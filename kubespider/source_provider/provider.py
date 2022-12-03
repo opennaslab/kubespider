@@ -1,4 +1,7 @@
+import os
 import abc
+import configparser
+import logging
 
 class SourceProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod
@@ -18,5 +21,31 @@ class SourceProvider(metaclass=abc.ABCMeta):
         pass
     
     @abc.abstractmethod
-    def load_config(self, cfg):
+    def is_webhook_enable(self):
         pass
+
+    @abc.abstractmethod
+    def load_config(self):
+        pass
+
+    @abc.abstractmethod
+    def provider_enabled(self):
+        pass
+
+    @abc.abstractmethod
+    def get_file_type(self):
+        return self.file_type
+    
+    @abc.abstractmethod
+    def get_links(self, dataSourceUrl):
+        pass
+
+    @abc.abstractmethod
+    def get_download_path(self):
+        pass
+
+def load_source_provide_config():
+    cfg = configparser.ConfigParser()
+    config_path = os.path.join(os.getenv('HOME'), '.kubespider')
+    cfg.read(os.path.join(config_path, 'source_provider.cfg'))
+    return cfg

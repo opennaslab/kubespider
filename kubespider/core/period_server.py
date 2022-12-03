@@ -1,0 +1,55 @@
+import time
+from api import types
+from core import kubespider
+import configparser
+import os
+import logging
+from utils import helper
+
+class PeriodServer:
+    def __init__(self, source_providers, download_providers) -> None:
+        self.period_seconds = 3600
+        self.source_providers = source_providers
+        self.download_providers = download_providers
+        self.state_file_dir = os.getenv('HOME') + '/.kubespider'
+    
+    def run(self):
+        while True:
+            for provider in self.source_providers:
+                if provider.get_provider_type() == types.SOURCE_PROVIDER_PERIOD_TYPE:
+                    provider.load_config()
+                    links = provider.get_links("")
+                    file_type = provider.get_file_type()
+                    download_final_path = provider.get_download_path()
+
+                    provider_name = provider.get_provider_name()
+                    state = self.load_state(provider_name)
+
+                    downloaded_links = dict(state.items(provider_name))
+                    for source in links:
+                        if helper.get_unique_hash(source) in downloaded_links:
+                            continue
+                        logging.info(f"Find new resource:{source}")
+                        kubespider.kubespider_downloader.download_file(source, download_final_path, file_type)
+                        downloaded_links[helper.get_unique_hash(source)] = '1'
+                    
+                    state[provider_name] = downloaded_links
+                    self.save_state(state)
+            time.sleep(self.period_seconds)
+
+    def load_state(self, provider_name):
+        cfg = configparser.ConfigParser()
+        if not os.path.exists(self.state_file_dir):
+            os.makedirs(self.state_file_dir)
+        if os.path.exists(self.state_file_dir+'/state.cfg'):
+            cfg.read(self.state_file_dir+'/state.cfg')
+            if provider_name not in cfg.sections():
+                cfg.add_section(provider_name)
+        else:
+            cfg.add_section(provider_name)
+        return cfg
+
+    def save_state(self, state):
+        with open(self.state_file_dir+'/state.cfg', 'w') as state_file:
+            state.write(state_file)
+            state_file.close()
