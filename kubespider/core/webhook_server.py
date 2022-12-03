@@ -32,7 +32,6 @@ class WebhookServer(BaseHTTPRequestHandler):
         if matchOneProvider == False:
             file_type = self.get_file_type(source)
             kubespider.kubespider_downloader.download_file(source, path, file_type)
-            return
 
         if matchOneProvider == True and \
             matchProvider.get_provider_type() == types.SOURCE_PROVIDER_DISPOSABLE_TYPE:
@@ -41,8 +40,16 @@ class WebhookServer(BaseHTTPRequestHandler):
             download_final_path = os.path.join(matchProvider.get_download_path(), path)
             for download_link in links:
                 kubespider.kubespider_downloader.download_file(source, download_final_path, file_type)
+
+        self.send_ok_response()
     
     def get_file_type(self, url):
         if url.endswith("torrent"):
             return 'torrent'
         return 'general'
+
+    def send_ok_response(self):
+        self.send_response(200)
+        self.send_header("Content-type", "application/text")
+        self.end_headers()
+        self.wfile.write(bytes('ok', "utf-8")) 

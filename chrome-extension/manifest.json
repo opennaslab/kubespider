@@ -1,0 +1,18 @@
+{
+    "name": "Kubespider",
+    "manifest_version": 3,
+    "version": "0.1",
+    "description": "Trigger Kubespider execute downloading task",
+    "permissions": [
+      "storage",
+      "scripting",
+      "declarativeNetRequest",
+      "declarativeNetRequestFeedback"
+    ],
+    "host_permissions": ["*://*/*"],
+    "action": {
+        "default_title": "Kubespider",
+        "default_icon": "icon.png",
+        "default_popup": "kubespider.html"
+    }
+  }

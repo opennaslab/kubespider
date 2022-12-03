@@ -16,5 +16,5 @@ setup(
     author_email='jwcesign@gmail.com',
     url='https://github.com/jwcesign/kubespider',
     license=license,
-    packages=find_packages(exclude=('tests', 'docs', 'config'))
+    packages=find_packages(exclude=('tests', 'docs', '.kubespider', 'chrome-extension'))
 )

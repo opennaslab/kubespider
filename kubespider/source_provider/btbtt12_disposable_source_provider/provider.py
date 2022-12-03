@@ -39,7 +39,7 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
         return [dataSourceUrl]
     
     def get_download_path(self):
-        return ""
+        return "general"
 
     def get_file_type(self):
         return self.file_type
