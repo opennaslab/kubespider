@@ -19,13 +19,10 @@ function sendRequest() {
         return
     }
     
-    alert(server)
-
     var httpRequest = new XMLHttpRequest();
     httpRequest.open('POST', server, true);
     httpRequest.setRequestHeader("Content-type","application/json");
     data = "{\"dataSource\":\"" + dataSource + "\",\"path\":\"" + path + "\"}"
-    alert(data)
     httpRequest.send(data);
 
     httpRequest.onreadystatechange = function () {

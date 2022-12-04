@@ -21,10 +21,13 @@ class KubespiderDownloader:
                 f.write(torrent_data)
                 f.close()
             for provider in self.download_provider:
-                provider.send_torrent_task(tmp_file, path)
-            return
+                if provider.send_torrent_task(tmp_file, path) == False:
+                    return False
+            return True
 
 
         logging.info('Download general type file')
         for provider in self.download_provider:
-            provider.send_general_task(url, path)
+            if provider.send_general_task(url, path) == False:
+                return False
+        return True

@@ -16,6 +16,7 @@ class PeriodServer:
     
     def run(self):
         while True:
+            meetError = False
             for provider in self.source_providers:
                 if provider.get_provider_type() == types.SOURCE_PROVIDER_PERIOD_TYPE:
                     provider.load_config()
@@ -31,12 +32,18 @@ class PeriodServer:
                         if helper.get_unique_hash(source) in downloaded_links:
                             continue
                         logging.info(f"Find new resource:{source}")
-                        kubespider.kubespider_downloader.download_file(source, download_final_path, file_type)
+                        if kubespider.kubespider_downloader.download_file(source, download_final_path, file_type) == False:
+                            meetError = True
+                            break
                         downloaded_links[helper.get_unique_hash(source)] = '1'
-                    
+
                     state[provider_name] = downloaded_links
                     self.save_state(state)
-            time.sleep(self.period_seconds)
+            
+            if not meetError:
+                time.sleep(self.period_seconds)
+            else:
+                time.sleep(20)
 
     def load_state(self, provider_name):
         cfg = configparser.ConfigParser()

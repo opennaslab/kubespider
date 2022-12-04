@@ -28,8 +28,13 @@ class MotrixDownloadProvider(provider.DownloadProvider):
             )
         )
         download_path = os.path.join(self.download_base_path, download_path)
-        ret = aria2.add_torrent(torrent_file_path, options={'dir': download_path})
-        logging.info(f'Create download task result:{ret}')
+        try:
+            ret = aria2.add_torrent(torrent_file_path, options={'dir': download_path})
+            logging.info(f'Create download task result:{ret}')
+            return True
+        except:
+            logging.warning("Please ensure your motrix server is ok")
+            return False
 
     def send_general_task(self, url, path):
         self.load_config()
@@ -41,7 +46,13 @@ class MotrixDownloadProvider(provider.DownloadProvider):
             )
         )
         download_path = os.path.join(self.download_base_path, "general/"+path)
-        aria2.add(url, options={'dir': download_path})
+        try:
+            ret = aria2.add(url, options={'dir': download_path})
+            logging.info(f'Create download task result:{ret}')
+            return True
+        except:
+            logging.warning("Please ensure your motrix server is ok")
+            return False
 
     def provider_enabled(self):
         cfg = provider.load_download_provider_config()
