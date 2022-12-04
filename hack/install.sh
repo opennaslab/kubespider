@@ -26,8 +26,8 @@ if [[ $? != 0 ]]; then
 fi
 
 # 3.Create necessary directory
-mkdir /root/nas/
-mkdir /root/netdisk/motrix/
+mkdir -p /root/nas/
+mkdir -p /root/netdisk/motrix/
 cp -r ./.kubespider /root/
 
 # 4.Deploy motrix

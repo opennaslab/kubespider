@@ -13,7 +13,7 @@ So you should install docker on your machine(personal-server or nas). Follow [of
     ```
 2. Start the motrix programe 
    Open your chrome(or other browser), and go to `http://<your_personal-server/nas_ip>:8081` and start motrix as follows:
-    ![img](../images/motrix-server-start.jpg)
+    ![img](../../images/motrix-server-start.jpg)
 
 ### Following
 1. Try download file:
