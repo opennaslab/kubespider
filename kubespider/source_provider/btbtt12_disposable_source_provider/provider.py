@@ -1,9 +1,10 @@
 # This works for: https://www.btbtt12.com
 # Function: download single video link
 import logging
+from urllib.parse import urlparse
+
 from source_provider import provider
 from api import types
-from urllib.parse import urlparse
 
 class Btbtt12DisposableSourceProvider(provider.SourceProvider):
     def __init__(self) -> None:

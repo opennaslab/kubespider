@@ -1,7 +1,6 @@
 import os
 import abc
 import configparser
-import logging
 
 class SourceProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod

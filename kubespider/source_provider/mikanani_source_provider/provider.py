@@ -1,14 +1,14 @@
 # This works for: https://mikanani.me
 # Function: download anime you subscribe
 import logging
+from urllib.parse import urlparse
+
+import requests
+import xml.etree.cElementTree as ET
+
 from source_provider import provider
 from api import types
-from urllib.parse import urlparse
-import requests
-import xml.sax
 from utils import helper
-import os
-import xml.etree.cElementTree as ET
 
 class MikananiSourceProvider(provider.SourceProvider):
     def __init__(self) -> None:

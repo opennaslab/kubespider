@@ -1,7 +1,9 @@
 import logging
 import os
-from download_provider import provider
+
 import aria2p
+
+from download_provider import provider
 
 class MotrixDownloadProvider(provider.DownloadProvider):
     def __init__(self) -> None:

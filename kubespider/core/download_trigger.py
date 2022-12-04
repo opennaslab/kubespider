@@ -1,8 +1,7 @@
 import logging
-import os
-import uuid
 from urllib import request
-from urllib.request import Request, urlopen
+from urllib.request import urlopen
+
 from utils import helper
 
 class KubespiderDownloader:

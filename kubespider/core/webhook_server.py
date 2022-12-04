@@ -1,9 +1,8 @@
 import logging
-import urllib
-import socketserver
 import json
 import os
 from http.server import BaseHTTPRequestHandler
+
 from core import kubespider
 from api import types
 
