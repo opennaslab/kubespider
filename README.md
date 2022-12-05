@@ -2,14 +2,14 @@
 
 ![image](./docs/images/logo.png)
 
-## 一款全自动下载/追剧工具
+## 一款全局资源编排下载系统
 [![GitHub release](https://img.shields.io/github/v/release/agalwood/Motrix.svg)](https://github.com/agalwood/Motrix/releases) ![Build/release](https://github.com/agalwood/Motrix/workflows/Build/release/badge.svg) ![Total Downloads](https://img.shields.io/github/downloads/agalwood/Motrix/total.svg) ![Support Platforms](https://camo.githubusercontent.com/a50c47295f350646d08f2e1ccd797ceca3840e52/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f706c6174666f726d2d6d61634f5325323025374325323057696e646f77732532302537432532304c696e75782d6c69676874677265792e737667)
 
 [English](./README.md) | 简体中文  
 我是一个云计算工程师🤓，专注Serverles/FinOps/Runtime，利用空闲之余开发了 Kubespider。
 开发Kubespider的出发点是：我有一台空闲的服务器（局域网），想把它作为NAS，实现自动追剧下载，本地笔记本电脑触发下载，同时适配各种网站资源（Youtube、Bilibili等)。
 
-之前接触到Terraform，惊讶于其通用性。Kubespiders受到Terraform启发，旨在构建一个通用的下载编排系统，兼容各种资源平台和下载软件（如Motrix），同时兼容多种触发下载方式（只要符合Kubespider API即可）。
+之前接触到Terraform，惊讶于其通用性。Kubespiders受到Terraform启发，旨在构建一个通用的下载编排系统，兼容各种资源平台和下载软件，兼容多种下载方式（请求触发，周期触发，更新触发），做资源下载最完美的统一解决方案。
 
 ## 系统架构
 为了实现一个通用的下载编排系统，需要适配各种资源网站和下载软件，所以将这两部分从核心功能中抽象出来：
@@ -42,7 +42,7 @@ _          _                     _     _
 | |/ / | | | '_ \ / _ \/ __| '_ \| |/ _` |/ _ \ '__|
 |   <| |_| | |_) |  __/\__ \ |_) | | (_| |  __/ |
 |_|\_\\__,_|_.__/ \___||___/ .__/|_|\__,_|\___|_|
-                        |_|
+                           |_|
 [INFO] Start to deploy with default configuration...
 f4b5c6647dbbced11e1f511167edfc0f269ef697dfe05dcba082262ba4b4234f
 WARNING: Published ports are discarded when using host network mode
@@ -97,6 +97,9 @@ bash hack/install_plex.sh
 最后，配置Plex：
 打开地址`http://<nas_server_ip>:32400`，将`/nas`作为电影文件夹:
 ![img](./docs/images/plex-add-dir.jpg)
+
+## 特性列表
+* 基于mikanani，实现全自动动漫追番。[link](./docs/zh/user_guide/mikanani_source_provider/README.md)
 
 ## 🤝 参与共建 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 

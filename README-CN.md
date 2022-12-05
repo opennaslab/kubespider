@@ -42,7 +42,7 @@ _          _                     _     _
 | |/ / | | | '_ \ / _ \/ __| '_ \| |/ _` |/ _ \ '__|
 |   <| |_| | |_) |  __/\__ \ |_) | | (_| |  __/ |
 |_|\_\\__,_|_.__/ \___||___/ .__/|_|\__,_|\___|_|
-                        |_|
+                           |_|
 [INFO] Start to deploy with default configuration...
 f4b5c6647dbbced11e1f511167edfc0f269ef697dfe05dcba082262ba4b4234f
 WARNING: Published ports are discarded when using host network mode
