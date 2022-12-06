@@ -1,6 +1,7 @@
+import os
 import logging
 import json
-import os
+
 from http.server import BaseHTTPRequestHandler
 
 from core import kubespider
@@ -28,9 +29,12 @@ class WebhookServer(BaseHTTPRequestHandler):
                 # Do not break here, in order to check whether it matchs multiple provider
                 matchOneProvider = True
         
+        err = False
         if matchOneProvider == False:
             file_type = self.get_file_type(source)
-            kubespider.kubespider_downloader.download_file(source, path, file_type)
+            # If we not match the source provider, just download to common path
+            path = os.path.join('common', path)
+            err = kubespider.kubespider_downloader.download_file(source, path, file_type)
 
         if matchOneProvider == True and \
             matchProvider.get_provider_type() == types.SOURCE_PROVIDER_DISPOSABLE_TYPE:
@@ -38,9 +42,14 @@ class WebhookServer(BaseHTTPRequestHandler):
             links = matchProvider.get_links(source)
             download_final_path = os.path.join(matchProvider.get_download_path(), path)
             for download_link in links:
-                kubespider.kubespider_downloader.download_file(source, download_final_path, file_type)
+                err = kubespider.kubespider_downloader.download_file(source, download_final_path, file_type)
+                if err != None:
+                    break
 
-        self.send_ok_response()
+        if err == None:
+            self.send_ok_response()
+        else:
+            self.send_bad_response(err)
     
     def get_file_type(self, url):
         if url.endswith("torrent"):
@@ -52,3 +61,9 @@ class WebhookServer(BaseHTTPRequestHandler):
         self.send_header("Content-type", "application/text")
         self.end_headers()
         self.wfile.write(bytes('ok', "utf-8")) 
+    
+    def send_bad_response(self, err):
+        self.send_response(500)
+        self.send_header("Content-type", "application/text")
+        self.end_headers()
+        self.wfile.write(bytes(str(err), "utf-8")) 

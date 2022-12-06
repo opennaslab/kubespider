@@ -10,10 +10,18 @@ function sendRequest() {
     chrome.storage.sync.get('server', (res) => {
         if (res != server) {
             chrome.storage.sync.set({'server': server}, () => {
-                console.log('set successed!');
+                console.log('server set successed!');
             });
         }
     });
+
+    chrome.storage.sync.get('path', (res) => {
+        if (res != path) {
+            chrome.storage.sync.set({'path': path}, () => {
+                console.log('path set successed!');
+            });
+        }
+    })
 
     if (dataSource == "" || dataSource == null || server == null || server == "") {
         return
@@ -34,7 +42,7 @@ function sendRequest() {
                 document.getElementById('download').innerHTML = "Download"
             })
         } else {
-            document.getElementById('download').innerHTML = "Connection error"
+            document.getElementById('download').innerHTML = httpRequest.responseText
             sleep(3000).then(() => {
                 document.getElementById('download').innerHTML = "Download"
             })
@@ -49,5 +57,13 @@ chrome.storage.sync.get('server', (res) => {
     }
     document.getElementById('server').value = res.server;
 });
+
+chrome.storage.sync.get('path', (res) => {
+    if (typeof res.path === "undefined") {
+        document.getElementById('path').value = "";
+        return
+    }
+    document.getElementById('path').value = res.path;
+})
 
 document.getElementById('download').addEventListener('click', sendRequest)

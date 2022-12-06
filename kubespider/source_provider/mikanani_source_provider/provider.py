@@ -14,45 +14,39 @@ class MikananiSourceProvider(provider.SourceProvider):
     def __init__(self) -> None:
         self.provider_type = types.SOURCE_PROVIDER_PERIOD_TYPE
         self.file_type = 'torrent'
-        self.webhook_enable = True
+        self.webhook_enable = False
         self.provider_name = 'mikanani_source_provider'
         self.rss_link = ''
         self.download_path = ''
         self.tmp_file_path='/tmp/'
 
-    def should_handle(self, dataSourceUrl):
-        parse_url = urlparse(dataSourceUrl)
-        if parse_url.hostname == 'mikanani.me' and parse_url.path == '/RSS/MyBangumi':
-            logging.info(f'{dataSourceUrl} belongs to MikananiSourceProvider')
-            return True
-        return False
+    def get_provider_name(self):
+        return self.provider_name
+
+    def get_provider_type(self):
+        return self.provider_type
+
+    def get_file_type(self):
+        return self.file_type
+
+    def get_download_path(self):
+        return self.download_path
+
+    def provider_enabled(self):
+        cfg = provider.load_source_provide_config(self.provider_name)
+        return cfg['ENABLE'] == 'true'
 
     def is_webhook_enable(self):
         return self.webhook_enable
 
-    def get_provider_type(self):
-        return self.provider_type
+    def should_handle(self, dataSourceUrl):
+        return False
     
-    def get_file_type(self):
-        return self.file_type
-
-    def get_provider_name(self):
-        return self.provider_name
-    
-    def load_config(self):
-        cfg = provider.load_source_provide_config()
-        logging.info(cfg.get('mikanani_source_provider', 'RSS_LINK'))
-        self.rss_link = cfg.get(self.provider_name, 'RSS_LINK')
-        self.download_path = cfg.get(self.provider_name, 'DOWNLOAD_PATH')
-
-    def provider_enabled(self):
-        cfg = provider.load_source_provide_config()
-        return cfg.get(self.provider_name, 'ENABLE') == 'true'
-
     def get_links(self, dataSourceUrl):
         try:
             req = requests.get(self.rss_link)
-        except:
+        except Exception as e:
+            logging.info(f'mikanani get links error:{str(e)}')
             return []
         tmp_xml = helper.get_tmp_file_name('') + '.xml'
         with open(tmp_xml, 'wb') as f:
@@ -69,5 +63,11 @@ class MikananiSourceProvider(provider.SourceProvider):
             ret.append(url)
         return ret
 
-    def get_download_path(self):
-        return self.download_path
+    def update_config(self, reqPara):
+        pass
+
+    def load_config(self):
+        cfg = provider.load_source_provide_config(self.provider_name)
+        logging.info('mikanani rss link is:' + cfg['RSS_LINK'])
+        self.rss_link = cfg['RSS_LINK']
+        self.download_path = cfg['DOWNLOAD_PATH']

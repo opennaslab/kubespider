@@ -16,9 +16,12 @@ class MotrixDownloadProvider(provider.DownloadProvider):
     def get_provider_name(self):
         return self.provider_name
 
+    def provider_enabled(self):
+        cfg = provider.load_download_provider_config(self.provider_name)
+        return cfg['ENABLE'] == 'true'
+
     def send_torrent_task(self, torrent_file_path, download_path):
-        logging.info(f'{torrent_file_path}')
-        self.load_config()
+        logging.info(f'Start torrent download:{torrent_file_path}')
 
         aria2 = aria2p.API(
             aria2p.Client(
@@ -31,13 +34,13 @@ class MotrixDownloadProvider(provider.DownloadProvider):
         try:
             ret = aria2.add_torrent(torrent_file_path, options={'dir': download_path})
             logging.info(f'Create download task result:{ret}')
-            return True
-        except:
-            logging.warning("Please ensure your motrix server is ok")
-            return False
+            return None
+        except Exception as err:
+            logging.warning(f'Please ensure your motrix server is ok:{str(err)}')
+            return err
+        return None
 
     def send_general_task(self, url, path):
-        self.load_config()
         aria2 = aria2p.API(
             aria2p.Client(
                 host=self.rpc_endpoint_host,
@@ -50,18 +53,13 @@ class MotrixDownloadProvider(provider.DownloadProvider):
             ret = aria2.add(url, options={'dir': download_path})
             logging.info(f'Create download task result:{ret}')
             return True
-        except:
-            logging.warning("Please ensure your motrix server is ok")
-            return False
-
-    def provider_enabled(self):
-        cfg = provider.load_download_provider_config()
-        if cfg.get(self.provider_name, 'ENABLE') == 'true':
-            return True
-        return False
+        except Exception as err:
+            logging.warning(f'Please ensure your motrix server is ok:{str(err)}')
+            return err
+        return None
 
     def load_config(self):
-        cfg = provider.load_download_provider_config()
-        self.rpc_endpoint_host = cfg.get(self.provider_name, 'RPC_ENDPOINT_HOST')
-        self.rpc_endpoint_port = cfg.get(self.provider_name, 'RPC_ENDPOINT_PORT')
-        self.download_base_path = cfg.get(self.provider_name, 'DOWNLOAD_BASE_PATH')
+        cfg = provider.load_download_provider_config(self.provider_name)
+        self.rpc_endpoint_host = cfg['RPC_ENDPOINT_HOST']
+        self.rpc_endpoint_port = cfg['RPC_ENDPOINT_PORT']
+        self.download_base_path = cfg['DOWNLOAD_BASE_PATH']

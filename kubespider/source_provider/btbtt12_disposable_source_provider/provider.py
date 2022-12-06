@@ -13,6 +13,25 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
         self.webhook_enable = True
         self.provider_name = 'btbtt12_disposable_source_provider'
 
+    def get_provider_name(self):
+        return self.provider_name
+
+    def get_provider_type(self):
+        return self.provider_type
+
+    def get_file_type(self):
+        return self.file_type
+
+    def get_download_path(self):
+        return "common"
+
+    def provider_enabled(self):
+        cfg = provider.load_source_provide_config(self.provider_name)
+        return cfg['ENABLE'] == 'true'
+
+    def is_webhook_enable(self):
+        return self.webhook_enable
+
     def should_handle(self, dataSourceUrl):
         parse_url = urlparse(dataSourceUrl)
         if parse_url.hostname == 'www.btbtt12.com' and 'attach-download-fid' in parse_url.path:
@@ -20,27 +39,11 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
             return True
         return False
 
-    def is_webhook_enable(self):
-        return self.webhook_enable
-
-    def get_provider_type(self):
-        return self.provider_type
-    
-    def get_provider_name(self):
-        return self.provider_name
-    
-    def load_config(self):
-        pass
-
-    def provider_enabled(self):
-        cfg = provider.load_source_provide_config()
-        return cfg.get(self.provider_name, 'ENABLE') == 'true'
-
     def get_links(self, dataSourceUrl):
         return [dataSourceUrl]
     
-    def get_download_path(self):
-        return "general"
-
-    def get_file_type(self):
-        return self.file_type
+    def update_config(self, reqPara):
+        pass
+    
+    def load_config(self):
+        pass

@@ -18,32 +18,38 @@ class PeriodServer:
         while True:
             meetError = False
             for provider in self.source_providers:
-                if provider.get_provider_type() == types.SOURCE_PROVIDER_PERIOD_TYPE:
-                    provider.load_config()
-                    links = provider.get_links("")
-                    file_type = provider.get_file_type()
-                    download_final_path = provider.get_download_path()
-
-                    provider_name = provider.get_provider_name()
-                    state = self.load_state(provider_name)
-
-                    downloaded_links = dict(state.items(provider_name))
-                    for source in links:
-                        if helper.get_unique_hash(source) in downloaded_links:
-                            continue
-                        logging.info(f"Find new resource:{source}")
-                        if kubespider.kubespider_downloader.download_file(source, download_final_path, file_type) == False:
-                            meetError = True
-                            break
-                        downloaded_links[helper.get_unique_hash(source)] = '1'
-
-                    state[provider_name] = downloaded_links
-                    self.save_state(state)
+                meetError = self.run_single_provider(provider)
             
             if not meetError:
                 time.sleep(self.period_seconds)
             else:
                 time.sleep(20)
+
+    def run_single_provider(self, provider):
+        meetError = False
+        if provider.get_provider_type() == types.SOURCE_PROVIDER_PERIOD_TYPE:
+            provider.load_config()
+            links = provider.get_links("")
+            file_type = provider.get_file_type()
+            download_final_path = provider.get_download_path()
+
+            provider_name = provider.get_provider_name()
+            state = self.load_state(provider_name)
+
+            downloaded_links = dict(state.items(provider_name))
+            for source in links:
+                if helper.get_unique_hash(source) in downloaded_links:
+                    continue
+                logging.info(f"Find new resource:{source}")
+                if kubespider.kubespider_downloader.download_file(source, download_final_path, file_type) == False:
+                    meetError = True
+                    break
+                downloaded_links[helper.get_unique_hash(source)] = '1'
+
+            state[provider_name] = downloaded_links
+            self.save_state(state)
+        
+        return meetError
 
     def load_state(self, provider_name):
         cfg = configparser.ConfigParser()
