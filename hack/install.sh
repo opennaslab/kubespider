@@ -26,16 +26,16 @@ if [[ $? != 0 ]]; then
 fi
 
 # 3.Create necessary directory
-mkdir -p /root/nas/
-mkdir -p /root/netdisk/motrix/
-cp -r ./.kubespider /root/
+mkdir -p /root/kubespider/nas/
+mkdir -p /root/kubespider/motrix/
+cp -r ./.kubespider /root/ 
 
 # 4.Deploy motrix
 docker run -itd --name motrix  \
     -p 8081:8080  \
     -p 16800:16800 \
-    -v /root/netdisk/motrix/:/config  \
-    -v /root/nas/:/config/Downloads \
+    -v /root/kubespider/motrix/:/config  \
+    -v /root/kubespider/nas/:/config/Downloads \
     --restart unless-stopped \
     msjpq/motrix-vnc
 
@@ -54,7 +54,7 @@ echo "[INFO] It's better idea to try chrome extenstions, check here:"
 echo "[INFO] It's better idea to try plex, check here:"
 echo "*******************************************"
 echo "Kubespider config path: /root/.kubespider/"
-echo "Download file path: /root/nas/"
+echo "Download file path: /root/kubespider/nas/"
 echo "Kubespider webhook address: http://<server_ip>:3800"
 echo "Waring: Motrix server UI address: http://<server_ip>:8081, go and open motrix"
 echo "*******************************************"

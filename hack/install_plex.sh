@@ -21,13 +21,13 @@ if [[ $claim == "" ]];then
 fi
 
 # 3. Creat directory
-mkdir -p /root/netdisk/plex
+mkdir -p /root/kubespider/plex/
 
 # 4. Install Plex
 docker run -itd --name plex \
     -p 32400:32400 \
-    -v /root/netdisk/plex:/config \
-    -v /root/nas:/nas \
+    -v /root/kubespider/plex:/config \
+    -v /root/kubespider/nas:/nas \
     -e PUID=1000 \
     -e VERSION=docker \
     -e PLEX_CLAIM=${claim} \
@@ -37,4 +37,4 @@ docker run -itd --name plex \
 
 # 5. Notice
 echo "[INFO] Deploy flex success, enjoy your time..."
-echo "[INFO] Plex UI address is: http://<your_server_ip>:32400"
+echo "[INFO] Plex UI address is: http://<server_ip>:32400"

@@ -20,9 +20,9 @@
 
 ## 💽 安装
 ### 前提
-1. 操作电脑和你的NAS服务器在同一局域网。（暂时还没有试过不在同一局域网的安装）
-2. NAS服务器为linux系统。
-3. NAS服务器已安装Docker。
+1. 操作电脑和你的服务器在同一局域网。（暂时还没有试过不在同一局域网的安装）
+2. 服务器为linux系统。
+3. 服务器已安装Docker。
 
 ### 默认安装
 Kubespider为了适配多种资源平台，提供了许多适配器，按你的需要开启或关闭这些适配器。配置文件在`.kubespider`文件夹：
@@ -35,31 +35,32 @@ bash hack/install.sh
 ```
 输出类似：
 ```sh
-root@cesign [02:18:54 PM] [+33.0°C] [~/git/kubespider] [main *]
+root@cesign [10:04:53 PM] [+29.0°C] [~/git/kubespider] [main *]
 -> # bash hack/install.sh
-_          _                     _     _
+ _          _                     _     _
 | | ___   _| |__   ___  ___ _ __ (_) __| | ___ _ __
 | |/ / | | | '_ \ / _ \/ __| '_ \| |/ _` |/ _ \ '__|
 |   <| |_| | |_) |  __/\__ \ |_) | | (_| |  __/ |
 |_|\_\\__,_|_.__/ \___||___/ .__/|_|\__,_|\___|_|
                            |_|
 [INFO] Start to deploy with default configuration...
-f4b5c6647dbbced11e1f511167edfc0f269ef697dfe05dcba082262ba4b4234f
+cbc33bf98a20d860a6d13a79a18fe6ed3f2d3a51d29cf8ebc948aa29e9c78c89
 WARNING: Published ports are discarded when using host network mode
-de37a5203a3340177e7b3d796b81245941d5f7535047b567675554c659ea7af0
+9b0fd11e3bdf1bfcbe088fa56ed7583b40f051254c15ec17a5a3a425b5c6a2a8
 [INFO] Deploy successful, check the information:
 *******************************************
 [INFO] It's better idea to try chrome extenstions, check here:
 [INFO] It's better idea to try plex, check here:
 *******************************************
 Kubespider config path: /root/.kubespider/
-Download file path: /root/nas/
+Download file path: /root/kubespider/nas/
 Kubespider webhook address: http://<server_ip>:3800
 Waring: Motrix server UI address: http://<server_ip>:8081, go and open motrix
+*******************************************
 ```
 
 #### 2.开启Motrix下载器  
-启动的Motrix服务端口为8081，所以打开游览器，输入`http://<nas_server_ip>:8081`，打开Motrix软件即可：
+启动的Motrix服务端口为8081，所以打开游览器，输入`http://<server_ip>:8081`，打开Motrix软件即可：
 ![img](./docs/images/motrix-server-start.jpg)
 
 
@@ -75,6 +76,9 @@ root@cesign [04:20:36 PM] [+31.0°C] [~]
 2022-12-04 06:19:14,303-INFO: https://mikanani.me/RSS/MyBangumi?token=egIVi24Uxfg68bFDW5ehVgpHCadfZ1AULNYot%2b95mDo%3d
 2022-12-04 06:19:14,304-INFO: Webhook Server start running...
 ```
+
+安装后，所有下载下载文件会存储到 `/root/kubespider/nas`。  
+配置文件在 `/root/.kubespider/`。
 
 #### 4.安装Chrome插件  
 TBD（还未发布）
@@ -95,7 +99,7 @@ bash hack/install_plex.sh
 ```
 
 最后，配置Plex：
-打开地址`http://<nas_server_ip>:32400`，将`/nas`作为电影文件夹:
+打开地址`http://<server_ip>:32400`，将`/nas`作为电影文件夹:
 ![img](./docs/images/plex-add-dir.jpg)
 
 ## 特性列表
