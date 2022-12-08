@@ -20,6 +20,10 @@ class DownloadProvider(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
+    def send_magnet_task(self, url, path):
+        pass
+
+    @abc.abstractmethod
     def send_general_task(self, url, path):
         pass
 

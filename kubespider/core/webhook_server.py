@@ -54,6 +54,9 @@ class WebhookServer(BaseHTTPRequestHandler):
     def get_file_type(self, url):
         if url.endswith("torrent"):
             return 'torrent'
+        if url.startswith('magnet:'):
+            return 'magnet'
+
         return 'general'
 
     def send_ok_response(self):
