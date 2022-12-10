@@ -53,15 +53,19 @@ class MikananiSourceProvider(provider.SourceProvider):
             f.write(req.content)
             f.close()
 
-        xml_parse = ET.parse(tmp_xml)
-        items = xml_parse.findall('.//item')
-        ret = []
-        for i in items:
-            anime_name = i.find('./guid').text
-            logging.info(f'mikanani find {anime_name}')
-            url = i.find('./enclosure').attrib['url']
-            ret.append(url)
-        return ret
+        try:
+            xml_parse = ET.parse(tmp_xml)
+            items = xml_parse.findall('.//item')
+            ret = []
+            for i in items:
+                anime_name = i.find('./guid').text
+                logging.info(f'mikanani find {anime_name}')
+                url = i.find('./enclosure').attrib['url']
+                ret.append(url)
+            return ret
+        except Exception as e:
+            logging.info(f'parse rss xml error:{str(e)}')
+            return []
 
     def update_config(self, reqPara):
         pass
