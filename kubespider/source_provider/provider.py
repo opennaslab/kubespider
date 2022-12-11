@@ -1,5 +1,7 @@
 import os
 import abc
+import threading
+
 import configparser
 
 class SourceProvider(metaclass=abc.ABCMeta):
@@ -47,19 +49,26 @@ class SourceProvider(metaclass=abc.ABCMeta):
     def load_config(self):
         pass
 
+source_provider_file_lock = threading.Lock()
+
 def load_source_provide_config(provider_name):
+    source_provider_file_lock.acquire()
     cfg = configparser.ConfigParser()
-    config_path = os.path.join(os.getenv('HOME'), '.kubespider')
-    cfg.read(os.path.join(config_path, 'source_provider.cfg'))
+    config_path = os.path.join(os.getenv('HOME'), '.kubespider/source_provider.cfg')
+    cfg.read(config_path)
     if provider_name in cfg.sections():
+        source_provider_file_lock.release()
         return cfg[provider_name]
+    source_provider_file_lock.release()
     return {}
 
 def save_source_provider_config(provider_name, section_cfg):
+    source_provider_file_lock.acquire()
     cfg = configparser.ConfigParser()
-    config_path = os.path.join(os.getenv('HOME'), '.kubespider')
-    cfg.read(os.path.join(config_path, 'source_provider.cfg'))
+    config_path = os.path.join(os.getenv('HOME'), '.kubespider/source_provider.cfg')
+    cfg.read(config_path)
     cfg[provider_name] = section_cfg
-    with open(config_path) as f:
+    with open(config_path, 'w') as f:
         cfg.write(f)
         f.close()
+    source_provider_file_lock.release()

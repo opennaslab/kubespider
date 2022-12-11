@@ -29,22 +29,25 @@ class WebhookServer(BaseHTTPRequestHandler):
                 # Do not break here, in order to check whether it matchs multiple provider
                 matchOneProvider = True
         
-        err = False
+        err = None
         if matchOneProvider == False:
             file_type = self.get_file_type(source)
             # If we not match the source provider, just download to common path
             path = os.path.join('common', path)
             err = kubespider.kubespider_downloader.download_file(source, path, file_type)
 
-        if matchOneProvider == True and \
-            matchProvider.get_provider_type() == types.SOURCE_PROVIDER_DISPOSABLE_TYPE:
-            file_type = matchProvider.get_file_type()
-            links = matchProvider.get_links(source)
-            download_final_path = os.path.join(matchProvider.get_download_path(), path)
-            for download_link in links:
-                err = kubespider.kubespider_downloader.download_file(download_link, download_final_path, file_type)
-                if err != None:
-                    break
+        if matchOneProvider == True:
+            if matchProvider.get_provider_type() == types.SOURCE_PROVIDER_DISPOSABLE_TYPE:
+                file_type = matchProvider.get_file_type()
+                links = matchProvider.get_links(source)
+                download_final_path = os.path.join(matchProvider.get_download_path(), path)
+                for download_link in links:
+                    err = kubespider.kubespider_downloader.download_file(download_link, download_final_path, file_type)
+                    if err != None:
+                        break
+            else:
+                provider.update_config(source)
+                kubespider.kubespider_period_server.trigger_run(provider.get_provider_name())
 
         if err == None:
             self.send_ok_response()

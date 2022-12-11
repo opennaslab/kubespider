@@ -13,7 +13,7 @@ class PeriodServer:
         self.source_providers = source_providers
         self.download_providers = download_providers
         self.state_file_dir = os.getenv('HOME') + '/.kubespider'
-    
+
     def run(self):
         while True:
             meetError = False
@@ -24,7 +24,13 @@ class PeriodServer:
                 time.sleep(self.period_seconds)
             else:
                 time.sleep(20)
-
+    
+    def trigger_run(self, provider_name):
+        for provider in self.source_providers:
+            if provider_name != provider.get_provider_name():
+                continue
+            self.run_single_provider(provider)
+            
     def run_single_provider(self, provider):
         meetError = False
         if provider.get_provider_type() == types.SOURCE_PROVIDER_PERIOD_TYPE:
