@@ -34,13 +34,19 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
 
     def should_handle(self, dataSourceUrl):
         parse_url = urlparse(dataSourceUrl)
-        if parse_url.hostname == 'www.btbtt12.com' and 'attach-download-fid' in parse_url.path:
+        if parse_url.hostname == 'www.btbtt12.com' and 'attach-dialog-fid' in parse_url.path:
             logging.info(f'{dataSourceUrl} belongs to Btbtt12DisposableSourceProvider')
             return True
         return False
 
     def get_links(self, dataSourceUrl):
-        return [dataSourceUrl]
+        parse_url = urlparse(dataSourceUrl)
+        rep_path = str.split(parse_url.path, '-')
+        rep_path[1] = 'download'
+        rep_path = '-'.join(rep_path)
+        ret = parse_url.scheme + '://' + parse_url.netloc + rep_path
+        logging.info(f'btbtt12_disposable_source_provider parse {dataSourceUrl} as {ret}')
+        return [ret]
     
     def update_config(self, reqPara):
         pass

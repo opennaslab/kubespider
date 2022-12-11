@@ -42,7 +42,7 @@ class WebhookServer(BaseHTTPRequestHandler):
             links = matchProvider.get_links(source)
             download_final_path = os.path.join(matchProvider.get_download_path(), path)
             for download_link in links:
-                err = kubespider.kubespider_downloader.download_file(source, download_final_path, file_type)
+                err = kubespider.kubespider_downloader.download_file(download_link, download_final_path, file_type)
                 if err != None:
                     break
 
