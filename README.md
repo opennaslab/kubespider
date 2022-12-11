@@ -104,6 +104,7 @@ bash hack/install_plex.sh
 
 ## 特性列表
 * 基于mikanani，实现全自动动漫追番。[link](./docs/zh/user_guide/mikanani_source_provider/README.md)
+* 下载btbtt12相关种子资源。[link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md)
 
 ## 🤝 参与共建 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
