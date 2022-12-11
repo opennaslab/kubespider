@@ -38,7 +38,6 @@ function sendRequest() {
             document.getElementById('download').innerHTML = "OK"
             sleep(3000).then(() => {
                 document.getElementById('url').value = "";
-                document.getElementById('path').value = "";
                 document.getElementById('download').innerHTML = "Download"
             })
         } else {
