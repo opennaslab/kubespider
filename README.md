@@ -35,7 +35,7 @@ bash hack/install.sh
 ```
 输出类似：
 ```sh
-root@cesign [10:04:53 PM] [+29.0°C] [~/git/kubespider] [main *]
+root@cesign [09:01:34 PM] [+22.0°C] [~/git/kubespider] [main *]
 -> # bash hack/install.sh
  _          _                     _     _
 | | ___   _| |__   ___  ___ _ __ (_) __| | ___ _ __
@@ -44,9 +44,9 @@ root@cesign [10:04:53 PM] [+29.0°C] [~/git/kubespider] [main *]
 |_|\_\\__,_|_.__/ \___||___/ .__/|_|\__,_|\___|_|
                            |_|
 [INFO] Start to deploy with default configuration...
-cbc33bf98a20d860a6d13a79a18fe6ed3f2d3a51d29cf8ebc948aa29e9c78c89
+b13820946878c4f00635e7fa3db64ea83506850ebb7d07ff77b62814db1d894a
 WARNING: Published ports are discarded when using host network mode
-9b0fd11e3bdf1bfcbe088fa56ed7583b40f051254c15ec17a5a3a425b5c6a2a8
+9c0aa1059f1546a4f1a2accac445ce1389f1c400b96328f3e18c8af03f0bbc70
 [INFO] Deploy successful, check the information:
 *******************************************
 [INFO] It's better idea to try chrome extenstions, check here:
@@ -55,14 +55,18 @@ WARNING: Published ports are discarded when using host network mode
 Kubespider config path: /root/.kubespider/
 Download file path: /root/kubespider/nas/
 Kubespider webhook address: http://<server_ip>:3800
-Waring: Motrix server UI address: http://<server_ip>:8081, go and open motrix
+Aria2 server address: http://<server_ip>:6800/jsonrpc, you can use any gui or webui to connect it
+Aria2 default secret is:kubespider
 *******************************************
 ```
+此步骤会安装`Kubespide`和`Aria2`资源下载程序，作为默认的下载器。
 
-#### 2.开启Motrix下载器  
-启动的Motrix服务端口为8081，所以打开游览器，输入`http://<server_ip>:8081`，打开Motrix软件即可：
-![img](./docs/images/motrix-server-start.jpg)
+#### 2.连接aria2 
+为了便于查看下载任务，去chrome商店下载[Aria2插件](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn)。  
+然后连接，插件配置如下(其中配置在`install.sh`脚本最后已输出)：  
+![img](./docs/images/aria2-for-chrome-config.jpg)
 
+当然，非必需的，你也可以使用桌面程序连接：[AriaNg](https://github.com/mayswind/AriaNg-Native/releases/)
 
 #### 3.检查是否安装成功  
 查看kubespider容器日志即可，无报错即可：
@@ -77,7 +81,7 @@ root@cesign [04:20:36 PM] [+31.0°C] [~]
 2022-12-04 06:19:14,304-INFO: Webhook Server start running...
 ```
 
-安装后，所有下载下载文件会存储到 `/root/kubespider/nas`。  
+安装后，所有下载文件会存储到 `/root/kubespider/nas`。  
 配置文件在 `/root/.kubespider/`。
 
 #### 4.安装Chrome插件  
@@ -103,6 +107,13 @@ bash hack/install_plex.sh
 ![img](./docs/images/plex-add-dir.jpg)
 
 ## 特性列表
+### 基本特性
+* 支持magnent, torrent, 以及普通资源下载，如zip等。
+
+### 下载提供器
+* 支持aria2类型的下载器。
+
+### 资源提供器
 * 基于mikanani，实现全自动动漫追番。[link](./docs/zh/user_guide/mikanani_source_provider/README.md)
 * 下载btbtt12相关种子资源。[link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md)
 * 基于meijutt实现自动追美剧。[link](./docs/zh/user_guide/meijutt_source_provider/README.md)

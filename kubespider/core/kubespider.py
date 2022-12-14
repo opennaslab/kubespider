@@ -7,7 +7,7 @@ from http.server import HTTPServer
 import source_provider.mikanani_source_provider.provider as mikanani_source_provider
 import source_provider.btbtt12_disposable_source_provider.provider as btbtt12_disposable_source_provider
 import source_provider.meijutt_source_provider.provider as meijutt_source_provider
-import download_provider.motrix_download_provider.provider as motrix_source_provider
+import download_provider.aria2_download_provider.provider as aria2_download_provider
 from core import webhook_server
 from core import download_trigger
 from core import period_server
@@ -20,7 +20,7 @@ source_providers = [
 ]
 
 download_providers = [
-    motrix_source_provider.MotrixDownloadProvider()
+    aria2_download_provider.Aria2DownloadProvider()
 ]
 
 enabled_source_provider = []

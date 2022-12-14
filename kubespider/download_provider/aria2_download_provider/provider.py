@@ -5,13 +5,14 @@ import aria2p
 
 from download_provider import provider
 
-class MotrixDownloadProvider(provider.DownloadProvider):
+class Aria2DownloadProvider(provider.DownloadProvider):
     def __init__(self) -> None:
-        self.provider_name = 'motrix_download_provider'
+        self.provider_name = 'aria2_download_provider'
         self.rpc_endpoint_host = ''
         self.rpc_endpoint_port = 0
         self.download_base_path = ''
         self.aria2 = None
+        self.secret = ''
 
     def get_provider_name(self):
         return self.provider_name
@@ -59,10 +60,11 @@ class MotrixDownloadProvider(provider.DownloadProvider):
         self.rpc_endpoint_host = cfg['RPC_ENDPOINT_HOST']
         self.rpc_endpoint_port = cfg['RPC_ENDPOINT_PORT']
         self.download_base_path = cfg['DOWNLOAD_BASE_PATH']
+        self.secret = cfg['SECRET']
         self.aria2 = aria2p.API(
             aria2p.Client(
                 host=self.rpc_endpoint_host,
                 port=self.rpc_endpoint_port,
-                secret=""
+                secret=self.secret
             )
         )

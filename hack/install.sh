@@ -28,16 +28,22 @@ fi
 # 3.Create necessary directory
 mkdir -p /root/kubespider/nas/
 mkdir -p /root/kubespider/motrix/
-cp -r ./.kubespider /root/ 
+cp -r ./.kubespider /root/
 
-# 4.Deploy motrix
-docker run -itd --name motrix  \
-    -p 8081:8080  \
-    -p 16800:16800 \
-    -v /root/kubespider/motrix/:/config  \
-    -v /root/kubespider/nas/:/config/Downloads \
+# 4.Deploy aria2
+docker run -d \
+    --name aria2-pro \
     --restart unless-stopped \
-    msjpq/motrix-vnc
+    --log-opt max-size=1m \
+    --network host \
+    -e PUID=$UID \
+    -e PGID=$GID \
+    -e RPC_SECRET=kubespider \
+    -e RPC_PORT=6800 \
+    -e LISTEN_PORT=6888 \
+    -v /root/kubespider/aria2/:/config \
+    -v /root/kubespider/nas/:/downloads/ \
+    p3terx/aria2-pro
 
 # 5.Deploy kubespider
 docker run -itd --name kubespider \
@@ -56,5 +62,6 @@ echo "*******************************************"
 echo "Kubespider config path: /root/.kubespider/"
 echo "Download file path: /root/kubespider/nas/"
 echo "Kubespider webhook address: http://<server_ip>:3800"
-echo "Waring: Motrix server UI address: http://<server_ip>:8081, go and open motrix"
+echo "Aria2 server address: http://<server_ip>:6800/jsonrpc, you can use any gui or webui to connect it"
+echo "Aria2 default secret is:kubespider"
 echo "*******************************************"
