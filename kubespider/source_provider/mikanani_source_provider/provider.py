@@ -39,10 +39,10 @@ class MikananiSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self):
         return self.webhook_enable
 
-    def should_handle(self, dataSourceUrl):
+    def should_handle(self, dataSourceUrl: str):
         return False
     
-    def get_links(self, dataSourceUrl):
+    def get_links(self, dataSourceUrl: str):
         try:
             req = requests.get(self.rss_link)
         except Exception as e:
@@ -67,7 +67,7 @@ class MikananiSourceProvider(provider.SourceProvider):
             logging.info(f'parse rss xml error:{str(e)}')
             return []
 
-    def update_config(self, reqPara):
+    def update_config(self, reqPara: str):
         pass
 
     def load_config(self):

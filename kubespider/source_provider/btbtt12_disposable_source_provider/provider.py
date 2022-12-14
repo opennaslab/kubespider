@@ -32,14 +32,14 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self):
         return self.webhook_enable
 
-    def should_handle(self, dataSourceUrl):
+    def should_handle(self, dataSourceUrl: str):
         parse_url = urlparse(dataSourceUrl)
         if parse_url.hostname == 'www.btbtt12.com' and 'attach-dialog-fid' in parse_url.path:
             logging.info(f'{dataSourceUrl} belongs to Btbtt12DisposableSourceProvider')
             return True
         return False
 
-    def get_links(self, dataSourceUrl):
+    def get_links(self, dataSourceUrl: str):
         parse_url = urlparse(dataSourceUrl)
         rep_path = str.split(parse_url.path, '-')
         rep_path[1] = 'download'
@@ -48,7 +48,7 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
         logging.info(f'btbtt12_disposable_source_provider parse {dataSourceUrl} as {ret}')
         return [ret]
     
-    def update_config(self, reqPara):
+    def update_config(self, reqPara: str):
         pass
     
     def load_config(self):

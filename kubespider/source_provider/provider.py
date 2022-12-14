@@ -34,15 +34,15 @@ class SourceProvider(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def should_handle(self, dataSourceUrl):
+    def should_handle(self, dataSourceUrl: str):
         pass
     
     @abc.abstractmethod
-    def get_links(self, dataSourceUrl):
+    def get_links(self, dataSourceUrl: str):
         pass
 
     @abc.abstractmethod
-    def update_config(self, reqPara):
+    def update_config(self, reqPara: str):
         pass
 
     @abc.abstractmethod

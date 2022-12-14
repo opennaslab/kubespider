@@ -36,14 +36,14 @@ class MeijuttSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self):
         return True
 
-    def should_handle(self, dataSourceUrl):
+    def should_handle(self, dataSourceUrl: str):
         parse_url = urlparse(dataSourceUrl)
         if parse_url.hostname == 'www.meijutt.tv' and 'content' in parse_url.path:
             logging.info(f'{dataSourceUrl} belongs to MeijuttSourceProvider')
             return True
         return False
     
-    def get_links(self, dataSourceUrl):
+    def get_links(self, dataSourceUrl: str):
         ret = []
         for tv_link in self.tv_links:
             if len(tv_link) == 0:
@@ -64,7 +64,7 @@ class MeijuttSourceProvider(provider.SourceProvider):
                 ret.append(url)
         return ret
 
-    def update_config(self, reqPara):
+    def update_config(self, reqPara: str):
         cfg = provider.load_source_provide_config(self.provider_name)
         links = cfg['TV_LINKS']
         links = str.split(links, ',')
