@@ -56,9 +56,6 @@ docker run -itd --name kubespider \
 # 6.Give other info
 echo "[INFO] Deploy successful, check the information:"
 echo "*******************************************"
-echo "[INFO] It's better idea to try chrome extenstions, check here:"
-echo "[INFO] It's better idea to try plex, check here:"
-echo "*******************************************"
 echo "Kubespider config path: /root/.kubespider/"
 echo "Download file path: /root/kubespider/nas/"
 echo "Kubespider webhook address: http://<server_ip>:3800"

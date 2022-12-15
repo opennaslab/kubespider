@@ -54,5 +54,7 @@ class SourceProvider(metaclass=abc.ABCMeta):
 ```
 `__init__`: 资源提供器初始化函数，初始化一些必要状态。
 
+## 示例
+
 ## 测试
 TBD

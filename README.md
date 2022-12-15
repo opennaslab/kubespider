@@ -26,7 +26,7 @@
 3. 服务器已安装Docker。
 
 ### 默认安装
-Kubespider为了适配多种资源平台，提供了许多适配器，按你的需要开启或关闭这些适配器。配置文件在`.kubespider`文件夹：
+Kubespider为了适配多种资源平台，提供了许多适配器，按你的需要开启或关闭这些适配器，配置文件在`.kubespider`文件夹：
 
 #### 1.下载代码库并且安装
 ```sh
@@ -50,9 +50,6 @@ WARNING: Published ports are discarded when using host network mode
 9c0aa1059f1546a4f1a2accac445ce1389f1c400b96328f3e18c8af03f0bbc70
 [INFO] Deploy successful, check the information:
 *******************************************
-[INFO] It's better idea to try chrome extenstions, check here:
-[INFO] It's better idea to try plex, check here:
-*******************************************
 Kubespider config path: /root/.kubespider/
 Download file path: /root/kubespider/nas/
 Kubespider webhook address: http://<server_ip>:3800
@@ -60,7 +57,9 @@ Aria2 server address: http://<server_ip>:6800/jsonrpc, you can use any gui or we
 Aria2 default secret is:kubespider
 *******************************************
 ```
-此步骤会安装`Kubespide`和`Aria2`资源下载程序，作为默认的下载器。
+* 此步骤会安装`Kubespide`和`Aria2`资源下载程序，作为默认的下载器。
+* 安装后，**所有下载文件会存储到 `/root/kubespider/nas`**。  
+* 配置文件在 `/root/.kubespider/`。
 
 #### 2.连接aria2 
 为了便于查看下载任务，去chrome商店下载[Aria2插件](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn)。  
@@ -69,45 +68,13 @@ Aria2 default secret is:kubespider
 
 当然，非必需的，你也可以使用桌面程序连接：[AriaNg](https://github.com/mayswind/AriaNg-Native/releases/)
 
-#### 3.检查是否安装成功  
-查看kubespider容器日志即可，无报错即可：
-```sh
-root@cesign [04:20:36 PM] [+31.0°C] [~]
--> # docker logs kubespider
-2022-12-04 06:19:14,302-INFO: Source Provider:mikanani_source_provider enabled...
-2022-12-04 06:19:14,302-INFO: Source Provider:btbtt12_disposable_source_provider enabled...
-2022-12-04 06:19:14,302-INFO: Download Provider:motrix_download_provider enabled...
-2022-12-04 06:19:14,302-INFO: Period Server start running...
-2022-12-04 06:19:14,303-INFO: https://mikanani.me/RSS/MyBangumi?token=egIVi24Uxfg68bFDW5ehVgpHCadfZ1AULNYot%2b95mDo%3d
-2022-12-04 06:19:14,304-INFO: Webhook Server start running...
-```
-
-安装后，所有下载文件会存储到 `/root/kubespider/nas`。  
-配置文件在 `/root/.kubespider/`。
-
-#### 4.安装Chrome插件  
+#### 3.安装Chrome插件  
 TBD（还未发布）  
 Kubespider结合chrome插件，能获得更好的体验，如我要追剧，直接将如下网页地址发送给Kubespider即可：
 ![img](./docs/images/kubespider-chrome-ext-usage.png)
 
-#### 5.安装Plex（非必需，可选安装）  
-Plex是一个视频观看平台，能非常方便的观看下载的视频资源。最后效果如下：
-![img](./docs/images/plex-video-show.jpg)
-   
-首先，获取Plex口令代码：访问[Plex Claim](https://www.plex.tv/claim/)注册获取口令。  
-![img](./docs/img/../images/plex-claim-code.jpg)
-
-然后，安装Plex:
-```sh
-git clone https://github.com/jwcesign/kubespider.git
-cd kubespider
-export PLEX_CLAIM=<获取到的代码>
-bash hack/install_plex.sh
-```
-
-最后，配置Plex：
-打开地址`http://<server_ip>:32400`，将`/nas`作为电影文件夹:
-![img](./docs/images/plex-add-dir.jpg)
+#### 4.更多（可选）
+* 安装Plex，多平台观看视频。[立即安装](./docs/zh/user_guide/plex_install_config/README.md) 
 
 ## 特性列表
 ### 基本特性
