@@ -3,7 +3,7 @@
 ![image](./docs/images/logo.png)  
 [LOGO准备中...]
 
-## 一款全局资源编排下载系统
+## 💥 一款全局资源编排下载系统
 [![GitHub release](https://img.shields.io/github/v/release/agalwood/Motrix.svg)](https://github.com/agalwood/Motrix/releases) ![Build/release](https://github.com/agalwood/Motrix/workflows/Build/release/badge.svg) ![Total Downloads](https://img.shields.io/github/downloads/agalwood/Motrix/total.svg) ![Support Platforms](https://camo.githubusercontent.com/a50c47295f350646d08f2e1ccd797ceca3840e52/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f706c6174666f726d2d6d61634f5325323025374325323057696e646f77732532302537432532304c696e75782d6c69676874677265792e737667)
 
 [English](./README.md) | 简体中文  
@@ -12,7 +12,7 @@
 
 之前接触到Terraform，惊讶于其通用性。Kubespider受到Terraform启发，旨在构建一个通用的下载编排系统，兼容各种资源平台和下载软件，兼容多种下载方式（请求触发，周期触发，更新触发），做资源下载最完美的统一解决方案。
 
-## 系统架构
+## ⛵ 系统架构
 为了实现一个通用的下载编排系统，需要适配各种资源网站和下载软件，所以将这两部分从核心功能中抽象出来：
 ![image](./docs/images/kubespider-architecture.png)
 * `kubespider-core`：Kubespider核心模块，接受触发下载请求，调用资源提供器provider解析（最终会解析为标准模式，如用户输入bilibili博主地址，对应资源提供器输出mp4文件地址下载列表），最后调用下载提供器provider实现下载；此模块同时也会周期调用providers(如追剧provider)，下载增加的资源。
@@ -94,3 +94,4 @@ Kubespider结合chrome插件，能获得更好的体验，如我要追剧，直�
 如果你有兴趣参与共同开发，欢迎 STAR/FORK/PR。
 * 如何编写资源网站的资源提供器，请看 [link](./docs/zh/contribute/implement_source_provider_cn.md)。
 * 如何编写下载软件的下载提供器，请看 [link](./docs/zh/contribute/implement_download_provider_cn.md)。
+* 如何开发chrome插件webhook，请看 [link](./docs/zh/contribute/develop_chrome_extension.md)。
