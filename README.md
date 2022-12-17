@@ -76,7 +76,7 @@ Kubespider结合chrome插件，能获得更好的体验，如我要追剧，直�
 #### 4.更多（可选）
 * 安装Plex，多平台观看视频。[立即安装](./docs/zh/user_guide/plex_install_config/README.md) 
 
-## 特性列表
+## 🔧 特性列表
 ### 基本特性
 * 支持magnent, torrent, 以及普通资源下载，如zip等。
 
@@ -84,14 +84,14 @@ Kubespider结合chrome插件，能获得更好的体验，如我要追剧，直�
 * 支持aria2类型的下载器。
 
 ### 资源提供器
-* 基于mikanani，实现全自动动漫追番。[link](./docs/zh/user_guide/mikanani_source_provider/README.md)
-* 下载btbtt12相关种子资源。[link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md)
-* 基于meijutt实现自动追美剧。[link](./docs/zh/user_guide/meijutt_source_provider/README.md)
+* 基于mikanani，实现全自动动漫追番，配置请查看 [link](./docs/zh/user_guide/mikanani_source_provider/README.md)。
+* 下载btbtt12相关种子资源，配置请查看 [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md)。
+* 基于meijutt实现自动追美剧，配置请查看 [link](./docs/zh/user_guide/meijutt_source_provider/README.md)。
 * 基于y2mate，实现下载youtube视频（TODO）。
 
 ## 🤝 参与共建 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
-如果你有兴趣参与共同开发，欢迎 STAR/FORK/PR。
+如果你有兴趣参与共同开发，欢迎 STAR/FORK/PR，Roadmap请查看 [link](./docs/zh/roadmap.md)。
 * 如何编写资源网站的资源提供器，请看 [link](./docs/zh/contribute/implement_source_provider_cn.md)。
 * 如何编写下载软件的下载提供器，请看 [link](./docs/zh/contribute/implement_download_provider_cn.md)。
 * 如何开发chrome插件webhook，请看 [link](./docs/zh/contribute/develop_chrome_extension.md)。

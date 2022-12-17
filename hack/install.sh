@@ -13,7 +13,7 @@ cat << "EOF"
 EOF
 echo "[INFO] Start to deploy with default configuration..."
 
-# 2.Check docker install
+# 2.Check env
 if [[ `whoami` != 'root' ]]; then
     echo "[ERROR] Please run as root"
     exit 1
