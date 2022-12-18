@@ -38,6 +38,6 @@ docker run -d --name=thunder --hostname=thunder \
     --restart=unless-stopped --privileged \
     cesign/xunlei:latest
 
-# 5. Notice
+# 5.Notice
 echo "[INFO] Deploy baidu thunder success, enjoy your time..."
 echo "[INFO] Thunder web address is: http://<server_ip>:2345"
