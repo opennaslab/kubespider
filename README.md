@@ -52,7 +52,7 @@ WARNING: Published ports are discarded when using host network mode
 *******************************************
 Kubespider config path: /root/.kubespider/
 Download file path: /root/kubespider/nas/
-Kubespider webhook address: http://<server_ip>:3800
+Kubespider webhook address: http://<server_ip>:3080
 Aria2 server address: http://<server_ip>:6800/jsonrpc, you can use any gui or webui to connect it
 Aria2 default secret is:kubespider
 *******************************************
@@ -74,7 +74,9 @@ Kubespider结合chrome插件，能获得更好的体验，如我要追剧，直�
 ![img](./docs/images/kubespider-chrome-ext-usage.png)
 
 #### 4.更多（可选）
-* 安装Plex，多平台观看视频。[立即安装](./docs/zh/user_guide/plex_install_config/README.md) 
+* 安装Plex，多平台观看视频，[立即安装](./docs/zh/user_guide/plex_install_config/README.md)。
+* 安装百度网盘，长时下载，[立即安装](TODO)。
+* 安装迅雷，长时下载，[立即安装](TODO)。
 
 ## 🔧 特性列表
 ### 基本特性
