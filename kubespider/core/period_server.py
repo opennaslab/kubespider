@@ -7,6 +7,7 @@ from api import types
 from core import kubespider
 from utils import helper
 
+
 class PeriodServer:
     def __init__(self, source_providers, download_providers) -> None:
         self.period_seconds = 3600
@@ -16,11 +17,11 @@ class PeriodServer:
 
     def run(self):
         while True:
-            meetError = False
+            meet_err = False
             for provider in self.source_providers:
-                meetError = self.run_single_provider(provider)
+                meet_err = self.run_single_provider(provider)
             
-            if not meetError:
+            if not meet_err:
                 time.sleep(self.period_seconds)
             else:
                 time.sleep(20)
@@ -32,7 +33,7 @@ class PeriodServer:
             self.run_single_provider(provider)
             
     def run_single_provider(self, provider):
-        meetError = False
+        meet_err = False
         if provider.get_provider_type() == types.SOURCE_PROVIDER_PERIOD_TYPE:
             provider.load_config()
             links = provider.get_links("")
@@ -47,15 +48,16 @@ class PeriodServer:
                 if helper.get_unique_hash(source) in downloaded_links:
                     continue
                 logging.info(f"Find new resource:{source}")
-                if kubespider.kubespider_downloader.download_file(source, download_final_path, file_type) == False:
-                    meetError = True
+                ok = kubespider.kubespider_downloader.download_file(source, download_final_path, file_type)
+                if ok is False:
+                    meet_err = True
                     break
                 downloaded_links[helper.get_unique_hash(source)] = '1'
 
             state[provider_name] = downloaded_links
             self.save_state(state)
         
-        return meetError
+        return meet_err
 
     def load_state(self, provider_name):
         cfg = configparser.ConfigParser()

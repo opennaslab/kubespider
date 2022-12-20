@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 from source_provider import provider
 from api import types
 
+
 class Btbtt12DisposableSourceProvider(provider.SourceProvider):
     def __init__(self) -> None:
         self.provider_type = types.SOURCE_PROVIDER_DISPOSABLE_TYPE

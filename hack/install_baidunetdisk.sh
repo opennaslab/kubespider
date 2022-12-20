@@ -14,11 +14,6 @@ EOF
 echo "[INFO] Start to deploy baidu net disk..."
 
 # 2.Check env
-if [[ `whoami` != 'root' ]]; then
-    echo "[ERROR] Please run as root"
-    exit 1
-fi
-
 ret=`docker version`
 if [[ $? != 0 ]]; then
     echo "[ERROR] Please install docker"
@@ -26,19 +21,18 @@ if [[ $? != 0 ]]; then
 fi
 
 # 3.Create necessary directory
-mkdir -p /root/kubespider/nas/
-mkdir -p /root/kubespider/baidunetdisk/
+mkdir -p /${HOME}/kubespider/nas/
+mkdir -p /${HOME}/kubespider/baidunetdisk/
 
 # 4.Install baidu net disk
-docker create \
-    --name=baidunetdisk \
+docker run -itd --name=baidunetdisk \
     -p 5800:5800 \
     -p 5900:5900 \
-    -v /root/kubespider/baidu:/config \
-    -v /root/kubespider/nas:/config/baidunetdiskdownload \
+    -v /${HOME}/kubespider/baidu:/config \
+    -v /${HOME}/kubespider/nas:/config/baidunetdiskdownload \
     --restart unless-stopped \
     cesign/baidunetdisk:latest
 
-# 5. Notice
+# 4. Notice
 echo "[INFO] Deploy baidu net disk success, enjoy your time..."
 echo "[INFO] Biadu web address is: http://<server_ip>:5800"

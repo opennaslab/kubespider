@@ -7,6 +7,7 @@ from http.server import BaseHTTPRequestHandler
 from core import kubespider
 from api import types
 
+
 class WebhookServer(BaseHTTPRequestHandler):
     def __init__(self, request, client_address, server) -> None:
         self.source_provider = kubespider.enabled_source_provider
@@ -30,26 +31,26 @@ class WebhookServer(BaseHTTPRequestHandler):
                 matchOneProvider = True
         
         err = None
-        if matchOneProvider == False:
+        if matchOneProvider is False:
             file_type = self.get_file_type(source)
             # If we not match the source provider, just download to common path
             path = os.path.join('common', path)
             err = kubespider.kubespider_downloader.download_file(source, path, file_type)
 
-        if matchOneProvider == True:
+        if matchOneProvider is True:
             if matchProvider.get_provider_type() == types.SOURCE_PROVIDER_DISPOSABLE_TYPE:
                 file_type = matchProvider.get_file_type()
                 links = matchProvider.get_links(source)
                 download_final_path = os.path.join(matchProvider.get_download_path(), path)
                 for download_link in links:
                     err = kubespider.kubespider_downloader.download_file(download_link, download_final_path, file_type)
-                    if err != None:
+                    if err is not None:
                         break
             else:
                 provider.update_config(source)
                 kubespider.kubespider_period_server.trigger_run(provider.get_provider_name())
 
-        if err == None:
+        if err is None:
             self.send_ok_response()
         else:
             self.send_bad_response(err)

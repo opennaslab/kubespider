@@ -5,6 +5,7 @@ import aria2p
 
 from download_provider import provider
 
+
 class Aria2DownloadProvider(provider.DownloadProvider):
     def __init__(self) -> None:
         self.provider_name = 'aria2_download_provider'

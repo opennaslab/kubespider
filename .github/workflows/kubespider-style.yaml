@@ -1,0 +1,31 @@
+# Copyright 2022 Kubespider
+# SPDX-License-Identifier: Apache-2.0
+
+name: Kubespider style check
+
+on:
+  pull_request:
+    branches: [ 'main', 'release-*' ]
+  
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pylint
+
+    - name: Analysing the code with pylint
+      run: |
+        pylint $(git ls-files '*.py') --max-line-length=240
