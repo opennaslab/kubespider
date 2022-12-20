@@ -1,0 +1,12 @@
+# Copyright 2022 Kubespider
+# SPDX-License-Identifier: Apache-2.0
+
+name: Kubespider style check
+
+on:
+  pull_request:
+    branches: [ 'main', 'release-*' ]
+  
+jobs:
+  style:
+    uses: andymckay/pycodestyle-action@0.1.3

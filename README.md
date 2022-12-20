@@ -58,8 +58,8 @@ Aria2 default secret is:kubespider
 *******************************************
 ```
 * 此步骤会安装`Kubespide`和`Aria2`资源下载程序，作为默认的下载器。
-* 安装后，**所有下载文件会存储到 `/root/kubespider/nas`**。  
-* 配置文件在 `/root/.kubespider/`。
+* 安装后，**所有下载文件会存储到 `/${HOME}/kubespider/nas`**。  
+* 配置文件在 `/${HOME}/.kubespider/`。
 
 #### 2.连接aria2 
 为了便于查看下载任务，去chrome商店下载[Aria2插件](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn)。  
