@@ -28,6 +28,7 @@ enabled_download_provider = []
 kubespider_downloader = download_trigger.KubespiderDownloader(enabled_download_provider)
 kubespider_period_server = period_server.PeriodServer(enabled_source_provider, enabled_download_provider)
 
+
 def run():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s-%(levelname)s: %(message)s')
 
@@ -43,21 +44,25 @@ def run():
             logging.info(f'Download Provider:{provider_name} enabled...')
             enabled_download_provider.append(provider)
 
-    kubespider_downloader = download_trigger.KubespiderDownloader(enabled_download_provider)
-    kubespider_period_server = period_server.PeriodServer(enabled_source_provider, enabled_download_provider)
+    kubespider_downloader = \
+        download_trigger.KubespiderDownloader(enabled_download_provider)
+    kubespider_period_server = \
+        period_server.PeriodServer(enabled_source_provider, enabled_download_provider)
 
     _thread.start_new_thread(run_period_job, ())
     _thread.start_new_thread(run_webhook_server, ())
     while True:
         time.sleep(30)
 
+
 def run_webhook_server():
     webhook_server_port = os.getenv('WEBHOOK_SERVER_PORT')
-    if webhook_server_port == None:
+    if webhook_server_port is None:
         webhook_server_port = 3080
     httpd = HTTPServer(('0.0.0.0', webhook_server_port), webhook_server.WebhookServer)
     logging.info(f'Webhook Server start running...')
     httpd.serve_forever()
+
 
 def run_period_job():
     logging.info('Period Server start running...')

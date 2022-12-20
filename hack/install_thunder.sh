@@ -15,11 +15,6 @@ EOF
 echo "[INFO] Start to deploy thunder..."
 
 # 2.Check env
-if [[ `whoami` != 'root' ]]; then
-    echo "[ERROR] Please run as root"
-    exit 1
-fi
-
 ret=`docker version`
 if [[ $? != 0 ]]; then
     echo "[ERROR] Please install docker"
@@ -27,14 +22,14 @@ if [[ $? != 0 ]]; then
 fi
 
 # 3.Create necessary directory
-mkdir -p /root/kubespider/nas/
-mkdir -p /root/kubespider/thunder/
+mkdir -p ${HOME}/kubespider/nas/
+mkdir -p ${HOME}/kubespider/thunder/
 
 # 4.Install thunder 
 docker run -d --name=thunder --hostname=thunder \
     --net=host \
-    -v /root/kubespider/thunder:/xunlei/data \
-    -v /root/kubespider/nas:/xunlei/downloads \
+    -v ${HOME}/kubespider/thunder:/xunlei/data \
+    -v ${HOME}/kubespider/nas:/xunlei/downloads \
     --restart=unless-stopped --privileged \
     cesign/xunlei:latest
 

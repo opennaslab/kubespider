@@ -4,6 +4,9 @@ import threading
 
 import configparser
 
+source_provider_file_lock = threading.Lock()
+
+
 class SourceProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def __init__(self) -> None:
@@ -49,7 +52,6 @@ class SourceProvider(metaclass=abc.ABCMeta):
     def load_config(self):
         pass
 
-source_provider_file_lock = threading.Lock()
 
 def load_source_provide_config(provider_name):
     source_provider_file_lock.acquire()
@@ -61,6 +63,7 @@ def load_source_provide_config(provider_name):
         return cfg[provider_name]
     source_provider_file_lock.release()
     return {}
+
 
 def save_source_provider_config(provider_name, section_cfg):
     source_provider_file_lock.acquire()

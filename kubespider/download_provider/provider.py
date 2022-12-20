@@ -2,6 +2,7 @@ import os
 import abc
 import configparser
 
+
 class DownloadProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def __init__(self) -> None:
@@ -30,6 +31,7 @@ class DownloadProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def load_config(self):
         pass
+
 
 def load_download_provider_config(provider_name):
     cfg = configparser.ConfigParser()

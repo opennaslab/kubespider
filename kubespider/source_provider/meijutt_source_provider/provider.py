@@ -8,6 +8,7 @@ import logging
 from api import types
 from source_provider import provider
 
+
 class MeijuttSourceProvider(provider.SourceProvider):
     def __init__(self) -> None:
         self.provider_type = types.SOURCE_PROVIDER_PERIOD_TYPE
@@ -55,7 +56,7 @@ class MeijuttSourceProvider(provider.SourceProvider):
                 continue
             dom = BeautifulSoup(req.content, 'html.parser')
             div = dom.find_all("div", ['class', 'tabs-list current-tab'])
-            if len(div)  == 0:
+            if len(div) == 0:
                 continue
             links = div[0].find_all('input', ['class', 'down_url'])
             for link in links:

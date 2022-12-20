@@ -10,6 +10,7 @@ from source_provider import provider
 from api import types
 from utils import helper
 
+
 class MikananiSourceProvider(provider.SourceProvider):
     def __init__(self) -> None:
         self.provider_type = types.SOURCE_PROVIDER_PERIOD_TYPE
@@ -18,7 +19,7 @@ class MikananiSourceProvider(provider.SourceProvider):
         self.provider_name = 'mikanani_source_provider'
         self.rss_link = ''
         self.download_path = ''
-        self.tmp_file_path='/tmp/'
+        self.tmp_file_path = '/tmp/'
 
     def get_provider_name(self):
         return self.provider_name
