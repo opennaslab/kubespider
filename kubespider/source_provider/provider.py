@@ -11,10 +11,10 @@ class SourceProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def __init__(self) -> None:
         pass
-    
+
     @abc.abstractmethod
     def get_provider_name(self):
-        pass 
+        pass
 
     @abc.abstractmethod
     def get_provider_type(self):
@@ -37,15 +37,15 @@ class SourceProvider(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def should_handle(self, dataSourceUrl: str):
-        pass
-    
-    @abc.abstractmethod
-    def get_links(self, dataSourceUrl: str):
+    def should_handle(self, data_source_url: str):
         pass
 
     @abc.abstractmethod
-    def update_config(self, reqPara: str):
+    def get_links(self, data_source_url: str):
+        pass
+
+    @abc.abstractmethod
+    def update_config(self, req_para: str):
         pass
 
     @abc.abstractmethod
@@ -71,7 +71,7 @@ def save_source_provider_config(provider_name, section_cfg):
     config_path = os.path.join(os.getenv('HOME'), '.kubespider/source_provider.cfg')
     cfg.read(config_path)
     cfg[provider_name] = section_cfg
-    with open(config_path, 'w') as f:
-        cfg.write(f)
-        f.close()
+    with open(config_path, 'w') as config_file:
+        cfg.write(config_file)
+        config_file.close()
     source_provider_file_lock.release()

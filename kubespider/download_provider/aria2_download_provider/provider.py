@@ -23,37 +23,37 @@ class Aria2DownloadProvider(provider.DownloadProvider):
         return cfg['ENABLE'] == 'true'
 
     def send_torrent_task(self, torrent_file_path, download_path):
-        logging.info(f'Start torrent download:{torrent_file_path}')
+        logging.info('Start torrent download:%s', torrent_file_path)
         download_path = os.path.join(self.download_base_path, download_path)
         try:
             ret = self.aria2.add_torrent(torrent_file_path, options={'dir': download_path})
-            logging.info(f'Create download task result:{ret}')
+            logging.info('Create download task result:%s', ret)
             return None
         except Exception as err:
-            logging.warning(f'Please ensure your motrix server is ok:{str(err)}')
+            logging.warning('Please ensure your motrix server is ok:%s', err)
             return err
         return None
     
     def send_magnet_task(self, url, path):
-        logging.info(f'Start magnet download:{url}')
+        logging.info('Start magnet download:%s', url)
         download_path = os.path.join(self.download_base_path, path)
         try:
             ret = self.aria2.add_magnet(url, options={'dir': download_path})
-            logging.info(f'Create download task result:{ret}')
+            logging.info('Create download task result:%s', ret)
             return None
         except Exception as err:
-            logging.warning(f'Please ensure your motrix server is ok:{str(err)}')
+            logging.warning('Please ensure your motrix server is ok:%s', err)
             return err
 
     def send_general_task(self, url, path):
-        logging.info(f'Start general file download:{url}')
+        logging.info('Start general file download:%s', url)
         download_path = os.path.join(self.download_base_path, path)
         try:
             ret = self.aria2.add(url, options={'dir': download_path})
-            logging.info(f'Create download task result:{ret}')
+            logging.info('Create download task result:%s', ret)
             return True
         except Exception as err:
-            logging.warning(f'Please ensure your motrix server is ok:{str(err)}')
+            logging.warning('Please ensure your motrix server is ok:%s', err)
             return err
 
     def load_config(self):

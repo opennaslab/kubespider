@@ -20,18 +20,18 @@ class PeriodServer:
             meet_err = False
             for provider in self.source_providers:
                 meet_err = self.run_single_provider(provider)
-            
+
             if not meet_err:
                 time.sleep(self.period_seconds)
             else:
                 time.sleep(20)
-    
+
     def trigger_run(self, provider_name):
         for provider in self.source_providers:
             if provider_name != provider.get_provider_name():
                 continue
             self.run_single_provider(provider)
-            
+
     def run_single_provider(self, provider):
         meet_err = False
         if provider.get_provider_type() == types.SOURCE_PROVIDER_PERIOD_TYPE:
@@ -47,16 +47,16 @@ class PeriodServer:
             for source in links:
                 if helper.get_unique_hash(source) in downloaded_links:
                     continue
-                logging.info(f"Find new resource:{source}")
-                ok = kubespider.kubespider_downloader.download_file(source, download_final_path, file_type)
-                if ok is False:
+                logging.info('Find new resource:%s', source)
+                download_ok = kubespider.kubespider_downloader.download_file(source, download_final_path, file_type)
+                if download_ok is False:
                     meet_err = True
                     break
                 downloaded_links[helper.get_unique_hash(source)] = '1'
 
             state[provider_name] = downloaded_links
             self.save_state(state)
-        
+
         return meet_err
 
     def load_state(self, provider_name):
@@ -72,6 +72,6 @@ class PeriodServer:
         return cfg
 
     def save_state(self, state):
-        with open(self.state_file_dir+'/state.cfg', 'w') as state_file:
+        with open(self.state_file_dir+'/state.cfg', 'w', encoding='utf-8') as state_file:
             state.write(state_file)
             state_file.close()

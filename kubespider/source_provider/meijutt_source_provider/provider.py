@@ -37,22 +37,22 @@ class MeijuttSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self):
         return True
 
-    def should_handle(self, dataSourceUrl: str):
-        parse_url = urlparse(dataSourceUrl)
+    def should_handle(self, data_source_url: str):
+        parse_url = urlparse(data_source_url)
         if parse_url.hostname == 'www.meijutt.tv' and 'content' in parse_url.path:
-            logging.info(f'{dataSourceUrl} belongs to MeijuttSourceProvider')
+            logging.info('%s belongs to MeijuttSourceProvider', data_source_url)
             return True
         return False
     
-    def get_links(self, dataSourceUrl: str):
+    def get_links(self, data_source_url: str):
         ret = []
         for tv_link in self.tv_links:
             if len(tv_link) == 0:
                 continue
             try:
                 req = requests.get(tv_link)
-            except Exception as e:
-                logging.info(f'meijutt_source_provider get links error:{str(e)}')
+            except Exception as err:
+                logging.info('meijutt_source_provider get links error:%s', err)
                 continue
             dom = BeautifulSoup(req.content, 'html.parser')
             div = dom.find_all("div", ['class', 'tabs-list current-tab'])
@@ -61,16 +61,16 @@ class MeijuttSourceProvider(provider.SourceProvider):
             links = div[0].find_all('input', ['class', 'down_url'])
             for link in links:
                 url = link.get('value')
-                logging.info(f'meijutt find {url}')
+                logging.info('meijutt find %s', url)
                 ret.append(url)
         return ret
 
-    def update_config(self, reqPara: str):
+    def update_config(self, req_para: str):
         cfg = provider.load_source_provide_config(self.provider_name)
         links = cfg['TV_LINKS']
         links = str.split(links, ',')
-        if reqPara not in links:
-            links.append(reqPara)
+        if req_para not in links:
+            links.append(req_para)
         links = ','.join(links)
         cfg['TV_LINKS'] = links
         provider.save_source_provider_config(self.provider_name, cfg)

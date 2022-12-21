@@ -45,7 +45,6 @@ if [[ ${KUBESPIDER_VERSION} == "" ]]; then
     export KUBESPIDER_VERSION="latest"
 fi
 docker run -itd --name kubespider \
-    -p 3800:3800 \
     -v ${HOME}/.kubespider:/root/.kubespider \
     --network=host \
     --restart unless-stopped \
