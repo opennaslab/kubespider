@@ -8,15 +8,17 @@ class KubespiderDownloader:
     def __init__(self, download_providers) -> None:
         self.download_provider = download_providers
 
-    def download_file(self, url, path, fileType):
-        if fileType == 'torrent':
+    def download_file(self, url, path, file_type):
+        if file_type == 'torrent':
             return self.handle_torrent_download(url, path)
 
-        if fileType == 'magnet':
+        if file_type == 'magnet':
             return self.handle_magnet_download(url, path)
 
-        if fileType == 'general':
+        if file_type == 'general':
             return self.handle_general_download(url, path)
+
+        return None
 
     def handle_torrent_download(self, url, path):
         logging.info('Download torrent file')
@@ -28,18 +30,18 @@ class KubespiderDownloader:
         try:
             torrent_data = req.open(url, timeout=10).read()
         except Exception as err:
-            logging.info(f'Download torrent error{str(err)}')
+            logging.info('Download torrent error:%s', err)
             return err
-        with open(tmp_file, 'wb') as f:
-            f.write(torrent_data)
-            f.close()
+        with open(tmp_file, 'wb') as torrent_file:
+            torrent_file.write(torrent_data)
+            torrent_file.close()
         for provider in self.download_provider:
             provider.load_config()
             err = provider.send_torrent_task(tmp_file, path)
             if err is not None:
                 return err
         return None
-    
+
     def handle_magnet_download(self, url, path):
         logging.info('Download mangent file')
         for provider in self.download_provider:
@@ -48,7 +50,7 @@ class KubespiderDownloader:
             if err is not None:
                 return err
         return None
-    
+
     def handle_general_download(self, url, path):
         logging.info('Download general file')
         for provider in self.download_provider:

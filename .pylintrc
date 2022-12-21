@@ -1,0 +1,23 @@
+[MASTER]
+disable=
+    C0114, # missing-module-docstring
+    C0115, # missing-class-docstring
+    C0116, # missing-class-docstring
+    W0703, # broad-except
+
+[SIMILARITIES]
+# Minimum lines number of a similarity.
+min-similarity-lines=100
+
+# Ignore comments when computing similarities.
+ignore-comments=yes
+
+# Ignore docstrings when computing similarities.
+ignore-docstrings=yes
+
+# Ignore imports when computing similarities.
+ignore-imports=no
+
+[FORMAT]
+# Maximum number of characters on a single line.
+max-line-length=240

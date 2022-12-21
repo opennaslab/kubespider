@@ -21,13 +21,13 @@ if [[ $claim == "" ]];then
 fi
 
 # 3. Creat directory
-mkdir -p /${HOME}/kubespider/plex/
+mkdir -p ${HOME}/kubespider/plex/
 
 # 4. Install Plex
 docker run -itd --name plex \
     -p 32400:32400 \
-    -v /${HOME}/kubespider/plex:/config \
-    -v /${HOME}/kubespider/nas:/nas \
+    -v ${HOME}/kubespider/plex:/config \
+    -v ${HOME}/kubespider/nas:/nas \
     -e PUID=1000 \
     -e VERSION=docker \
     -e PLEX_CLAIM=${claim} \

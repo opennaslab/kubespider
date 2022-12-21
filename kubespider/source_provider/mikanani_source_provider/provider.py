@@ -40,14 +40,14 @@ class MikananiSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self):
         return self.webhook_enable
 
-    def should_handle(self, dataSourceUrl: str):
+    def should_handle(self, data_source_url: str):
         return False
     
-    def get_links(self, dataSourceUrl: str):
+    def get_links(self, data_source_url: str):
         try:
             req = requests.get(self.rss_link)
-        except Exception as e:
-            logging.info(f'mikanani get links error:{str(e)}')
+        except Exception as err:
+            logging.info('mikanani get links error:%s', err)
             return []
         tmp_xml = helper.get_tmp_file_name('') + '.xml'
         with open(tmp_xml, 'wb') as f:
@@ -60,15 +60,15 @@ class MikananiSourceProvider(provider.SourceProvider):
             ret = []
             for i in items:
                 anime_name = i.find('./guid').text
-                logging.info(f'mikanani find {anime_name}')
+                logging.info('mikanani find %s', anime_name)
                 url = i.find('./enclosure').attrib['url']
                 ret.append(url)
             return ret
-        except Exception as e:
-            logging.info(f'parse rss xml error:{str(e)}')
+        except Exception as err:
+            logging.info('parse rss xml error:%s', err)
             return []
 
-    def update_config(self, reqPara: str):
+    def update_config(self, req_para: str):
         pass
 
     def load_config(self):

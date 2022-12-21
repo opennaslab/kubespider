@@ -21,15 +21,15 @@ if [[ $? != 0 ]]; then
 fi
 
 # 3.Create necessary directory
-mkdir -p /${HOME}/kubespider/nas/
-mkdir -p /${HOME}/kubespider/baidunetdisk/
+mkdir -p ${HOME}/kubespider/nas/
+mkdir -p ${HOME}/kubespider/baidunetdisk/
 
 # 4.Install baidu net disk
 docker run -itd --name=baidunetdisk \
     -p 5800:5800 \
     -p 5900:5900 \
-    -v /${HOME}/kubespider/baidu:/config \
-    -v /${HOME}/kubespider/nas:/config/baidunetdiskdownload \
+    -v ${HOME}/kubespider/baidu:/config \
+    -v ${HOME}/kubespider/nas:/config/baidunetdiskdownload \
     --restart unless-stopped \
     cesign/baidunetdisk:latest
 
