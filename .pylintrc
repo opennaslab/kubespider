@@ -21,3 +21,10 @@ ignore-imports=no
 [FORMAT]
 # Maximum number of characters on a single line.
 max-line-length=240
+
+[BASIC]
+# Regular expression matching correct method names
+# Pylint do not complain for setUp and other if it
+# detects that we inherit from unittest.TestCase
+# But that's not always possible to detect.
+method-rgx=[a-z_][a-z0-9_]{2,30}$|do_POST(Class)?

@@ -33,7 +33,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
             logging.warning('Please ensure your motrix server is ok:%s', err)
             return err
         return None
-    
+
     def send_magnet_task(self, url, path):
         logging.info('Start magnet download:%s', url)
         download_path = os.path.join(self.download_base_path, path)
