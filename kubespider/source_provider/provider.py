@@ -71,7 +71,7 @@ def save_source_provider_config(provider_name, section_cfg):
     config_path = os.path.join(os.getenv('HOME'), '.kubespider/source_provider.cfg')
     cfg.read(config_path)
     cfg[provider_name] = section_cfg
-    with open(config_path, 'w') as config_file:
+    with open(config_path, 'wb') as config_file:
         cfg.write(config_file)
         config_file.close()
     source_provider_file_lock.release()

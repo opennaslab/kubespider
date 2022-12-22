@@ -1,7 +1,6 @@
 # This works for: https://mikanani.me
 # Function: download anime you subscribe
 import logging
-from urllib.parse import urlparse
 
 import requests
 import xml.etree.cElementTree as ET
@@ -42,17 +41,17 @@ class MikananiSourceProvider(provider.SourceProvider):
 
     def should_handle(self, data_source_url: str):
         return False
-    
+
     def get_links(self, data_source_url: str):
         try:
-            req = requests.get(self.rss_link)
+            req = requests.get(self.rss_link, timeout=30)
         except Exception as err:
             logging.info('mikanani get links error:%s', err)
             return []
         tmp_xml = helper.get_tmp_file_name('') + '.xml'
-        with open(tmp_xml, 'wb') as f:
-            f.write(req.content)
-            f.close()
+        with open(tmp_xml, 'wb') as cfg_file:
+            cfg_file.write(req.content)
+            cfg_file.close()
 
         try:
             xml_parse = ET.parse(tmp_xml)
@@ -73,6 +72,6 @@ class MikananiSourceProvider(provider.SourceProvider):
 
     def load_config(self):
         cfg = provider.load_source_provide_config(self.provider_name)
-        logging.info('mikanani rss link is:' + cfg['RSS_LINK'])
+        logging.info('mikanani rss link is:%s', cfg['RSS_LINK'])
         self.rss_link = cfg['RSS_LINK']
         self.download_path = cfg['DOWNLOAD_PATH']

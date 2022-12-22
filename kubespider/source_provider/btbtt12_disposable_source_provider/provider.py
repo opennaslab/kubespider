@@ -51,6 +51,6 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
 
     def update_config(self, req_para: str):
         pass
-    
+
     def load_config(self):
         pass

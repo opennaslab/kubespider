@@ -1,10 +1,10 @@
 # This works for: https://www.meijutt.tv/
 # Function: download tv video once it's updated
 from urllib.parse import urlparse
+import logging
 import requests
 from bs4 import BeautifulSoup
 
-import logging
 from api import types
 from source_provider import provider
 
@@ -17,9 +17,9 @@ class MeijuttSourceProvider(provider.SourceProvider):
         self.provider_name = 'meijutt_source_provider'
         self.download_path = ''
         self.tv_links = []
-    
+
     def get_provider_name(self):
-        return self.provider_name 
+        return self.provider_name
 
     def get_provider_type(self):
         return self.provider_type
@@ -32,7 +32,7 @@ class MeijuttSourceProvider(provider.SourceProvider):
 
     def provider_enabled(self):
         cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg['ENABLE'] == 'true' 
+        return cfg['ENABLE'] == 'true'
 
     def is_webhook_enable(self):
         return True
@@ -43,14 +43,14 @@ class MeijuttSourceProvider(provider.SourceProvider):
             logging.info('%s belongs to MeijuttSourceProvider', data_source_url)
             return True
         return False
-    
+
     def get_links(self, data_source_url: str):
         ret = []
         for tv_link in self.tv_links:
             if len(tv_link) == 0:
                 continue
             try:
-                req = requests.get(tv_link)
+                req = requests.get(tv_link, timeout=30)
             except Exception as err:
                 logging.info('meijutt_source_provider get links error:%s', err)
                 continue
@@ -77,6 +77,6 @@ class MeijuttSourceProvider(provider.SourceProvider):
 
     def load_config(self):
         cfg = provider.load_source_provide_config(self.provider_name)
-        logging.info('meijutt tv link is:' + cfg['TV_LINKS'])
+        logging.info('meijutt tv link is:%s', cfg['TV_LINKS'])
         self.tv_links = str.split(cfg['TV_LINKS'], ',')
         self.download_path = cfg['DOWNLOAD_PATH']
