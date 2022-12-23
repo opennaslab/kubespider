@@ -59,3 +59,5 @@ class KubespiderDownloader:
             if err is not None:
                 return err
         return None
+
+kubespider_downloader = KubespiderDownloader(None)
