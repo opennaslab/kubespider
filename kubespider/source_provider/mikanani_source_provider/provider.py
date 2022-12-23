@@ -2,8 +2,8 @@
 # Function: download anime you subscribe
 import logging
 
+import xml.etree.ElementTree as ET
 import requests
-import xml.etree.cElementTree as ET
 
 from source_provider import provider
 from api import types

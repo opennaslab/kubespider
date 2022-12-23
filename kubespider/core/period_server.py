@@ -4,7 +4,7 @@ import os
 import logging
 
 from api import types
-from core import kubespider
+from core import download_trigger
 from utils import helper
 
 
@@ -48,7 +48,8 @@ class PeriodServer:
                 if helper.get_unique_hash(source) in downloaded_links:
                     continue
                 logging.info('Find new resource:%s', source)
-                download_ok = kubespider.kubespider_downloader.download_file(source, download_final_path, file_type)
+                download_ok = download_trigger.kubespider_downloader. \
+                    download_file(source, download_final_path, file_type)
                 if download_ok is False:
                     meet_err = True
                     break
@@ -75,3 +76,5 @@ class PeriodServer:
         with open(self.state_file_dir+'/state.cfg', 'w', encoding='utf-8') as state_file:
             state.write(state_file)
             state_file.close()
+
+kubespider_period_server = PeriodServer(None, None)

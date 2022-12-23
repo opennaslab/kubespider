@@ -4,13 +4,15 @@ import json
 
 from http.server import BaseHTTPRequestHandler
 
-from core import kubespider
+from core import download_trigger
+from core import kubespider_global
+from core import period_server
 from api import types
 
 
 class WebhookServer(BaseHTTPRequestHandler):
     def __init__(self, request, client_address, server) -> None:
-        self.source_provider = kubespider.enabled_source_provider
+        self.source_provider = kubespider_global.enabled_source_provider
         super().__init__(request, client_address, server)
 
     def do_POST(self):
@@ -35,7 +37,7 @@ class WebhookServer(BaseHTTPRequestHandler):
             file_type = self.get_file_type(source)
             # If we not match the source provider, just download to common path
             path = os.path.join('common', path)
-            err = kubespider.kubespider_downloader.download_file(source, path, file_type)
+            err = download_trigger.kubespider_downloader.download_file(source, path, file_type)
 
         if match_one_provider is True:
             if match_provider.get_provider_type() == types.SOURCE_PROVIDER_DISPOSABLE_TYPE:
@@ -43,12 +45,13 @@ class WebhookServer(BaseHTTPRequestHandler):
                 links = match_provider.get_links(source)
                 download_final_path = os.path.join(match_provider.get_download_path(), path)
                 for download_link in links:
-                    err = kubespider.kubespider_downloader.download_file(download_link, download_final_path, file_type)
+                    err = download_trigger.kubespider_downloader.download_file(download_link, \
+                        download_final_path, file_type)
                     if err is not None:
                         break
             else:
                 match_provider.update_config(source)
-                kubespider.kubespider_period_server.trigger_run(match_provider.get_provider_name())
+                period_server.kubespider_period_server.trigger_run(match_provider.get_provider_name())
 
         if err is None:
             self.send_ok_response()
