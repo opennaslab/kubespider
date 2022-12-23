@@ -4,6 +4,7 @@ disable=
     C0115, # missing-class-docstring
     C0116, # missing-class-docstring
     W0703, # broad-except
+    R1732, # consider-using-with
 
 [SIMILARITIES]
 # Minimum lines number of a similarity.
