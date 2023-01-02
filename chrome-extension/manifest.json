@@ -7,12 +7,19 @@
       "storage",
       "scripting",
       "declarativeNetRequest",
-      "declarativeNetRequestFeedback"
+      "declarativeNetRequestFeedback",
+      "contextMenus",
+      "scripting",
+      "tabs",
+      "notifications"
     ],
     "host_permissions": ["*://*/*"],
     "action": {
         "default_title": "Kubespider",
         "default_icon": "icon.png",
         "default_popup": "kubespider.html"
+    },
+    "background": {
+      "service_worker": "service_worker.js"
     }
-  }
+}
