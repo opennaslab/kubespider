@@ -13,7 +13,7 @@
 English | [简体中文](./README-CN.md)  
 I am a cloud computing engineer🤓, focusing on Serverless/FinOps/Runtime, developed Kubespider in my spare time.
 
-The starting point for developing Kubespider is: I have an idle server(in a local area network), and I want to use it as a NAS to realize automatic drama downloads, trigger downloads on a local laptop, and adapt to various website resources (Youtube, BiliBilim, etc.)
+The original intention of developing Kubespider is: I have an idle server(in a local area network), and I want to use it as a NAS to realize automatic drama downloads, trigger downloads on a local laptop, and adapt to various website resources (Youtube, BiliBili, etc.)
 
 I was exposed to Terraform before and was surprised by its versatility. Inspired by Terraform, Kubespider aims to build a general download orchestration system, which is compatible with various resource platforms and download software, compatible with multiple download methods(request trigger, cycle trigger, update trigger) and is the most perfect unified solution for resource download.
 
@@ -79,12 +79,12 @@ Kubespider combined with the chrome plug-in can get a better experience. If I wa
 ![img](./docs/images/kubespider-chrome-ext-usage.png)
 
 #### 4.More (Optional)
-* Install Plex, watch videos on multiple platforms, [Install Now](./docs/zh/user_guide/plex_install_config/README.md).
-* Install Baidu network disk, download for a long time, [install now] (TODO).
+* Install Plex, watch videos on multiple platforms, [install Now](./docs/zh/user_guide/plex_install_config/README.md).
+* Install Baidu network disk, download for a long time, [install now](TODO).
 * Install Thunder, long download, [install now](./docs/zh/user_guide/thunder_install_config/README.md).
 
 ## 🔧 Feature list
-### Basic feature
+### Basic feature   
 * Supports magnet, torrent, and common resource downloads, such as zip, etc.
 
 ### Download provider
