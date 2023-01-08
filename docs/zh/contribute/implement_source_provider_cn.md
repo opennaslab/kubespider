@@ -63,6 +63,15 @@ class SourceProvider(metaclass=abc.ABCMeta):
 * `update_config`: 更新资源提供器配置信息，在webhook ebable时，此接口可用于更新配置文件，如接受美剧地址，刷写地址到配置文件，然后周期下载更新剧集。
 * `load_config`: 获取资源提供器配置信息。
 
+在实现如上函数后，还需要在`kubespider/core/kubespider_global.py`中初始化对应provider，如下：
+```python
+source_providers = [
+    mikanani_source_provider.MikananiSourceProvider(),
+    btbtt12_disposable_source_provider.Btbtt12DisposableSourceProvider(),
+    meijutt_source_provider.MeijuttSourceProvider(),
+]
+```
+
 ## 示例
 这里以meijutt作为示例，实现一个资源提供器。meijutt资源提供器旨在接收webhook触发（接收喜欢的美剧地址URL），实现自动追剧。
 ### 1.配置定义
@@ -158,6 +167,37 @@ class MeijuttSourceProvider(provider.SourceProvider):
   * meijutt资源提供器接受webhook触发，所以`webhook_enable`设置为true。
   * meijutt资源提供器会周期检查美剧是否更新，所以provider类型为`SOURCE_PROVIDER_PERIOD_TYPE`。
   * 其中provider name必需合配置文件中的provider name一致。
+* `get_provider_name`: 直接返回此provider的name即可。
+* `get_provider_type`: 此provider为周期下载类型，所以返回`SOURCE_PROVIDER_PERIOD_TYPE`。
+* `get_file_type`: 返回此provider的下载文件类型。
+* `get_download_path`: 返回下载文件夹地址。
+* `provider_enabled`: 读取配置文件，返回此provider是否开启。
+* `is_webhook_enable`: 此provider需要接收webhook触发，所以返回true。
+* `should_handle`: 判断请求的url是否为www.meijutt.tv，如果是则调用此provider处理。
+* `get_links`: 获取所有文件的下载链接。
+* `update_config`: 在webhook开启情况下，如果请求的url通过`should_handle`检查，则会调用此函数把美剧地址存如provider config文件。
+* `load_config`: 读取配置文件函数。
+
+最后，在`kubespider/core/kubespider_global.py`中初始化meijutt provider，如下：
+```python
+source_providers = [
+    mikanani_source_provider.MikananiSourceProvider(),
+    btbtt12_disposable_source_provider.Btbtt12DisposableSourceProvider(),
+    meijutt_source_provider.MeijuttSourceProvider(),
+]
+```
 
 ## 测试
-TBD
+在代码写好后，直接运行如下命令打包镜像并运行即可(在此repo的根目录运行)：
+```sh
+docker build -t cesign/kubespider:latest -f Dockerfile ./
+
+docker rm kubespider --force
+
+docker run -itd --name kubespider \
+    -v ${HOME}/.kubespider:/root/.kubespider \
+    --network=host \
+    --restart unless-stopped \
+    cesign/kubespider:latest
+```
+然后执行你期待的操作，检查是否如期运行。
