@@ -13,7 +13,7 @@
 English | [简体中文](./README-CN.md)  
 I am a cloud computing engineer🤓, focusing on Serverless/FinOps/Runtime, developed Kubespider in my spare time.
 
-The original intention of developing Kubespider is: I have an idle server(in a local area network), and I want to use it as a NAS to realize automatic drama downloads, trigger downloads on a local laptop, and adapt to various website resources (Youtube, BiliBili, etc.)
+The original intention of developing Kubespider is: I have an idle server(in a local area network), and I want to use it as a NAS to realize automatic drama downloads, trigger downloads on a local laptop, and adapt to various website resources (YouTube, BiliBili, etc.)
 
 I was exposed to Terraform before and was surprised by its versatility. Inspired by Terraform, Kubespider aims to build a general download orchestration system, which is compatible with various resource platforms and download software, compatible with multiple download methods(request trigger, cycle trigger, update trigger) and is the most perfect unified solution for resource download.
 
@@ -21,7 +21,7 @@ I was exposed to Terraform before and was surprised by its versatility. Inspired
 To realize a general download orchestration system, it is necessary to adapt various resource websites and download software, so these two parts are abstracted from the core functions:
 ![image](./docs/images/kubespider-architecture.png)
 * `kubespider-core`: The core module of Kubespider accepts the trigger download request, calls the resource provider for resolution (it will eventually be resolved into a standard mode, such as the user enters the bilibili blogger address, and the corresponding resource provider outputs the mp4 file address download list), and finally calls the download provider to implement Download; this module will also periodically call providers (such as drama provider) to download additional resources.
-* `source-provider`：The provider of each resource website accepts input of general resource addresses, and outputs standard resource address URLs, such as the personal homepage of a YouTube blogger, and outputs all mp4 download addresses of the blogger’s videos. The configuration file is in `./kubespider/source_provider.cfg`.
+* `source-provider`：The provider of each resource website accepts input of general resource addresses, and outputs standard resource address URLs, such as the personal homepage of a YouTuber, and outputs all mp4 download addresses of the blogger’s videos. The configuration file is in `./kubespider/source_provider.cfg`.
 * `download-provider`：The provider of each download software receives the request task from `kubespider-core`, and calls the corresponding service to realize the download. The configuration file is in `./kubespider/download_provider.cfg`.
 
 ## 💽 Installation
@@ -67,21 +67,21 @@ Aria2 default secret is:kubespider
 * Configuration files are located in `${HOME}/.kubespider/`.
 
 #### 2.Connect to aria2
-To check the download tasks, go to the chrome store to download [Aria2 plugin](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn).
+To check the download tasks, go to the chrome store to download [Aria2 plugin](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn).  
 Then connect, the plug-in configuration is as follows (the configuration has been output at the end of `install.sh` script):
-![img](./docs/images/aria2-for-chrome-config.jpg)
+![img](./docs/images/aria2-for-chrome-config-en.jpg)
 
 Of course, it is not necessary, you can also use the desktop program to connect: [AriaNg](https://github.com/mayswind/AriaNg-Native/releases/)
 
 #### 3.Install chrome plugin
-TBD (No release yet)  
+TBD (No release yet, please check [link](./docs/zh/contribute/develop_chrome_extension.md) to install the chrome plugin)  
 Kubespider combined with the chrome plug-in can get a better experience. If I want to follow the drama, I can directly send the following web page address to Kubespider:
 ![img](./docs/images/kubespider-chrome-ext-usage.png)
 
 #### 4.More (Optional)
 * Install Plex, watch videos on multiple platforms, [install Now](./docs/zh/user_guide/plex_install_config/README.md).
-* Install Baidu network disk, download for a long time, [install now](TODO).
-* Install Thunder, long download, [install now](./docs/zh/user_guide/thunder_install_config/README.md).
+* Install Baidu network disk(only in china), download in the background, [install now](TODO).
+* Install Thunder(only in china), download in the background, [install now](./docs/zh/user_guide/thunder_install_config/README.md).
 
 ## 🔧 Feature list
 ### Basic feature   
