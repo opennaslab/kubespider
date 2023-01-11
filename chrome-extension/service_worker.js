@@ -6,21 +6,13 @@ chrome.runtime.onInstalled.addListener(function() {
     });
 });
 
-function handleRequestSend(link, tab) {
-    var server = ""
-    chrome.storage.sync.get('server', (res) => {
-        if (res == null || res == "") {
-            return
-        }
-        server = res.server
-    });
-
+function handleRequestSend(link, tab, server) {
     var dataSource = tab.url
     if (link != null) {
-        dataSource = link
+        dataSource = link;
     }
 
-    data = "{\"dataSource\":\"" + dataSource + "\",\"path\":\"\"}"
+    var data = {"dataSource": dataSource, "path": ""};
     fetch(server, {
         method: 'POST',
         mode: 'cors',
@@ -30,15 +22,21 @@ function handleRequestSend(link, tab) {
         body: JSON.stringify(data),
     })
     .then(response => {
-        response.status == 200 ? console.log("Download OK") : console.log("Download error")
+        response.status == 200 ? console.log("Download OK") : console.log("Download error");
     })
     .catch(error => {
-        console.log("Download error")
+        console.log("Download error");
     })
 }
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
-    if (info.menuItemId == "KubespiderMenu") {
-        handleRequestSend(info.linkUrl, tab)
+    if (info.menuItemId == "KubespiderMenu") {  
+        chrome.storage.sync.get('server', (res) => {
+            if (typeof res.server === "undefined") {
+                document.getElementById('server').value = "";
+                return
+            }
+            handleRequestSend(info.linkUrl, tab, res.server);
+        });
     }
 })

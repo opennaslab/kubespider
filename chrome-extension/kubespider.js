@@ -27,26 +27,35 @@ function sendRequest() {
         return
     }
     
-    var httpRequest = new XMLHttpRequest();
-    httpRequest.open('POST', server, true);
-    httpRequest.setRequestHeader("Content-type","application/json");
-    data = "{\"dataSource\":\"" + dataSource + "\",\"path\":\"" + path + "\"}"
-    httpRequest.send(data);
-
-    httpRequest.onreadystatechange = function () {
-        if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-            document.getElementById('download').innerHTML = "OK"
+    var data = {"dataSource": dataSource, "path": path};
+    fetch(server, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        if (response.status == 200) {
+            document.getElementById('download').innerHTML = "OK";
             sleep(3000).then(() => {
                 document.getElementById('url').value = "";
-                document.getElementById('download').innerHTML = "Download"
+                document.getElementById('download').innerHTML = "Download";
             })
         } else {
-            document.getElementById('download').innerHTML = httpRequest.responseText
+            document.getElementById('download').innerHTML = httpRequest.responseText;
             sleep(3000).then(() => {
-                document.getElementById('download').innerHTML = "Download"
+                document.getElementById('download').innerHTML = "Download";
             })
         }
-    };
+    })
+    .catch(error => {
+        document.getElementById('download').innerHTML = error;
+        sleep(3000).then(() => {
+            document.getElementById('download').innerHTML = "Download";
+        });
+    });
 }
 
 chrome.storage.sync.get('server', (res) => {
