@@ -1,7 +1,7 @@
 # Kubespider
-
-![image](./docs/images/logo.png)  
-[LOGO preparing...]
+<p align="center">
+  <img src="./docs/images/logo.png" width="200" alt="Kubespider logo">
+</p>
 
 ## 💥 A unified downloading orchestration system
 [![GitHub release](https://img.shields.io/github/v/release/jwcesign/kubespider.svg)](https://github.com/jwcesign/kubespider/releases)
@@ -79,7 +79,7 @@ Kubespider combined with the chrome plug-in can get a better experience. If I wa
 ![img](./docs/images/kubespider-chrome-ext-usage.png)
 
 #### 4.More (Optional)
-* Install Plex, watch videos on multiple platforms, [install Now](./docs/zh/user_guide/plex_install_config/README.md).
+* Install Plex, watch videos on multiple platforms, [install now](./docs/zh/user_guide/plex_install_config/README.md).
 * Install Baidu network disk(only in china), download in the background, [install now](TODO).
 * Install Thunder(only in china), download in the background, [install now](./docs/zh/user_guide/thunder_install_config/README.md).
 
@@ -108,7 +108,7 @@ All downloading and use of the software are deemed to have carefully read and fu
 * The software is only for personal learning and communication, and it is strictly prohibited for commercial and bad purposes.
 * If any commercial behavior and bad use are found, the software author has the right to revoke the right to use.
 * The risk of using this software will be entirely borne by him, and the software author will not bear any responsibility.
-* Except for the terms of service indicated in the software, the author of this software is not responsible for any accidents, negligence, contract damage, defamation, copyright or other intellectual property infringement and any losses caused by improper use of this software, and also No legal responsibility is assumed.
+* Except for the terms of service indicated in the software, the author of this software is not responsible for any accidents, negligence, contract damage, defamation, copyright or other intellectual property infringement and any losses caused by improper use of this software, and also no legal responsibility is assumed.
 * The author of the software will not be responsible for the interruption of services or other defects caused by force majeure or uncontrollable reasons such as hacker attacks, communication line interruptions, etc., which cause users to fail to use normally but will try their best to reduce losses or impacts caused to users.
 * For issues not covered in this statement, please refer to relevant national laws and regulations. When this statement conflicts with relevant national laws and regulations, the national laws and regulations shall prevail.
 * The copyright of this software statement and its right to modify, update and final interpretation belong to the software author.
