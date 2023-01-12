@@ -1,7 +1,7 @@
 # Kubespider
-
-![image](./docs/images/logo.png)
-[LOGO准备中...]
+<p align="center">
+  <img src="./docs/images/logo.png" width="200" alt="Kubespider logo">
+</p>
 
 ## 💥 一款全局资源编排下载系统
 [![GitHub release](https://img.shields.io/github/v/release/jwcesign/kubespider.svg)](https://github.com/jwcesign/kubespider/releases)
