@@ -41,7 +41,7 @@ docker run -d \
     p3terx/aria2-pro
 
 # 5.Deploy kubespider
-export KUBESPIDER_DEFAULT_VERSION="latest"
+export KUBESPIDER_DEFAULT_VERSION="v0.1.0"
 if [[ ${KUBESPIDER_VERSION} == "" ]]; then
     export KUBESPIDER_VERSION=${KUBESPIDER_DEFAULT_VERSION}
 fi
