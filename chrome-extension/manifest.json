@@ -5,13 +5,10 @@
     "description": "Trigger Kubespider execute downloading task",
     "permissions": [
       "storage",
-      "scripting",
       "declarativeNetRequest",
       "declarativeNetRequestFeedback",
       "contextMenus",
-      "scripting",
-      "tabs",
-      "notifications"
+      "tabs"
     ],
     "host_permissions": ["*://*/*"],
     "action": {
