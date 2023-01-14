@@ -5,13 +5,10 @@
     "description": "Trigger Kubespider execute downloading task",
     "permissions": [
       "storage",
-      "scripting",
       "declarativeNetRequest",
       "declarativeNetRequestFeedback",
       "contextMenus",
-      "scripting",
-      "tabs",
-      "notifications"
+      "tabs"
     ],
     "host_permissions": ["*://*/*"],
     "action": {
@@ -19,9 +16,9 @@
         "default_popup": "kubespider.html"
     },
     "icons": {
-      "16": "icon.png",
-      "48": "icon.png",
-      "128": "icon.png"
+      "16": "images/icon16.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
     },
     "content_scripts": [
       {
