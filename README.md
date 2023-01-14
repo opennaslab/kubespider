@@ -13,14 +13,14 @@
 English | [简体中文](./README-CN.md)  
 I am a cloud computing engineer🤓, focusing on Serverless/FinOps/Runtime, developed Kubespider in my spare time.
 
-The original intention of developing Kubespider is: I have an idle server(in a local area network), and I want to use it as a NAS to realize automatic drama downloads, trigger downloads on a local laptop, and adapt to various website resources (YouTube, BiliBili, etc.)
+The original intention of developing Kubespider is: I have an idle server(in a local area network), and I want to use it as a NAS to realize automatic TV series downloads, trigger downloads on a local laptop, and adapt to various website(YouTube, BiliBili, etc.) and different type resources(TV series, movie, music, etc.)
 
 I was exposed to Terraform before and was surprised by its versatility. Inspired by Terraform, Kubespider aims to build a general download orchestration system, which is compatible with various resource platforms and download software, compatible with multiple download methods(request trigger, cycle trigger, update trigger) and is the most perfect unified solution for resource download.
 
 ## ⛵ System architecture
 To realize a general download orchestration system, it is necessary to adapt various resource websites and download software, so these two parts are abstracted from the core functions:
 ![image](./docs/images/kubespider-architecture.png)
-* `kubespider-core`: The core module of Kubespider accepts the trigger download request, calls the resource provider for resolution (it will eventually be resolved into a standard mode, such as the user enters the bilibili blogger address, and the corresponding resource provider outputs the mp4 file address download list), and finally calls the download provider to implement Download; this module will also periodically call providers (such as drama provider) to download additional resources.
+* `kubespider-core`: The core module of Kubespider accepts the trigger download request, calls the resource provider for resolution (it will eventually be resolved into a standard mode, such as the user enters the bilibili blogger address, and the corresponding resource provider outputs the mp4 file address download list), and finally calls the download provider to implement Download; this module will also periodically call providers (such as TV series provider) to download additional resources.
 * `source-provider`：The provider of each resource website accepts input of general resource addresses, and outputs standard resource address URLs, such as the personal homepage of a YouTuber, and outputs all mp4 download addresses of the blogger’s videos. The configuration file is in `./kubespider/source_provider.cfg`.
 * `download-provider`：The provider of each download software receives the request task from `kubespider-core`, and calls the corresponding service to realize the download. The configuration file is in `./kubespider/download_provider.cfg`.
 
@@ -75,7 +75,7 @@ Of course, it is not necessary, you can also use the desktop program to connect:
 
 #### 3.Install chrome plugin
 TBD (No release yet, please check [link](./docs/zh/contribute/develop_chrome_extension.md) to install the chrome plugin)  
-Kubespider combined with the chrome plug-in can get a better experience. If I want to follow the drama, I can directly send the following web page address to Kubespider:
+Kubespider combined with the chrome plug-in can get a better experience. If I want to follow the TV series, I can directly send the following web page address to Kubespider:
 ![img](./docs/images/kubespider-chrome-ext-usage.png)
 
 #### 4.More (Optional)
@@ -93,7 +93,7 @@ Kubespider combined with the chrome plug-in can get a better experience. If I wa
 ### Source provider
 * Based on mikanani, it realizes fully automatic anime chasing, please refer to [link](./docs/zh/user_guide/mikanani_source_provider/README.md) for configuration.
 * Download related seed resources of btbtt12, please refer to [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) for configuration.
-* Based on meijutt to automatically follow American dramas, please refer to [link](./docs/zh/user_guide/meijutt_source_provider/README.md) for configuration.
+* Based on meijutt to automatically follow American TV series, please refer to [link](./docs/zh/user_guide/meijutt_source_provider/README.md) for configuration.
 * Based on y2mate, download a YouTube video (TODO).
 
 ## 🤝 Contribution [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)

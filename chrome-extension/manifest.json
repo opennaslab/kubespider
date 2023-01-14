@@ -16,9 +16,19 @@
     "host_permissions": ["*://*/*"],
     "action": {
         "default_title": "Kubespider",
-        "default_icon": "icon.png",
         "default_popup": "kubespider.html"
     },
+    "icons": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    },
+    "content_scripts": [
+      {
+        "js": ["js/bootstrap.bundle.min.js"],
+        "matches": [ "http://*/*", "https://*/*"]
+      }
+    ],
     "background": {
       "service_worker": "service_worker.js"
     }
