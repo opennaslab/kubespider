@@ -29,7 +29,7 @@ jobs:
         tags: cesign/kubespider:${{  github.ref_name }}
     
     - name: Update the version in script
-      run: sed -i "s/latest/v0.1.0/g" hack/install.sh
+      run: sed -i "s/latest/$GITHUB_REF_NAME/g" hack/install.sh
     
     - name: Uploading assets...
       if: ${{ !env.ACT }}
