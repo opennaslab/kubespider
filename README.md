@@ -75,7 +75,7 @@ Of course, it is not necessary, you can also use the desktop program to connect:
 
 #### 3.Install chrome plugin
 TBD (No release yet, please check [link](./docs/zh/contribute/develop_chrome_extension.md) to install the chrome plugin)  
-Kubespider combined with the chrome plug-in can get a better experience. If I want to download a movie, I can right click send the download task Kubespider([demo website](https://thepiratebay.org/)):
+Kubespider combined with the chrome plug-in can get a better experience. If I want to download a movie, I can right click and send the download task Kubespider([demo website](https://thepiratebay.org/)):
 <p align="center">
   <img src="./docs/images/kubespider-chrome-ext-usage-en.png" width="49%">
   <img src="./docs/images/kubespider-chrome-ext-aria2-en.jpg" width="48%">

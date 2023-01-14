@@ -74,7 +74,7 @@ Aria2 default secret is:kubespider
 
 #### 3.安装Chrome插件
 TBD（还未发布，请查看 [link](./docs/zh/contribute/develop_chrome_extension.md) 安装chrome插件）  
-Kubespider结合chrome插件，能获得更好的体验，如我要追剧，直接将如下网页地址发送给Kubespider即可([示例网站](https://www.meijutt.tv/))：
+Kubespider结合chrome插件，能获得更好的体验，如我要追剧，直接右键，发送给Kubespider即可([示例网站](https://www.meijutt.tv/))：
 <p align="center">
   <img src="./docs/images/kubespider-chrome-ext-usage-zh.png" width="33%">
   <img src="./docs/images/kubespider-chrome-ext-aria2-zh.jpg" width="48%">
