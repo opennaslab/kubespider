@@ -27,13 +27,4 @@ jobs:
       with:
         push: true
         tags: cesign/kubespider:${{  github.ref_name }}
-    
-    - name: Update the version in script
-      run: sed -i "s/latest/$GITHUB_REF_NAME/g" hack/install.sh
-    
-    - name: Uploading assets...
-      if: ${{ !env.ACT }}
-      uses: softprops/action-gh-release@v1
-      with:
-        files: |
-          hack/install.sh
+
