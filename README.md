@@ -3,7 +3,7 @@
   <img src="./docs/images/logo.png" width="200" alt="Kubespider logo">
 </p>
 
-## 💥 A unified downloading orchestration system
+## 💥 A unified download orchestration system
 [![GitHub release](https://img.shields.io/github/v/release/jwcesign/kubespider.svg)](https://github.com/jwcesign/kubespider/releases)
 [![Total Downloads](https://img.shields.io/docker/pulls/cesign/kubespider.svg)](https://hub.docker.com/repository/docker/cesign/kubespider/general)
 [![GitHub stars](https://img.shields.io/github/stars/jwcesign/kubespider?style=plastic)](https://github.com/jwcesign/kubespider/stargazers)
