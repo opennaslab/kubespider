@@ -5,7 +5,7 @@
 
 ## 💥 一款全局资源编排下载系统
 [![GitHub release](https://img.shields.io/github/v/release/jwcesign/kubespider.svg)](https://github.com/jwcesign/kubespider/releases)
-![Total Downloads](https://img.shields.io/github/downloads/jwcesign/kubespider/total.svg)
+![Total Downloads](https://img.shields.io/docker/pulls/cesign/kubespider.svg)
 [![GitHub stars](https://img.shields.io/github/stars/jwcesign/kubespider?style=plastic)](https://github.com/jwcesign/kubespider/stargazers)
 [![GitHub license](https://img.shields.io/github/license/jwcesign/kubespider?style=plastic)](https://github.com/jwcesign/kubespider/blob/master/LICENSE.md)
 
