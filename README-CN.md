@@ -7,7 +7,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/jwcesign/kubespider.svg)](https://github.com/jwcesign/kubespider/releases)
 [![Total Downloads](https://img.shields.io/docker/pulls/cesign/kubespider.svg)](https://hub.docker.com/repository/docker/cesign/kubespider/general)
 [![GitHub stars](https://img.shields.io/github/stars/jwcesign/kubespider?style=plastic)](https://github.com/jwcesign/kubespider/stargazers)
-[![GitHub license](https://img.shields.io/github/license/jwcesign/kubespider?style=plastic)](https://github.com/jwcesign/kubespider/blob/master/LICENSE.md)
+[![GitHub license](https://img.shields.io/github/license/jwcesign/kubespider?style=plastic)](https://github.com/jwcesign/kubespider/blob/master/LICENSE)
 
 [English](./README.md) | 简体中文  
 我是一个云计算工程师🤓，专注Serverles/FinOps/Runtime，利用空闲之余开发了 Kubespider。  
@@ -75,10 +75,10 @@ Aria2 default secret is:kubespider
 #### 3.安装Chrome插件
 TBD（还未发布，请查看 [link](./docs/zh/contribute/develop_chrome_extension.md) 安装chrome插件）  
 Kubespider结合chrome插件，能获得更好的体验，如我要追剧，直接右键，发送给Kubespider即可([示例网站](https://www.meijutt.tv/))：
-<p align="center">
-  <img src="./docs/images/kubespider-chrome-ext-usage-zh.png" width="33%">
-  <img src="./docs/images/kubespider-chrome-ext-aria2-zh.jpg" width="48%">
-</p>
+![img](./docs/images/kubespider-chrome-ext-usage-zh.png)
+
+Kubesdpier会自动下载现有的所有剧集并且追更：
+![img](./docs/images/kubespider-chrome-ext-aria2-zh.jpg)
 
 #### 4.更多（可选）
 * 安装Plex，多平台观看视频，[立即安装](./docs/zh/user_guide/plex_install_config/README.md)。
