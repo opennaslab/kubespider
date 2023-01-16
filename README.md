@@ -7,7 +7,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/jwcesign/kubespider.svg)](https://github.com/jwcesign/kubespider/releases)
 [![Total Downloads](https://img.shields.io/docker/pulls/cesign/kubespider.svg)](https://hub.docker.com/repository/docker/cesign/kubespider/general)
 [![GitHub stars](https://img.shields.io/github/stars/jwcesign/kubespider?style=plastic)](https://github.com/jwcesign/kubespider/stargazers)
-[![GitHub license](https://img.shields.io/github/license/jwcesign/kubespider?style=plastic)](https://github.com/jwcesign/kubespider/blob/master/LICENSE.md)
+[![GitHub license](https://img.shields.io/github/license/jwcesign/kubespider?style=plastic)](https://github.com/jwcesign/kubespider/blob/master/LICENSE)
 
 
 English | [简体中文](./README-CN.md)  
@@ -68,18 +68,18 @@ Aria2 default secret is:kubespider
 
 #### 2.Connect to aria2
 To check the download tasks, go to the chrome store to download [Aria2 plugin](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn).  
-Then connect, the plug-in configuration is as follows (the configuration has been output at the end of `install.sh` script):
+Then connect, the plugin configuration is as follows (the configuration has been output at the end of `install.sh` script):
 ![img](./docs/images/aria2-for-chrome-config-en.jpg)
 
 Of course, it is not necessary, you can also use the desktop program to connect: [AriaNg](https://github.com/mayswind/AriaNg-Native/releases/)
 
 #### 3.Install chrome plugin
 TBD (No release yet, please check [link](./docs/zh/contribute/develop_chrome_extension.md) to install the chrome plugin)  
-Kubespider combined with the chrome plug-in can get a better experience. If I want to download a movie, I can right click and send the download task Kubespider([demo website](https://thepiratebay.org/)):
-<p align="center">
-  <img src="./docs/images/kubespider-chrome-ext-usage-en.png" width="49%">
-  <img src="./docs/images/kubespider-chrome-ext-aria2-en.jpg" width="48%">
-</p>
+Combined with Kubespider chrome plugin, you can get a better experience. If I want to download a movie, I can right click and send the download task to Kubespider([demo website](https://thepiratebay.org/)):
+![img](./docs/images/kubespider-chrome-ext-usage-en.png)
+
+Then with aria2 chrome plugin, you can see the download task starts:
+![img](./docs/images/kubespider-chrome-ext-aria2-en.jpg)
 
 #### 4.More (Optional)
 * Install Plex, watch videos on multiple platforms, [install now](./docs/zh/user_guide/plex_install_config/README.md).
