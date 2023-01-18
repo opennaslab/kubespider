@@ -24,13 +24,13 @@ To realize a general download orchestration system, it is necessary to adapt var
 * `source-provider`：The provider of each resource website accepts input of general resource addresses, and outputs standard resource address URLs, such as the personal homepage of a YouTuber, and outputs all mp4 download addresses of the blogger’s videos. The configuration file is in `./kubespider/source_provider.cfg`.
 * `download-provider`：The provider of each download software receives the request task from `kubespider-core`, and calls the corresponding service to realize the download. The configuration file is in `./kubespider/download_provider.cfg`.
 
-## 💽 Installation(Deploy with Docker)
+## 💽 Installation
 ### Premise
 1. The operating computer and your server are on the same LAN. (I haven't tried the installation not in the same LAN yet)
 2. The server is a Linux system。
 3. Docker is installed on the server。
 
-### Default installation
+### Default installation(Deploy with Docker)
 To adapt to multiple resource platforms, Kubespider provides many adapters. Enable or disable these adapters according to your needs. The configuration file is in the `.kubespider` folder:
 
 #### 1.Download the repository and install
