@@ -67,14 +67,17 @@ Aria2 default secret is:kubespider
 
 #### 2.连接aria2
 为了便于查看下载任务，去chrome商店下载[Aria2插件](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn)。  
-然后连接，插件配置如下(其中配置在`install.sh`脚本最后已输出)：
+然后连接，插件配置如下(显示在脚本`install.sh`执行输出最后)：
 ![img](./docs/images/aria2-for-chrome-config-zh.jpg)
 
 当然，非必需的，你也可以使用桌面程序连接：[AriaNg](https://github.com/mayswind/AriaNg-Native/releases/)
 
 #### 3.安装Chrome插件
-TBD（还未发布，请查看 [link](./docs/zh/contribute/develop_chrome_extension.md) 安装chrome插件）  
-Kubespider结合chrome插件，能获得更好的体验，如我要追剧，直接右键，发送给Kubespider即可([示例网站](https://www.meijutt.tv/))：
+Kubespider结合chrome插件，能获得更好的体验。  
+在步骤1下载代码后，打开Chrome，按如下步骤安装Kubespider Chrome插件并且设置：
+![img](./docs/images/kubespider-chrome-ext-install-zh.gif)  
+
+如我要追剧，直接右键，发送给Kubespider即可([示例网站](https://www.meijutt.tv/))：
 ![img](./docs/images/kubespider-chrome-ext-usage-zh.png)
 
 Kubesdpier会自动下载现有的所有剧集并且追更：

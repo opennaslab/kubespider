@@ -67,15 +67,18 @@ Aria2 default secret is:kubespider
 * Configuration files are located in `${HOME}/.kubespider/`.
 
 #### 2.Connect to aria2
-To check the download tasks, go to the chrome store to download [Aria2 plugin](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn).  
-Then connect, the plugin configuration is as follows (the configuration has been output at the end of `install.sh` script):
+For checking the download tasks on your server conveniently, go to the chrome store to download [Aria2 plugin](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn).  
+Then connect, the plugin configuration is as follows(shown at the end of the script `install.sh` execution output):
 ![img](./docs/images/aria2-for-chrome-config-en.jpg)
 
 Of course, it is not necessary, you can also use the desktop program to connect: [AriaNg](https://github.com/mayswind/AriaNg-Native/releases/)
 
-#### 3.Install chrome plugin
-TBD (No release yet, please check [link](./docs/zh/contribute/develop_chrome_extension.md) to install the chrome plugin)  
-Combined with Kubespider chrome plugin, you can get a better experience. If I want to download a movie, I can right click and send the download task to Kubespider([demo website](https://thepiratebay.org/)):
+#### 3.Install Chrome plugin
+With Kubespider Chrome plugin, you can get a better experience.  
+After step 1 has been done, open chrome, then install Kubespider plugin, and configure it as follows:
+![img](./docs/images/kubespider-chrome-ext-install-en.gif)  
+
+If I want to download a movie, I can right click and send the download task to Kubespider([demo website](https://thepiratebay.org/)):
 ![img](./docs/images/kubespider-chrome-ext-usage-en.png)
 
 Then with aria2 chrome plugin, you can see the download task starts:
