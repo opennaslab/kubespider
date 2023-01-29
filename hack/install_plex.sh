@@ -23,7 +23,11 @@ fi
 # 3. Creat directory
 mkdir -p ${HOME}/kubespider/plex/
 
-# 4. Install Plex
+# 4.Set registry
+source hack/util.sh
+util::set_registry_for_image
+
+# 5. Install Plex
 docker run -itd --name plex \
     -p 32400:32400 \
     -v ${HOME}/kubespider/plex:/config \
@@ -33,7 +37,7 @@ docker run -itd --name plex \
     -e PLEX_CLAIM=${claim} \
     -e PGID=1000 \
     --restart unless-stopped \
-    linuxserver/plex:latest
+    ${image_registry}/plex:latest
 
 # 5. Notice
 echo "[INFO] Deploy flex success, enjoy your time..."

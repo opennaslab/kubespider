@@ -1,7 +1,7 @@
 # Copyright 2022 Kubespider
 # SPDX-License-Identifier: Apache-2.0
 
-name: Kubespider release
+name: Kubespider release for DockerHub
 on:
   release:
     types:

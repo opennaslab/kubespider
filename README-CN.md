@@ -36,12 +36,12 @@ Kubespider为了适配多种资源平台，提供了许多适配器，按你的�
 ```sh
 git clone https://github.com/jwcesign/kubespider.git
 cd kubespider
-bash hack/install.sh
+bash hack/install_kubespider.sh
 ```
 输出类似：
 ```sh
 root@cesign [09:01:34 PM] [+22.0°C] [~/git/kubespider] [main *]
--> # bash hack/install.sh
+-> # bash hack/install_kubespider.sh
  _          _                     _     _
 | | ___   _| |__   ___  ___ _ __ (_) __| | ___ _ __
 | |/ / | | | '_ \ / _ \/ __| '_ \| |/ _` |/ _ \ '__|
@@ -66,7 +66,8 @@ Aria2 default secret is:kubespider
 * 配置文件在 `${HOME}/.kubespider/`。
 
 #### 2.连接aria2
-为了便于查看下载任务，去chrome商店下载[Aria2插件](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn)。  
+为了便于查看下载任务，需要下载Chrome插件AriNg:(1)如果你能访问外网，在chrome商店下载[AriaNg](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn)；(2)如果不能，在Crx4Chrome下载[AriaNg](https://www.crx4chrome.com/crx/85196/)。  
+
 然后连接，插件配置如下(显示在脚本`install.sh`执行输出最后)：
 ![img](./docs/images/aria2-for-chrome-config-zh.jpg)
 

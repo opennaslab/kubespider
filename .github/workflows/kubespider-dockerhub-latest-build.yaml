@@ -1,7 +1,7 @@
 # Copyright 2022 Kubespider
 # SPDX-License-Identifier: Apache-2.0
 
-name: Kubespider latest image build
+name: Kubespider latest image build for DockerHub
 
 on:
   pull_request:
