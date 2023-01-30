@@ -25,7 +25,11 @@ mkdir -p ${HOME}/kubespider/nas/
 mkdir -p ${HOME}/kubespider/motrix/
 cp -r ./.kubespider ${HOME}/
 
-# 4.Deploy aria2
+# 4.Set registry
+source hack/util.sh
+util::set_registry_for_image
+
+# 5.Deploy aria2
 docker run -d \
     --name aria2-pro \
     --restart unless-stopped \
@@ -38,9 +42,9 @@ docker run -d \
     -e LISTEN_PORT=6888 \
     -v ${HOME}/kubespider/aria2/:/config \
     -v ${HOME}/kubespider/nas/:/downloads/ \
-    p3terx/aria2-pro
+    ${image_registry}/aria2-pro:latest
 
-# 5.Deploy kubespider
+# 6.Deploy kubespider
 export KUBESPIDER_DEFAULT_VERSION="latest"
 if [[ ${KUBESPIDER_VERSION} == "" ]]; then
     export KUBESPIDER_VERSION=${KUBESPIDER_DEFAULT_VERSION}
@@ -49,9 +53,9 @@ docker run -itd --name kubespider \
     -v ${HOME}/.kubespider:/root/.kubespider \
     --network=host \
     --restart unless-stopped \
-    cesign/kubespider:${KUBESPIDER_VERSION}
+    ${image_registry}/kubespider:${KUBESPIDER_VERSION}
 
-# 6.Give other info
+# 7.Give necessary info
 echo "[INFO] Deploy successful, check the information:"
 echo "*******************************************"
 echo "Kubespider config path: ${HOME}/.kubespider/"

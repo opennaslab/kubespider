@@ -24,14 +24,18 @@ fi
 mkdir -p ${HOME}/kubespider/nas/
 mkdir -p ${HOME}/kubespider/baidunetdisk/
 
-# 4.Install baidu net disk
+# 4.Set registry
+source hack/util.sh
+util::set_registry_for_image
+
+# 5.Install baidu net disk
 docker run -itd --name=baidunetdisk \
     -p 5800:5800 \
     -p 5900:5900 \
     -v ${HOME}/kubespider/baidu:/config \
     -v ${HOME}/kubespider/nas:/config/baidunetdiskdownload \
     --restart unless-stopped \
-    cesign/baidunetdisk:latest
+    ${image_registry}/baidunetdisk:latest
 
 # 4. Notice
 echo "[INFO] Deploy baidu net disk success, enjoy your time..."

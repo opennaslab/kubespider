@@ -1,7 +1,7 @@
 # Copyright 2022 Kubespider
 # SPDX-License-Identifier: Apache-2.0
 
-name: Kubespider deploy test
+name: Kubespider china mainland deploy test
 
 on:
   pull_request:
@@ -22,14 +22,14 @@ jobs:
     - name: Build images
       run: |
         set -x
-        docker build -t cesign/kubespider:latest -f Dockerfile ./
-        docker tag cesign/kubespider:latest registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest
+        docker build -t registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest -f Dockerfile ./
     
-    - name: Deploy test
+    - name: China mainland deploy test
       run: |
         set -x
 
         #1. Test deploy Kubespider
+        export CHINA_MAINLAND=TRUE
         bash hack/install_kubespider.sh
         sleep 10
         docker ps | grep -e kubespider -e aria2-pro

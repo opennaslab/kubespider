@@ -25,13 +25,17 @@ fi
 mkdir -p ${HOME}/kubespider/nas/
 mkdir -p ${HOME}/kubespider/thunder/
 
-# 4.Install thunder 
+# 4.Set registry
+source hack/util.sh
+util::set_registry_for_image
+
+# 5.Install thunder 
 docker run -d --name=thunder --hostname=thunder \
     --net=host \
     -v ${HOME}/kubespider/thunder:/xunlei/data \
     -v ${HOME}/kubespider/nas:/xunlei/downloads \
     --restart=unless-stopped --privileged \
-    cesign/xunlei:latest
+    ${image_registry}/xunlei:latest
 
 # 5.Notice
 echo "[INFO] Deploy baidu thunder success, enjoy your time..."
