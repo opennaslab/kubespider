@@ -6,7 +6,8 @@ Kubespider旨在构建一个通用的下载编排系统，兼容各种资源平�
 * 实现chrome插件，自动在网页插入下载或者追剧按钮。
 * Chrome插件在保存server地址时做健康检查。
 * 国内加速下载，支持阿里云image registry。
-* 支持
+* 支持豆瓣评分大于X，自动搜索资源下载。
+* 所有配置文件json化，state存储也json化。
 
 ## 下一版本任务（2023/04/30）
 * 支持迅雷download provider。
