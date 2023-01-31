@@ -68,14 +68,14 @@ Aria2 default secret is:kubespider
 
 #### 2.Connect to aria2
 For checking the download tasks on your server conveniently, go to the chrome store to download [AriaNg plugin](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn).  
-Then connect, the plugin configuration is as follows(shown at the end of the script `install.sh` execution output):
+Then connect, the plugin configuration is as follows(shown at the end of the script `install_kubespider.sh` execution output):
 ![img](./docs/images/aria2-for-chrome-config-en.jpg)
 
 Of course, it is not necessary, you can also use the desktop program to connect: [AriaNg](https://github.com/mayswind/AriaNg-Native/releases/)
 
 #### 3.Install Chrome plugin
 With Kubespider Chrome plugin, you can get a better experience.  
-After step 1 has been done, open chrome, then install Kubespider plugin, and configure it as follows:
+After step 1 has been done, open chrome, then install Kubespider plugin, and configure it as follows(The server address is `http://<server_ip>:3080`):
 ![img](./docs/images/kubespider-chrome-ext-install-en.gif)  
 
 If I want to download a movie, I can right click and send the download task to Kubespider([demo website](https://thepiratebay.org/)):
