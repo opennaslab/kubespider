@@ -20,7 +20,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
 
     def provider_enabled(self):
         cfg = provider.load_download_provider_config(self.provider_name)
-        return cfg['ENABLE'] == 'true'
+        return cfg['enable']
 
     def send_torrent_task(self, torrent_file_path, download_path):
         logging.info('Start torrent download:%s', torrent_file_path)
@@ -58,10 +58,10 @@ class Aria2DownloadProvider(provider.DownloadProvider):
 
     def load_config(self):
         cfg = provider.load_download_provider_config(self.provider_name)
-        self.rpc_endpoint_host = cfg['RPC_ENDPOINT_HOST']
-        self.rpc_endpoint_port = cfg['RPC_ENDPOINT_PORT']
-        self.download_base_path = cfg['DOWNLOAD_BASE_PATH']
-        self.secret = cfg['SECRET']
+        self.rpc_endpoint_host = cfg['rpc_endpoint_host']
+        self.rpc_endpoint_port = cfg['rpc_endpoint_port']
+        self.download_base_path = cfg['download_base_path']
+        self.secret = cfg['secret']
         self.aria2 = aria2p.API(
             aria2p.Client(
                 host=self.rpc_endpoint_host,

@@ -1,11 +1,13 @@
 import time
-import configparser
 import os
 import logging
+import threading
 
 from api import types
 from core import download_trigger
 from utils import helper
+
+state_file_lock = threading.Lock()
 
 
 class PeriodServer:
@@ -30,6 +32,7 @@ class PeriodServer:
         for provider in self.source_providers:
             if provider_name != provider.get_provider_name():
                 continue
+            logging.info("jw1-----")
             self.run_single_provider(provider)
 
     def run_single_provider(self, provider):
@@ -43,9 +46,8 @@ class PeriodServer:
             provider_name = provider.get_provider_name()
             state = self.load_state(provider_name)
 
-            downloaded_links = dict(state.items(provider_name))
             for source in links:
-                if helper.get_unique_hash(source) in downloaded_links:
+                if helper.get_unique_hash(source) in state:
                     continue
                 logging.info('Find new resource:%s', source)
                 download_ok = download_trigger.kubespider_downloader. \
@@ -53,28 +55,23 @@ class PeriodServer:
                 if download_ok is False:
                     meet_err = True
                     break
-                downloaded_links[helper.get_unique_hash(source)] = '1'
+                state.append(helper.get_unique_hash(source))
 
-            state[provider_name] = downloaded_links
-            self.save_state(state)
+            self.save_state(provider_name, state)
 
         return meet_err
 
     def load_state(self, provider_name):
-        cfg = configparser.ConfigParser()
-        if not os.path.exists(self.state_file_dir):
-            os.makedirs(self.state_file_dir)
-        if os.path.exists(self.state_file_dir+'/state.cfg'):
-            cfg.read(self.state_file_dir+'/state.cfg')
-            if provider_name not in cfg.sections():
-                cfg.add_section(provider_name)
-        else:
-            cfg.add_section(provider_name)
-        return cfg
+        state_file_path = os.path.join(self.state_file_dir, 'state.cfg')
+        all_state = helper.load_json_config(state_file_path, state_file_lock)
+        if provider_name not in all_state.keys():
+            return []
+        return all_state[provider_name]
 
-    def save_state(self, state):
-        with open(self.state_file_dir+'/state.cfg', 'w', encoding='utf-8') as state_file:
-            state.write(state_file)
-            state_file.close()
+    def save_state(self, provider_name, state):
+        state_file_path = os.path.join(self.state_file_dir, 'state.cfg')
+        all_state = helper.load_json_config(state_file_path, state_file_lock)
+        all_state[provider_name] = state
+        helper.dump_json_config(state_file_path, all_state, state_file_lock)
 
 kubespider_period_server = PeriodServer(None, None)

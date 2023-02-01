@@ -1,7 +1,7 @@
 import os
 import uuid
 import hashlib
-
+import json
 
 def get_tmp_file_name(url):
     file_name = os.path.basename(url)
@@ -12,3 +12,20 @@ def get_tmp_file_name(url):
 
 def get_unique_hash(data):
     return hashlib.md5(data.encode('utf-8')).hexdigest()
+
+def load_json_config(cfg_path, lock):
+    lock.acquire()
+    if not os.path.exists(cfg_path):
+        lock.release()
+        return {}
+
+    with open(cfg_path, 'r', encoding='utf-8') as config_file:
+        cfg = json.load(config_file)
+        lock.release()
+        return cfg
+
+def dump_json_config(cfg_path, cfg, lock):
+    lock.acquire()
+    with open(cfg_path, 'w', encoding='utf-8') as config_file:
+        json.dump(cfg, config_file, check_circular=False, indent=4, separators=(',', ':'))
+        lock.release()

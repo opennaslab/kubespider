@@ -32,7 +32,7 @@ class MeijuttSourceProvider(provider.SourceProvider):
 
     def provider_enabled(self):
         cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg['ENABLE'] == 'true'
+        return cfg['enable']
 
     def is_webhook_enable(self):
         return True
@@ -67,16 +67,14 @@ class MeijuttSourceProvider(provider.SourceProvider):
 
     def update_config(self, req_para: str):
         cfg = provider.load_source_provide_config(self.provider_name)
-        links = cfg['TV_LINKS']
-        links = str.split(links, ',')
+        links = cfg['tv_links']
         if req_para not in links:
             links.append(req_para)
-        links = ','.join(links)
-        cfg['TV_LINKS'] = links
+        cfg['tv_links'] = links
         provider.save_source_provider_config(self.provider_name, cfg)
 
     def load_config(self):
         cfg = provider.load_source_provide_config(self.provider_name)
-        logging.info('meijutt tv link is:%s', cfg['TV_LINKS'])
-        self.tv_links = str.split(cfg['TV_LINKS'], ',')
-        self.download_path = cfg['DOWNLOAD_PATH']
+        logging.info('meijutt tv link is:%s', ','.join(cfg['tv_links']))
+        self.tv_links = cfg['tv_links']
+        self.download_path = cfg['download_path']
