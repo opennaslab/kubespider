@@ -1,6 +1,10 @@
 import os
 import abc
-import configparser
+import threading
+
+from utils import helper
+
+download_provider_file_lock = threading.Lock()
 
 
 class DownloadProvider(metaclass=abc.ABCMeta):
@@ -34,9 +38,6 @@ class DownloadProvider(metaclass=abc.ABCMeta):
 
 
 def load_download_provider_config(provider_name):
-    cfg = configparser.ConfigParser()
-    config_path = os.path.join(os.getenv('HOME'), '.kubespider')
-    cfg.read(os.path.join(config_path, 'download_provider.cfg'))
-    if provider_name in cfg.sections():
-        return cfg[provider_name]
-    return {}
+    config_path = os.path.join(os.getenv('HOME'), '.kubespider/download_provider.cfg')
+    cfg = helper.load_json_config(config_path, download_provider_file_lock)
+    return cfg[provider_name]

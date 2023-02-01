@@ -34,7 +34,7 @@ class MikananiSourceProvider(provider.SourceProvider):
 
     def provider_enabled(self):
         cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg['ENABLE'] == 'true'
+        return cfg['enable']
 
     def is_webhook_enable(self):
         return self.webhook_enable
@@ -72,6 +72,6 @@ class MikananiSourceProvider(provider.SourceProvider):
 
     def load_config(self):
         cfg = provider.load_source_provide_config(self.provider_name)
-        logging.info('mikanani rss link is:%s', cfg['RSS_LINK'])
-        self.rss_link = cfg['RSS_LINK']
-        self.download_path = cfg['DOWNLOAD_PATH']
+        logging.info('mikanani rss link is:%s', cfg['rss_link'])
+        self.rss_link = cfg['rss_link']
+        self.download_path = cfg['download_path']

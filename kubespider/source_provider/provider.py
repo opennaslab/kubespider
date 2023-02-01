@@ -2,7 +2,7 @@ import os
 import abc
 import threading
 
-import configparser
+from utils import helper
 
 source_provider_file_lock = threading.Lock()
 
@@ -54,24 +54,12 @@ class SourceProvider(metaclass=abc.ABCMeta):
 
 
 def load_source_provide_config(provider_name):
-    source_provider_file_lock.acquire()
-    cfg = configparser.ConfigParser()
     config_path = os.path.join(os.getenv('HOME'), '.kubespider/source_provider.cfg')
-    cfg.read(config_path)
-    if provider_name in cfg.sections():
-        source_provider_file_lock.release()
-        return cfg[provider_name]
-    source_provider_file_lock.release()
-    return {}
+    cfg = helper.load_json_config(config_path, source_provider_file_lock)
+    return cfg[provider_name]
 
-
-def save_source_provider_config(provider_name, section_cfg):
-    source_provider_file_lock.acquire()
-    cfg = configparser.ConfigParser()
+def save_source_provider_config(provider_name, provider_cfg):
     config_path = os.path.join(os.getenv('HOME'), '.kubespider/source_provider.cfg')
-    cfg.read(config_path)
-    cfg[provider_name] = section_cfg
-    with open(config_path, 'w', encoding="utf-8") as config_file:
-        cfg.write(config_file)
-        config_file.close()
-    source_provider_file_lock.release()
+    cfg = helper.load_json_config(config_path, source_provider_file_lock)
+    cfg[provider_name] = provider_cfg
+    helper.dump_json_config(config_path, cfg, source_provider_file_lock)
