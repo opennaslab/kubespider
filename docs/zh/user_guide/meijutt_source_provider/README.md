@@ -23,7 +23,7 @@ meijutt有丰富的美剧内容，提供高质量下载资源。官方地址：[
 `enable`：是否开启此provider。  
 `download_path`：下载路径，最终的下载路径为`/root/.kubespider/download_provide.cfg`中配置路径+此路径。    
 `tv_links`：tv剧地址，直接通过Kubespider chrome插件发送美剧地址URL即可：  
-![img](../../images/../../images/kubespider-chrome-ext-usage.png)  
+![img](../../images/../../images/kubespider-chrome-ext-usage-zh.png)  
 
 其中Server地址为 http://<server_ip>:3080
 
