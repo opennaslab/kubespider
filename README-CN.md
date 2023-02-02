@@ -34,6 +34,8 @@ Kubespider为了适配多种资源平台，提供了许多适配器，按你的�
 
 #### 1.下载代码库并且安装
 ```sh
+# 如果镜像无法下载或速度较慢请设置此环境变量
+# export CHINA_MAINLAND=TRUE
 git clone https://github.com/jwcesign/kubespider.git
 cd kubespider
 bash hack/install_kubespider.sh
