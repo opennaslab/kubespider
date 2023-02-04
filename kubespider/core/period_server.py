@@ -32,7 +32,6 @@ class PeriodServer:
         for provider in self.source_providers:
             if provider_name != provider.get_provider_name():
                 continue
-            logging.info("jw1-----")
             self.run_single_provider(provider)
 
     def run_single_provider(self, provider):

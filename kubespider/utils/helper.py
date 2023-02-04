@@ -27,5 +27,6 @@ def load_json_config(cfg_path, lock):
 def dump_json_config(cfg_path, cfg, lock):
     lock.acquire()
     with open(cfg_path, 'w', encoding='utf-8') as config_file:
-        json.dump(cfg, config_file, check_circular=False, indent=4, separators=(',', ':'))
+        json.dump(cfg, config_file, check_circular=False,
+            indent=4, separators=(',', ':'), ensure_ascii=False)
         lock.release()
