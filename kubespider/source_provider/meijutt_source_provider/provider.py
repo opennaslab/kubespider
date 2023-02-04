@@ -1,5 +1,6 @@
 # This works for: https://www.meijutt.tv/
 # Function: download tv video once it's updated
+# encoding:utf-8
 from urllib.parse import urlparse
 import logging
 import requests
@@ -47,15 +48,13 @@ class MeijuttSourceProvider(provider.SourceProvider):
     def get_links(self, data_source_url: str):
         ret = []
         for tv_link in self.tv_links:
-            if len(tv_link) == 0:
-                continue
             try:
-                req = requests.get(tv_link, timeout=30)
+                req = requests.get(tv_link['link'], timeout=30)
             except Exception as err:
                 logging.info('meijutt_source_provider get links error:%s', err)
                 continue
             dom = BeautifulSoup(req.content, 'html.parser')
-            div = dom.find_all("div", ['class', 'tabs-list current-tab'])
+            div = dom.find_all('div', ['class', 'tabs-list current-tab'])
             if len(div) == 0:
                 continue
             links = div[0].find_all('input', ['class', 'down_url'])
@@ -67,14 +66,37 @@ class MeijuttSourceProvider(provider.SourceProvider):
 
     def update_config(self, req_para: str):
         cfg = provider.load_source_provide_config(self.provider_name)
-        links = cfg['tv_links']
-        if req_para not in links:
-            links.append(req_para)
-        cfg['tv_links'] = links
+        tv_links = cfg['tv_links']
+        urls = [i['link'] for i in tv_links]
+        if req_para not in urls:
+            tv_title = self.get_tv_title(req_para)
+            if tv_title == "":
+                return
+            tv_info = {'tv_name': tv_title, 'link': req_para}
+            tv_links.append(tv_info)
+        cfg['tv_links'] = tv_links
         provider.save_source_provider_config(self.provider_name, cfg)
 
     def load_config(self):
         cfg = provider.load_source_provide_config(self.provider_name)
-        logging.info('meijutt tv link is:%s', ','.join(cfg['tv_links']))
+        tv_links = [i['link'] for i in cfg['tv_links']]
+        logging.info('meijutt tv link is:%s', ','.join(tv_links))
         self.tv_links = cfg['tv_links']
         self.download_path = cfg['download_path']
+
+    def get_tv_title(self, req_para: str) -> str:
+        # example link: https://www.meijutt.tv/content/meiju28277.html
+        try:
+            req = requests.get(req_para, timeout=30)
+        except Exception as err:
+            logging.info('meijutt_source_provider get tv title error:%s', err)
+            return ""
+        dom = BeautifulSoup(req.content, 'html.parser')
+        div = dom.find_all('div', ['class', 'info-title'])
+        if len(div) == 0:
+            logging.info('meijutt_source_provider get tv title empty:%s', req_para)
+            return ""
+        h1_title = div[0].find_all('h1')
+        tv_title = h1_title[0].text.strip()
+        logging.info('meijutt_source_provider get tv title:%s,%s', tv_title, req_para)
+        return tv_title
