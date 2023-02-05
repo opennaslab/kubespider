@@ -2,6 +2,10 @@ import os
 import uuid
 import hashlib
 import json
+import logging
+
+from api import types
+
 
 def get_tmp_file_name(url):
     file_name = os.path.basename(url)
@@ -30,3 +34,9 @@ def dump_json_config(cfg_path, cfg, lock):
         json.dump(cfg, config_file, check_circular=False,
             indent=4, separators=(',', ':'), ensure_ascii=False)
         lock.release()
+
+def convert_file_type_to_path(file_type: str):
+    if file_type in types.file_type_to_path.keys():
+        return types.file_type_to_path[file_type]
+    logging.warning('%s file file is not recorded', file_type)
+    return file_type

@@ -1,9 +1,11 @@
 # This works for: https://mikanani.me
 # Function: download anime you subscribe
+# encoding:utf-8
 import logging
 
 import xml.etree.ElementTree as ET
 import requests
+from bs4 import BeautifulSoup
 
 from source_provider import provider
 from api import types
@@ -13,11 +15,10 @@ from utils import helper
 class MikananiSourceProvider(provider.SourceProvider):
     def __init__(self) -> None:
         self.provider_type = types.SOURCE_PROVIDER_PERIOD_TYPE
-        self.file_type = 'torrent'
+        self.link_type = types.LINK_TYPE_TORRENT
         self.webhook_enable = False
         self.provider_name = 'mikanani_source_provider'
         self.rss_link = ''
-        self.download_path = ''
         self.tmp_file_path = '/tmp/'
 
     def get_provider_name(self):
@@ -26,11 +27,8 @@ class MikananiSourceProvider(provider.SourceProvider):
     def get_provider_type(self):
         return self.provider_type
 
-    def get_file_type(self):
-        return self.file_type
-
-    def get_download_path(self):
-        return self.download_path
+    def get_link_type(self):
+        return self.link_type
 
     def provider_enabled(self):
         cfg = provider.load_source_provide_config(self.provider_name)
@@ -59,9 +57,10 @@ class MikananiSourceProvider(provider.SourceProvider):
             ret = []
             for i in items:
                 anime_name = i.find('./guid').text
+                title = self.get_file_title(i.find('./link').text)
                 logging.info('mikanani find %s', anime_name)
                 url = i.find('./enclosure').attrib['url']
-                ret.append(url)
+                ret.append({'path': title, 'link': url, 'file_type': types.FILE_TYPE_VIDEO_TV})
             return ret
         except Exception as err:
             logging.info('parse rss xml error:%s', err)
@@ -74,4 +73,19 @@ class MikananiSourceProvider(provider.SourceProvider):
         cfg = provider.load_source_provide_config(self.provider_name)
         logging.info('mikanani rss link is:%s', cfg['rss_link'])
         self.rss_link = cfg['rss_link']
-        self.download_path = cfg['download_path']
+
+    def get_file_title(self, link: str):
+        # example: https://mikanani.me/Home/Episode/5350b283db7d8e4665a08dda24d0d0c66259fc71
+        try:
+            req = requests.get(link, timeout=30)
+        except Exception as err:
+            logging.info('mikanani get anime title error:%s', err)
+            return ""
+        dom = BeautifulSoup(req.content, 'html.parser')
+        titles = dom.find_all('a', ['class', 'w-other-c'])
+        if len(titles) == 0:
+            logging.error('mikanani get anime title empty:%s', link)
+            return ""
+        title = titles[0].text.strip()
+        logging.info('mikanani get anime title:%s', title)
+        return title

@@ -13,7 +13,6 @@
    ...
     "mikanani_source_provider": {
         "enable": false,
-        "download_path": "anime",
         "rss_link": "https://mikanani.me/RSS/MyBangumi?token=egIVi24Uxfg68bFDW5ehVgpHCadfZ1AULNYot%2b95mDo%3d"
     },
     ...
@@ -21,7 +20,6 @@
 ```
 
 `enable`：是否开启此provider。  
-`download_path`：下载路径，最终的下载路径为`/root/.kubespider/download_provide.cfg`中配置路径+此路径。    
 `rss_link`：mikanani账号的rss链接，获取方法如下：  
 
 1. 去[mikanani](https://mikanani.me/)注册账号，开启高级订阅 

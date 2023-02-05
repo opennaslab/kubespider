@@ -1,4 +1,3 @@
-import os
 import logging
 import json
 
@@ -8,6 +7,7 @@ from core import download_trigger
 from core import kubespider_global
 from core import period_server
 from api import types
+from utils import helper
 
 
 class WebhookServer(BaseHTTPRequestHandler):
@@ -34,19 +34,21 @@ class WebhookServer(BaseHTTPRequestHandler):
 
         err = None
         if match_one_provider is False:
-            file_type = self.get_file_type(source)
+            link_type = self.get_link_type(source)
             # If we not match the source provider, just download to common path
-            path = os.path.join('common', path)
-            err = download_trigger.kubespider_downloader.download_file(source, path, file_type)
+            # TODO: implement a better classification if no source provider match
+            path = helper.convert_file_type_to_path(types.FILE_TYPE_COMMON) + '/' + path
+            err = download_trigger.kubespider_downloader.download_file(source, path, link_type)
 
         if match_one_provider is True:
             if match_provider.get_provider_type() == types.SOURCE_PROVIDER_DISPOSABLE_TYPE:
-                file_type = match_provider.get_file_type()
+                link_type = match_provider.get_link_type()
                 links = match_provider.get_links(source)
-                download_final_path = os.path.join(match_provider.get_download_path(), path)
                 for download_link in links:
-                    err = download_trigger.kubespider_downloader.download_file(download_link, \
-                        download_final_path, file_type)
+                    # The path rule should be like: {file_type}/{file_title}
+                    download_final_path = helper.convert_file_type_to_path(download_link['file_type']) + '/' + download_link['path']
+                    err = download_trigger.kubespider_downloader.download_file(download_link['link'], \
+                        download_final_path, link_type)
                     if err is not None:
                         break
             else:
@@ -58,13 +60,14 @@ class WebhookServer(BaseHTTPRequestHandler):
         else:
             self.send_bad_response(err)
 
-    def get_file_type(self, url):
-        if url.endswith("torrent"):
-            return 'torrent'
+    def get_link_type(self, url):
+        if url.endswith('torrent'):
+            return types.LINK_TYPE_TORRENT
         if url.startswith('magnet:'):
-            return 'magnet'
+            return types.LINK_TYPE_MAGNET
 
-        return 'general'
+        # TODO: implement other type, like music mv or short video
+        return types.LINK_TYPE_GENERAL
 
     def send_ok_response(self):
         self.send_response(200)
