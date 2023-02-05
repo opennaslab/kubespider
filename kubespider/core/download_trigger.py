@@ -2,20 +2,21 @@ import logging
 from urllib import request
 
 from utils import helper
+from api import types
 
 
 class KubespiderDownloader:
     def __init__(self, download_providers) -> None:
         self.download_provider = download_providers
 
-    def download_file(self, url, path, file_type):
-        if file_type == 'torrent':
+    def download_file(self, url, path, link_type):
+        if link_type == types.LINK_TYPE_TORRENT:
             return self.handle_torrent_download(url, path)
 
-        if file_type == 'magnet':
+        if link_type == types.LINK_TYPE_MAGNET:
             return self.handle_magnet_download(url, path)
 
-        if file_type == 'general':
+        if link_type == types.LINK_TYPE_GENERAL:
             return self.handle_general_download(url, path)
 
         return None

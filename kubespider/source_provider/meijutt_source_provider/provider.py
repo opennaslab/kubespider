@@ -13,10 +13,9 @@ from source_provider import provider
 class MeijuttSourceProvider(provider.SourceProvider):
     def __init__(self) -> None:
         self.provider_type = types.SOURCE_PROVIDER_PERIOD_TYPE
-        self.file_type = 'magnet'
+        self.link_type = types.LINK_TYPE_MAGNET
         self.webhook_enable = True
         self.provider_name = 'meijutt_source_provider'
-        self.download_path = ''
         self.tv_links = []
 
     def get_provider_name(self):
@@ -25,11 +24,8 @@ class MeijuttSourceProvider(provider.SourceProvider):
     def get_provider_type(self):
         return self.provider_type
 
-    def get_file_type(self):
-        return self.file_type
-
-    def get_download_path(self):
-        return self.download_path
+    def get_link_type(self):
+        return self.link_type
 
     def provider_enabled(self):
         cfg = provider.load_source_provide_config(self.provider_name)
@@ -61,7 +57,7 @@ class MeijuttSourceProvider(provider.SourceProvider):
             for link in links:
                 url = link.get('value')
                 logging.info('meijutt find %s', url)
-                ret.append(url)
+                ret.append({'path': tv_link['tv_name'], 'link': url, 'file_type': types.FILE_TYPE_VIDEO_TV})
         return ret
 
     def update_config(self, req_para: str):
@@ -82,9 +78,8 @@ class MeijuttSourceProvider(provider.SourceProvider):
         tv_links = [i['link'] for i in cfg['tv_links']]
         logging.info('meijutt tv link is:%s', ','.join(tv_links))
         self.tv_links = cfg['tv_links']
-        self.download_path = cfg['download_path']
 
-    def get_tv_title(self, req_para: str) -> str:
+    def get_tv_title(self, req_para: str):
         # example link: https://www.meijutt.tv/content/meiju28277.html
         try:
             req = requests.get(req_para, timeout=30)

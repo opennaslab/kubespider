@@ -51,9 +51,9 @@ class Aria2DownloadProvider(provider.DownloadProvider):
         try:
             ret = self.aria2.add(url, options={'dir': download_path})
             logging.info('Create download task result:%s', ret)
-            return True
+            return None
         except Exception as err:
-            logging.warning('Please ensure your motrix server is ok:%s', err)
+            logging.warning('Please ensure your aria2-type download server is ok:%s', err)
             return err
 
     def load_config(self):

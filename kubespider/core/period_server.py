@@ -39,22 +39,22 @@ class PeriodServer:
         if provider.get_provider_type() == types.SOURCE_PROVIDER_PERIOD_TYPE:
             provider.load_config()
             links = provider.get_links("")
-            file_type = provider.get_file_type()
-            download_final_path = provider.get_download_path()
+            link_type = provider.get_link_type()
 
             provider_name = provider.get_provider_name()
             state = self.load_state(provider_name)
 
             for source in links:
-                if helper.get_unique_hash(source) in state:
+                download_final_path = helper.convert_file_type_to_path(source['file_type']) + '/' + source['path']
+                if helper.get_unique_hash(source['link']) in state:
                     continue
-                logging.info('Find new resource:%s', source)
+                logging.info('Find new resource:%s', source['link'])
                 download_ok = download_trigger.kubespider_downloader. \
-                    download_file(source, download_final_path, file_type)
+                    download_file(source['link'], download_final_path, link_type)
                 if download_ok is False:
                     meet_err = True
                     break
-                state.append(helper.get_unique_hash(source))
+                state.append(helper.get_unique_hash(source['link']))
 
             self.save_state(provider_name, state)
 

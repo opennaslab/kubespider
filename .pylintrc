@@ -4,7 +4,9 @@ disable=
     C0115, # missing-class-docstring
     C0116, # missing-class-docstring
     W0703, # broad-except
+    W0511, # fixme, like TODO
     R1732, # consider-using-with
+    C0201, # consider-iterating-dictionary
 
 [SIMILARITIES]
 # Minimum lines number of a similarity.

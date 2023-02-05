@@ -21,11 +21,7 @@ class SourceProvider(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def get_file_type(self):
-        pass
-
-    @abc.abstractmethod
-    def get_download_path(self):
+    def get_link_type(self):
         pass
 
     @abc.abstractmethod
@@ -40,6 +36,8 @@ class SourceProvider(metaclass=abc.ABCMeta):
     def should_handle(self, data_source_url: str):
         pass
 
+    # Return the download links for the source provider, the return struct should be format like:
+    # {'path': 'file_path', 'link': 'download_link', 'file_type': 'file type'}
     @abc.abstractmethod
     def get_links(self, data_source_url: str):
         pass
