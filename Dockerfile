@@ -2,7 +2,7 @@ FROM python:3.10-buster
 
 WORKDIR /root
 COPY ./kubespider ./kubespider
-COPY ./.kubespider ./.kubespider
+COPY ./.config ./.config
 COPY requirements.txt ./
 
 RUN python3 -m pip install --upgrade pip \
