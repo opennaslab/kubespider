@@ -15,7 +15,7 @@ class PeriodServer:
         self.period_seconds = 3600
         self.source_providers = source_providers
         self.download_providers = download_providers
-        self.state_file_dir = os.getenv('HOME') + '/.kubespider'
+        self.state_file_dir = os.getenv('HOME') + '/.config'
 
     def run(self):
         while True:

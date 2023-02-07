@@ -20,8 +20,8 @@
 为了实现一个通用的下载编排系统，需要适配各种资源网站和下载软件，所以将这两部分从核心功能中抽象出来：
 ![image](./docs/images/kubespider-architecture.png)
 * `kubespider-core`：Kubespider核心模块，接受触发下载请求，调用资源提供器provider解析（最终会解析为标准模式，如用户输入bilibili博主地址，对应资源提供器输出mp4文件地址下载列表），最后调用下载提供器provider实现下载；此模块同时也会周期调用providers(如追剧provider)，下载增加的资源。
-* `source-provider`：各资源网站的提供器，接受通用资源地址输入，输出为标准资源地址url，如输入为某个bilibili博主的个人主页，输出为博主视频的所有mp4下载地址。配置文件在`./kubespider/source_provider.cfg`。
-* `download-provider`：各下载软件的提供器，接收`kubespider-core`的请求Task，调用对应的服务实现下载。配置文件在`./kubespider/download_provider.cfg`。
+* `source-provider`：各资源网站的提供器，接受通用资源地址输入，输出为标准资源地址url，如输入为某个bilibili博主的个人主页，输出为博主视频的所有mp4下载地址。配置文件在`.config/source_provider.cfg`。
+* `download-provider`：各下载软件的提供器，接收`kubespider-core`的请求Task，调用对应的服务实现下载。配置文件在`.config/download_provider.cfg`。
 
 ## 💽 安装
 ### 前提
@@ -30,7 +30,7 @@
 3. 服务器已安装Docker。
 
 ### 默认安装（使用Docker部署）
-Kubespider为了适配多种资源平台，提供了许多适配器，按你的需要开启或关闭这些适配器，配置文件在`.kubespider`文件夹：
+Kubespider为了适配多种资源平台，提供了许多适配器，按你的需要开启或关闭这些适配器，配置文件在`.config`文件夹：
 
 #### 1.下载代码库并且安装
 ```sh
@@ -56,7 +56,7 @@ WARNING: Published ports are discarded when using host network mode
 9c0aa1059f1546a4f1a2accac445ce1389f1c400b96328f3e18c8af03f0bbc70
 [INFO] Deploy successful, check the information:
 *******************************************
-Kubespider config path: /root/.kubespider/
+Kubespider config path: /root/kubespider/.config
 Download file path: /root/kubespider/nas/
 Kubespider webhook address: http://<server_ip>:3080
 Aria2 server address: http://<server_ip>:6800/jsonrpc, you can use any gui or webui to connect it
@@ -65,7 +65,7 @@ Aria2 default secret is:kubespider
 ```
 * 此步骤会安装`Kubespide`和`Aria2`资源下载程序，作为默认的下载器。
 * 安装后，**所有下载文件会存储到 `${HOME}/kubespider/nas`**。
-* 配置文件在 `${HOME}/.kubespider/`。
+* 配置文件在 `${HOME}/kubespider/.config`。
 
 #### 2.连接aria2
 为了便于查看下载任务，需要下载Chrome插件AriNg:(1)如果你能访问外网，在chrome商店下载[AriaNg](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn)；(2)如果不能，在Crx4Chrome下载[AriaNg](https://www.crx4chrome.com/crx/85196/)。  

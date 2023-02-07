@@ -14,6 +14,7 @@ PS：如果你想做某个特性，请在repo issue中说明。
 * 完善现有代码，定义好资源提供器和下载提供器的API。
 * 设计测试框架，确保各source provider/download provder正常工作。
 * 增加卸载脚本。
+* 参照 https://reorx.com/blog/track-and-download-shows-automatically-with-sonarr/，集成到kubespider中，成为一个source provider。
 
 ## 正在做特性
 * 更好的文件分类。
@@ -22,6 +23,7 @@ PS：如果你想做某个特性，请在repo issue中说明。
 * 国内加速下载，支持阿里云image registry。
 * 所有配置文件json化，state存储也json化。
 * 搭建中国大陆部署测试流水线。
+* 配置文件位置归一，.kubespider改为.config，放入${HOME}/kubespider/.config。
 
 ## v0.1.0版本特性(2023/01/30)
 * Chrome插件支持右键触发下载。

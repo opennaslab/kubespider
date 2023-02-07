@@ -23,7 +23,7 @@ fi
 # 3.Create necessary directory
 mkdir -p ${HOME}/kubespider/nas/
 mkdir -p ${HOME}/kubespider/motrix/
-cp -r ./.kubespider ${HOME}/
+cp -r ./.config ${HOME}/kubespider
 
 # 4.Set registry
 source hack/util.sh
@@ -50,7 +50,7 @@ if [[ ${KUBESPIDER_VERSION} == "" ]]; then
     export KUBESPIDER_VERSION=${KUBESPIDER_DEFAULT_VERSION}
 fi
 docker run -itd --name kubespider \
-    -v ${HOME}/.kubespider:/root/.kubespider \
+    -v ${HOME}/kubespider/.config:/root/.config \
     --network=host \
     --restart unless-stopped \
     ${image_registry}/kubespider:${KUBESPIDER_VERSION}
@@ -58,7 +58,7 @@ docker run -itd --name kubespider \
 # 7.Give necessary info
 echo "[INFO] Deploy successful, check the information:"
 echo "*******************************************"
-echo "Kubespider config path: ${HOME}/.kubespider/"
+echo "Kubespider config path: ${HOME}/kubespider/.config"
 echo "Download file path: ${HOME}/kubespider/nas/"
 echo "Kubespider webhook address: http://<server_ip>:3080"
 echo "Aria2 server address: http://<server_ip>:6800/jsonrpc, you can use any gui or webui to connect it"

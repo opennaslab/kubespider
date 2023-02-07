@@ -195,7 +195,7 @@ docker build -t cesign/kubespider:latest -f Dockerfile ./
 docker rm kubespider --force
 
 docker run -itd --name kubespider \
-    -v ${HOME}/.kubespider:/root/.kubespider \
+    -v ${HOME}/kubespider/.config:/root/.config \
     --network=host \
     --restart unless-stopped \
     cesign/kubespider:latest

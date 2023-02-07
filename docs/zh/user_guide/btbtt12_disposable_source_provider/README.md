@@ -7,7 +7,7 @@ BT之家单版社区平台，最快提供最新最全高清电影、动漫、韩
 你已经安装好了Kubespider/Kubespider chrome插件。
 
 ## 配置手册
-你可以通过`/root/.kubespider/source_provider.cfg`配置，配置解释如下：
+你可以通过`${HOME}/kubespider/.config/source_provider.cfg`配置，配置解释如下：
 ```cfg
 {
     ...

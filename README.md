@@ -21,8 +21,8 @@ I was exposed to Terraform before and was surprised by its versatility. Inspired
 To realize a general download orchestration system, it is necessary to adapt various resource websites and download software, so these two parts are abstracted from the core functions:
 ![image](./docs/images/kubespider-architecture.png)
 * `kubespider-core`: The core module of Kubespider accepts the trigger download request, calls the resource provider for resolution (it will eventually be resolved into a standard mode, such as the user enters the bilibili blogger address, and the corresponding resource provider outputs the mp4 file address download list), and finally calls the download provider to implement Download; this module will also periodically call providers (such as TV series provider) to download additional resources.
-* `source-provider`：The provider of each resource website accepts input of general resource addresses, and outputs standard resource address URLs, such as the personal homepage of a YouTuber, and outputs all mp4 download addresses of the blogger’s videos. The configuration file is in `./kubespider/source_provider.cfg`.
-* `download-provider`：The provider of each download software receives the request task from `kubespider-core`, and calls the corresponding service to realize the download. The configuration file is in `./kubespider/download_provider.cfg`.
+* `source-provider`：The provider of each resource website accepts input of general resource addresses, and outputs standard resource address URLs, such as the personal homepage of a YouTuber, and outputs all mp4 download addresses of the blogger’s videos. The configuration file is in `.config/source_provider.cfg`.
+* `download-provider`：The provider of each download software receives the request task from `kubespider-core`, and calls the corresponding service to realize the download. The configuration file is in `.config/download_provider.cfg`.
 
 ## 💽 Installation
 ### Premise
@@ -31,7 +31,7 @@ To realize a general download orchestration system, it is necessary to adapt var
 3. Docker is installed on the server。
 
 ### Default installation(Deploy with Docker)
-To adapt to multiple resource platforms, Kubespider provides many adapters. Enable or disable these adapters according to your needs. The configuration file is in the `.kubespider` folder:
+To adapt to multiple resource platforms, Kubespider provides many adapters. Enable or disable these adapters according to your needs. The configuration file is in the `.config` folder:
 
 #### 1.Download the repository and install
 ```sh
@@ -51,11 +51,10 @@ root@cesign [09:01:34 PM] [+22.0°C] [~/git/kubespider] [main *]
                            |_|
 [INFO] Start to deploy with default configuration...
 b13820946878c4f00635e7fa3db64ea83506850ebb7d07ff77b62814db1d894a
-WARNING: Published ports are discarded when using host network mode
 9c0aa1059f1546a4f1a2accac445ce1389f1c400b96328f3e18c8af03f0bbc70
 [INFO] Deploy successful, check the information:
 *******************************************
-Kubespider config path: /root/.kubespider/
+Kubespider config path: /root/kubespider/.config/
 Download file path: /root/kubespider/nas/
 Kubespider webhook address: http://<server_ip>:3080
 Aria2 server address: http://<server_ip>:6800/jsonrpc, you can use any gui or webui to connect it
@@ -64,7 +63,7 @@ Aria2 default secret is:kubespider
 ```
 * This step will install `Kubespide` and `Aria2` resource downloader as the default downloader.
 * After installation, **all downloaded files will be stored in `${HOME}/kubespider/nas`**.
-* Configuration files are located in `${HOME}/.kubespider/`.
+* Configuration files are located in `${HOME}/kubespider/.config`.
 
 #### 2.Connect to aria2
 For checking the download tasks on your server conveniently, go to the chrome store to download [AriaNg plugin](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn).  
