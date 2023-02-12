@@ -7,6 +7,8 @@ disable=
     W0511, # fixme, like TODO
     R1732, # consider-using-with
     C0201, # consider-iterating-dictionary
+    I1101, # Module 'libtorrent' has no 'torrent_info' member
+    W0719, # Raising too general exception
 
 [SIMILARITIES]
 # Minimum lines number of a similarity.

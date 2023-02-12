@@ -1,4 +1,4 @@
-FROM python:3.10-buster
+FROM cesign/kubespider-base:latest
 
 WORKDIR /root
 COPY ./kubespider ./kubespider
