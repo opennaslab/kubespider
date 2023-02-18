@@ -8,13 +8,15 @@ PS：如果你想做某个特性，请在repo issue中说明。
 * 实现chrome插件，自动在网页插入下载或者追剧按钮。
 * Chrome插件在保存server地址时做健康检查。
 * 支持豆瓣评分大于X，自动搜索资源下载。
-* 支持迅雷download provider。
 * 支持下载优先级，在某个下载器长期无法下载时，切换另外一个下载器。
 * 完善现有文档，提供中英版本。
 * 完善现有代码，定义好资源提供器和下载提供器的API。
 * 设计测试框架，确保各source provider/download provder正常工作。
 * 增加卸载脚本。
-* 参照 https://reorx.com/blog/track-and-download-shows-automatically-with-sonarr/，集成到kubespider中，成为一个source provider。
+* 参照 `https://reorx.com/blog/track-and-download-shows-automatically-with-sonarr/`，集成到kubespider中，成为一个source provider。
+* 集成alist，基于webDAV下载各云盘资源，成为一个source provider。
+* 添加如下文档：如何配置Aria2，如何触发下载各种类型文件。
+* README特性表格化，更易阅读。
 
 ## 正在做特性
 * 更好的文件分类。
@@ -24,6 +26,7 @@ PS：如果你想做某个特性，请在repo issue中说明。
 * 所有配置文件json化，state存储也json化。
 * 搭建中国大陆部署测试流水线。
 * 配置文件位置归一，.kubespider改为.config，放入${HOME}/kubespider/.config。
+* 支持迅雷download provider。
 
 ## v0.1.0版本特性(2023/01/30)
 * Chrome插件支持右键触发下载。

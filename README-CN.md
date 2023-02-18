@@ -93,7 +93,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 
 ## 🔧 特性列表
 ### 基本特性
-* 支持magnent, torrent, 以及普通资源下载，如zip等。
+* 支持magnet, torrent, 以及普通资源下载，如zip等。
 
 ### 下载提供器
 * 支持aria2类型的下载器。

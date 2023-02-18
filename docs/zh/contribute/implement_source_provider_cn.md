@@ -54,7 +54,7 @@ class SourceProvider(metaclass=abc.ABCMeta):
 * `__init__`: 资源提供器初始化函数，初始化一些必要状态。
 * `get_provider_name`: 获取资源提供器名称。
 * `get_provider_type`: 获取资源提供器类型，只能为`SOURCE_PROVIDER_PERIOD_TYPE`或者`SOURCE_PROVIDER_DISPOSABLE_TYPE`, 分别表示周期性资源提供器和一次性资源提供器，周期提供器可用于追剧等下载操作，一次性提供器用于webhook触发等下载操作。
-* `get_file_type`: 获取资源提供器下载的文件类型，可为magnent, torrent获取其他通用类型。
+* `get_file_type`: 获取资源提供器下载的文件类型，可为magnet, torrent获取其他通用类型。
 * `get_download_path`: 获取资源提供器下载的文件存放路径，一般是每个提供一一个目录。
 * `provider_enabled`: 获取资源提供器是否启用，从配置文件中获取。
 * `is_webhook_enable`: webhook是否启用，在provider type为`SOURCE_PROVIDER_DISPOSABLE_TYPE`时，此接口必需返回true。
@@ -163,7 +163,7 @@ class MeijuttSourceProvider(provider.SourceProvider):
 ```
 
 * `__init__`: 初始化函数，包含provider类型，文件类型，是否支持webhook，资源提供器名称，下载路径，美剧地址。注意：
-  * 文件类型目前只支持magnent，torrent，general。
+  * 文件类型目前只支持magnet，torrent，general。
   * meijutt资源提供器接受webhook触发，所以`webhook_enable`设置为true。
   * meijutt资源提供器会周期检查美剧是否更新，所以provider类型为`SOURCE_PROVIDER_PERIOD_TYPE`。
   * 其中provider name必需合配置文件中的provider name一致。
