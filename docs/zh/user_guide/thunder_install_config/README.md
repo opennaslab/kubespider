@@ -3,7 +3,7 @@
 迅雷作为国内最大的下载工具，其下载速度和稳定性都是非常不错的。在Linux上现已支持Docker版本，可以方便的在Linux上安装和使用。感谢 [cnk3x](https://github.com/cnk3x/xunlei) 的移植，让我们得以使用。
 
 ## 最终效果
-效果如果，利用迅雷，接收触发，下载剧集：
+效果如图，结合迅雷，Kubespider会调用迅雷，下载所有剧集并追更：
 ![img](images/xunlei_final_show.gif)
 
 ## 安装
@@ -25,12 +25,12 @@ docker ps | grep xunlei
 5eafffa17ac8   cnk3x/xunlei:latest            "/xunlei/xlp syno"       5 days ago       Up 5 days
 ```
 
-## 配置
+## 3.配置
 ### 1.通用配置
 打开地址`http://<server_ip>:2345`，初次使用会询问内测邀请码，输入 `我不是矿神IMNKS`，如果无效，请在github上提issue，我会尽快回复。
 
 ### 2.Kubespider对接配置（可选）
-由于迅雷的设计问题，此部分配置会比较复杂，做好心里准备，如果遇到任何问题，都可以issue提问，我会尽快回复。
+由于迅雷的设计问题，此部分配置会比较复杂，做好心理准备，如果遇到任何问题，都可以issue提问，我会尽快回复。
 
 #### 1.获取JS脚本名
 curl迅雷web ui地址：
@@ -69,7 +69,8 @@ curl http://<server_ip>:2345/webman/3rdparty/pan-xunlei-com/index.cgi/\#/home
 
 #### 4.设置get_token.js
 现在打开`${home}/kubespider/.config/dependencies/xunlei_download_provider/get_token.js`:
-![img](images/get_key_step3.jpg)
+![img](images/get_key_step3.jpg)  
+
 将函数1的名字替换为步骤3的函数1名字，函数2名字替换为函数2名字，代码段替换为步骤2的代码段。
 
 #### 5.获取device_id并设置
@@ -92,10 +93,10 @@ curl http://<server_ip>:2345/webman/3rdparty/pan-xunlei-com/index.cgi/\#/home
 }
 ```
 其中：
-`enable`: 设置是否使用此provider，只能使用一个，后续开发优先级后可以多个一起使用。
-`token_js_path`: 不用修改，如果你知道如何开发，可以修改。
-`http_endpoint`: 服务地址。
-`device_id`: 步骤5获取到的device_id。
+* `enable`: 设置是否使用此provider，只能使用一个，后续开发优先级后可以多个一起使用。
+* `token_js_path`: 不用修改，如果你知道如何开发，可以修改。
+* `http_endpoint`: 服务地址。
+* `device_id`: 步骤5获取到的device_id。
 
 #### 7.测试下载
 配置好后，运行如下命令：
