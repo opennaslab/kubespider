@@ -92,17 +92,30 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 * 安装迅雷，后台下载，[立即安装](./docs/zh/user_guide/thunder_install_config/README.md)。
 
 ## 🔧 特性列表
-### 基本特性
-* 支持magnet, torrent, 以及普通资源下载，如zip等。
+### 资源提供器
+如前面所述，资源提供器用于对接各种资源网站，条件触发下载相关资源：
+| 资源提供器 | 是否支持 | 用途 | 配置手册 |
+| :-------- | -----: | ---: | ------: |
+| mikanani资源提供器  | 是     | 全自动动漫追番 | [link](./docs/zh/user_guide/mikanani_source_provider/README) |
+| btbtt12资源提供器 | 是 | 实现链接触发下载，简化下载流程 | [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) |
+| meijutt资源提供器 | 是 | 自动追美剧 | [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
+| YouTube资源提供器 | TBD | 触发下载YouTube视频 | TBD |
 
 ### 下载提供器
-* 支持aria2类型的下载器。
+为了充分利用开源社区已有的下载软件(如YouTube有专门的下载软件)，目前支持如下下载软件：
+| 下载器 | 是否支持 | 配置手册 |
+| :---- | ------: | -----: |
+| aria2 |    是   | TBD |
+| 迅雷   |   是    | [link](./docs/zh/user_guide/thunder_install_config/README.md)  |
+| qbittorrent | TBD | TBD | 
 
-### 资源提供器
-* 基于mikanani，实现全自动动漫追番，配置请查看 [link](./docs/zh/user_guide/mikanani_source_provider/README.md)。
-* 下载btbtt12相关种子资源，配置请查看 [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md)。
-* 基于meijutt实现自动追美剧，配置请查看 [link](./docs/zh/user_guide/meijutt_source_provider/README.md)。
-* 基于y2mate，实现下载youtube视频（TODO）。
+### 基本特性
+目前支持如下文件触发下载：
+| 下载类型 | 是否支持 |
+| :-----  | ------: |
+| magnet  |   是    |
+| torrent |   是    |
+| 通用文件(jpg, mp4等) |   是    |
 
 ## 🤝 参与共建 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
