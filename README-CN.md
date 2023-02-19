@@ -96,7 +96,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 如前面所述，资源提供器用于对接各种资源网站，条件触发下载相关资源：
 | 资源提供器 | 是否支持 | 用途 | 配置手册 |
 | :-------- | -----: | ---: | ------: |
-| mikanani资源提供器  | 是     | 全自动动漫追番 | [link](./docs/zh/user_guide/mikanani_source_provider/README) |
+| mikanani资源提供器  | 是     | 全自动动漫追番 | [link](./docs/zh/user_guide/mikanani_source_provider/README.md) |
 | btbtt12资源提供器 | 是 | 实现链接触发下载，简化下载流程 | [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) |
 | meijutt资源提供器 | 是 | 自动追美剧 | [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
 | YouTube资源提供器 | TBD | 触发下载YouTube视频 | TBD |
