@@ -30,7 +30,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
             logging.info('Create download task result:%s', ret)
             return None
         except Exception as err:
-            logging.warning('Please ensure your motrix server is ok:%s', err)
+            logging.warning('Please ensure your aria2 server is ok:%s', err)
             return err
         return None
 
