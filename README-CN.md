@@ -103,11 +103,11 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 
 ### 下载提供器
 为了充分利用开源社区已有的下载软件(如YouTube有专门的下载软件)，目前支持如下下载软件：
-| 下载器 | 是否支持 | 配置手册 |
+| 下载软件 | 是否支持 | 配置手册 |
 | :---- | ------: | -----: |
 | aria2 |    是   | TBD |
 | 迅雷   |   是    | [link](./docs/zh/user_guide/thunder_install_config/README.md)  |
-| qbittorrent | TBD | TBD | 
+| qBittorrent | TBD | TBD | 
 
 ### 基本特性
 目前支持如下文件触发下载：
@@ -116,6 +116,8 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 | magnet  |   是    |
 | torrent |   是    |
 | 通用文件(jpg, mp4等) |   是    |
+
+触发下载使用方法请查看 [link](./docs/zh/user_guide/trigger_download/README.md)。
 
 ## 🤝 参与共建 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 

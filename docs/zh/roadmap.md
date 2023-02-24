@@ -15,11 +15,11 @@ PS：如果你想做某个特性，请在repo issue中说明。
 * 增加卸载脚本。
 * 参照 `https://reorx.com/blog/track-and-download-shows-automatically-with-sonarr/`，集成到kubespider中，成为一个source provider。
 * 集成alist，基于webDAV下载各云盘资源，成为一个source provider。
-* 添加如下文档：如何配置Aria2，如何触发下载各种类型文件。
-* README特性表格化，更易阅读。
+* 修复torrent触发下载时，带query参数的请求。
 
 ## 正在做特性
 * 更好的文件分类。
+* 添加如下文档：如何配置Aria2，如何触发下载各种类型文件。
 
 ## v0.2.0版本特性(2023/04/30)
 * 国内加速下载，支持阿里云image registry。
@@ -27,6 +27,7 @@ PS：如果你想做某个特性，请在repo issue中说明。
 * 搭建中国大陆部署测试流水线。
 * 配置文件位置归一，.kubespider改为.config，放入${HOME}/kubespider/.config。
 * 支持迅雷download provider。
+* README特性表格化，更易阅读。
 
 ## v0.1.0版本特性(2023/01/30)
 * Chrome插件支持右键触发下载。

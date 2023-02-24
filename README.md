@@ -89,24 +89,39 @@ Then with aria2 chrome plugin, you can see the download task starts:
 * Install Thunder(only in china), download in the background, [install now](./docs/zh/user_guide/thunder_install_config/README.md).
 
 ## 🔧 Feature list
-### Basic feature   
-* Supports magnet, torrent, and common resource downloads, such as zip, etc.
+### Source provider  
+As metioned before, the source provider is used to adpot to different websites, and download related resources based on conditions:
+| Source Provider | Support | Purpose | Configuration |
+| :-------- | -----: | ---: | ------: |
+| mikanani source provider  | Yes     | Automatically download updated anime | [link](./docs/zh/user_guide/mikanani_source_provider/README.md) |
+| btbtt12 source provider | Yes | Trigger download resource in btbtt12 website | [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) |
+| meijutt source provider | Yes | Download updated TV series | [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
+| YouTube source provider | TBD | Trigger download YouTube video | TBD |
 
 ### Download provider
-* Support aria2-type downloaders。
+In order to make full use of the exisiting download software in the open source community(For example, YouTube hasdedicated download software), the following software is current supported:
+| Download Software | Support | Configuration |
+| :---------------- | ------: | ------------: |
+| aria2             | Yes     | TBD           |
+| xunlei            | Yes     | TBD           |
+| qBittorrent       | TBD     | TBD           |
 
-### Source provider
-* Based on mikanani, it realizes fully automatic anime chasing, please refer to [link](./docs/zh/user_guide/mikanani_source_provider/README.md) for configuration.
-* Download related seed resources of btbtt12, please refer to [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) for configuration.
-* Based on meijutt to automatically follow American TV series, please refer to [link](./docs/zh/user_guide/meijutt_source_provider/README.md) for configuration.
-* Based on y2mate, download a YouTube video (TODO).
+### Basic feature  
+Currently, the following file types are supported to trigger downloading:
+| Download Types | Support |
+| :------------- | ------: |
+| magnet         | Yes     | 
+| torrent        | Yes     |
+| general(jpg, mp4, etc.) | Yes |
+
+Please refer to [link](./docs/zh/user_guide/trigger_download/README.md) for how to trigger the download.
 
 ## 🤝 Contribution [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
 If you are interested in participating in joint development, welcome to STAR/FORK/PR, please check [link](./docs/zh/roadmap.md) for Roadmap.
-* For how to write a resource provider for a resource website, please see [link](./docs/zh/contribute/implement_source_provider_cn.md).
-* How to write a download provider for download software, please see [link](./docs/en/contribute/implement_download_provider_cn.md).
-* For How to develop chrome extension webhook, please see [link](./docs/zh/contribute/develop_chrome_extension.md).
+* For how to implement a resource provider for a resource website, please see [link](./docs/zh/contribute/implement_source_provider_cn.md).
+* How to implement a download provider for download software, please see [link](./docs/en/contribute/implement_download_provider_cn.md).
+* For how to develop chrome extension webhook, please see [link](./docs/zh/contribute/develop_chrome_extension.md).
 
 ## 📝 Disclaimer
 All downloading and use of the software are deemed to have carefully read and fully agreed to the following terms:
