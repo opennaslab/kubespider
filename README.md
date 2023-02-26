@@ -103,7 +103,7 @@ In order to make full use of the exisiting download software in the open source 
 | Download Software | Support | Configuration |
 | :---------------- | ------: | ------------: |
 | aria2             | Yes     | TBD           |
-| xunlei            | Yes     | TBD           |
+| xunlei            | Yes     | [link](./docs/zh/user_guide/thunder_install_config/README.md) |
 | qBittorrent       | TBD     | TBD           |
 
 ### Basic feature  

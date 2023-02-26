@@ -1,5 +1,6 @@
 import logging
 import json
+from urllib.parse import urlparse
 
 from http.server import BaseHTTPRequestHandler
 
@@ -61,10 +62,10 @@ class WebhookServer(BaseHTTPRequestHandler):
             self.send_bad_response(err)
 
     def get_link_type(self, url):
-        if url.endswith('torrent'):
-            return types.LINK_TYPE_TORRENT
         if url.startswith('magnet:'):
             return types.LINK_TYPE_MAGNET
+        if urlparse(url).path.endswith('torrent'):
+            return types.LINK_TYPE_TORRENT
 
         # TODO: implement other type, like music mv or short video
         return types.LINK_TYPE_GENERAL
