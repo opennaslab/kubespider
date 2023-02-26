@@ -106,7 +106,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 | 下载软件 | 是否支持 | 配置手册 |
 | :---- | ------: | -----: |
 | aria2 |    是   | TBD |
-| 迅雷   |   是    | [link](./docs/zh/user_guide/thunder_install_config/README.md)  |
+| 迅雷   |   是    | [link](./docs/zh/user_guide/thunder_install_config/README.md) |
 | qBittorrent | TBD | TBD | 
 
 ### 基本特性

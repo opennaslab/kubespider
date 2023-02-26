@@ -15,7 +15,6 @@ PS：如果你想做某个特性，请在repo issue中说明。
 * 增加卸载脚本。
 * 参照 `https://reorx.com/blog/track-and-download-shows-automatically-with-sonarr/`，集成到kubespider中，成为一个source provider。
 * 集成alist，基于webDAV下载各云盘资源，成为一个source provider。
-* 修复torrent触发下载时，带query参数的请求。
 
 ## 正在做特性
 * 更好的文件分类。
@@ -28,6 +27,7 @@ PS：如果你想做某个特性，请在repo issue中说明。
 * 配置文件位置归一，.kubespider改为.config，放入${HOME}/kubespider/.config。
 * 支持迅雷download provider。
 * README特性表格化，更易阅读。
+* 修复torrent触发下载时，带query参数的请求。
 
 ## v0.1.0版本特性(2023/01/30)
 * Chrome插件支持右键触发下载。
