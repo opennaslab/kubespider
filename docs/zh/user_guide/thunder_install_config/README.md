@@ -25,7 +25,7 @@ docker ps | grep xunlei
 5eafffa17ac8   cnk3x/xunlei:latest            "/xunlei/xlp syno"       5 days ago       Up 5 days
 ```
 
-## 3.配置
+## 配置
 ### 1.通用配置
 打开地址`http://<server_ip>:2345`，初次使用会询问内测邀请码，输入 `我不是矿神IMNKS`，如果无效，请在github上提issue，我会尽快回复。
 
