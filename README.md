@@ -119,8 +119,9 @@ Please refer to [link](./docs/zh/user_guide/trigger_download/README.md) for how 
 ## 🤝 Contribution [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
 If you are interested in participating in joint development, welcome to STAR/FORK/PR, please check [link](./docs/zh/roadmap.md) for Roadmap.
+* For how to develop/debug Kubespider, please see [link](./CONTRIBUTING.md).
 * For how to implement a resource provider for a resource website, please see [link](./docs/zh/contribute/implement_source_provider_cn.md).
-* How to implement a download provider for download software, please see [link](./docs/en/contribute/implement_download_provider_cn.md).
+* For how to implement a download provider for download software, please see [link](./docs/en/contribute/implement_download_provider_cn.md).
 * For how to develop chrome extension webhook, please see [link](./docs/zh/contribute/develop_chrome_extension.md).
 
 ## 📝 Disclaimer
