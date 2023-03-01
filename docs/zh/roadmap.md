@@ -15,6 +15,7 @@ PS：如果你想做某个特性，请在repo issue中说明。
 * 增加卸载脚本。
 * 参照 `https://reorx.com/blog/track-and-download-shows-automatically-with-sonarr/`，集成到kubespider中，成为一个source provider。
 * 集成alist，基于webDAV下载各云盘资源，成为一个source provider。
+* 修复美剧天堂多次连续触发的性能问题，无法连续触发下载。
 
 ## 正在做特性
 * 更好的文件分类。

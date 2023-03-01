@@ -122,7 +122,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 ## 🤝 参与共建 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
 如果你有兴趣参与共同开发，欢迎 STAR/FORK/PR，Roadmap请查看 [link](./docs/zh/roadmap.md)。
-* 如何开发调试Kubespider，轻查看 [link](./docs/xxx)。
+* 如何开发调试Kubespider，请看 [link](./CONTRIBUTING-CN.md)。
 * 如何编写资源网站的资源提供器，请看 [link](./docs/zh/contribute/implement_source_provider_cn.md)。
 * 如何编写下载软件的下载提供器，请看 [link](./docs/zh/contribute/implement_download_provider_cn.md)。
 * 如何开发调试chrome插件webhook，请看 [link](./docs/zh/contribute/develop_chrome_extension.md)。
