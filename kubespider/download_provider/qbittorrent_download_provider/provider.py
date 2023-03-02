@@ -5,7 +5,9 @@ import qbittorrentapi
 
 from download_provider import provider
 
-class QbittorrentDownloadProvider(provider.DownloadProvider):
+class QbittorrentDownloadProvider(
+        provider.DownloadProvider # pylint length
+    ):
     def __init__(self) -> None:
         self.provider_name = 'qbittorrent_download_provider'
         self.http_endpoint_host = ''
@@ -29,9 +31,11 @@ class QbittorrentDownloadProvider(provider.DownloadProvider):
         try:
             ret = self.client.torrents_add(torrent_files=torrent_file_path, save_path=download_path)
             logging.info('Create download task results:%s', ret)
+            return None
         except Exception as err:
             logging.warning('Please ensure your qbittorrent server or your config are ok:%s', err)
             return err
+        return None
 
     def send_magnet_task(self, url, path):
         logging.info('Start magent download:%s, path:%s', url, path)
@@ -39,9 +43,11 @@ class QbittorrentDownloadProvider(provider.DownloadProvider):
         try:
             ret = self.client.torrents_add(urls=url, save_path=download_path)
             logging.info('Create download task results:%s', ret)
+            return None
         except Exception as err:
             logging.warning('Please ensure your qbittorrent server or your config are ok:%s', err)
             return err
+        return None
 
     def send_general_task(self, url, path):
         logging.warning('qbittorrent not support generatl task download! Please use aria2 or else download provider')
@@ -65,6 +71,8 @@ class QbittorrentDownloadProvider(provider.DownloadProvider):
         )
         try:
             self.client.auth_log_in()
+            return None
         except qbittorrentapi.LoginFailed as err:
             logging.warning('Auth into qbittorrent error:%s', err)
             return err
+        return None

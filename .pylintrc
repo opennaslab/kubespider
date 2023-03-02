@@ -9,6 +9,7 @@ disable=
     C0201, # consider-iterating-dictionary
     I1101, # Module 'libtorrent' has no 'torrent_info' member
     W0719, # Raising too general exception
+    R0902, # Too many instance attributes
 
 [SIMILARITIES]
 # Minimum lines number of a similarity.

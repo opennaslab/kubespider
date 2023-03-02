@@ -35,11 +35,9 @@ docker run -itd  \
     -e PUID=1026 \
     -e PGID=100 \
     -e TZ=Asia/Shanghai \
-    -p 6881:6881  \
-    -p 6881:6881/udp  \
-    -p 8080:8080  \
-    -v ${HOME}/kubespider/qbittorrent/config:/config  \
-    -v ${HOME}/kubespider/qbittorrent/downloads:/downloads  \
+    --network=host \
+    -v ${HOME}/kubespider/qbittorrent/:/config  \
+    -v ${HOME}/kubespider/nas/:/downloads  \
     --restart unless-stopped  \
     superng6/qbittorrentee:latest
 
