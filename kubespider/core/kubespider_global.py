@@ -3,6 +3,7 @@ import source_provider.btbtt12_disposable_source_provider.provider as btbtt12_di
 import source_provider.meijutt_source_provider.provider as meijutt_source_provider
 import download_provider.aria2_download_provider.provider as aria2_download_provider
 import download_provider.xunlei_download_provider.provider as xunlei_download_provider
+import download_provider.qbittorrent_download_provider.provider as qbittorrent_download_provider
 
 
 source_providers = [
@@ -14,6 +15,7 @@ source_providers = [
 download_providers = [
     aria2_download_provider.Aria2DownloadProvider(),
     xunlei_download_provider.XunleiDownloadProvider(),
+    qbittorrent_download_provider.QbittorrentDownloadProvider(),
 ]
 
 enabled_source_provider = []
