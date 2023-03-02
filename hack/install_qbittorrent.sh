@@ -22,7 +22,6 @@ if [[ $? != 0 ]]; then
 fi
 
 # 3.Create necessary directory
-mkdir -p ${HOME}/kubespider/nas/
 mkdir -p ${HOME}/kubespider/qbittorrent/
 
 # 4.Set registry
