@@ -13,7 +13,7 @@ function handleRequestSend(link, tab, server) {
     }
 
     var data = {"dataSource": dataSource, "path": ""};
-    fetch(server, {
+    fetch(server + '/api/v1/download', {
         method: 'POST',
         mode: 'cors',
         headers: {

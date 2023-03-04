@@ -27,7 +27,7 @@ function sendRequest() {
         }
         
         var data = {"dataSource": dataSource, "path": path};
-        fetch(res.server, {
+        fetch(res.server + '/api/v1/download', {
             method: "POST",
             mode: "cors",
             headers: {

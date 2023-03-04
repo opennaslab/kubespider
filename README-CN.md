@@ -126,6 +126,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 * 如何编写资源网站的资源提供器，请看 [link](./docs/zh/contribute/implement_source_provider_cn.md)。
 * 如何编写下载软件的下载提供器，请看 [link](./docs/zh/contribute/implement_download_provider_cn.md)。
 * 如何开发调试chrome插件webhook，请看 [link](./docs/zh/contribute/develop_chrome_extension.md)。
+* 如何开发其他webhook触发工具, 请看 [link](./docs/zh/user_guide/api_docs/README.md).
 
 ## 📝 免责声明
 一切下载及使用软件时均被视为已经仔细阅读并完全同意以下条款：

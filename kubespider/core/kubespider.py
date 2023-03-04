@@ -2,7 +2,6 @@ import os
 import logging
 import _thread
 import time
-from http.server import HTTPServer
 
 from core import kubespider_global
 from core import webhook_server
@@ -41,10 +40,8 @@ def run_webhook_server():
     webhook_server_port = os.getenv('WEBHOOK_SERVER_PORT')
     if webhook_server_port is None:
         webhook_server_port = 3080
-    httpd = HTTPServer(('0.0.0.0', webhook_server_port), webhook_server.WebhookServer)
     logging.info('Webhook Server start running...')
-    httpd.serve_forever()
-
+    webhook_server.kubespider_server.run(host='0.0.0.0', port=webhook_server_port)
 
 def run_period_job():
     logging.info('Period Server start running...')
