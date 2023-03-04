@@ -123,6 +123,7 @@ If you are interested in participating in joint development, welcome to STAR/FOR
 * For how to implement a resource provider for a resource website, please see [link](./docs/zh/contribute/implement_source_provider_cn.md).
 * For how to implement a download provider for download software, please see [link](./docs/en/contribute/implement_download_provider_cn.md).
 * For how to develop chrome extension webhook, please see [link](./docs/zh/contribute/develop_chrome_extension.md).
+* For how to implement other webhook trigger tools, please see [link](./docs/zh/user_guide/api_docs/README.md).
 
 ## 📝 Disclaimer
 All downloading and use of the software are deemed to have carefully read and fully agreed to the following terms:

@@ -6,7 +6,6 @@ PS：如果你想做某个特性，请在repo issue中说明。
 ## 待做特性
 * 增加如何开发的文档。
 * 实现chrome插件，自动在网页插入下载或者追剧按钮。
-* Chrome插件在保存server地址时做健康检查。
 * 支持豆瓣评分大于X，自动搜索资源下载。
 * 支持下载优先级，在某个下载器长期无法下载时，切换另外一个下载器。
 * 完善现有文档，提供中英版本。
@@ -16,10 +15,13 @@ PS：如果你想做某个特性，请在repo issue中说明。
 * 参照 `https://reorx.com/blog/track-and-download-shows-automatically-with-sonarr/`，集成到kubespider中，成为一个source provider。
 * 集成alist，基于webDAV下载各云盘资源，成为一个source provider。
 * 修复美剧天堂多次连续触发的性能问题，无法连续触发下载。
+* 集成you-get。
+* 增加API文档，便于其他人二次相关触发插件。
 
 ## 正在做特性
 * 更好的文件分类。
 * 添加如下文档：如何配置Aria2，如何触发下载各种类型文件。
+* Chrome插件在保存server地址时做健康检查。
 
 ## v0.2.0版本特性(2023/04/30)
 * 国内加速下载，支持阿里云image registry。
@@ -29,6 +31,7 @@ PS：如果你想做某个特性，请在repo issue中说明。
 * 支持迅雷download provider。
 * README特性表格化，更易阅读。
 * 修复torrent触发下载时，带query参数的请求。
+* 支持qBittorrent。
 
 ## v0.1.0版本特性(2023/01/30)
 * Chrome插件支持右键触发下载。
