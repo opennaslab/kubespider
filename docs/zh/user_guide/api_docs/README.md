@@ -1,5 +1,5 @@
 # API手册
-基于Kubespider的架构，为了便于开发者开发更多的下载触发方式，在此详细Kubespider webhook的API。
+基于Kubespider的架构，为了便于开发者开发更多的下载触发方式，在此详细描述Kubespider webhook的API。
 
 ## 获取所有下载提供器
 API接口 GET /api/v1/downloadproviders  
@@ -20,7 +20,9 @@ API接口 GET /api/v1/surceproviders
 响应内容:
 ```json
 {
-    "btbtt12_disposable_source_provider":true,"meijutt_source_provider":true,"mikanani_source_provider":true
+    "btbtt12_disposable_source_provider":true,
+    "meijutt_source_provider":true,
+    "mikanani_source_provider":true
 }
 ```
 true代表此download provider开启，反之则关闭。
