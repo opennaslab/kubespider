@@ -104,7 +104,7 @@ In order to make full use of the exisiting download software in the open source 
 | :---------------- | ------: | ------------: |
 | aria2             | Yes     | TBD           |
 | xunlei            | Yes     | [link](./docs/zh/user_guide/thunder_install_config/README.md) |
-| qBittorrent       | TBD     | TBD           |
+| qBittorrent       | Yes     | [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) | 
 
 ### Basic feature  
 Currently, the following file types are supported to trigger downloading:
