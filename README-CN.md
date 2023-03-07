@@ -105,7 +105,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 为了充分利用开源社区已有的下载软件(如YouTube有专门的下载软件)，目前支持如下下载软件：
 | 下载软件 | 是否支持 | 配置手册 |
 | :---- | ------: | -----: |
-| aria2 |    是   | TBD |
+| aria2 |    是   | [link](./docs/zh/user_guide/aria2_download_provider/README.md) |
 | 迅雷   |   是    | [link](./docs/zh/user_guide/thunder_install_config/README.md) |
 | qBittorrent | 是| [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) | 
 

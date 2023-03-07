@@ -86,7 +86,7 @@ qBittorrent对应的配置文件如下
 * `password`: 登录WebAPI的密码，与WebAPI设置中保持一致。
 * `verify_webui_certificate`: 是否启用WebAPI的证书认证，目前务必设置为false。
 
-### 4.添加Tracker列表
+### 4.测试下载
 配置好后，运行如下命令：
 ```
 docker restart kubespider
