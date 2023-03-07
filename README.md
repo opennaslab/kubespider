@@ -102,7 +102,7 @@ As metioned before, the source provider is used to adpot to different websites, 
 In order to make full use of the exisiting download software in the open source community(For example, YouTube hasdedicated download software), the following software is current supported:
 | Download Software | Support | Configuration |
 | :---------------- | ------: | ------------: |
-| aria2             | Yes     | TBD           |
+| aria2             | Yes     | [link](./docs/zh/user_guide/aria2_download_provider/README.md) |
 | xunlei            | Yes     | [link](./docs/zh/user_guide/thunder_install_config/README.md) |
 | qBittorrent       | Yes     | [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) | 
 
