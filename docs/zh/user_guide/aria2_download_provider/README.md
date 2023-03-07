@@ -3,7 +3,7 @@
 aria2 是一个轻量级的多协议和多源命令行下载实用程序。 它支持HTTP/HTTPS、FTP、SFTP、BitTorrent 和Metalink。 aria2 可以通过内置的JSON-RPC 和XML-RPC 接口进行操作。
 
 ## 最终效果
-效果如图，结合啊aria，Kubespider会调用aria2，下载bt链接资源：
+效果如图，结合aria下载软件，Kubespider会调用aria2，下载bt链接资源：
 ![img](images/final_show.gif)
 
 ## 安装
@@ -18,7 +18,9 @@ docker ps | grep aria2
 
 输出类似：
 ```sh
-802bd72aeb42 cesign/aria2-pro:latest "/init" 4 weeks ago Up 11 days ria2-pro
+root@cesign [10:49:25 PM] [+41.0°C] [~/kubespider/.config]
+-> # docker ps | grep aria2
+802bd72aeb42   cesign/aria2-pro:latest   "/init"   4 weeks ago   Up 11 days   aria2-pro
 ```
 
 ## 配置
@@ -48,7 +50,7 @@ aria2对应的配置文件如下：
 * `rpc_endpoint_port`: aria2 rpc端口。
 * `secret`: aria2 rpc接口密码。
 
-### 4.测试下载
+### 2.测试下载
 配置好后，运行如下命令：
 ```
 docker restart kubespider
