@@ -4,6 +4,7 @@ import os
 import aria2p
 
 from download_provider import provider
+from api import types
 
 
 class Aria2DownloadProvider(provider.DownloadProvider):
@@ -21,6 +22,34 @@ class Aria2DownloadProvider(provider.DownloadProvider):
     def provider_enabled(self):
         cfg = provider.load_download_provider_config(self.provider_name)
         return cfg['enable']
+
+    def provide_priority(self):
+        cfg = provider.load_download_provider_config(self.provider_name)
+        return cfg['priority']
+
+    def get_defective_task(self):
+        defective_tasks = []
+        downloads = self.aria2.get_downloads()
+        for single_download in downloads:
+            if single_download.is_waiting:
+                # The task queue length is limited, so the status maybe be waiting
+                continue
+            # in general, we only return the bt pending tasks
+            if single_download.progress <= 0.0 and single_download.is_torrent:
+                file_type = types.LINK_TYPE_MAGNET
+                url = 'magnet:?xt=urn:btih:'+single_download.info_hash
+
+                # now remove the tasks
+                self.aria2.remove([single_download], force=True)
+
+                pending_task = {
+                    'path': str(single_download.dir).removeprefix(self.download_base_path),
+                    'url': url,
+                    'linkType': file_type
+                }
+                defective_tasks.append(pending_task)
+
+        return defective_tasks
 
     def send_torrent_task(self, torrent_file_path, download_path):
         logging.info('Start torrent download:%s', torrent_file_path)
@@ -47,6 +76,10 @@ class Aria2DownloadProvider(provider.DownloadProvider):
 
     def send_general_task(self, url, path):
         logging.info('Start general file download:%s', url)
+
+        if not url.startswith('http'):
+            return TypeError("Aria2 do not support:"+url)
+
         download_path = os.path.join(self.download_base_path, path)
         try:
             ret = self.aria2.add(url, options={'dir': download_path})

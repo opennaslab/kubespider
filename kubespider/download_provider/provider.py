@@ -21,6 +21,17 @@ class DownloadProvider(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
+    def provide_priority(self):
+        pass
+
+    @abc.abstractmethod
+    def get_defective_task(self):
+        # This will be call every 1m, should return the list downloads
+        # with none process or failed tasks, and then remove the download tasks
+        # The return is a list of map, the map should be {'path': 'download', 'url': 'url', 'linkType': 'link_type'}
+        pass
+
+    @abc.abstractmethod
     def send_torrent_task(self, torrent_file_path, download_path):
         pass
 
