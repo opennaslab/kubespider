@@ -2,8 +2,11 @@ import logging
 import os
 
 import qbittorrentapi
+from qbittorrentapi.definitions import TorrentStates
 
 from download_provider import provider
+from api import types
+
 
 class QbittorrentDownloadProvider(
         provider.DownloadProvider # pylint length
@@ -24,6 +27,36 @@ class QbittorrentDownloadProvider(
     def provider_enabled(self):
         cfg = provider.load_download_provider_config(self.provider_name)
         return cfg['enable']
+
+    def provide_priority(self):
+        cfg = provider.load_download_provider_config(self.provider_name)
+        return cfg['priority']
+
+    def get_defective_task(self):
+        torrents_info = self.client.torrents_info()
+        defective_tasks = []
+        for single_torrent in torrents_info:
+            if single_torrent.state_enum == TorrentStates.ERROR:
+                fail_task = {
+                    'path': single_torrent.save_path.removeprefix(self.download_base_path),
+                    'url': single_torrent.magnet_uri,
+                    'linkType': types.LINK_TYPE_MAGNET
+                }
+                defective_tasks.append(fail_task)
+                single_torrent.delete(delete_files=True)
+                continue
+            if single_torrent.state_enum == TorrentStates.METADATA_DOWNLOAD or \
+                single_torrent.state_enum == TorrentStates.STALLED_DOWNLOAD:
+                if single_torrent.downloaded <= 0.0:
+                    pending_task = {
+                        'path': single_torrent.save_path.removeprefix(self.download_base_path),
+                        'url': single_torrent.magnet_uri,
+                        'linkType': types.LINK_TYPE_MAGNET
+                    }
+                    defective_tasks.append(pending_task)
+                    single_torrent.delete(delete_files=True)
+                    continue
+        return defective_tasks
 
     def send_torrent_task(self, torrent_file_path, download_path):
         download_path = os.path.join(self.download_base_path, download_path)

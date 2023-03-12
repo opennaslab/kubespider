@@ -10,6 +10,7 @@ disable=
     I1101, # Module 'libtorrent' has no 'torrent_info' member
     W0719, # Raising too general exception
     R0902, # Too many instance attributes
+    R1714, # onsider merging these comparisons with 'in'
 
 [SIMILARITIES]
 # Minimum lines number of a similarity.

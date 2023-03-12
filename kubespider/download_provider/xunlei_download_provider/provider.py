@@ -25,6 +25,14 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         cfg = provider.load_download_provider_config(self.provider_name)
         return cfg['enable']
 
+    def provide_priority(self):
+        cfg = provider.load_download_provider_config(self.provider_name)
+        return cfg['priority']
+
+    def get_defective_task(self):
+        # if xunlei doesn't work, it means other tools couldn't, so just ignore it.
+        return []
+
     def send_torrent_task(self, torrent_file_path, download_path):
         logging.info('Start torrent download:%s', torrent_file_path)
         token = self.get_pan_token()

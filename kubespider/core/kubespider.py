@@ -7,6 +7,7 @@ from core import kubespider_global
 from core import webhook_server
 from core import download_trigger
 from core import period_server
+import download_provider.provider as download_provider
 
 
 def run():
@@ -23,6 +24,7 @@ def run():
         if provider.provider_enabled():
             logging.info('Download Provider:%s enabled...', provider_name)
             kubespider_global.enabled_download_provider.append(provider)
+    kubespider_global.enabled_download_provider.sort(key=sort_download_provider)
 
     download_trigger.kubespider_downloader = \
         download_trigger.KubespiderDownloader(kubespider_global.enabled_download_provider)
@@ -31,6 +33,7 @@ def run():
             kubespider_global.enabled_download_provider)
 
     _thread.start_new_thread(run_period_job, ())
+    _thread.start_new_thread(run_download_trigger_job, ())
     _thread.start_new_thread(run_webhook_server, ())
     while True:
         time.sleep(30)
@@ -46,3 +49,10 @@ def run_webhook_server():
 def run_period_job():
     logging.info('Period Server start running...')
     period_server.kubespider_period_server.run()
+
+def run_download_trigger_job():
+    logging.info('Download trigger job start running...')
+    download_trigger.kubespider_downloader.period_run()
+
+def sort_download_provider(provider: download_provider.DownloadProvider):
+    return provider.provide_priority()
