@@ -13,7 +13,7 @@ class KubespiderDownloader:
 
     def period_run(self):
         while True:
-            time.sleep(60)
+            time.sleep(120)
             self.handle_defective_downloade()
 
     def handle_defective_downloade(self):

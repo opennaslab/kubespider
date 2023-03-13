@@ -34,6 +34,10 @@ class PeriodServer:
                 continue
             self.run_single_provider(provider)
 
+    def trigger_run_all(self):
+        for provider in self.source_providers:
+            self.run_single_provider(provider)
+
     def run_single_provider(self, provider):
         meet_err = False
         if provider.get_provider_type() == types.SOURCE_PROVIDER_PERIOD_TYPE:

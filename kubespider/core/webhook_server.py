@@ -81,6 +81,10 @@ def download_handler():
         return send_ok_response()
     return send_bad_response(err)
 
+@kubespider_server.route('/api/v1/refresh', methods = ['GET'])
+def refresh_handler():
+    period_server.kubespider_period_server.trigger_run_all()
+
 def get_link_type(url):
     if url.startswith('magnet:'):
         return types.LINK_TYPE_MAGNET
