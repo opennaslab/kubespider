@@ -21,6 +21,12 @@ class SourceProvider(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
+    def get_download_provider():
+        # in general, if this source provider needs to work with specific downlad
+        # provider, return the name of the download provider
+        pass
+
+    @abc.abstractmethod
     def get_link_type(self):
         pass
 

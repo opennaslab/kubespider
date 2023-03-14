@@ -27,6 +27,9 @@ class MikananiSourceProvider(provider.SourceProvider):
     def get_provider_type(self):
         return self.provider_type
 
+    def get_download_provider():
+        return None
+
     def get_link_type(self):
         return self.link_type
 
