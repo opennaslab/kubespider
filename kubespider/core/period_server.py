@@ -6,7 +6,7 @@ import threading
 from api import types
 from core import download_trigger
 from utils import helper
-from source_provider import provider
+import source_provider.provider as sp
 
 state_file_lock = threading.Lock()
 
@@ -39,7 +39,7 @@ class PeriodServer:
         for provider in self.source_providers:
             self.run_single_provider(provider)
 
-    def run_single_provider(self, provider: provider.SourceProvider):
+    def run_single_provider(self, provider: sp.SourceProvider):
         meet_err = False
         if provider.get_provider_type() == types.SOURCE_PROVIDER_PERIOD_TYPE:
             provider.load_config()

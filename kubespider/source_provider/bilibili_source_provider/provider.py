@@ -4,9 +4,6 @@
 import logging
 from urllib.parse import urlparse
 
-import requests
-from bs4 import BeautifulSoup
-
 from source_provider import provider
 from api import types
 
@@ -24,7 +21,7 @@ class BilibiliSourceProvider(provider.SourceProvider):
     def get_provider_type(self):
         return self.provider_type
 
-    def get_download_provider():
+    def get_download_provider(self):
         return "youget_download_provider"
 
     def get_link_type(self):

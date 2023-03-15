@@ -10,17 +10,45 @@
     .input-group {
         margin-top: 20px;
     }
+
     .btn {
         margin-top: 0px;
         width: 100%;
     }
+
     .pos {
         margin-top: 30px;
     }
+
     .nav-link {
         padding: 10px;
         padding-bottom: 5px;
         padding-top: 5px;
+    }
+
+    .btn-loading:before {
+        content: "";
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 4px;
+        background-color: #fff;
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(0);
+        }
+        50% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(0);
+            opacity: 0;
+        }
     }
   </style>
 </head>
@@ -32,6 +60,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="#configPage"><image src="images/menu.png" width="20px"></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#refreshPage"><image src="images/refresh.png" width="20px"></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="#" id="openGitHub"><image src="images/github.png" width="20px"></a>
@@ -56,6 +87,9 @@
                     <input type="text" class="form-control form-control-sm" placeholder="server" id="server">
                 </div>
                 <button type="button" class="btn btn-primary btn-sm" id="save">Save</button>
+            </div>
+            <div id="refreshPage" class="tab-pane fade">
+                <button type="button" class="pos btn btn-primary btn-sm" id="refresh">Refresh</button>
             </div>
         </div>
     </div>

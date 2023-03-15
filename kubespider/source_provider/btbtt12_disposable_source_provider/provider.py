@@ -24,7 +24,7 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
     def get_provider_type(self):
         return self.provider_type
 
-    def get_download_provider():
+    def get_download_provider(self):
         return None
 
     def get_link_type(self):

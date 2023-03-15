@@ -43,7 +43,7 @@ function sendRequest() {
                     document.getElementById('download').innerHTML = "Download";
                 });
             } else {
-                document.getElementById('download').innerHTML = httpRequest.responseText;
+                document.getElementById('download').innerHTML = response.body;
                 sleep(3000).then(() => {
                     document.getElementById('download').innerHTML = "Download";
                 });
@@ -58,24 +58,85 @@ function sendRequest() {
     });
 }
 
-function saveConfig() {
-    var server = document.getElementById('server').value;
+async function saveConfig() {
+    const serverInput = document.getElementById('server');
+    const serverValue = serverInput.value;
+    const saveBtn = document.getElementById('save')
 
-    chrome.storage.sync.get('server', (res) => {
-        if (res != server) {
-            chrome.storage.sync.set({'server': server}, () => {
-                document.getElementById('save').innerHTML = "OK";
-                sleep(3000).then(() => {
-                    document.getElementById('save').innerHTML = "Save";
-                });
-                console.log('server set successed!');
-            });
+    saveBtn.classList.add('btn-loading');
+    try {
+        const response = await fetch(`${serverValue}/healthz`, {
+          method: 'GET',
+          mode: 'cors',
+        });
+    
+        if (response.ok) {
+            saveBtn.classList.remove('btn-loading');
+            saveBtn.classList.add('btn-success');
+            saveBtn.innerHTML = 'OK';
+            await chrome.storage.sync.set({ server: serverValue });
+            await sleep(3000);
+            saveBtn.classList.remove('btn-success');
+            saveBtn.innerHTML = 'Save';
+        } else {
+            saveBtn.classList.remove('btn-loading');
+            saveBtn.classList.add('btn-danger');
+            saveBtn.innerHTML = response.body;
+            await sleep(3000);
+            saveBtn.classList.remove('btn-danger');
+            saveBtn.innerHTML = 'Save';
         }
-    });
+    } catch (error) {
+        saveBtn.classList.remove('btn-loading');
+        saveBtn.classList.add('btn-danger');
+        saveBtn.innerHTML = error;
+        await sleep(3000);
+        saveBtn.classList.remove('btn-danger');
+        saveBtn.innerHTML = 'Save';
+    }
 }
 
 function openGitHub() {
     chrome.tabs.create({ url: "https://github.com/jwcesign/kubespider" });
+}
+
+async function refreshDownload() {
+    const refreshBtn = document.getElementById('refresh');
+  
+    const { server } = await chrome.storage.sync.get('server');
+    if (!server) return;
+
+    refreshBtn.classList.add('btn-loading');
+    refreshBtn.innerHTML = 'Refreshing...';
+    try {
+        const response = await fetch(`${server}/api/v1/refresh`, {
+            method: 'GET',
+            mode: 'cors',
+        });
+  
+        if (response.ok) {
+            refreshBtn.classList.remove('btn-loading');
+            refreshBtn.classList.add('btn-success');
+            refreshBtn.innerHTML = 'OK';
+            await sleep(3000);
+            refreshBtn.classList.remove('btn-success');
+            refreshBtn.innerHTML = 'Refresh';
+        } else {
+            refreshBtn.classList.remove('btn-loading');
+            refreshBtn.classList.add('btn-danger');
+            refreshBtn.innerHTML = response.body;
+            await sleep(3000);
+            refreshBtn.classList.remove('btn-danger');
+            refreshBtn.innerHTML = 'Refresh';
+        }
+    } catch (error) {
+        refreshBtn.classList.remove('btn-loading');
+        refreshBtn.classList.add('btn-danger');
+        refreshBtn.innerHTML = error;
+        await sleep(3000);
+        refreshBtn.classList.remove('btn-danger');
+        refreshBtn.innerHTML = 'Refresh';
+    }
 }
 
 chrome.storage.sync.get('server', (res) => {
@@ -98,3 +159,4 @@ chrome.storage.sync.get('path', (res) => {
 document.getElementById('download').addEventListener('click', sendRequest);
 document.getElementById('save').addEventListener('click', saveConfig);
 document.getElementById('openGitHub').addEventListener('click', openGitHub);
+document.getElementById('refresh').addEventListener('click', refreshDownload);
