@@ -7,6 +7,7 @@ from flask import Flask,jsonify,request
 from core import download_trigger
 from core import kubespider_global
 from core import period_server
+import source_provider.provider as sp
 from api import types
 from utils import helper
 
@@ -64,15 +65,7 @@ def download_handler():
 
     if match_one_provider is True:
         if match_provider.get_provider_type() == types.SOURCE_PROVIDER_DISPOSABLE_TYPE:
-            link_type = match_provider.get_link_type()
-            links = match_provider.get_links(source)
-            for download_link in links:
-                # The path rule should be like: {file_type}/{file_title}
-                download_final_path = helper.convert_file_type_to_path(download_link['file_type']) + '/' + download_link['path']
-                err = download_trigger.kubespider_downloader.download_file(download_link['link'], \
-                    download_final_path, link_type)
-                if err is not None:
-                    break
+            err = download_links_with_provider(source, match_provider)
         else:
             match_provider.update_config(source)
             period_server.kubespider_period_server.trigger_run(match_provider.get_provider_name())
@@ -80,6 +73,32 @@ def download_handler():
     if err is None:
         return send_ok_response()
     return send_bad_response(err)
+
+@kubespider_server.route('/api/v1/refresh', methods = ['GET'])
+def refresh_handler():
+    period_server.kubespider_period_server.trigger_run_all()
+    return send_ok_response()
+
+def download_links_with_provider(source: str, source_provider: sp.SourceProvider):
+    link_type = source_provider.get_link_type()
+    links = source_provider.get_links(source)
+    specific_download_provider = source_provider.get_download_provider()
+    for download_link in links:
+        # The path rule should be like: {file_type}/{file_title}
+        download_final_path = helper.convert_file_type_to_path(download_link['file_type']) + '/' + download_link['path']
+
+        if specific_download_provider is not None:
+            err = download_trigger.kubespider_downloader.\
+                download_file(download_link['link'], \
+                              download_final_path, link_type,\
+                                specific_download_provider)
+        else:
+            err = download_trigger.kubespider_downloader.\
+                download_file(download_link['link'], \
+                              download_final_path, link_type)
+        if err is not None:
+            return err
+    return None
 
 def get_link_type(url):
     if url.startswith('magnet:'):

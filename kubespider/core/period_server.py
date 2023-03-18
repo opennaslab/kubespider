@@ -6,6 +6,7 @@ import threading
 from api import types
 from core import download_trigger
 from utils import helper
+import source_provider.provider as sp
 
 state_file_lock = threading.Lock()
 
@@ -34,12 +35,17 @@ class PeriodServer:
                 continue
             self.run_single_provider(provider)
 
-    def run_single_provider(self, provider):
+    def trigger_run_all(self):
+        for provider in self.source_providers:
+            self.run_single_provider(provider)
+
+    def run_single_provider(self, provider: sp.SourceProvider):
         meet_err = False
         if provider.get_provider_type() == types.SOURCE_PROVIDER_PERIOD_TYPE:
             provider.load_config()
             links = provider.get_links("")
             link_type = provider.get_link_type()
+            specific_download_provider = provider.get_download_provider()
 
             provider_name = provider.get_provider_name()
             state = self.load_state(provider_name)
@@ -49,8 +55,12 @@ class PeriodServer:
                 if helper.get_unique_hash(source['link']) in state:
                     continue
                 logging.info('Find new resource:%s', source['link'])
-                download_ok = download_trigger.kubespider_downloader. \
-                    download_file(source['link'], download_final_path, link_type)
+                if specific_download_provider is None:
+                    download_ok = download_trigger.kubespider_downloader. \
+                        download_file(source['link'], download_final_path, link_type)
+                else:
+                    download_ok = download_trigger.kubespider_downloader. \
+                        download_file(source['link'], download_final_path, link_type, specific_download_provider)
                 if download_ok is False:
                     meet_err = True
                     break
