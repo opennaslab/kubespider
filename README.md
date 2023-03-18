@@ -11,11 +11,9 @@
 
 
 English | [简体中文](./README-CN.md)  
-I am a cloud computing engineer🤓, focusing on Serverless/FinOps/Runtime, developed Kubespider in my spare time.
+I am a Cloud Computing Engineer🤓, with a focus on Serverless, FinOps, and Runtime. In my spare time, I developed Kubespider to utilize an idle server in a local area network as a NAS, enabling automatic downloads of TV series, triggering downloads from a local laptop, and adapting to various websites such as YouTube and BiliBili, as well as different types of resources such as TV series, movies, and music.
 
-The original intention of developing Kubespider is: I have an idle server(in a local area network), and I want to use it as a NAS to realize automatic TV series downloads, trigger downloads on a local laptop, and adapt to various website(YouTube, BiliBili, etc.) and different type resources(TV series, movie, music, etc.)
-
-I was exposed to Terraform before and was surprised by its versatility. Inspired by Terraform, Kubespider aims to build a general download orchestration system, which is compatible with various resource platforms and download software, compatible with multiple download methods(request trigger, cycle trigger, update trigger) and is the most perfect unified solution for resource download.
+Having been exposed to Terraform, I was impressed by its versatility and inspired to create Kubespider as a general download orchestration system that is compatible with various resource platforms and download software. Kubespider supports multiple download methods, including request trigger, cycle trigger, and update trigger, making it the most comprehensive and unified solution for resource downloads.
 
 ## ⛵ System architecture
 To realize a general download orchestration system, it is necessary to adapt various resource websites and download software, so these two parts are abstracted from the core functions:
