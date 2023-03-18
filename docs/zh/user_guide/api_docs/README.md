@@ -47,3 +47,12 @@ API接口 GET /healthz
 ```
 OK
 ```
+
+## 下载刷新
+API接口 GET /api/v1/refresh
+
+Kubespider会周期获取更新资源(1h)，如果想立即获取，请调用此接口。  
+响应内容:
+```
+OK
+```
