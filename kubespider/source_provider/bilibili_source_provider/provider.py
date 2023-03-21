@@ -15,37 +15,37 @@ class BilibiliSourceProvider(provider.SourceProvider):
         self.webhook_enable = True
         self.provider_name = 'bilibili_source_provider'
 
-    def get_provider_name(self):
+    def get_provider_name(self) -> str:
         return self.provider_name
 
-    def get_provider_type(self):
+    def get_provider_type(self) -> str:
         return self.provider_type
 
-    def get_download_provider(self):
+    def get_download_provider(self) -> str:
         return "youget_download_provider"
 
-    def get_link_type(self):
+    def get_link_type(self) -> str:
         return self.link_type
 
-    def provider_enabled(self):
+    def provider_enabled(self) -> bool:
         cfg = provider.load_source_provide_config(self.provider_name)
         return cfg['enable']
 
-    def is_webhook_enable(self):
+    def is_webhook_enable(self) -> bool:
         return self.webhook_enable
 
-    def should_handle(self, data_source_url: str):
+    def should_handle(self, data_source_url: str) -> bool:
         parse_url = urlparse(data_source_url)
         if parse_url.hostname == 'www.bilibili.com':
             logging.info('%s belongs to BilibiliSourceProvider', data_source_url)
             return True
         return False
 
-    def get_links(self, data_source_url: str):
+    def get_links(self, data_source_url: str) -> dict:
         return [{'path': '', 'link': data_source_url, 'file_type': ''}]
 
-    def update_config(self, req_para: str):
+    def update_config(self, req_para: str) -> None:
         pass
 
-    def load_config(self):
+    def load_config(self) -> None:
         pass

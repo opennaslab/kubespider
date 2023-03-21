@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 from api import types
 from source_provider import provider
+from utils import helper
 
 
 class MeijuttSourceProvider(provider.SourceProvider):
@@ -18,33 +19,33 @@ class MeijuttSourceProvider(provider.SourceProvider):
         self.provider_name = 'meijutt_source_provider'
         self.tv_links = []
 
-    def get_provider_name(self):
+    def get_provider_name(self) -> str:
         return self.provider_name
 
-    def get_provider_type(self):
+    def get_provider_type(self) -> str:
         return self.provider_type
 
-    def get_download_provider(self):
+    def get_download_provider(self) -> str:
         return None
 
-    def get_link_type(self):
+    def get_link_type(self) -> str:
         return self.link_type
 
-    def provider_enabled(self):
+    def provider_enabled(self) -> bool:
         cfg = provider.load_source_provide_config(self.provider_name)
         return cfg['enable']
 
-    def is_webhook_enable(self):
+    def is_webhook_enable(self) -> bool:
         return True
 
-    def should_handle(self, data_source_url: str):
+    def should_handle(self, data_source_url: str) -> bool:
         parse_url = urlparse(data_source_url)
         if parse_url.hostname == 'www.meijutt.tv' and 'content' in parse_url.path:
             logging.info('%s belongs to MeijuttSourceProvider', data_source_url)
             return True
         return False
 
-    def get_links(self, data_source_url: str):
+    def get_links(self, data_source_url: str) -> dict:
         ret = []
         for tv_link in self.tv_links:
             try:
@@ -59,11 +60,11 @@ class MeijuttSourceProvider(provider.SourceProvider):
             links = div[0].find_all('input', ['class', 'down_url'])
             for link in links:
                 url = link.get('value')
-                logging.info('meijutt find %s', url)
+                logging.info('meijutt find %s', helper.format_long_string(url))
                 ret.append({'path': tv_link['tv_name'], 'link': url, 'file_type': types.FILE_TYPE_VIDEO_TV})
         return ret
 
-    def update_config(self, req_para: str):
+    def update_config(self, req_para: str) -> None:
         cfg = provider.load_source_provide_config(self.provider_name)
         tv_links = cfg['tv_links']
         urls = [i['link'] for i in tv_links]
@@ -76,13 +77,13 @@ class MeijuttSourceProvider(provider.SourceProvider):
         cfg['tv_links'] = tv_links
         provider.save_source_provider_config(self.provider_name, cfg)
 
-    def load_config(self):
+    def load_config(self) -> None:
         cfg = provider.load_source_provide_config(self.provider_name)
         tv_links = [i['link'] for i in cfg['tv_links']]
         logging.info('meijutt tv link is:%s', ','.join(tv_links))
         self.tv_links = cfg['tv_links']
 
-    def get_tv_title(self, req_para: str):
+    def get_tv_title(self, req_para: str) -> str:
         # example link: https://www.meijutt.tv/content/meiju28277.html
         try:
             req = requests.get(req_para, timeout=30)

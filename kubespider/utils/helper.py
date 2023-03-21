@@ -40,3 +40,8 @@ def convert_file_type_to_path(file_type: str):
         return types.file_type_to_path[file_type]
     logging.warning('%s file file is not recorded', file_type)
     return file_type
+
+def format_long_string(longstr: str) -> str:
+    if len(longstr) > 40:
+        return longstr[:40] + '...'
+    return longstr
