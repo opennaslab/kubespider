@@ -4,16 +4,18 @@ from urllib import request
 
 from utils import helper
 from api import types
-import download_provider.provider as download_provider
+import download_provider.provider as dp
 
 
 class KubespiderDownloader:
-    def __init__(self, download_providers: download_provider.DownloadProvider):
-        self.download_providers = download_providers
+    def __init__(self, download_providers: dp.DownloadProvider):
+        self.download_providers: dp.DownloadProvider = download_providers
 
     def period_run(self):
         while True:
-            time.sleep(120)
+            # For certain download providers, the task start time is not available.
+            # Therefore, specifying a time here would be futile.
+            time.sleep(180)
             self.handle_defective_downloade()
 
     def handle_defective_downloade(self):
@@ -34,7 +36,7 @@ class KubespiderDownloader:
             for task in tasks:
                 self.download_file(task['url'], task['path'], task['linkType'], provider_next.get_provider_name())
 
-    def download_file(self, url, path, link_type, provider_name=None):
+    def download_file(self, url, path, link_type, provider_name=None) -> TypeError:
         if link_type == types.LINK_TYPE_TORRENT:
             return self.handle_torrent_download(url, path, provider_name)
 
@@ -44,9 +46,11 @@ class KubespiderDownloader:
         if link_type == types.LINK_TYPE_GENERAL:
             return self.handle_general_download(url, path, provider_name)
 
+        logging.warning("Unknown link type:%s", link_type)
+
         return None
 
-    def handle_torrent_download(self, url, path, provider_name=None):
+    def handle_torrent_download(self, url, path, provider_name=None) -> TypeError:
         logging.info('Download torrent file')
         tmp_file = helper.get_tmp_file_name(url)
 
@@ -62,22 +66,19 @@ class KubespiderDownloader:
             torrent_file.write(torrent_data)
             torrent_file.close()
 
-        err = None
         for provider in self.download_providers:
             if provider_name is not None and \
                 provider_name != provider.get_provider_name():
                 continue
             provider.load_config()
-            err = None
             err = provider.send_torrent_task(tmp_file, path)
             if err is not None:
                 return err
             break
-        return err
+        return None
 
-    def handle_magnet_download(self, url, path, provider_name=None):
+    def handle_magnet_download(self, url, path, provider_name=None) -> TypeError:
         logging.info('Download mangent file')
-        err = None
         for provider in self.download_providers:
             if provider_name is not None and \
                 provider_name != provider.get_provider_name():
@@ -85,13 +86,12 @@ class KubespiderDownloader:
             provider.load_config()
             err = provider.send_magnet_task(url, path)
             if err is not None:
-                continue
+                return err
             break
-        return err
+        return None
 
-    def handle_general_download(self, url, path, provider_name=None):
+    def handle_general_download(self, url, path, provider_name=None) -> TypeError:
         logging.info('Download general file')
-        err = None
         for provider in self.download_providers:
             if provider_name is not None and \
                 provider_name != provider.get_provider_name():
@@ -99,8 +99,8 @@ class KubespiderDownloader:
             provider.load_config()
             err = provider.send_general_task(url, path)
             if err is not None:
-                continue
+                return err
             break
-        return err
+        return None
 
 kubespider_downloader = KubespiderDownloader(None)

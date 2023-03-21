@@ -21,29 +21,29 @@ class MikananiSourceProvider(provider.SourceProvider):
         self.rss_link = ''
         self.tmp_file_path = '/tmp/'
 
-    def get_provider_name(self):
+    def get_provider_name(self) -> str:
         return self.provider_name
 
-    def get_provider_type(self):
+    def get_provider_type(self) -> str:
         return self.provider_type
 
-    def get_download_provider(self):
+    def get_download_provider(self) -> str:
         return None
 
-    def get_link_type(self):
+    def get_link_type(self) -> str:
         return self.link_type
 
-    def provider_enabled(self):
+    def provider_enabled(self) -> bool:
         cfg = provider.load_source_provide_config(self.provider_name)
         return cfg['enable']
 
-    def is_webhook_enable(self):
+    def is_webhook_enable(self) -> bool:
         return self.webhook_enable
 
-    def should_handle(self, data_source_url: str):
+    def should_handle(self, data_source_url: str) -> bool:
         return False
 
-    def get_links(self, data_source_url: str):
+    def get_links(self, data_source_url: str) -> dict:
         try:
             req = requests.get(self.rss_link, timeout=30)
         except Exception as err:
@@ -61,7 +61,7 @@ class MikananiSourceProvider(provider.SourceProvider):
             for i in items:
                 anime_name = i.find('./guid').text
                 title = self.get_file_title(i.find('./link').text)
-                logging.info('mikanani find %s', anime_name)
+                logging.info('mikanani find %s', helper.format_long_string(anime_name))
                 url = i.find('./enclosure').attrib['url']
                 ret.append({'path': title, 'link': url, 'file_type': types.FILE_TYPE_VIDEO_TV})
             return ret
@@ -69,15 +69,15 @@ class MikananiSourceProvider(provider.SourceProvider):
             logging.info('parse rss xml error:%s', err)
             return []
 
-    def update_config(self, req_para: str):
+    def update_config(self, req_para: str) -> None:
         pass
 
-    def load_config(self):
+    def load_config(self) -> None:
         cfg = provider.load_source_provide_config(self.provider_name)
         logging.info('mikanani rss link is:%s', cfg['rss_link'])
         self.rss_link = cfg['rss_link']
 
-    def get_file_title(self, link: str):
+    def get_file_title(self, link: str) -> str:
         # example: https://mikanani.me/Home/Episode/5350b283db7d8e4665a08dda24d0d0c66259fc71
         try:
             req = requests.get(link, timeout=30)
