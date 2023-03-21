@@ -4,6 +4,7 @@
 </p>
 
 ## 💥 一款全局资源编排下载系统
+![Python](https://img.shields.io/badge/python-3.10-blue)
 [![GitHub release](https://img.shields.io/github/v/release/jwcesign/kubespider.svg)](https://github.com/jwcesign/kubespider/releases)
 [![Total Downloads](https://img.shields.io/docker/pulls/cesign/kubespider.svg)](https://hub.docker.com/repository/docker/cesign/kubespider/general)
 [![GitHub stars](https://img.shields.io/github/stars/jwcesign/kubespider?style=plastic)](https://github.com/jwcesign/kubespider/stargazers)
