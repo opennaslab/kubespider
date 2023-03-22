@@ -21,18 +21,18 @@ class QbittorrentDownloadProvider(
         self.download_base_path = ''
         self.verify_webui_certificate = False
 
-    def get_provider_name(self):
+    def get_provider_name(self) -> str:
         return self.provider_name
 
-    def provider_enabled(self):
+    def provider_enabled(self) -> bool:
         cfg = provider.load_download_provider_config(self.provider_name)
         return cfg['enable']
 
-    def provide_priority(self):
+    def provide_priority(self) -> int:
         cfg = provider.load_download_provider_config(self.provider_name)
         return cfg['priority']
 
-    def get_defective_task(self):
+    def get_defective_task(self) -> dict:
         torrents_info = self.client.torrents_info()
         defective_tasks = []
         for single_torrent in torrents_info:
@@ -58,7 +58,7 @@ class QbittorrentDownloadProvider(
                     continue
         return defective_tasks
 
-    def send_torrent_task(self, torrent_file_path, download_path):
+    def send_torrent_task(self, torrent_file_path: str, download_path: str) -> TypeError:
         download_path = os.path.join(self.download_base_path, download_path)
         logging.info('Start torrent download:%s, path:%s', torrent_file_path, download_path)
         try:
@@ -70,7 +70,7 @@ class QbittorrentDownloadProvider(
             return err
         return None
 
-    def send_magnet_task(self, url, path):
+    def send_magnet_task(self, url: str, path: str) -> TypeError:
         logging.info('Start magent download:%s, path:%s', url, path)
         download_path = os.path.join(self.download_base_path, path)
         try:
@@ -82,12 +82,12 @@ class QbittorrentDownloadProvider(
             return err
         return None
 
-    def send_general_task(self, url, path):
+    def send_general_task(self, url: str, path: str) -> TypeError:
         logging.warning('qbittorrent not support generatl task download! Please use aria2 or else download provider')
         return TypeError('qbittorrent not support generate task download')
 
 
-    def load_config(self):
+    def load_config(self) -> TypeError:
         cfg = provider.load_download_provider_config(self.provider_name)
         self.http_endpoint_host = cfg['http_endpoint_host']
         self.http_endpoint_port = cfg['http_endpoint_port']

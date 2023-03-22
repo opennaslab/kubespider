@@ -16,18 +16,18 @@ class Aria2DownloadProvider(provider.DownloadProvider):
         self.aria2 = None
         self.secret = ''
 
-    def get_provider_name(self):
+    def get_provider_name(self) -> str:
         return self.provider_name
 
-    def provider_enabled(self):
+    def provider_enabled(self) -> bool:
         cfg = provider.load_download_provider_config(self.provider_name)
         return cfg['enable']
 
-    def provide_priority(self):
+    def provide_priority(self) -> int:
         cfg = provider.load_download_provider_config(self.provider_name)
         return cfg['priority']
 
-    def get_defective_task(self):
+    def get_defective_task(self) -> dict:
         defective_tasks = []
         downloads = self.aria2.get_downloads()
         for single_download in downloads:
@@ -51,7 +51,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
 
         return defective_tasks
 
-    def send_torrent_task(self, torrent_file_path, download_path):
+    def send_torrent_task(self, torrent_file_path: str, download_path: str) -> TypeError:
         logging.info('Start torrent download:%s', torrent_file_path)
         download_path = os.path.join(self.download_base_path, download_path)
         try:
@@ -63,7 +63,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
             return err
         return None
 
-    def send_magnet_task(self, url, path):
+    def send_magnet_task(self, url: str, path: str) -> TypeError:
         logging.info('Start magnet download:%s', url)
         download_path = os.path.join(self.download_base_path, path)
         try:
@@ -74,7 +74,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
             logging.warning('Please ensure your aria2 server is ok:%s', err)
             return err
 
-    def send_general_task(self, url, path):
+    def send_general_task(self, url: str, path: str) -> TypeError:
         logging.info('Start general file download:%s', url)
 
         if not url.startswith('http'):
@@ -89,7 +89,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
             logging.warning('Please ensure your aria2-type download server is ok:%s', err)
             return err
 
-    def load_config(self):
+    def load_config(self) -> TypeError:
         cfg = provider.load_download_provider_config(self.provider_name)
         self.rpc_endpoint_host = cfg['rpc_endpoint_host']
         self.rpc_endpoint_port = cfg['rpc_endpoint_port']
