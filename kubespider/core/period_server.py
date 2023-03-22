@@ -24,7 +24,7 @@ class PeriodServer:
             for provider in self.source_providers:
                 err = self.run_single_provider(provider)
 
-            if err is not None:
+            if err is None:
                 time.sleep(self.period_seconds)
             else:
                 time.sleep(20)

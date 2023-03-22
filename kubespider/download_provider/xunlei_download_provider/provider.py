@@ -18,22 +18,22 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         self.device_id = ''
         self.js_ctx = execjs.compile('')
 
-    def get_provider_name(self):
+    def get_provider_name(self) -> str:
         return self.provider_name
 
-    def provider_enabled(self):
+    def provider_enabled(self) -> bool:
         cfg = provider.load_download_provider_config(self.provider_name)
         return cfg['enable']
 
-    def provide_priority(self):
+    def provide_priority(self) -> int:
         cfg = provider.load_download_provider_config(self.provider_name)
         return cfg['priority']
 
-    def get_defective_task(self):
+    def get_defective_task(self) -> dict:
         # if xunlei doesn't work, it means other tools couldn't, so just ignore it.
         return []
 
-    def send_torrent_task(self, torrent_file_path, download_path):
+    def send_torrent_task(self, torrent_file_path: str, download_path: str) -> TypeError:
         logging.info('Start torrent download:%s', torrent_file_path)
         token = self.get_pan_token()
         if token == "":
@@ -42,7 +42,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         file_info = self.list_files(token, magnet_url)
         return self.send_task(token, file_info, magnet_url, download_path)
 
-    def send_magnet_task(self, url, path):
+    def send_magnet_task(self, url: str, path: str) -> TypeError:
         logging.info('Start magnet download:%s', url)
         token = self.get_pan_token()
         if token == "":
@@ -50,7 +50,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         file_info = self.list_files(token, url)
         return self.send_task(token, file_info, url, path)
 
-    def send_general_task(self, url, path):
+    def send_general_task(self, url: str, path: str) -> TypeError:
         logging.info('Start general file download:%s', url)
         token = self.get_pan_token()
         if token == "":
@@ -58,7 +58,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         file_info = self.list_files(token, url)
         return self.send_task(token, file_info, url, path)
 
-    def load_config(self):
+    def load_config(self) -> TypeError:
         cfg = provider.load_download_provider_config(self.provider_name)
         self.http_endpoint = cfg['http_endpoint']
         token_js_path = cfg['token_js_path']
@@ -67,7 +67,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         self.js_ctx = execjs.compile(js_text)
         self.device_id = cfg['device_id']
 
-    def list_files(self, token, url):
+    def list_files(self, token: str, url: str) -> dict:
         try:
             list_files_path = '/webman/3rdparty/pan-xunlei-com/index.cgi/drive/v1/resource/list?pan_auth=' + token + '&device_space='
             req_data = {'urls': url}
@@ -77,7 +77,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
             logging.error("List files error:%s", err)
             return None
 
-    def send_task(self, token, file_info, url, path):
+    def send_task(self, token: str, file_info: dict, url: str, path: str) -> TypeError:
         try:
             path_id = self.get_path_id(token, path)
             if path_id is None:
@@ -110,11 +110,11 @@ class XunleiDownloadProvider(provider.DownloadProvider):
             logging.error('Send download task error:%s', err)
             return err
 
-    def convert_torrent_to_magnet(self, torrent_file_path):
+    def convert_torrent_to_magnet(self, torrent_file_path: str) -> str:
         info = lb.torrent_info(torrent_file_path)
         return 'magnet:?xt=urn:btih:' + str(info.info_hash()) + '&dn=' + info.name()
 
-    def create_sub_path(self, token, dir_name, parent_id):
+    def create_sub_path(self, token: str, dir_name: str, parent_id: str) -> TypeError:
         try:
             path = '/webman/3rdparty/pan-xunlei-com/index.cgi/drive/v1/files?pan_auth='+ token +'&device_space='
             rep = requests.get(self.http_endpoint + path, headers={'pan-auth': token}, timeout=30)
@@ -128,9 +128,9 @@ class XunleiDownloadProvider(provider.DownloadProvider):
             return json.loads(rep.text)['file']['id']
         except Exception as err:
             logging.error('Create dir error:%s', err)
-            return None
+            return err
 
-    def get_path_id(self, token, path):
+    def get_path_id(self, token: str, path: str) -> str:
         try:
             parent_id = ""
             dir_list = path.split('/')
@@ -171,15 +171,15 @@ class XunleiDownloadProvider(provider.DownloadProvider):
 
         except Exception as err:
             logging.error("get path id error:%s", err)
-            return None
+            return ""
 
-    def get_file_index(self, file_info):
+    def get_file_index(self, file_info: dict) -> str:
         file_count = int(file_info['list']['resources'][0]['file_count'])
         if file_count == 1:
             return '--1,'
         return '0-' + str(file_count-1)
 
-    def get_pan_token(self):
+    def get_pan_token(self) -> str:
         xunlei_e = int(time.time())
         xunlei_cn = int(time.time())
         try:
