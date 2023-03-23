@@ -49,7 +49,7 @@ def download_handler():
 
     match_one_provider = False
     match_provider = None
-    for provider in kubespider_global.source_providers:
+    for provider in kubespider_global.enabled_download_provider:
         if provider.is_webhook_enable() and provider.should_handle(source):
             match_provider = provider
             # Do not break here, in order to check whether it matchs multiple provider
@@ -86,16 +86,10 @@ def download_links_with_provider(source: str, source_provider: sp.SourceProvider
     for download_link in links:
         # The path rule should be like: {file_type}/{file_title}
         download_final_path = helper.convert_file_type_to_path(download_link['file_type']) + '/' + download_link['path']
-
-        if specific_download_provider is not None:
-            err = download_trigger.kubespider_downloader.\
-                download_file(download_link['link'], \
-                              download_final_path, link_type,\
-                                specific_download_provider)
-        else:
-            err = download_trigger.kubespider_downloader.\
-                download_file(download_link['link'], \
-                              download_final_path, link_type)
+        err = download_trigger.kubespider_downloader.\
+            download_file(download_link['link'], \
+                          download_final_path, link_type,\
+                            specific_download_provider)
         if err is not None:
             return err
     return None
