@@ -58,15 +58,9 @@ class PeriodServer:
 
             logging.info('Find new resource:%s/%s', provider_name, helper.format_long_string(source['link']))
             download_final_path = helper.convert_file_type_to_path(source['file_type']) + '/' + source['path']
-            err = None
-            if specific_download_provider is None:
-                err = download_trigger.kubespider_downloader. \
-                    download_file(source['link'],
-                    download_final_path, link_type)
-            else:
-                err = download_trigger.kubespider_downloader. \
-                    download_file(
-                    source['link'], download_final_path, link_type, specific_download_provider)
+            err = download_trigger.kubespider_downloader. \
+                download_file(source['link'], download_final_path, \
+                              link_type, specific_download_provider)
             if err is not None:
                 break
             state.append(helper.get_unique_hash(source['link']))

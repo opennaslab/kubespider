@@ -23,6 +23,7 @@ class KubespiderDownloader:
         if provider_len <= 1:
             return
 
+        # Start from the last one, the task in laster downloder will never be removed
         for index in range(provider_len - 2, -1, -1):
             # load config
             provider_now = self.download_providers[index]
