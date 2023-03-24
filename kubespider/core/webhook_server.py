@@ -68,7 +68,7 @@ def download_handler():
             err = download_links_with_provider(source, match_provider)
         else:
             match_provider.update_config(source)
-            period_server.kubespider_period_server.trigger_run(match_provider.get_provider_name())
+            period_server.kubespider_period_server.trigger_run()
 
     if err is None:
         return send_ok_response()
@@ -76,7 +76,7 @@ def download_handler():
 
 @kubespider_server.route('/api/v1/refresh', methods = ['GET'])
 def refresh_handler():
-    period_server.kubespider_period_server.trigger_run_all()
+    period_server.kubespider_period_server.trigger_run()
     return send_ok_response()
 
 def download_links_with_provider(source: str, source_provider: sp.SourceProvider):

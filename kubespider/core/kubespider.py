@@ -32,9 +32,11 @@ def run():
         period_server.PeriodServer(kubespider_global.enabled_source_provider, \
             kubespider_global.enabled_download_provider)
 
-    _thread.start_new_thread(run_period_job, ())
+    _thread.start_new_thread(run_period_job_producer, ())
+    _thread.start_new_thread(run_period_job_consumer, ())
     _thread.start_new_thread(run_download_trigger_job, ())
     _thread.start_new_thread(run_webhook_server, ())
+
     while True:
         time.sleep(30)
 
@@ -46,9 +48,13 @@ def run_webhook_server():
     logging.info('Webhook Server start running...')
     webhook_server.kubespider_server.run(host='0.0.0.0', port=webhook_server_port)
 
-def run_period_job():
-    logging.info('Period Server start running...')
-    period_server.kubespider_period_server.run()
+def run_period_job_consumer():
+    logging.info('Period Server Quene handler start running...')
+    period_server.kubespider_period_server.run_consumer()
+
+def run_period_job_producer():
+    logging.info("Period Server producer start running...")
+    period_server.kubespider_period_server.run_producer()
 
 def run_download_trigger_job():
     logging.info('Download trigger job start running...')
