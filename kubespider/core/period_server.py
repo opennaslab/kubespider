@@ -2,6 +2,7 @@ import time
 import os
 import logging
 import threading
+import queue
 
 from api import types
 from core import download_trigger
@@ -17,27 +18,30 @@ class PeriodServer:
         self.source_providers = source_providers
         self.download_providers = download_providers
         self.state_file_dir = os.getenv('HOME') + '/.config'
+        self.queue = queue.Queue()
 
-    def run(self) -> None:
+    def run_producer(self) -> None:
         while True:
+            self.queue.put(True)
+            time.sleep(self.period_seconds)
+
+    def run_consumer(self) -> None:
+        while True:
+            time.sleep(1)
+            get_trigger = self.queue.get()
+            if get_trigger is None:
+                continue
+
             err = None
             for provider in self.source_providers:
                 err = self.run_single_provider(provider)
 
-            if err is None:
-                time.sleep(self.period_seconds)
-            else:
-                time.sleep(20)
+            if err is not None:
+                # If error, try again
+                self.queue.put(True)
 
-    def trigger_run(self, provider_name) -> None:
-        for provider in self.source_providers:
-            if provider_name != provider.get_provider_name():
-                continue
-            self.run_single_provider(provider)
-
-    def trigger_run_all(self) -> None:
-        for provider in self.source_providers:
-            self.run_single_provider(provider)
+    def trigger_run(self) -> None:
+        self.queue.put(True)
 
     def run_single_provider(self, provider: sp.SourceProvider) -> TypeError:
         if provider.get_provider_type() != types.SOURCE_PROVIDER_PERIOD_TYPE:
