@@ -84,6 +84,7 @@ Then with aria2 chrome plugin, you can see the download task starts:
 
 #### 4.More (Optional)
 * Install Plex, watch videos on multiple platforms, [install now](./docs/zh/user_guide/plex_install_config/README.md).
+* Install Jellyfin, watch videos on multiple platforms, [install now](./docs/zh/user_guide/jellyfin_install_config/README.md).
 * Install Baidu network disk(only in china), download in the background, [install now](TODO).
 * Install Thunder(only in china), download in the background, [install now](./docs/zh/user_guide/thunder_install_config/README.md).
 

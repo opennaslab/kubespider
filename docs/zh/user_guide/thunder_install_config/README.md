@@ -87,7 +87,8 @@ curl http://<server_ip>:2345/webman/3rdparty/pan-xunlei-com/index.cgi/\#/home
         "enable": true,
         "token_js_path": "/root/.config/dependencies/xunlei_download_provider/get_token.js",
         "http_endpoint": "http://192.168.1.7:2345",
-        "device_id": "5c78ea560a34ed4b4fbe6686da1172b4"
+        "device_id": "5c78ea560a34ed4b4fbe6686da1172b4",
+        "priority": 1
     },
     ...
 }
@@ -97,6 +98,7 @@ curl http://<server_ip>:2345/webman/3rdparty/pan-xunlei-com/index.cgi/\#/home
 * `token_js_path`: 不用修改，如果你知道如何开发，可以修改。
 * `http_endpoint`: 服务地址。
 * `device_id`: 步骤5获取到的device_id。
+* `priority`: 下载提供器优先级，数字越小，优先级越高，下载资源时按优先级尝试，无法下载或下载失败时切换下载器。
 
 #### 7.测试下载
 配置好后，运行如下命令：

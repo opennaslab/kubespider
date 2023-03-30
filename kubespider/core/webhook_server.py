@@ -49,7 +49,7 @@ def download_handler():
 
     match_one_provider = False
     match_provider = None
-    for provider in kubespider_global.enabled_download_provider:
+    for provider in kubespider_global.enabled_source_provider:
         if provider.is_webhook_enable() and provider.should_handle(source):
             match_provider = provider
             # Do not break here, in order to check whether it matchs multiple provider

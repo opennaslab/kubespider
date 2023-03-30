@@ -89,6 +89,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 
 #### 4.更多（可选）
 * 安装Plex，多平台观看视频，[立即安装](./docs/zh/user_guide/plex_install_config/README.md)。
+* 安装Jellyfin，多平台观看视频，[立即安装](./docs/zh/user_guide/jellyfin_install_config/README.md)。
 * 安装百度网盘，后台下载，[立即安装](TODO)。
 * 安装迅雷，后台下载，[立即安装](./docs/zh/user_guide/thunder_install_config/README.md)。
 
