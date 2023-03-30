@@ -73,7 +73,8 @@ qBittorrent对应的配置文件如下
         "http_endpoint_port": 8080,
         "username": "admin",
         "password": "adminadmin",
-        "verify_webui_certificate": false
+        "verify_webui_certificate": false,
+        "priority": 1
     }
 }
 ```
@@ -85,6 +86,7 @@ qBittorrent对应的配置文件如下
 * `username`: 登录WebAPI的用户名，与WebAPI设置中保持一致。
 * `password`: 登录WebAPI的密码，与WebAPI设置中保持一致。
 * `verify_webui_certificate`: 是否启用WebAPI的证书认证，目前务必设置为false。
+* `priority`: 下载提供器优先级，数字越小，优先级越高，下载资源时按优先级尝试，无法下载或下载失败时切换下载器。
 
 ### 4.测试下载
 配置好后，运行如下命令：

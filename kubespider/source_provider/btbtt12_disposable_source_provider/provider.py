@@ -81,7 +81,9 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
             return "", ""
         title = titles[0].text.strip().replace('.torrent', '')
 
-        if ahrefs[0].text.strip() == '剧集' or ahrefs[0].text.strip() == '高清剧集':
+        if ahrefs[0].text.strip() == '剧集' or \
+            ahrefs[0].text.strip() == '高清剧集' or \
+                ahrefs[0].text.strip() == '动漫':
             return types.FILE_TYPE_VIDEO_TV, title
 
         if ahrefs[0].text.strip() == '电影' or ahrefs[0].text.strip() == '高清电影':

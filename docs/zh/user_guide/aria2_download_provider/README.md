@@ -38,7 +38,8 @@ aria2对应的配置文件如下：
         "download_base_path": "/downloads/",
         "rpc_endpoint_host": "http://127.0.0.1",
         "rpc_endpoint_port": "6800",
-        "secret": "kubespider"
+        "secret": "kubespider",
+        "priority": 1
     },
     ...
 }
@@ -49,6 +50,7 @@ aria2对应的配置文件如下：
 * `rpc_endpoint_host`: aria2 rpc地址。
 * `rpc_endpoint_port`: aria2 rpc端口。
 * `secret`: aria2 rpc接口密码。
+* `priority`: 下载提供器优先级，数字越小，优先级越高，下载资源时按优先级尝试，无法下载或下载失败时切换下载器。
 
 ### 3.测试下载
 配置好后，运行如下命令：
