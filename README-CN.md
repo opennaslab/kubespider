@@ -102,6 +102,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 | btbtt12资源提供器 | 是 | 实现链接触发下载，简化下载流程 | [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) |
 | meijutt资源提供器 | 是 | 自动追美剧 | [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
 | YouTube资源提供器 | TBD | 触发下载YouTube视频 | TBD |
+| Bilibili资源提供器 | Yes | 触发下载Bilibili视频 | TBD |
 
 ### 下载提供器
 为了充分利用开源社区已有的下载软件(如YouTube有专门的下载软件)，目前支持如下下载软件：
@@ -110,6 +111,8 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 | aria2 |    是   | [link](./docs/zh/user_guide/aria2_download_provider/README.md) |
 | 迅雷   |   是    | [link](./docs/zh/user_guide/thunder_install_config/README.md) |
 | qBittorrent | 是| [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) | 
+qbittorrent_download_provider/README.md) | 
+| you-get           | Yes     | TBD      |
 
 ### 基本特性
 目前支持如下文件触发下载：
