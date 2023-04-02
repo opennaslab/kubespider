@@ -23,5 +23,3 @@ bash fhs-install-v2ray/install-dat-release.sh -l v2ray-linux-64.zip
 # 2.Notice
 echo "[INFO] Install v2ray successful..."
 echo "[INFO] v2ray config path: /usr/local/etc/v2ray/config.json"
-
-

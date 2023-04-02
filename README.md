@@ -97,6 +97,7 @@ As metioned before, the source provider is used to adpot to different websites, 
 | btbtt12 source provider | Yes | Trigger download resource in btbtt12 website | [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) |
 | meijutt source provider | Yes | Download updated TV series | [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
 | YouTube source provider | TBD | Trigger download YouTube video | TBD |
+| Bilibili source provider | Yes | Trigger download bilibili video | TBD |
 
 ### Download provider
 In order to make full use of the exisiting download software in the open source community(For example, YouTube hasdedicated download software), the following software is current supported:
@@ -105,6 +106,7 @@ In order to make full use of the exisiting download software in the open source 
 | aria2             | Yes     | [link](./docs/zh/user_guide/aria2_download_provider/README.md) |
 | xunlei            | Yes     | [link](./docs/zh/user_guide/thunder_install_config/README.md) |
 | qBittorrent       | Yes     | [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) | 
+| you-get           | Yes     | TBD      |
 
 ### Basic feature  
 Currently, the following file types are supported to trigger downloading:

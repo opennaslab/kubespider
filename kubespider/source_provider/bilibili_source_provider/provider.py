@@ -42,7 +42,7 @@ class BilibiliSourceProvider(provider.SourceProvider):
         return False
 
     def get_links(self, data_source_url: str) -> dict:
-        return [{'path': '', 'link': data_source_url, 'file_type': ''}]
+        return [{'path': '', 'link': data_source_url, 'file_type': types.FILE_TYPE_VIDEO_MIXED}]
 
     def update_config(self, req_para: str) -> None:
         pass

@@ -13,13 +13,13 @@ PS：如果你想做某个特性，请在repo issue中说明。
 * 参照 `https://reorx.com/blog/track-and-download-shows-automatically-with-sonarr/`，集成到kubespider中，成为一个source provider。
 * 集成alist，基于webDAV下载各云盘资源，成为一个source provider。
 * 修复美剧天堂多次连续触发的性能问题，无法连续触发下载；修复美剧天堂获取到除bt外的链接类型。
-* 集成you-get。
 
 ## 正在做特性
 * 更好的文件分类。
 * 支持下载优先级，在某个下载器长期无法下载时，切换另外一个下载器（待同步文档）。
 * 支持bilibili source provider。
 * 完善现有代码，定义好资源提供器和下载提供器的API（高优先级）。
+* 集成you-get（bilibili，文档）。
 
 ## v0.2.0版本特性(2023/04/30)
 * 国内加速下载，支持阿里云image registry。
