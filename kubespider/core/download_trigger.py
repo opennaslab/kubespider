@@ -52,7 +52,6 @@ class KubespiderDownloader:
         return None
 
     def handle_torrent_download(self, url, path, provider_name=None) -> TypeError:
-        logging.info('Download torrent file')
         tmp_file = helper.get_tmp_file_name(url)
 
         headers = ("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE")
@@ -67,41 +66,48 @@ class KubespiderDownloader:
             torrent_file.write(torrent_data)
             torrent_file.close()
 
+        err = None
         for provider in self.download_providers:
             if provider_name is not None and \
                 provider_name != provider.get_provider_name():
                 continue
+            logging.info('Download torrent file with downloader(%s)', provider.get_provider_name())
             provider.load_config()
             err = provider.send_torrent_task(tmp_file, path)
             if err is not None:
-                return err
+                logging.warning('Download torrent file error:%s', err)
+                continue
             break
-        return None
+        return err
 
     def handle_magnet_download(self, url, path, provider_name=None) -> TypeError:
-        logging.info('Download mangent file')
+        err = None
         for provider in self.download_providers:
             if provider_name is not None and \
                 provider_name != provider.get_provider_name():
                 continue
+            logging.info('Download mangent file with downloader(%s)', provider.get_provider_name())
             provider.load_config()
             err = provider.send_magnet_task(url, path)
             if err is not None:
-                return err
+                logging.warning('Download torrent file error:%s', err)
+                continue
             break
-        return None
+        return err
 
     def handle_general_download(self, url, path, provider_name=None) -> TypeError:
-        logging.info('Download general file')
+        err = None
         for provider in self.download_providers:
             if provider_name is not None and \
                 provider_name != provider.get_provider_name():
                 continue
+            logging.info('Download general file with downloader(%s)', provider.get_provider_name())
             provider.load_config()
             err = provider.send_general_task(url, path)
             if err is not None:
-                return err
+                logging.warning('Download torrent file error:%s', err)
+                continue
             break
-        return None
+        return err
 
 kubespider_downloader = KubespiderDownloader(None)

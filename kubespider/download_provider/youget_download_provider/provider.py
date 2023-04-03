@@ -40,6 +40,10 @@ class YougetDownloadProvider(
         data = {'dataSource': url, 'path': path}
         logging.info('Send general task:%s', json.dumps(data))
 
+        if not url.startswith('https://www.bilibili.com') and \
+            not url.startswith('https://www.youtube.com'):
+            return TypeError('you-get only support specific resource')
+
         # This downloading tasks is special, other download software could not handle
         # So just return None
         try:
