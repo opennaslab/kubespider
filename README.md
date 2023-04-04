@@ -86,7 +86,6 @@ Then with aria2 chrome plugin, you can see the download task starts:
 * Install Plex, watch videos on multiple platforms, [install now](./docs/zh/user_guide/plex_install_config/README.md).
 * Install Jellyfin, watch videos on multiple platforms, [install now](./docs/zh/user_guide/jellyfin_install_config/README.md).
 * Install Baidu network disk(only in china), download in the background, [install now](TODO).
-* Install Thunder(only in china), download in the background, [install now](./docs/zh/user_guide/thunder_install_config/README.md).
 
 ## 🔧 Feature list
 ### Source provider  
@@ -106,7 +105,7 @@ In order to make full use of the exisiting download software in the open source 
 | aria2             | Yes     | [link](./docs/zh/user_guide/aria2_download_provider/README.md) |
 | xunlei            | Yes     | [link](./docs/zh/user_guide/thunder_install_config/README.md) |
 | qBittorrent       | Yes     | [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) | 
-| you-get           | Yes     | TBD      |
+| you-get           | Yes     | [link](./docs/zh/user_guide/youget_download_provider/README.md)    |
 
 ### Basic feature  
 Currently, the following file types are supported to trigger downloading:
