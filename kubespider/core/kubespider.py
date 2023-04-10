@@ -20,7 +20,7 @@ def run():
                 logging.info('Source Provider:%s enabled...', provider_name)
                 kubespider_global.enabled_source_provider.append(provider)
         except KeyError:
-            logging.warn('Source Provider:%s not exists, treat as disabled', provider_name)
+            logging.warning('Source Provider:%s not exists, treat as disabled', provider_name)
 
     for provider in kubespider_global.download_providers:
         provider_name = provider.get_provider_name()
@@ -29,7 +29,7 @@ def run():
                 logging.info('Download Provider:%s enabled...', provider_name)
                 kubespider_global.enabled_download_provider.append(provider)
         except KeyError:
-            logging.warn('Download Provider:%s not exists, treat as disabled', provider_name)
+            logging.warning('Download Provider:%s not exists, treat as disabled', provider_name)
     kubespider_global.enabled_download_provider.sort(key=sort_download_provider)
 
     download_trigger.kubespider_downloader = \
