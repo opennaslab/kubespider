@@ -20,6 +20,8 @@ class QbittorrentDownloadProvider(
         self.password = ''
         self.download_base_path = ''
         self.verify_webui_certificate = False
+        self.download_tags = ['']
+        self.download_category = ''
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -62,7 +64,8 @@ class QbittorrentDownloadProvider(
         download_path = os.path.join(self.download_base_path, download_path)
         logging.info('Start torrent download:%s, path:%s', torrent_file_path, download_path)
         try:
-            ret = self.client.torrents_add(torrent_files=torrent_file_path, save_path=download_path)
+            logging.info('Create download task category:%s, tags:%s', self.download_category, self.download_tags)
+            ret = self.client.torrents_add(torrent_files=torrent_file_path, save_path=download_path, category=self.download_category, tags=self.download_tags)
             logging.info('Create download task results:%s', ret)
             return None
         except Exception as err:
@@ -74,7 +77,8 @@ class QbittorrentDownloadProvider(
         logging.info('Start magent download:%s, path:%s', url, path)
         download_path = os.path.join(self.download_base_path, path)
         try:
-            ret = self.client.torrents_add(urls=url, save_path=download_path)
+            logging.info('Create download task category:%s, tags:%s', self.download_category, self.download_tags)
+            ret = self.client.torrents_add(urls=url, save_path=download_path, category=self.download_category, tags=self.download_tags)
             logging.info('Create download task results:%s', ret)
             return None
         except Exception as err:
@@ -95,6 +99,8 @@ class QbittorrentDownloadProvider(
         self.username = cfg['username']
         self.password = cfg['password']
         self.verify_webui_certificate = cfg['verify_webui_certificate']
+        self.download_tags = cfg.get('tags')
+        self.download_category = cfg.get('category')
         self.client = qbittorrentapi.Client(
             self.http_endpoint_host,
             self.http_endpoint_port,
