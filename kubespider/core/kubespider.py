@@ -4,9 +4,9 @@ import _thread
 import time
 
 from core import kubespider_global
-from core import webhook_server
 from core import download_trigger
 from core import period_server
+from core.kubespider_flask import create_kubespider_app
 import download_provider.provider as dp
 
 
@@ -52,7 +52,7 @@ def run_webhook_server():
     if webhook_server_port is None:
         webhook_server_port = 3080
     logging.info('Webhook Server start running...')
-    webhook_server.kubespider_server.run(host='0.0.0.0', port=webhook_server_port)
+    create_kubespider_app().run(host='0.0.0.0', port=webhook_server_port)
 
 def run_period_job_consumer():
     logging.info('Period Server Quene handler start running...')
