@@ -14,7 +14,7 @@ import uuid
 from flask import Blueprint, request
 
 rss_list_bp = Blueprint("rss_list", __name__, url_prefix="/rss")
-general_rss_file = os.path.join(os.path.dirname(os.path.dirname(sys.argv[0])), "./config/general_rss.json")
+general_rss_file = os.path.join(os.path.dirname(os.path.dirname(sys.argv[0])), ".config/general_rss.json")
 
 @rss_list_bp.route("/list", methods=["POST"])
 def rss_list():
@@ -22,7 +22,6 @@ def rss_list():
     rss_type = request.json.get("type")
     state = request.json.get("state")
     rss_list = []
-    print()
     with open(general_rss_file, "r") as file:
         rss_info = json.loads(file.read())
 
@@ -72,13 +71,11 @@ def rss_edit():
     edit_index = 0
     with open(general_rss_file, "r") as file:
         rss_list = json.loads(file.read()).get("rss")
-        print(rss_list)
         for index, rss in enumerate(rss_list):
             if rss.get("id") == data.get("id"):
                 edit_index = index
                 break
         rss_list[edit_index] = {**data}
-        print(rss_list)
     with open(general_rss_file, "w") as file:
         json.dump({"rss": rss_list}, file, indent=4, ensure_ascii=False)
 
@@ -101,7 +98,7 @@ if __name__ == '__main__':
         ]
     }
 
-    with open('D:\Python_Project\kubespider\.config\general_rss.json', "w") as file:
+    with open('D:\Python_Project\kubespider\github\kubespider\.config\general_rss.json', "w") as file:
         json.dump(a, file, indent=4, ensure_ascii=False)
     pass
 

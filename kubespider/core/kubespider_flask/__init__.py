@@ -8,6 +8,7 @@
 """
 from flask import Flask
 from .controller import blue_print_register
+from .job import register_job
 
 
 def create_kubespider_app():
@@ -15,8 +16,10 @@ def create_kubespider_app():
     from flask_cors import CORS
     CORS(kubespider_app, supports_credentials=True)
     kubespider_app.config.from_mapping(
-        SECRET_KEY="123123"
+        SECRET_KEY="123123",
+        SCHEDULER_API_ENABLED = True
     )
+    register_job(kubespider_app)
     blue_print_register(kubespider_app)
     return kubespider_app
 
