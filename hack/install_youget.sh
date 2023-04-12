@@ -29,7 +29,7 @@ mkdir -p ${HOME}/kubespider/youget/
 source hack/util.sh
 util::set_registry_for_image
 
-# 5.Install thunder 
+# 5.Install youget 
 docker run --name youget -d \
     --network=host \
     -e BILIBILI_COOKIE_PATH=/root/config/bilibili_cookie.txt \

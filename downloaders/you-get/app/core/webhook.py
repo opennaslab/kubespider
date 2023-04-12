@@ -14,7 +14,7 @@ def download_handler():
     path = os.path.join('/root/downloads', data['path'])
     args = [source, '-o', path]
 
-    tasks.you_get_tasks.equeue(args)
+    tasks.you_get_tasks.equeue(tasks.DownloadTask(args, 0))
     return send_ok_response()
 
 def send_ok_response():

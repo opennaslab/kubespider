@@ -25,6 +25,10 @@ jobs:
         docker build -t cesign/kubespider:latest -f Dockerfile ./
         docker tag cesign/kubespider:latest registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest
     
+        cd downloaders/you-get
+        docker build -t cesign/youget-downloader:latest -f Dockerfile ./
+        cd ../../
+
     - name: Deploy test
       run: |
         set -x
@@ -62,6 +66,14 @@ jobs:
           exit 1
         fi
 
+        #5. Test deploy youget
+        bash hack/install_youget.sh
+        sleep 10
+        docker ps | grep -e youget
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
+
     - name: Find error
       if: ${{ failure() }}
       run: |
@@ -71,3 +83,4 @@ jobs:
         docker logs aria2-pro
         docker logs plex
         docker logs xunlei
+        docker logs youget
