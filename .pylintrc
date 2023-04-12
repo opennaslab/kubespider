@@ -11,6 +11,7 @@ disable=
     W0719, # Raising too general exception
     R0902, # Too many instance attributes
     R1714, # onsider merging these comparisons with 'in'
+    R0903, # Too few public methods
 
 [SIMILARITIES]
 # Minimum lines number of a similarity.
