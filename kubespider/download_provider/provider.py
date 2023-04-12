@@ -1,10 +1,7 @@
-import os
 import abc
-import threading
 
 from utils import helper
-
-download_provider_file_lock = threading.Lock()
+from utils.helper import Config
 
 
 class DownloadProvider(metaclass=abc.ABCMeta):
@@ -49,6 +46,5 @@ class DownloadProvider(metaclass=abc.ABCMeta):
 
 
 def load_download_provider_config(provider_name: str) -> dict:
-    config_path = os.path.join(os.getenv('HOME'), '.config/download_provider.cfg')
-    cfg = helper.load_json_config(config_path, download_provider_file_lock)
+    cfg = helper.load_config(Config.DOWNLOAD_PROVIDER)
     return cfg[provider_name]
