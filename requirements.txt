@@ -6,3 +6,4 @@ pyexecjs==1.5.1
 libtorrent==2.0.7
 qbittorrent-api==2023.2.43
 flask==2.2.3
+pyyaml==5.1

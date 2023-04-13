@@ -1,23 +1,18 @@
 import time
-import os
 import logging
-import threading
 import queue
 
 from api import types
 from core import download_trigger
 from utils import helper
+from utils.helper import Config
 import source_provider.provider as sp
-
-state_file_lock = threading.Lock()
-
 
 class PeriodServer:
     def __init__(self, source_providers, download_providers) -> None:
         self.period_seconds = 3600
         self.source_providers = source_providers
         self.download_providers = download_providers
-        self.state_file_dir = os.getenv('HOME') + '/.config'
         self.queue = queue.Queue()
 
     def run_producer(self) -> None:
@@ -74,16 +69,14 @@ class PeriodServer:
         return err
 
     def load_state(self, provider_name) -> list:
-        state_file_path = os.path.join(self.state_file_dir, 'state.cfg')
-        all_state = helper.load_json_config(state_file_path, state_file_lock)
+        all_state = helper.load_config(Config.STATE)
         if provider_name not in all_state.keys():
             return []
         return all_state[provider_name]
 
     def save_state(self, provider_name, state) -> None:
-        state_file_path = os.path.join(self.state_file_dir, 'state.cfg')
-        all_state = helper.load_json_config(state_file_path, state_file_lock)
+        all_state = helper.load_config(Config.STATE)
         all_state[provider_name] = state
-        helper.dump_json_config(state_file_path, all_state, state_file_lock)
+        helper.dump_config(Config.STATE, all_state)
 
 kubespider_period_server = PeriodServer(None, None)
