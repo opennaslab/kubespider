@@ -3,6 +3,7 @@ import source_provider.btbtt12_disposable_source_provider.provider as btbtt12_di
 import source_provider.meijutt_source_provider.provider as meijutt_source_provider
 import source_provider.bilibili_source_provider.provider as bilibili_source_provider
 import source_provider.youtube_source_provider.provider as youtube_source_provider
+import source_provider.general_rss_source_provider.provider as rss_source_provider
 
 import download_provider.aria2_download_provider.provider as aria2_download_provider
 import download_provider.xunlei_download_provider.provider as xunlei_download_provider
@@ -15,6 +16,7 @@ source_providers = [
     meijutt_source_provider.MeijuttSourceProvider(),
     bilibili_source_provider.BilibiliSourceProvider(),
     youtube_source_provider.YouTubeSourceProvider(),
+    rss_source_provider.GeneralRssSourceProvider(),
 ]
 
 download_providers = [

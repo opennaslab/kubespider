@@ -9,6 +9,10 @@ btbtt12_disposable_source_provider:
 meijutt_source_provider:
   enable: true
   tv_links: []
+general_rss_source_provider:
+  enable: true
+  rss:
+    - {"id": "123123123", "rss_name": "深影译站", "rss_url": "http://192.168.124.10:1200/shinybbs", "provider_type": "disposable", "flag": "movie", "type": "电影", "provider_enabled": true, "decs": "decs", "exec_time": "8h", "check_time": "0h"}
 bilibili_source_provider:
   enable: true
 youtube_source_provider:

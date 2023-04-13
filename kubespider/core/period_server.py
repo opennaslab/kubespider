@@ -6,6 +6,7 @@ from api import types
 from core import download_trigger
 from utils import helper
 from utils.helper import Config
+from source_provider import general_rss_source_provider, provider as pd
 import source_provider.provider as sp
 
 class PeriodServer:
@@ -29,7 +30,10 @@ class PeriodServer:
 
             err = None
             for provider in self.source_providers:
-                err = self.run_single_provider(provider)
+                if provider.get_provider_name() == "general_rss_source_provider":
+                    err = self.rss_deal_provider(provider)
+                else:
+                    err = self.run_single_provider(provider)
 
             if err is not None:
                 # If error, try again
@@ -37,6 +41,27 @@ class PeriodServer:
 
     def trigger_run(self) -> None:
         self.queue.put(True)
+
+
+    def rss_deal_provider(self, provider: sp.SourceProvider) -> TypeError:
+        configs = pd.load_source_provide_config(provider.get_provider_name()).get("rss")
+        logging.info("-------------------")
+        logging.info(configs)
+        logging.info("-------------------")
+        err_flag = None
+        for rss_config in configs:
+            if rss_config.get("provider_enabled"):
+                rss_provider = general_rss_source_provider.provider.GeneralRssSourceProvider(rss_config)
+                general_rss_source_provider_disposable = self.load_state("general_rss_source_provider_disposable")
+                if rss_provider.get_provider_type() != types.SOURCE_PROVIDER_PERIOD_TYPE and rss_provider.get_rss_hub_link() not in general_rss_source_provider_disposable:
+                    download_links_with_provider("", rss_provider)
+                    self.save_state(rss_provider.get_rss_hub_link(), general_rss_source_provider_disposable)
+                else:
+                    err = self.rss_single_provider(provider)
+                    if err is not None:
+                        err_flag = False
+        return err_flag
+
 
     def run_single_provider(self, provider: sp.SourceProvider) -> TypeError:
         if provider.get_provider_type() != types.SOURCE_PROVIDER_PERIOD_TYPE:
@@ -78,5 +103,20 @@ class PeriodServer:
         all_state = helper.load_config(Config.STATE)
         all_state[provider_name] = state
         helper.dump_config(Config.STATE, all_state)
+
+def download_links_with_provider(source: str, source_provider: sp.SourceProvider):
+    link_type = source_provider.get_link_type()
+    links = source_provider.get_links(source)
+    specific_download_provider = source_provider.get_download_provider()
+    for download_link in links:
+        # The path rule should be like: {file_type}/{file_title}
+        download_final_path = helper.convert_file_type_to_path(download_link['file_type']) + '/' + download_link['path']
+        err = download_trigger.kubespider_downloader.\
+            download_file(download_link['link'], \
+                          download_final_path, link_type,\
+                            specific_download_provider)
+        if err is not None:
+            return err
+    return None
 
 kubespider_period_server = PeriodServer(None, None)
