@@ -1,0 +1,13 @@
+---
+mikanani_source_provider:
+  enable: false
+  rss_link: https://mikanani.me/RSS/MyBangumi?token=egIVi24Uxfg68bFDW5ehVgpHCadfZ1AULNYot%2b95mDo%3d
+btbtt12_disposable_source_provider:
+  enable: true
+meijutt_source_provider:
+  enable: true
+  tv_links: []
+bilibili_source_provider:
+  enable: true
+youtube_source_provider:
+  enable: true

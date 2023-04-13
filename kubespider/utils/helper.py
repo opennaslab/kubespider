@@ -9,9 +9,9 @@ import yaml
 from api import types
 
 class Config(str, Enum):
-    SOURCE_PROVIDER = 'source_provider'
-    DOWNLOAD_PROVIDER = 'download_provider'
-    STATE = 'state'
+    SOURCE_PROVIDER = 'source_provider.yaml'
+    DOWNLOAD_PROVIDER = 'download_provider.yaml'
+    STATE = 'state.yaml'
 
     def __str__(self) -> str:
         return str(self.value)
@@ -32,18 +32,16 @@ def get_unique_hash(data):
 def load_config(cfg_type: Config):
     lock = locks.get(cfg_type)
     lock.acquire()
-    yaml_file = cfg_type + '.yaml'
     try:
-        return load_yaml_config(os.path.join(cfg_base_path, yaml_file))
+        return load_yaml_config(os.path.join(cfg_base_path, cfg_type))
     finally:
         lock.release()
 
 def dump_config(cfg_type: Config, cfg):
     lock = locks.get(cfg_type)
     lock.acquire()
-    yaml_file = cfg_type + '.yaml'
     try:
-        dump_yaml_config(os.path.join(cfg_base_path, yaml_file), cfg)
+        dump_yaml_config(os.path.join(cfg_base_path, cfg_type), cfg)
     finally:
         lock.release()
 
