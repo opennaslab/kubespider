@@ -64,25 +64,27 @@ https://jsd.cdn.zzko.cn/gh/XIU2/TrackersListCollection/best.txt
 如果你对WebAPI进行了修改配置，请务必修改Kubespider的对接配置，如果没有修改则可以直接使用默认配置使用
 
 qBittorrent对应的配置文件如下
-```json
-{
-    "qbittorrent_download_provider": {
-        "enable": false,
-        "download_base_path": "/downloads/",
-        "http_endpoint_host": "http://127.0.0.1",
-        "http_endpoint_port": 8080,
-        "username": "admin",
-        "password": "adminadmin",
-        "verify_webui_certificate": false,
-        "priority": 1,
-        "tags": [
-            "kubespider"
-        ],
-        "category": "kubespider"
-    }
-}
+
+```yaml
+qbittorrent:
+  type: qbittorrent_download_provider
+  enable: false
+  download_base_path: "/downloads/"
+  http_endpoint_host: http://127.0.0.1
+  http_endpoint_port: 8080
+  username: admin
+  password: adminadmin
+  verify_webui_certificate: false
+  priority: 2
+  tags:
+    - kubespider
+  category: kubespider
 ```
+
 其中:
+
+* 名称，可自定义（不可重复），可以在 `source_provider.yaml` 中按名称指定下载器。
+* `type`: 表示此下载器的类型，需为 `qbittorrent_download_provider`。
 * `enable`: 设置是否使用此provider，只能使用一个，后续开发优先级后可以多个一起使用。
 * `download_base_path`: 设置下载基础路径，后续文件都将保存在该目录中，务必设置在你所挂载的nas目录或其他目录。
 * `http_endpoint_host`: qbittorrent服务所在服务器地址。

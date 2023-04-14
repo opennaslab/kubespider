@@ -14,17 +14,15 @@
 
 ### 2.配置手册
 你可以通过`${HOME}/kubespider/.config/source_provider.cfg`配置，配置解释如下：
-```cfg
-{
-    ...
-    "bilibili_source_provider":{
-        "enable":true
-    }
-    ...
-}
+
+```yaml
+bilibili_source_provider:
+  type: bilibili_source_provider
+  enable: true
 ```
 
-`enable`：是否开启此provider，因为此provider无需口令等用户信息，所以默认开启。
+* `type`：订阅源类型，需为`bilibili_source_provider`。
+* `enable`：是否开启此provider，因为此provider无需口令等用户信息，所以默认开启。
 
 ## 测试
 设置好后，直接重启Kubespider即可。

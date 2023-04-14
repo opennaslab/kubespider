@@ -13,19 +13,16 @@ meijutt有丰富的美剧内容，提供高质量下载资源。官方地址：[
 
 ### 2.配置手册
 你可以通过`${HOME}/kubespider/.config/source_provider.cfg`配置，配置解释如下：
-```cfg
-{
-    ...
-    "meijutt_source_provider": {
-        "enable": true,
-        "tv_links": []
-    },
-    ...
-}
+```yaml
+meijutt_source_provider:
+  type: meijutt_source_provider
+  enable: true
+  tv_links: []
 ```
 
-`enable`：是否开启此provider。  
-`tv_links`：tv剧地址，直接通过Kubespider chrome插件发送美剧地址URL即可，如最终效果图所示。
+* `type`：订阅源类型，需为`meijutt_source_provider`。
+* `enable`：是否开启此provider。  
+* `tv_links`：tv剧地址，直接通过Kubespider chrome插件发送美剧地址URL即可，如最终效果图所示。
 
 其中Server地址为 http://<server_ip>:3080
 

@@ -5,6 +5,8 @@ mikanani_source_provider:
   # 将以下rss链接更换为自己的mikan订阅链接
   # 格式为 https://mikanani.me/RSS/MyBangumi?token=***mytoken***
   rss_link: https://mikanani.me/Home/Classic
+  downloader:
+    - qbittorrent
   download_param:
     tags:
       - mikanani
