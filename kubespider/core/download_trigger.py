@@ -5,6 +5,7 @@ from urllib import request
 from utils import helper
 from api import types
 import download_provider.provider as dp
+import source_provider.provider as sp
 
 
 class KubespiderDownloader:
@@ -35,9 +36,13 @@ class KubespiderDownloader:
             tasks = provider_now.get_defective_task()
             logging.info("Find defective tasks:%d/%s", len(tasks), provider_now.get_provider_name())
             for task in tasks:
-                self.download_file(task['url'], task['path'], task['linkType'], provider_next.get_provider_name())
+                self.download_file(task['url'], task['path'], task['linkType'], provider_next)
 
-    def filter_downloader(self, name_list=None, provider_type=None) -> list:
+    def filter_downloader(self, source_provider: sp.SourceProvider=None) -> list:
+        if source_provider is None:
+            return self.download_providers
+        name_list = source_provider.get_prefer_download_provider()
+        provider_type = source_provider.get_download_provider_type()
         if name_list is not None:
             provider = list(filter(lambda p: p.get_provider_name() in name_list, self.download_providers))
         else:
@@ -48,8 +53,9 @@ class KubespiderDownloader:
         logging.info('filtering downloader by name %s type %s, result %s', str(name_list), str(provider_type), str(name))
         return provider
 
-    def download_file(self, url, path, link_type, provider_name=None, provider_type=None, extra_param=None) -> TypeError:
-        downloader = self.filter_downloader(provider_name, provider_type)
+    def download_file(self, url, path, link_type, source_provider: sp.SourceProvider=None) -> TypeError:
+        downloader = self.filter_downloader(source_provider)
+        extra_param = source_provider.get_download_param()
         logging.info('download link type %s, with provider size %s', link_type, len(downloader))
         if link_type == types.LINK_TYPE_TORRENT:
             return self.handle_torrent_download(url, path, downloader, extra_param)

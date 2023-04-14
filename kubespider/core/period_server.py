@@ -45,9 +45,6 @@ class PeriodServer:
         provider.load_config()
         links = provider.get_links("")
         link_type = provider.get_link_type()
-        specific_download_provider_type = provider.get_download_provider_type()
-        specific_download_provider_name = provider.get_prefer_download_provider()
-        extras = provider.get_download_param()
 
         provider_name = provider.get_provider_name()
         state = self.load_state(provider_name)
@@ -61,8 +58,7 @@ class PeriodServer:
             download_final_path = helper.convert_file_type_to_path(source['file_type']) + '/' + source['path']
             err = download_trigger.kubespider_downloader. \
                 download_file(source['link'], download_final_path, \
-                              link_type, specific_download_provider_name,\
-                                specific_download_provider_type, extras)
+                              link_type, provider)
             if err is not None:
                 break
             state.append(helper.get_unique_hash(source['link']))
