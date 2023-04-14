@@ -37,7 +37,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         # if xunlei doesn't work, it means other tools couldn't, so just ignore it.
         return []
 
-    def send_torrent_task(self, torrent_file_path: str, download_path: str) -> TypeError:
+    def send_torrent_task(self, torrent_file_path: str, download_path: str, extra_param=None) -> TypeError:
         logging.info('Start torrent download:%s', torrent_file_path)
         token = self.get_pan_token()
         if token == "":
@@ -46,7 +46,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         file_info = self.list_files(token, magnet_url)
         return self.send_task(token, file_info, magnet_url, download_path)
 
-    def send_magnet_task(self, url: str, path: str) -> TypeError:
+    def send_magnet_task(self, url: str, path: str, extra_param=None) -> TypeError:
         logging.info('Start magnet download:%s', url)
         token = self.get_pan_token()
         if token == "":
@@ -54,7 +54,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         file_info = self.list_files(token, url)
         return self.send_task(token, file_info, url, path)
 
-    def send_general_task(self, url: str, path: str) -> TypeError:
+    def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
         logging.info('Start general file download:%s', url)
         token = self.get_pan_token()
         if token == "":

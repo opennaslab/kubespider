@@ -35,15 +35,15 @@ class DownloadProvider(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def send_torrent_task(self, torrent_file_path, download_path) -> TypeError:
+    def send_torrent_task(self, torrent_file_path, download_path, extra_param=None) -> TypeError:
         pass
 
     @abc.abstractmethod
-    def send_magnet_task(self, url: str, path: str) -> TypeError:
+    def send_magnet_task(self, url: str, path: str, extra_param=None) -> TypeError:
         pass
 
     @abc.abstractmethod
-    def send_general_task(self, url: str, path: str) -> TypeError:
+    def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
         pass
 
     @abc.abstractmethod

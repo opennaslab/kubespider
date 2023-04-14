@@ -55,7 +55,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
 
         return defective_tasks
 
-    def send_torrent_task(self, torrent_file_path: str, download_path: str) -> TypeError:
+    def send_torrent_task(self, torrent_file_path: str, download_path: str, extra_param=None) -> TypeError:
         logging.info('Start torrent download:%s', torrent_file_path)
         download_path = os.path.join(self.download_base_path, download_path)
         try:
@@ -67,7 +67,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
             return err
         return None
 
-    def send_magnet_task(self, url: str, path: str) -> TypeError:
+    def send_magnet_task(self, url: str, path: str, extra_param=None) -> TypeError:
         logging.info('Start magnet download:%s', url)
         download_path = os.path.join(self.download_base_path, path)
         try:
@@ -78,7 +78,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
             logging.warning('Please ensure your aria2 server is ok:%s', err)
             return err
 
-    def send_general_task(self, url: str, path: str) -> TypeError:
+    def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
         logging.info('Start general file download:%s', url)
 
         if not url.startswith('http'):

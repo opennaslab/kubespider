@@ -34,14 +34,18 @@ class MeijuttSourceProvider(provider.SourceProvider):
     
     def get_prefer_download_provider(self) -> list:
         cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg['downloader']
+        return cfg.get('downloader')
+
+    def get_download_param(self) -> list:
+        cfg = provider.load_source_provide_config(self.provider_name)
+        return cfg.get('download_param')
 
     def get_link_type(self) -> str:
         return self.link_type
 
     def provider_enabled(self) -> bool:
         cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg['enable']
+        return cfg.get('enable', True)
 
     def is_webhook_enable(self) -> bool:
         return True

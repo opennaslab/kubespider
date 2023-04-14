@@ -37,6 +37,11 @@ class SourceProvider(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
+    def get_download_param(self) -> list:
+        # get the specific params for downloader
+        pass
+
+    @abc.abstractmethod
     def get_link_type(self) -> str:
         pass
 
