@@ -8,8 +8,9 @@ from api import types
 
 
 class Aria2DownloadProvider(provider.DownloadProvider):
-    def __init__(self) -> None:
-        self.provider_name = 'aria2_download_provider'
+    def __init__(self, name: str) -> None:
+        self.provider_name = name
+        self.provider_type = 'aria2_download_provider'
         self.rpc_endpoint_host = ''
         self.rpc_endpoint_port = 0
         self.download_base_path = ''
@@ -18,6 +19,9 @@ class Aria2DownloadProvider(provider.DownloadProvider):
 
     def get_provider_name(self) -> str:
         return self.provider_name
+    
+    def get_provider_type(self) -> str:
+        return self.provider_type
 
     def provider_enabled(self) -> bool:
         cfg = provider.load_download_provider_config(self.provider_name)

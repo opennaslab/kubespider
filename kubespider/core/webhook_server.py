@@ -82,14 +82,16 @@ def refresh_handler():
 def download_links_with_provider(source: str, source_provider: sp.SourceProvider):
     link_type = source_provider.get_link_type()
     links = source_provider.get_links(source)
-    specific_download_provider = source_provider.get_download_provider()
+    specific_download_provider_type = source_provider.get_download_provider_type()
+    specific_download_provider_name = source_provider.get_prefer_download_provider()
     for download_link in links:
         # The path rule should be like: {file_type}/{file_title}
         download_final_path = helper.convert_file_type_to_path(download_link['file_type']) + '/' + download_link['path']
         err = download_trigger.kubespider_downloader.\
             download_file(download_link['link'], \
                           download_final_path, link_type,\
-                            specific_download_provider)
+                          specific_download_provider_name,\
+                            specific_download_provider_type)
         if err is not None:
             return err
     return None

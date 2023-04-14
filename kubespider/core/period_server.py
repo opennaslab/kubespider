@@ -39,13 +39,14 @@ class PeriodServer:
         self.queue.put(True)
 
     def run_single_provider(self, provider: sp.SourceProvider) -> TypeError:
-        if provider.get_provider_type() != types.SOURCE_PROVIDER_PERIOD_TYPE:
+        if provider.get_provider_listen_type() != types.SOURCE_PROVIDER_PERIOD_TYPE:
             return None
 
         provider.load_config()
         links = provider.get_links("")
         link_type = provider.get_link_type()
-        specific_download_provider = provider.get_download_provider()
+        specific_download_provider_type = provider.get_download_provider_type()
+        specific_download_provider_name = provider.get_prefer_download_provider()
 
         provider_name = provider.get_provider_name()
         state = self.load_state(provider_name)
@@ -59,7 +60,8 @@ class PeriodServer:
             download_final_path = helper.convert_file_type_to_path(source['file_type']) + '/' + source['path']
             err = download_trigger.kubespider_downloader. \
                 download_file(source['link'], download_final_path, \
-                              link_type, specific_download_provider)
+                              link_type, specific_download_provider_name,\
+                                specific_download_provider_type)
             if err is not None:
                 break
             state.append(helper.get_unique_hash(source['link']))

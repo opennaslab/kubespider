@@ -9,18 +9,31 @@ class SourceProvider(metaclass=abc.ABCMeta):
     def __init__(self) -> None:
         pass
 
+    # 配置中声明的名字
     @abc.abstractmethod
     def get_provider_name(self) -> str:
         pass
 
+    # 订阅源类型
     @abc.abstractmethod
     def get_provider_type(self) -> str:
         pass
 
+    # 订阅源的监听类型，周期订阅or触发式
     @abc.abstractmethod
-    def get_download_provider(self) -> str:
+    def get_provider_listen_type(self) -> str:
+        pass
+
+    @abc.abstractmethod
+    def get_download_provider_type(self) -> str:
         # in general, if this source provider needs to work with specific downlad
-        # provider, return the name of the download provider
+        # provider, return the TYPE of the download provider
+        pass
+
+    @abc.abstractmethod
+    def get_prefer_download_provider(self) -> list:
+        # if the provider is configed to use some specified download providers,
+        # return them here in a list
         pass
 
     @abc.abstractmethod
