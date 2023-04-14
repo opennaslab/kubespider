@@ -18,7 +18,7 @@ class BilibiliSourceProvider(provider.SourceProvider):
 
     def get_provider_name(self) -> str:
         return self.provider_name
-    
+
     def get_provider_type(self) -> str:
         return self.provider_type
 
@@ -27,7 +27,7 @@ class BilibiliSourceProvider(provider.SourceProvider):
 
     def get_download_provider_type(self) -> str:
         return "youget_download_provider"
-    
+
     def get_prefer_download_provider(self) -> list:
         cfg = provider.load_source_provide_config(self.provider_name)
         return cfg.get('downloader')

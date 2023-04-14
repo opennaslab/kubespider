@@ -42,14 +42,13 @@ class KubespiderDownloader:
             provider = list(filter(lambda p: p.get_provider_name() in name_list, self.download_providers))
         else:
             provider = self.download_providers
-        
         if provider_type is not None:
             provider = list(filter(lambda p: p.get_provider_type() == provider_type, provider))
         name = list(map(lambda p: p.get_provider_name(), provider))
         logging.info('filtering downloader by name %s type %s, result %s', str(name_list), str(provider_type), str(name))
         return provider
 
-    def download_file(self, url, path, link_type, provider_name=None, provider_type=None, extra_param=None) -> TypeError:        
+    def download_file(self, url, path, link_type, provider_name=None, provider_type=None, extra_param=None) -> TypeError:
         downloader = self.filter_downloader(provider_name, provider_type)
         logging.info('download link type %s, with provider size %s', link_type, len(downloader))
         if link_type == types.LINK_TYPE_TORRENT:

@@ -12,19 +12,19 @@ import download_provider.youget_download_provider.provider as youget_download_pr
 from utils import helper
 from utils.helper import Config
 
-def get_source_provider(name: str, config: dict):
-    type = config['type']
-    if type == 'bilibili_source_provider':
-        return bilibili_source_provider.BilibiliSourceProvider(name)
-    elif type == 'btbtt12_disposable_source_provider':
-        return btbtt12_disposable_source_provider.Btbtt12DisposableSourceProvider(name)
-    elif type == 'meijutt_source_provider':
-        return meijutt_source_provider.MeijuttSourceProvider(name)
-    elif type == 'mikanani_source_provider':
-        return mikanani_source_provider.MikananiSourceProvider(name)
-    elif type == 'youtube_source_provider':
-        return youget_download_provider.YougetDownloadProvider(name)
-    raise Exception(str('unknown source provider type %s', type))
+def get_source_provider(provider_name: str, config: dict):
+    provider_type = config['type']
+    if provider_type == 'bilibili_source_provider':
+        return bilibili_source_provider.BilibiliSourceProvider(provider_name)
+    if provider_type == 'btbtt12_disposable_source_provider':
+        return btbtt12_disposable_source_provider.Btbtt12DisposableSourceProvider(provider_name)
+    if provider_type == 'meijutt_source_provider':
+        return meijutt_source_provider.MeijuttSourceProvider(provider_name)
+    if provider_type == 'mikanani_source_provider':
+        return mikanani_source_provider.MikananiSourceProvider(provider_name)
+    if provider_type == 'youtube_source_provider':
+        return youtube_source_provider.YouTubeSourceProvider(provider_name)
+    raise Exception(str('unknown source provider type %s', provider_type))
 
 source_providers = []
 
@@ -33,17 +33,17 @@ for name in source_config:
     source_providers.append(get_source_provider(name, source_config[name]))
 
 
-def get_download_provider(name: str, config: dict):
-    type = config['type']
-    if type == 'aria2_download_provider':
-        return aria2_download_provider.Aria2DownloadProvider(name)
-    elif type == 'qbittorrent_download_provider':
-        return qbittorrent_download_provider.QbittorrentDownloadProvider(name)
-    elif type == 'xunlei_download_provider':
-        return xunlei_download_provider.XunleiDownloadProvider(name)
-    elif type == 'youget_download_provider':
-        return youget_download_provider.YougetDownloadProvider(name)
-    raise Exception(str('unknown download provider type %s', type))
+def get_download_provider(provider_name: str, config: dict):
+    provider_type = config['type']
+    if provider_type == 'aria2_download_provider':
+        return aria2_download_provider.Aria2DownloadProvider(provider_name)
+    if provider_type == 'qbittorrent_download_provider':
+        return qbittorrent_download_provider.QbittorrentDownloadProvider(provider_name)
+    if provider_type == 'xunlei_download_provider':
+        return xunlei_download_provider.XunleiDownloadProvider(provider_name)
+    if provider_type == 'youget_download_provider':
+        return youget_download_provider.YougetDownloadProvider(provider_name)
+    raise Exception(str('unknown download provider type %s', provider_type))
 
 
 download_providers = []

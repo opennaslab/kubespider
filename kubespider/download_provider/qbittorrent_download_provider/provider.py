@@ -26,7 +26,7 @@ class QbittorrentDownloadProvider(
 
     def get_provider_name(self) -> str:
         return self.provider_name
-    
+
     def get_provider_type(self) -> str:
         return self.provider_type
 
