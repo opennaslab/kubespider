@@ -24,8 +24,8 @@ def get_source_provider(provider_name: str, config: dict):
     provider_type = config['type']
     try:
         return source_provider_init_func[provider_type](provider_name)
-    except:
-        raise Exception(str('unknown source provider type %s', provider_type))
+    except Exception as exc:
+        raise Exception(str('unknown source provider type %s', provider_type)) from exc
 
 source_providers = []
 
@@ -44,8 +44,8 @@ def get_download_provider(provider_name: str, config: dict):
     provider_type = config['type']
     try:
         return downloader_provider_init_func[provider_type](provider_name)
-    except:
-        raise Exception(str('unknown download provider type %s', provider_type))
+    except Exception as exc:
+        raise Exception(str('unknown download provider type %s', provider_type)) from exc
 
 
 download_providers = []
