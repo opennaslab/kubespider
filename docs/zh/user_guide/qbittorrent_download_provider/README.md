@@ -96,6 +96,30 @@ qbittorrent:
 * `tags`: 触发下载时使用的tag，可用于资源分类，不需要时可留空或不设置。
 * `category`: 触发下载时使用的category，可用于资源分类，不需要时可留空或不设置。
 
+#### 3.1 来自订阅源的配置
+
+qBittorrent支持订阅源传递过来的下载参数：
+
+source_provider.yaml:
+
+```yaml
+---
+mikan_oshi:
+  enable: true
+  rss_link: https://mikanani.me/RSS/Bangumi?bangumiId=2995&subgroupid=534
+  type: mikanani_source_provider
+  downloader:
+    # 指定使用 qBittorrent进行下载
+    - qb
+  download_param:
+    tags:
+      - oshinoko
+      - mikan_tv
+    category: mikananime
+```
+
+在触发下载时，订阅源会将 `download_param` 内的参数传递过来，其值的含义参考上面的格式定义。
+
 ### 4.测试下载
 配置好后，运行如下命令：
 ```

@@ -23,6 +23,8 @@ meijutt_source_provider:
 * `type`：订阅源类型，需为`meijutt_source_provider`。
 * `enable`：是否开启此provider。  
 * `tv_links`：tv剧地址，直接通过Kubespider chrome插件发送美剧地址URL即可，如最终效果图所示。
+* `downloader`：指定使用的下载器，格式为数组，内容需要精确地跟 `downloader_provider.yaml` 中声明的名称一样；下载优先级将由数组顺序决定。
+* `download_param`：下载时传给下载器的额外参数，具体参数需要参考下载器定义。
 
 其中Server地址为 http://<server_ip>:3080
 

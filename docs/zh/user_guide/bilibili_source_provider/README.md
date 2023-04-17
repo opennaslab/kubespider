@@ -23,6 +23,8 @@ bilibili_source_provider:
 
 * `type`：订阅源类型，需为`bilibili_source_provider`。
 * `enable`：是否开启此provider，因为此provider无需口令等用户信息，所以默认开启。
+* `downloader`：指定使用的下载器，格式为数组，内容需要精确地跟 `downloader_provider.yaml` 中声明的名称一样；下载优先级将由数组顺序决定。
+* `download_param`：下载时传给下载器的额外参数，具体参数需要参考下载器定义。
 
 ## 测试
 设置好后，直接重启Kubespider即可。
