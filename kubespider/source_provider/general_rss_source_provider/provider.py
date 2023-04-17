@@ -33,7 +33,6 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         Args:
             rss_config: config member of rss config, file is ./config/general_rss.json
         """
-        self.provider_type = None
         self.rss_name = None
         self.rss_link = None
         self.webhook_enable = False
@@ -48,34 +47,31 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         self.provider_name = name
         self.load_config()
 
-    def get_provider_name(self):
+    def get_provider_name(self) -> str:
         return self.provider_name
 
-    def provider_enabled(self):
-        return self.enabled
+    def get_provider_type(self) -> str:
+        return self.provider_type
 
-    def get_provider_type(self):
-        return None
-
-    def get_file_type(self):
+    def get_file_type(self) -> str:
         return self.file_type
 
-    def get_download_provider(self):
+    def get_download_provider(self) -> None:
         return None
 
-    def get_link_type(self):
+    def get_link_type(self) -> str:
         return self.link_type
 
-    def get_download_path(self):
-        return self.download_path
-
-    def get_download_param(self) -> list:
+    def get_download_path(self) -> None:
         pass
 
-    def get_download_provider_type(self) -> list:
+    def get_download_param(self) -> None:
         pass
 
-    def get_prefer_download_provider(self) -> list:
+    def get_download_provider_type(self) -> None:
+        pass
+
+    def get_prefer_download_provider(self) -> None:
         pass
 
     def get_provider_listen_type(self) -> str:
@@ -85,16 +81,16 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         cfg = provider.load_source_provide_config(self.provider_name)
         return cfg.get('enable', True)
 
-    def is_webhook_enable(self):
+    def is_webhook_enable(self) -> bool:
         return self.is_webhook_enable
 
-    def should_handle(self, dataSourceUrl):
+    def should_handle(self, dataSourceUrl) -> None:
         pass
 
-    def get_rss_hub_link(self):
-        return self.rss_hub_link
+    def get_rss_link(self) -> str:
+        return self.rss_link
 
-    def get_links(self, dataSourceUrl=""):
+    def get_links(self, dataSourceUrl="") -> list:
         """
         Description: get rss resource link for download
 
@@ -123,10 +119,10 @@ class GeneralRssSourceProvider(provider.SourceProvider):
                 logging.warning("{}, No magnetic links were found to download yet".format(entry['title']))
         return links
 
-    def update_config(self, reqPara):
+    def update_config(self, reqPara) -> None:
         pass
 
-    def load_config(self):
+    def load_config(self) -> None:
         cfg = provider.load_source_provide_config(self.provider_name)
         self.rss_name = cfg.get("rss_name")
         self.rss_link = cfg.get("rss_link")
