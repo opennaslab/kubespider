@@ -61,20 +61,22 @@ docker ps | grep youget
 
 ### 2.Kubespider对接配置（可选）
 #### 1.设置download_provider文件
+
 配置文件如下：
-```json
-{
-    ...
-    "youget_download_provider": {
-        "enable": false,
-        "http_endpoint_host": "http://127.0.0.1",
-        "http_endpoint_port": "3081",
-        "priority": 0
-    },
-    ...
-}
+
+```yaml
+youget:
+  type: youget_download_provider
+  enable: false
+  http_endpoint_host: http://127.0.0.1
+  http_endpoint_port: '3081'
+  priority: 0
 ```
+
 其中：
+
+* 名称，可自定义（不可重复），可以在 `source_provider.yaml` 中按名称指定下载器。
+* `type`: 表示此下载器的类型，需为 `youget_download_provider`。
 * `enable`: 设置是否使用此provider。
 * `http_endpoint_host`: you-get下载软件IP地址。
 * `http_endpoint`: you-get下载软件IP端口。

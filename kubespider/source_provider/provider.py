@@ -11,16 +11,34 @@ class SourceProvider(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def get_provider_name(self) -> str:
+        # name of source provider defined in config
         pass
 
     @abc.abstractmethod
     def get_provider_type(self) -> str:
+        # type of provider
         pass
 
     @abc.abstractmethod
-    def get_download_provider(self) -> str:
+    def get_provider_listen_type(self) -> str:
+        # listen type of provider, disposable or periodly
+        pass
+
+    @abc.abstractmethod
+    def get_download_provider_type(self) -> str:
         # in general, if this source provider needs to work with specific downlad
-        # provider, return the name of the download provider
+        # provider, return the TYPE of the download provider
+        pass
+
+    @abc.abstractmethod
+    def get_prefer_download_provider(self) -> list:
+        # if the provider is configed to use some specified download providers,
+        # return them here in a list
+        pass
+
+    @abc.abstractmethod
+    def get_download_param(self) -> list:
+        # get the specific params for downloader
         pass
 
     @abc.abstractmethod

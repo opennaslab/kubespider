@@ -8,8 +8,9 @@ from api import types
 
 
 class Aria2DownloadProvider(provider.DownloadProvider):
-    def __init__(self) -> None:
-        self.provider_name = 'aria2_download_provider'
+    def __init__(self, name: str) -> None:
+        self.provider_name = name
+        self.provider_type = 'aria2_download_provider'
         self.rpc_endpoint_host = ''
         self.rpc_endpoint_port = 0
         self.download_base_path = ''
@@ -18,6 +19,9 @@ class Aria2DownloadProvider(provider.DownloadProvider):
 
     def get_provider_name(self) -> str:
         return self.provider_name
+
+    def get_provider_type(self) -> str:
+        return self.provider_type
 
     def provider_enabled(self) -> bool:
         cfg = provider.load_download_provider_config(self.provider_name)
@@ -51,7 +55,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
 
         return defective_tasks
 
-    def send_torrent_task(self, torrent_file_path: str, download_path: str) -> TypeError:
+    def send_torrent_task(self, torrent_file_path: str, download_path: str, extra_param=None) -> TypeError:
         logging.info('Start torrent download:%s', torrent_file_path)
         download_path = os.path.join(self.download_base_path, download_path)
         try:
@@ -63,7 +67,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
             return err
         return None
 
-    def send_magnet_task(self, url: str, path: str) -> TypeError:
+    def send_magnet_task(self, url: str, path: str, extra_param=None) -> TypeError:
         logging.info('Start magnet download:%s', url)
         download_path = os.path.join(self.download_base_path, path)
         try:
@@ -74,7 +78,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
             logging.warning('Please ensure your aria2 server is ok:%s', err)
             return err
 
-    def send_general_task(self, url: str, path: str) -> TypeError:
+    def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
         logging.info('Start general file download:%s', url)
 
         if not url.startswith('http'):

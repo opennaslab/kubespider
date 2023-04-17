@@ -80,20 +80,20 @@ curl http://<server_ip>:2345/webman/3rdparty/pan-xunlei-com/index.cgi/\#/home
 
 #### 6.设置download_provider文件
 配置文件如下：
-```json
-{
-    ...
-    "xunlei_download_provider": {
-        "enable": true,
-        "token_js_path": "/root/.config/dependencies/xunlei_download_provider/get_token.js",
-        "http_endpoint": "http://192.168.1.7:2345",
-        "device_id": "5c78ea560a34ed4b4fbe6686da1172b4",
-        "priority": 1
-    },
-    ...
-}
+```yaml
+xunlei:
+  type: xunlei_download_provider
+  enable: false
+  token_js_path: "/root/.config/dependencies/xunlei_download_provider/get_token.js"
+  http_endpoint: http://127.0.0.1:2345
+  device_id: 5c78ea560a34ed4b4fbe6686da1172b4
+  priority: 3
+
 ```
 其中：
+
+* 名称，可自定义（不可重复），可以在 `source_provider.yaml` 中按名称指定下载器。
+* `type`: 表示此下载器的类型，需为 `xunlei_download_provider`。
 * `enable`: 设置是否使用此provider，只能使用一个，后续开发优先级后可以多个一起使用。
 * `token_js_path`: 不用修改，如果你知道如何开发，可以修改。
 * `http_endpoint`: 服务地址。
