@@ -9,19 +9,19 @@ class SourceProvider(metaclass=abc.ABCMeta):
     def __init__(self) -> None:
         pass
 
-    # 配置中声明的名字
     @abc.abstractmethod
     def get_provider_name(self) -> str:
+        # name of source provider defined in config
         pass
 
-    # 订阅源类型
     @abc.abstractmethod
     def get_provider_type(self) -> str:
+        # type of provider
         pass
 
-    # 订阅源的监听类型，周期订阅or触发式
     @abc.abstractmethod
     def get_provider_listen_type(self) -> str:
+        # listen type of provider, disposable or periodly
         pass
 
     @abc.abstractmethod

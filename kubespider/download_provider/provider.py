@@ -9,14 +9,14 @@ class DownloadProvider(metaclass=abc.ABCMeta):
     def __init__(self) -> None:
         pass
 
-    # 配置中声明的名字
     @abc.abstractmethod
     def get_provider_name(self) -> str:
+        # name of download provider defined in config
         pass
 
-    # 下载器类型
     @abc.abstractmethod
     def get_provider_type(self) -> str:
+        # type of downloader
         pass
 
     @abc.abstractmethod
