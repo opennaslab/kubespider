@@ -54,23 +54,25 @@ class KubespiderDownloader:
         return provider
 
     def download_file(self, url, path, link_type, source_provider: sp.SourceProvider=None) -> TypeError:
-        downloader = self.filter_downloader(source_provider)
+        downloader_list = self.filter_downloader(source_provider)
         extra_param = source_provider.get_download_param()
-        logging.info('download link type %s, with provider size %s', link_type, len(downloader))
+        logging.info('download link type %s, with provider size %s', link_type, len(downloader_list))
+        if len(downloader_list) == 0:
+            logging.error('Downloader for %s not found, check your configuration!!!', source_provider.get_provider_name())
         if link_type == types.LINK_TYPE_TORRENT:
-            return self.handle_torrent_download(url, path, downloader, extra_param)
+            return self.handle_torrent_download(url, path, downloader_list, extra_param)
 
         if link_type == types.LINK_TYPE_MAGNET:
-            return self.handle_magnet_download(url, path, downloader, extra_param)
+            return self.handle_magnet_download(url, path, downloader_list, extra_param)
 
         if link_type == types.LINK_TYPE_GENERAL:
-            return self.handle_general_download(url, path, downloader, extra_param)
+            return self.handle_general_download(url, path, downloader_list, extra_param)
 
         logging.warning("Unknown link type:%s", link_type)
 
         return None
 
-    def handle_torrent_download(self, url, path, downloader: list, extra_param=None) -> TypeError:
+    def handle_torrent_download(self, url, path, downloader_list: list, extra_param=None) -> TypeError:
         tmp_file = helper.get_tmp_file_name(url)
 
         headers = ("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE")
@@ -86,7 +88,7 @@ class KubespiderDownloader:
             torrent_file.close()
 
         err = None
-        for provider in downloader:
+        for provider in downloader_list:
             logging.info('Download torrent file with downloader(%s)', provider.get_provider_name())
             provider.load_config()
             err = provider.send_torrent_task(tmp_file, path, extra_param)
@@ -96,9 +98,9 @@ class KubespiderDownloader:
             break
         return err
 
-    def handle_magnet_download(self, url, path, downloader=None, extra_param=None) -> TypeError:
+    def handle_magnet_download(self, url, path, downloader_list=None, extra_param=None) -> TypeError:
         err = None
-        for provider in downloader:
+        for provider in downloader_list:
             logging.info('Download mangent file with downloader(%s)', provider.get_provider_name())
             provider.load_config()
             err = provider.send_magnet_task(url, path, extra_param)
@@ -108,9 +110,9 @@ class KubespiderDownloader:
             break
         return err
 
-    def handle_general_download(self, url, path, downloader=None, extra_param=None) -> TypeError:
+    def handle_general_download(self, url, path, downloader_list=None, extra_param=None) -> TypeError:
         err = None
-        for provider in downloader:
+        for provider in downloader_list:
             logging.info('Download general file with downloader(%s)', provider.get_provider_name())
             provider.load_config()
             err = provider.send_general_task(url, path, extra_param)
