@@ -6,7 +6,7 @@ from utils.helper import Config
 
 class DownloadProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def __init__(self) -> None:
+    def __init__(self, name: str) -> None:
         pass
 
     @abc.abstractmethod

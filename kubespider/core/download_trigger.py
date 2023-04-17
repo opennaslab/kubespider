@@ -29,7 +29,6 @@ class KubespiderDownloader:
             # load config
             provider_now = self.download_providers[index]
             provider_next = self.download_providers[index+1]
-            logging.info("%s,%s", provider_now.get_provider_name(), provider_next.get_provider_name())
             provider_now.load_config()
             provider_next.load_config()
 

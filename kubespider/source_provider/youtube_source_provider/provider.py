@@ -26,7 +26,7 @@ class YouTubeSourceProvider(provider.SourceProvider):
         return self.provider_listen_type
 
     def get_download_provider_type(self) -> str:
-        return "yt-dlp"
+        return "ytdlp_download_provider"
 
     def get_download_param(self) -> list:
         cfg = provider.load_source_provide_config(self.provider_name)
@@ -48,7 +48,7 @@ class YouTubeSourceProvider(provider.SourceProvider):
 
     def should_handle(self, data_source_url: str) -> bool:
         parse_url = urlparse(data_source_url)
-        if parse_url.hostname == 'https://www.youtube.com/':
+        if parse_url.hostname == 'www.youtube.com':
             logging.info('%s belongs to youtube_source_provider', data_source_url)
             return True
         return False

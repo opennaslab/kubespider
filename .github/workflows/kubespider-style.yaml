@@ -29,6 +29,24 @@ jobs:
         pip install typing-extensions
         pip install -r requirements.txt
 
+        cd downloaders
+        for downloader in $(ls)
+        do
+          cd ${downloader}
+          pip install -r requirements.txt
+          cd ..
+        done
+
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py') --max-line-length=240
+        ROOT=$(pwd)
+
+        pylint $(git ls-files '*.py' | grep -v "downloaders/") --max-line-length=240
+        
+        cd downloaders
+        for downloader in $(ls)
+        do
+          cd ${downloader}
+          pylint $(git ls-files '*.py') --max-line-length=240 --rcfile=${ROOT}/.pylintrc
+          cd ..
+        done

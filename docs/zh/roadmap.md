@@ -33,6 +33,7 @@ PS：如果你想做某个特性，请在repo issue中说明。
 * 增加API文档，便于其他人二次相关触发插件。
 * 利用异步队列处理，提升刷新接口性能。
 * 集成you-get（bilibili，文档）。
+* 集成yt-dlp（YouTube，文档）。
 * 支持bilibili source provider。
 
 ## v0.1.0版本特性(2023/01/30)

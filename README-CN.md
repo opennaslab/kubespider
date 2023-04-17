@@ -21,8 +21,8 @@
 为了实现一个通用的下载编排系统，需要适配各种资源网站和下载软件，所以将这两部分从核心功能中抽象出来：
 ![image](./docs/images/kubespider-architecture.png)
 * `kubespider-core`：Kubespider核心模块，接受触发下载请求，调用资源提供器provider解析（最终会解析为标准模式，如用户输入bilibili博主地址，对应资源提供器输出mp4文件地址下载列表），最后调用下载提供器provider实现下载；此模块同时也会周期调用providers(如追剧provider)，下载增加的资源。
-* `source-provider`：各资源网站的提供器，接受通用资源地址输入，输出为标准资源地址url，如输入为某个bilibili博主的个人主页，输出为博主视频的所有mp4下载地址。配置文件在`.config/source_provider.cfg`。
-* `download-provider`：各下载软件的提供器，接收`kubespider-core`的请求Task，调用对应的服务实现下载。配置文件在`.config/download_provider.cfg`。
+* `source-provider`：各资源网站的提供器，接受通用资源地址输入，输出为标准资源地址url，如输入为某个bilibili博主的个人主页，输出为博主视频的所有mp4下载地址。配置文件在`.config/source_provider.yaml`。
+* `download-provider`：各下载软件的提供器，接收`kubespider-core`的请求Task，调用对应的服务实现下载。配置文件在`.config/download_provider.yaml`。
 
 ## 💽 安装
 ### 前提
@@ -100,7 +100,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 | mikanani资源提供器  | 是     | 全自动动漫追番 | [link](./docs/zh/user_guide/mikanani_source_provider/README.md) |
 | btbtt12资源提供器 | 是 | 实现链接触发下载，简化下载流程 | [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) |
 | meijutt资源提供器 | 是 | 自动追美剧 | [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
-| YouTube资源提供器 | TBD | 触发下载YouTube视频 | TBD |
+| YouTube资源提供器 | 是 | 触发下载YouTube视频 | [link](./docs/zh/user_guide/youtube_source_provider/README.md) |
 | Bilibili资源提供器 | 是 | 触发下载Bilibili视频 | [link](./docs/zh/user_guide/bilibili_source_provider/README.md) |
 
 ### 下载提供器
@@ -111,6 +111,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 | 迅雷   |   是    | [link](./docs/zh/user_guide/thunder_install_config/README.md) |
 | qBittorrent | 是| [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) |
 | you-get  | 是     | [link](./docs/zh/user_guide/youget_download_provider/README.md)      |
+| yt-dlp   | 是   | [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
 
 ### 基本特性
 目前支持如下文件触发下载：

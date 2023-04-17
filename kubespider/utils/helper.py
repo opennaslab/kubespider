@@ -50,7 +50,7 @@ def load_yaml_config(cfg_path):
         return {}
 
     with open(cfg_path, 'r', encoding='utf-8') as config_file:
-        cfg = yaml.load(config_file)
+        cfg = yaml.safe_load(config_file)
         return cfg
 
 def dump_yaml_config(cfg_path, cfg):

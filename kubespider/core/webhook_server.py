@@ -64,7 +64,7 @@ def download_handler():
         err = download_trigger.kubespider_downloader.download_file(source, path, link_type)
 
     if match_one_provider is True:
-        if match_provider.get_provider_type() == types.SOURCE_PROVIDER_DISPOSABLE_TYPE:
+        if match_provider.get_provider_listen_type() == types.SOURCE_PROVIDER_DISPOSABLE_TYPE:
             err = download_links_with_provider(source, match_provider)
         else:
             match_provider.update_config(source)
