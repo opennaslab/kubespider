@@ -6,7 +6,7 @@ import source_provider.youtube_source_provider.provider as youtube_source_provid
 import source_provider.general_rss_source_provider.provider as general_rss_source_provider
 
 import download_provider.aria2_download_provider.provider as aria2_download_provider
-# import download_provider.xunlei_download_provider.provider as xunlei_download_provider
+import download_provider.xunlei_download_provider.provider as xunlei_download_provider
 import download_provider.qbittorrent_download_provider.provider as qbittorrent_download_provider
 import download_provider.youget_download_provider.provider as youget_download_provider
 
