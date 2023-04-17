@@ -7,7 +7,7 @@
 你已经安装好了Kubespider。
 
 ## 配置手册
-你可以通过`${HOME}/kubespider/.config/source_provider.cfg`配置，配置解释如下：
+你可以通过`${HOME}/kubespider/.config/source_provider.yaml`配置，配置解释如下：
 ```yaml
 mikanani_source_provider:
   type: mikanani_source_provider

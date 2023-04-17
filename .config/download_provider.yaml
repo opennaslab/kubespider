@@ -1,18 +1,24 @@
 ---
+yt-dlp:
+  type: ytdlp_download_provider
+  enable: false
+  http_endpoint_host: http://127.0.0.1
+  http_endpoint_port: 3082
+  priority: 0
 youget:
   type: youget_download_provider
   enable: false
   http_endpoint_host: http://127.0.0.1
-  http_endpoint_port: '3081'
-  priority: 0
+  http_endpoint_port: 3081
+  priority: 1
 aria2:
   type: aria2_download_provider
   enable: true
   download_base_path: "/downloads/"
   rpc_endpoint_host: http://127.0.0.1
-  rpc_endpoint_port: '6800'
+  rpc_endpoint_port: 6800
   secret: kubespider
-  priority: 1
+  priority: 2
 qbittorrent:
   type: qbittorrent_download_provider
   enable: false
@@ -22,7 +28,7 @@ qbittorrent:
   username: admin
   password: adminadmin
   verify_webui_certificate: false
-  priority: 2
+  priority: 3
   tags:
     - kubespider
 xunlei:
@@ -31,4 +37,4 @@ xunlei:
   token_js_path: "/root/.config/dependencies/xunlei_download_provider/get_token.js"
   http_endpoint: http://127.0.0.1:2345
   device_id: 5c78ea560a34ed4b4fbe6686da1172b4
-  priority: 3
+  priority: 4

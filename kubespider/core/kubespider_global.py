@@ -8,6 +8,7 @@ import download_provider.aria2_download_provider.provider as aria2_download_prov
 import download_provider.xunlei_download_provider.provider as xunlei_download_provider
 import download_provider.qbittorrent_download_provider.provider as qbittorrent_download_provider
 import download_provider.youget_download_provider.provider as youget_download_provider
+import download_provider.ytdlp_download_provider.provider as ytdlp_download_provider
 
 from utils import helper
 from utils.helper import Config
@@ -37,7 +38,8 @@ downloader_provider_init_func = {
     'aria2_download_provider': aria2_download_provider.Aria2DownloadProvider,
     'qbittorrent_download_provider': qbittorrent_download_provider.QbittorrentDownloadProvider,
     'xunlei_download_provider': xunlei_download_provider.XunleiDownloadProvider,
-    'youget_download_provider': youget_download_provider.YougetDownloadProvider
+    'youget_download_provider': youget_download_provider.YougetDownloadProvider,
+    'ytdlp_download_provider': ytdlp_download_provider.YTDlpDownloadProvider,
 }
 
 def get_download_provider(provider_name: str, config: dict):

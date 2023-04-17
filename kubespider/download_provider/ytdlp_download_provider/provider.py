@@ -6,12 +6,12 @@ import requests
 from download_provider import provider
 
 
-class YougetDownloadProvider(
+class YTDlpDownloadProvider(
         provider.DownloadProvider # pylint length
     ):
     def __init__(self, name: str) -> None:
         self.provider_name = name
-        self.provider_type = 'youget_download_provider'
+        self.provider_type = 'ytdlp_download_provider'
         self.http_endpoint_host = ''
         self.http_endpoint_port = 0
 
@@ -34,18 +34,18 @@ class YougetDownloadProvider(
         return {}
 
     def send_torrent_task(self, torrent_file_path: str, download_path: str, extra_param=None) -> TypeError:
-        return TypeError("youget doesn't support torrent task")
+        return TypeError("yt-dlp doesn't support torrent task")
 
     def send_magnet_task(self, url: str, path: str, extra_param=None) -> TypeError:
-        return TypeError("youget doesn't support magnet task")
+        return TypeError("yt-dlp doesn't support magnet task")
 
     def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
         headers = {'Content-Type': 'application/json'}
         data = {'dataSource': url, 'path': path}
         logging.info('Send general task:%s', json.dumps(data))
 
-        if not url.startswith('https://www.bilibili.com'):
-            return TypeError('you-get only support specific resource')
+        if not url.startswith('https://www.youtube.com/'):
+            return TypeError('yt-dlp only support specific resource')
 
         # This downloading tasks is special, other download software could not handle
         # So just return None

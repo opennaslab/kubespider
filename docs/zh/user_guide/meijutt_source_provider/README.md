@@ -12,7 +12,7 @@ meijutt有丰富的美剧内容，提供高质量下载资源。官方地址：[
 你已经安装好了Kubespider/Kubespider chrome插件
 
 ### 2.配置手册
-你可以通过`${HOME}/kubespider/.config/source_provider.cfg`配置，配置解释如下：
+你可以通过`${HOME}/kubespider/.config/source_provider.yaml`配置，配置解释如下：
 ```yaml
 meijutt_source_provider:
   type: meijutt_source_provider

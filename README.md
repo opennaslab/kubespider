@@ -20,8 +20,8 @@ Having been exposed to Terraform, I was impressed by its versatility and inspire
 To realize a general download orchestration system, it is necessary to adapt various resource websites and download software, so these two parts are abstracted from the core functions:
 ![image](./docs/images/kubespider-architecture.png)
 * `kubespider-core`: The core module of Kubespider accepts the trigger download request, calls the resource provider for resolution (it will eventually be resolved into a standard mode, such as the user enters the bilibili blogger address, and the corresponding resource provider outputs the mp4 file address download list), and finally calls the download provider to implement Download; this module will also periodically call providers (such as TV series provider) to download additional resources.
-* `source-provider`：The provider of each resource website accepts input of general resource addresses, and outputs standard resource address URLs, such as the personal homepage of a YouTuber, and outputs all mp4 download addresses of the blogger’s videos. The configuration file is in `.config/source_provider.cfg`.
-* `download-provider`：The provider of each download software receives the request task from `kubespider-core`, and calls the corresponding service to realize the download. The configuration file is in `.config/download_provider.cfg`.
+* `source-provider`：The provider of each resource website accepts input of general resource addresses, and outputs standard resource address URLs, such as the personal homepage of a YouTuber, and outputs all mp4 download addresses of the blogger’s videos. The configuration file is in `.config/source_provider.yaml`.
+* `download-provider`：The provider of each download software receives the request task from `kubespider-core`, and calls the corresponding service to realize the download. The configuration file is in `.config/download_provider.yaml`.
 
 ## 💽 Installation
 ### Premise
@@ -95,7 +95,7 @@ As metioned before, the source provider is used to adpot to different websites, 
 | mikanani source provider  | Yes     | Automatically download updated anime | [link](./docs/zh/user_guide/mikanani_source_provider/README.md) |
 | btbtt12 source provider | Yes | Trigger download resource in btbtt12 website | [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) |
 | meijutt source provider | Yes | Download updated TV series | [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
-| YouTube source provider | TBD | Trigger download YouTube video | TBD |
+| YouTube source provider | Yes | Trigger download YouTube video | [link](./docs/zh/user_guide/youtube_source_provider/README.md) |
 | Bilibili source provider | Yes | Trigger download bilibili video | [link](./docs/zh/user_guide/bilibili_source_provider/README.md) |
 
 ### Download provider
@@ -106,6 +106,7 @@ In order to make full use of the exisiting download software in the open source 
 | xunlei            | Yes     | [link](./docs/zh/user_guide/thunder_install_config/README.md) |
 | qBittorrent       | Yes     | [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) | 
 | you-get           | Yes     | [link](./docs/zh/user_guide/youget_download_provider/README.md)    |
+| yt-dlp            | Yes   | [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
 
 ### Basic feature  
 Currently, the following file types are supported to trigger downloading:
