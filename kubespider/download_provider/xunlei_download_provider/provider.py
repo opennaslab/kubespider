@@ -12,14 +12,18 @@ from download_provider import provider
 
 
 class XunleiDownloadProvider(provider.DownloadProvider):
-    def __init__(self) -> None:
-        self.provider_name = 'xunlei_download_provider'
+    def __init__(self, name: str) -> None:
+        self.provider_name = name
+        self.provider_type = 'xunlei_download_provider'
         self.http_endpoint = ''
         self.device_id = ''
         self.js_ctx = execjs.compile('')
 
     def get_provider_name(self) -> str:
         return self.provider_name
+
+    def get_provider_type(self) -> str:
+        return self.provider_type
 
     def provider_enabled(self) -> bool:
         cfg = provider.load_download_provider_config(self.provider_name)
@@ -33,7 +37,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         # if xunlei doesn't work, it means other tools couldn't, so just ignore it.
         return []
 
-    def send_torrent_task(self, torrent_file_path: str, download_path: str) -> TypeError:
+    def send_torrent_task(self, torrent_file_path: str, download_path: str, extra_param=None) -> TypeError:
         logging.info('Start torrent download:%s', torrent_file_path)
         token = self.get_pan_token()
         if token == "":
@@ -42,7 +46,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         file_info = self.list_files(token, magnet_url)
         return self.send_task(token, file_info, magnet_url, download_path)
 
-    def send_magnet_task(self, url: str, path: str) -> TypeError:
+    def send_magnet_task(self, url: str, path: str, extra_param=None) -> TypeError:
         logging.info('Start magnet download:%s', url)
         token = self.get_pan_token()
         if token == "":
@@ -50,7 +54,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         file_info = self.list_files(token, url)
         return self.send_task(token, file_info, url, path)
 
-    def send_general_task(self, url: str, path: str) -> TypeError:
+    def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
         logging.info('Start general file download:%s', url)
         token = self.get_pan_token()
         if token == "":

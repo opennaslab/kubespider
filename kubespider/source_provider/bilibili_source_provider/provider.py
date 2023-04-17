@@ -9,11 +9,12 @@ from api import types
 
 
 class BilibiliSourceProvider(provider.SourceProvider):
-    def __init__(self) -> None:
-        self.provider_type = types.SOURCE_PROVIDER_DISPOSABLE_TYPE
+    def __init__(self, name: str) -> None:
+        self.provider_listen_type = types.SOURCE_PROVIDER_DISPOSABLE_TYPE
         self.link_type = types.LINK_TYPE_GENERAL
         self.webhook_enable = True
-        self.provider_name = 'bilibili_source_provider'
+        self.provider_type = 'bilibili_source_provider'
+        self.provider_name = name
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -21,15 +22,26 @@ class BilibiliSourceProvider(provider.SourceProvider):
     def get_provider_type(self) -> str:
         return self.provider_type
 
-    def get_download_provider(self) -> str:
+    def get_provider_listen_type(self) -> str:
+        return self.provider_listen_type
+
+    def get_download_provider_type(self) -> str:
         return "youget_download_provider"
+
+    def get_prefer_download_provider(self) -> list:
+        cfg = provider.load_source_provide_config(self.provider_name)
+        return cfg.get('downloader')
+
+    def get_download_param(self) -> list:
+        cfg = provider.load_source_provide_config(self.provider_name)
+        return cfg.get('download_param')
 
     def get_link_type(self) -> str:
         return self.link_type
 
     def provider_enabled(self) -> bool:
         cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg['enable']
+        return cfg.get('enable', True)
 
     def is_webhook_enable(self) -> bool:
         return self.webhook_enable
