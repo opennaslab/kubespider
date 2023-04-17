@@ -11,8 +11,9 @@ from api import types
 class QbittorrentDownloadProvider(
         provider.DownloadProvider # pylint length
     ):
-    def __init__(self) -> None:
-        self.provider_name = 'qbittorrent_download_provider'
+    def __init__(self, name: str) -> None:
+        self.provider_name = name
+        self.provider_type = 'qbittorrent_download_provider'
         self.http_endpoint_host = ''
         self.http_endpoint_port = 0
         self.client = None
@@ -25,6 +26,9 @@ class QbittorrentDownloadProvider(
 
     def get_provider_name(self) -> str:
         return self.provider_name
+
+    def get_provider_type(self) -> str:
+        return self.provider_type
 
     def provider_enabled(self) -> bool:
         cfg = provider.load_download_provider_config(self.provider_name)
@@ -60,12 +64,19 @@ class QbittorrentDownloadProvider(
                     continue
         return defective_tasks
 
-    def send_torrent_task(self, torrent_file_path: str, download_path: str) -> TypeError:
+    def send_torrent_task(self, torrent_file_path: str, download_path: str, extra_param=None) -> TypeError:
         download_path = os.path.join(self.download_base_path, download_path)
         logging.info('Start torrent download:%s, path:%s', torrent_file_path, download_path)
+        tags = []
+        if extra_param is not None:
+            category = extra_param.get('category', self.download_category)
+            tags += extra_param.get('tags', [])
+        else:
+            category = self.download_category
+        tags += self.download_tags
         try:
-            logging.info('Create download task category:%s, tags:%s', self.download_category, self.download_tags)
-            ret = self.client.torrents_add(torrent_files=torrent_file_path, save_path=download_path, category=self.download_category, tags=self.download_tags)
+            logging.info('Create download task category:%s, tags:%s', category, tags)
+            ret = self.client.torrents_add(torrent_files=torrent_file_path, save_path=download_path, category=category, tags=tags)
             logging.info('Create download task results:%s', ret)
             return None
         except Exception as err:
@@ -73,12 +84,19 @@ class QbittorrentDownloadProvider(
             return err
         return None
 
-    def send_magnet_task(self, url: str, path: str) -> TypeError:
+    def send_magnet_task(self, url: str, path: str, extra_param=None) -> TypeError:
         logging.info('Start magent download:%s, path:%s', url, path)
         download_path = os.path.join(self.download_base_path, path)
+        tags = []
+        if extra_param is not None:
+            category = extra_param.get('category', self.download_category)
+            tags += extra_param.get('tags', [])
+        else:
+            category = self.download_category
+        tags += self.download_tags
         try:
-            logging.info('Create download task category:%s, tags:%s', self.download_category, self.download_tags)
-            ret = self.client.torrents_add(urls=url, save_path=download_path, category=self.download_category, tags=self.download_tags)
+            logging.info('Create download task category:%s, tags:%s', category, tags)
+            ret = self.client.torrents_add(urls=url, save_path=download_path, category=category, tags=tags)
             logging.info('Create download task results:%s', ret)
             return None
         except Exception as err:
@@ -86,7 +104,7 @@ class QbittorrentDownloadProvider(
             return err
         return None
 
-    def send_general_task(self, url: str, path: str) -> TypeError:
+    def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
         logging.warning('qbittorrent not support generatl task download! Please use aria2 or else download provider')
         return TypeError('qbittorrent not support generate task download')
 

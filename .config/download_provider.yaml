@@ -1,17 +1,20 @@
 ---
-youget_download_provider:
+youget:
+  type: youget_download_provider
   enable: false
   http_endpoint_host: http://127.0.0.1
   http_endpoint_port: '3081'
   priority: 0
-aria2_download_provider:
+aria2:
+  type: aria2_download_provider
   enable: true
   download_base_path: "/downloads/"
   rpc_endpoint_host: http://127.0.0.1
   rpc_endpoint_port: '6800'
   secret: kubespider
   priority: 1
-qbittorrent_download_provider:
+qbittorrent:
+  type: qbittorrent_download_provider
   enable: false
   download_base_path: "/downloads/"
   http_endpoint_host: http://127.0.0.1
@@ -20,7 +23,10 @@ qbittorrent_download_provider:
   password: adminadmin
   verify_webui_certificate: false
   priority: 2
-xunlei_download_provider:
+  tags:
+    - kubespider
+xunlei:
+  type: xunlei_download_provider
   enable: false
   token_js_path: "/root/.config/dependencies/xunlei_download_provider/get_token.js"
   http_endpoint: http://127.0.0.1:2345

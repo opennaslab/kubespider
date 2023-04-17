@@ -12,12 +12,13 @@ from utils import helper
 
 
 class MeijuttSourceProvider(provider.SourceProvider):
-    def __init__(self) -> None:
-        self.provider_type = types.SOURCE_PROVIDER_PERIOD_TYPE
+    def __init__(self, name: str) -> None:
+        self.provider_listen_type = types.SOURCE_PROVIDER_PERIOD_TYPE
         self.link_type = types.LINK_TYPE_MAGNET
         self.webhook_enable = True
-        self.provider_name = 'meijutt_source_provider'
+        self.provider_type = 'meijutt_source_provider'
         self.tv_links = []
+        self.provider_name = name
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -25,15 +26,26 @@ class MeijuttSourceProvider(provider.SourceProvider):
     def get_provider_type(self) -> str:
         return self.provider_type
 
-    def get_download_provider(self) -> str:
+    def get_provider_listen_type(self) -> str:
+        return self.provider_listen_type
+
+    def get_download_provider_type(self) -> str:
         return None
+
+    def get_prefer_download_provider(self) -> list:
+        cfg = provider.load_source_provide_config(self.provider_name)
+        return cfg.get('downloader')
+
+    def get_download_param(self) -> list:
+        cfg = provider.load_source_provide_config(self.provider_name)
+        return cfg.get('download_param')
 
     def get_link_type(self) -> str:
         return self.link_type
 
     def provider_enabled(self) -> bool:
         cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg['enable']
+        return cfg.get('enable', True)
 
     def is_webhook_enable(self) -> bool:
         return True
