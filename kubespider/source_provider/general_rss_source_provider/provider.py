@@ -7,13 +7,15 @@
 @time: 2023/4/12 19:45
 """
 
-from source_provider import provider
-import feedparser
 import logging
+import feedparser
 from api import types
-
+from source_provider import provider
 
 class GeneralRssSourceProvider(provider.SourceProvider):
+    """
+    Description: general rss source provider
+    """
     def __init__(self, name) -> None:
         """
         Description: init class of GeneralRssSourceProvider
@@ -83,13 +85,13 @@ class GeneralRssSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self) -> bool:
         return self.webhook_enable
 
-    def should_handle(self, dataSourceUrl) -> None:
+    def should_handle(self, data_source_url: str) -> None:
         pass
 
     def get_rss_link(self) -> str:
         return self.rss_link
 
-    def get_links(self, dataSourceUrl="") -> list:
+    def get_links(self, data_source_url: str) -> list:
         """
         Description: get rss resource link for download
         Args:
@@ -103,7 +105,7 @@ class GeneralRssSourceProvider(provider.SourceProvider):
 
         for entry in rss_oschina['entries']:
             if not entry['links']:
-                logging.warning("{}, No links were found to download yet ".format(entry['title']))
+                logging.warning("%s, No links were found to download yet ", entry['title'])
                 continue
             link_exist = False
             for link_info in entry['links']:
@@ -112,10 +114,10 @@ class GeneralRssSourceProvider(provider.SourceProvider):
                     links.append({"link": link_info["href"], "file_type": self.file_type, "path": "/"}, )
                     break
             if not link_exist:
-                logging.warning("{}, No magnetic links were found to download yet".format(entry['title']))
+                logging.warning("%s, No magnetic links were found to download yet", entry['title'])
         return links
 
-    def update_config(self, reqPara) -> None:
+    def update_config(self, req_para: str) -> None:
         pass
 
     def load_config(self) -> None:
@@ -123,7 +125,8 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         self.rss_name = cfg.get("rss_name")
         self.rss_link = cfg.get("rss_link")
         self.rss_tpye = cfg.get("rss_type")
-        self.file_type = cfg.get("flag") if cfg.get("flag") in types.file_type_to_path.keys() else types.FILE_TYPE_COMMON
+        self.file_type = cfg.get("flag") if cfg.get(
+            "flag") in types.file_type_to_path.keys() else types.FILE_TYPE_COMMON
         self.decs = cfg.get("decs")
         self.exec_time = cfg.get("exec_time")
         self.check_time = cfg.get("check_time")
