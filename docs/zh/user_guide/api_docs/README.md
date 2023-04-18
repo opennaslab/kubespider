@@ -15,7 +15,7 @@ API接口 GET /api/v1/downloadproviders
 true代表此download provider开启，反之则关闭。
 
 ## 获取所有资源提供器
-API接口 GET /api/v1/surceproviders
+API接口 GET /api/v1/sourceproviders
 
 响应内容:
 ```json
