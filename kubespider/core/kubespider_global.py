@@ -3,6 +3,7 @@ import source_provider.btbtt12_disposable_source_provider.provider as btbtt12_di
 import source_provider.meijutt_source_provider.provider as meijutt_source_provider
 import source_provider.bilibili_source_provider.provider as bilibili_source_provider
 import source_provider.youtube_source_provider.provider as youtube_source_provider
+import source_provider.general_rss_source_provider.provider as general_rss_source_provider
 
 import download_provider.aria2_download_provider.provider as aria2_download_provider
 import download_provider.xunlei_download_provider.provider as xunlei_download_provider
@@ -18,7 +19,8 @@ source_provider_init_func = {
     'btbtt12_disposable_source_provider': btbtt12_disposable_source_provider.Btbtt12DisposableSourceProvider,
     'meijutt_source_provider': meijutt_source_provider.MeijuttSourceProvider,
     'mikanani_source_provider': mikanani_source_provider.MikananiSourceProvider,
-    'youtube_source_provider': youtube_source_provider.YouTubeSourceProvider
+    'youtube_source_provider': youtube_source_provider.YouTubeSourceProvider,
+    'general_rss_source_provider': general_rss_source_provider.GeneralRssSourceProvider
 }
 
 def get_source_provider(provider_name: str, config: dict):
