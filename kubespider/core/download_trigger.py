@@ -54,7 +54,10 @@ class KubespiderDownloader:
 
     def download_file(self, url, path, link_type, source_provider: sp.SourceProvider=None) -> TypeError:
         downloader_list = self.filter_downloader(source_provider)
-        extra_param = source_provider.get_download_param()
+        extra_param = None
+        if source_provider is not None:
+            extra_param = source_provider.get_download_param()
+
         logging.info('download link type %s, with provider size %s', link_type, len(downloader_list))
         if len(downloader_list) == 0:
             logging.error('Downloader for %s not found, check your configuration!!!', source_provider.get_provider_name())
