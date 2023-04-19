@@ -2,7 +2,7 @@
 ## 简介
 Transmission 是 Linux 下的一款 BitTorrent 下载软件。 比其他客户端使用更少的资源, 比较适合保种使用。
 ## 最终效果
-![使用界面](./images/final_show.png)
+![使用界面](./images/final_show.gif)
 
 ## 安装
 ### 1. 安装Transmission

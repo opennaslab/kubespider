@@ -47,7 +47,7 @@ class TransmissionProvider(
         try:
             self.client.add_torrent(torrent=torrent_file_path, download_dir=download_path)
         except Exception as err:
-            logging.error('transmission torrent download err:%s', err)
+            logging.error('Transmission torrent download err:%s', err)
             return err
         return None
 
@@ -57,13 +57,13 @@ class TransmissionProvider(
         try:
             self.client.add_torrent(torrent=url, download_dir=download_path)
         except Exception as err:
-            logging.error('transmission magnet download err:%s', err)
+            logging.error('Transmission magnet download err:%s', err)
             return err
         return None
 
     def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
-        logging.warning('transmission not support general task download! Please use aria2 or else download provider')
-        return TypeError('transmission not support general task download')
+        logging.warning('Transmission not support general task download! Please use aria2 or else download provider')
+        return TypeError('Transmission not support general task download')
 
     def load_config(self) -> TypeError:
         cfg = provider.load_download_provider_config(self.provider_name)
