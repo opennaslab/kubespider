@@ -10,6 +10,7 @@ import download_provider.xunlei_download_provider.provider as xunlei_download_pr
 import download_provider.qbittorrent_download_provider.provider as qbittorrent_download_provider
 import download_provider.youget_download_provider.provider as youget_download_provider
 import download_provider.ytdlp_download_provider.provider as ytdlp_download_provider
+import download_provider.transmission_download_provider.provider as transmission_download_provider
 
 from utils import helper
 from utils.helper import Config
@@ -42,6 +43,7 @@ downloader_provider_init_func = {
     'xunlei_download_provider': xunlei_download_provider.XunleiDownloadProvider,
     'youget_download_provider': youget_download_provider.YougetDownloadProvider,
     'ytdlp_download_provider': ytdlp_download_provider.YTDlpDownloadProvider,
+    'transmission_download_provider': transmission_download_provider.TransmissionProvider,
 }
 
 def get_download_provider(provider_name: str, config: dict):
