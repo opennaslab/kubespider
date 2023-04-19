@@ -1,9 +1,9 @@
 import logging
 import os
 
+from urllib.parse import urlparse
 from download_provider import provider
 from transmission_rpc import Client
-from urllib.parse import urlparse
 
 
 class TransmissionProvider(
@@ -54,9 +54,9 @@ class TransmissionProvider(
             return err
         return None
 
-    def send_magnet_task(self, url: str, download_path: str, extra_param=None) -> TypeError:
-        logging.info('Start magnet download:%s, path:%s', url, download_path)
-        download_path = os.path.join(self.download_base_path, download_path)
+    def send_magnet_task(self, url: str, path: str, extra_param=None) -> TypeError:
+        logging.info('Start magnet download:%s, path:%s', url, path)
+        download_path = os.path.join(self.download_base_path, path)
         try:
             self.client.add_torrent(torrent=url, download_dir=download_path)
         except Exception as err:
@@ -85,4 +85,3 @@ class TransmissionProvider(
             username=self.username,
             password=self.password,
         )
-        return None
