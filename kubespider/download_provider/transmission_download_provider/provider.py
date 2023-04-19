@@ -12,10 +12,7 @@ class TransmissionProvider(
     def __init__(self, name: str) -> None:
         self.provider_name = name
         self.provider_type = 'transmission_download_provider'
-        self.http_endpoint = ''
         self.client = None
-        self.username = ''
-        self.password = ''
         self.download_base_path = ''
 
     def get_provider_name(self) -> str:
@@ -70,18 +67,18 @@ class TransmissionProvider(
 
     def load_config(self) -> TypeError:
         cfg = provider.load_download_provider_config(self.provider_name)
-        self.http_endpoint = cfg['http_endpoint']
         self.download_base_path = cfg['download_base_path']
-        self.username = cfg['username']
-        self.password = cfg['password']
+        http_endpoint = cfg['http_endpoint']
+        username = cfg['username']
+        password = cfg['password']
 
-        parse_result = urlparse(self.http_endpoint)
+        parse_result = urlparse(http_endpoint)
 
         self.client = Client(
             protocol=parse_result.scheme,
             host=parse_result.hostname,
             port=parse_result.port,
             path=parse_result.path,
-            username=self.username,
-            password=self.password,
+            username=username,
+            password=password,
         )

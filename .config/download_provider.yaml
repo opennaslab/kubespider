@@ -40,7 +40,7 @@ xunlei:
   priority: 4
 transmission:
   type: transmission_download_provider
-  enable: false,
+  enable: false
   download_base_path: "/downloads/"
   http_endpoint: http://127.0.0.1:9091/transmission/rpc
   username: admin
