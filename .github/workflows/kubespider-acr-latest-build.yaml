@@ -4,14 +4,12 @@
 name: Kubespider latest image build for ACR
 
 on:
-  pull_request:
-    branches: [ 'main', 'release-*' ]
-    types:
-      - closed
+  push:
+    branches:
+      - main
 
 jobs:
   build:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
