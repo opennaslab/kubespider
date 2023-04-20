@@ -112,6 +112,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 | qBittorrent | 是| [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) |
 | you-get  | 是     | [link](./docs/zh/user_guide/youget_download_provider/README.md)      |
 | yt-dlp   | 是   | [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
+| transmission | 是   | [link](./docs/zh/user_guide/transmission_download_provider/README.md) |
 
 ### 基本特性
 目前支持如下文件触发下载：

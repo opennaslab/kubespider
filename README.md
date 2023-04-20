@@ -106,7 +106,9 @@ In order to make full use of the exisiting download software in the open source 
 | xunlei            | Yes     | [link](./docs/zh/user_guide/thunder_install_config/README.md) |
 | qBittorrent       | Yes     | [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) | 
 | you-get           | Yes     | [link](./docs/zh/user_guide/youget_download_provider/README.md)    |
-| yt-dlp            | Yes   | [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
+| yt-dlp            | Yes     | [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
+| transmission      | Yes     | [link](./docs/zh/user_guide/transmission_download_provider/README.md) |
+
 
 ### Basic feature  
 Currently, the following file types are supported to trigger downloading:
