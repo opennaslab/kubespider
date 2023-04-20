@@ -8,3 +8,4 @@ qbittorrent-api==2023.2.43
 flask==2.2.3
 pyyaml==5.4
 feedparser==6.0.10
+transmission-rpc==4.2.0
