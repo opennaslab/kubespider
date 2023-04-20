@@ -100,7 +100,7 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         """
         links = []
         rss_oschina = feedparser.parse(self.rss_link)
-        if rss_oschina.get('entries'):
+        if not rss_oschina.get('entries'):
             logging.warning("sorry, Not found source, please check the url of rsshub")
 
         for entry in rss_oschina['entries']:
