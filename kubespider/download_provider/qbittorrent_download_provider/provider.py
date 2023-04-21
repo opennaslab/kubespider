@@ -117,7 +117,7 @@ class QbittorrentDownloadProvider(
         self.username = cfg['username']
         self.password = cfg['password']
         self.verify_webui_certificate = cfg['verify_webui_certificate']
-        self.download_tags = cfg.get('tags')
+        self.download_tags = cfg.get('tags', [])
         self.download_category = cfg.get('category')
         self.client = qbittorrentapi.Client(
             self.http_endpoint_host,
