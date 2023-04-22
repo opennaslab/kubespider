@@ -1,6 +1,5 @@
 import logging
 import time
-from urllib import request
 
 from utils import helper
 from api import types
@@ -77,9 +76,7 @@ class KubespiderDownloader:
     def handle_torrent_download(self, url, path, downloader_list: list, extra_param=None) -> TypeError:
         tmp_file = helper.get_tmp_file_name(url)
 
-        headers = ("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE")
-        req = request.build_opener()
-        req.addheaders = [headers]
+        req = helper.get_request_controller()
         try:
             torrent_data = req.open(url, timeout=10).read()
         except Exception as err:

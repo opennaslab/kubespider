@@ -5,12 +5,16 @@ import logging
 import threading
 from enum import Enum
 
+import urllib
+from urllib import request
 import yaml
+
 from api import types
 
 class Config(str, Enum):
     SOURCE_PROVIDER = 'source_provider.yaml'
     DOWNLOAD_PROVIDER = 'download_provider.yaml'
+    KUBESPIDER_CONFIG = 'kubespider.yaml'
     STATE = 'state.yaml'
 
     def __str__(self) -> str:
@@ -67,3 +71,25 @@ def format_long_string(longstr: str) -> str:
     if len(longstr) > 40:
         return longstr[:40] + '...'
     return longstr
+
+def get_proxy() -> str:
+    cfg = load_config(Config.KUBESPIDER_CONFIG)
+    if cfg is not None:
+        return cfg.get('proxy', None)
+    return None
+
+def get_request_controller() -> request.OpenerDirector:
+    proxy_addr = get_proxy()
+
+    proxy_handler = None
+    handler: request.OpenerDirector = None
+    if proxy_addr is not None:
+        logging.info('Kubespider uses proxy:%s', proxy_addr)
+        proxy_handler = urllib.request.ProxyHandler({'http': proxy_addr, 'https': proxy_addr})
+        handler = request.build_opener(proxy_handler)
+    else:
+        handler = request.build_opener()
+
+    headers = ("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE")
+    handler.addheaders = [headers]
+    return handler
