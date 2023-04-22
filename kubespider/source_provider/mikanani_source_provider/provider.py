@@ -4,7 +4,6 @@
 import logging
 
 import xml.etree.ElementTree as ET
-import requests
 from bs4 import BeautifulSoup
 
 from source_provider import provider
@@ -57,13 +56,14 @@ class MikananiSourceProvider(provider.SourceProvider):
 
     def get_links(self, data_source_url: str) -> dict:
         try:
-            req = requests.get(self.rss_link, timeout=30)
+            req = helper.get_request_controller()
+            links_data = req.open(self.rss_link, timeout=30).read()
         except Exception as err:
             logging.info('mikanani get links error:%s', err)
             return []
         tmp_xml = helper.get_tmp_file_name('') + '.xml'
         with open(tmp_xml, 'wb') as cfg_file:
-            cfg_file.write(req.content)
+            cfg_file.write(links_data)
             cfg_file.close()
 
         try:
@@ -92,11 +92,12 @@ class MikananiSourceProvider(provider.SourceProvider):
     def get_file_title(self, link: str) -> str:
         # example: https://mikanani.me/Home/Episode/5350b283db7d8e4665a08dda24d0d0c66259fc71
         try:
-            req = requests.get(link, timeout=30)
+            req = helper.get_request_controller()
+            data = req.open(link, timeout=30).read()
         except Exception as err:
             logging.info('mikanani get anime title error:%s', err)
             return ""
-        dom = BeautifulSoup(req.content, 'html.parser')
+        dom = BeautifulSoup(data, 'html.parser')
         titles = dom.find_all('a', ['class', 'w-other-c'])
         if len(titles) == 0:
             logging.error('mikanani get anime title empty:%s', link)
