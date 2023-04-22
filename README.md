@@ -97,6 +97,7 @@ As metioned before, the source provider is used to adpot to different websites, 
 | meijutt source provider | Yes | Download updated TV series | [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
 | YouTube source provider | Yes | Trigger download YouTube video | [link](./docs/zh/user_guide/youtube_source_provider/README.md) |
 | Bilibili source provider | Yes | Trigger download bilibili video | [link](./docs/zh/user_guide/bilibili_source_provider/README.md) |
+| general rss source provider | Yes | Automatically download source of rss | [link](./docs/zh/user_guide/general_rss_source_provider/README.md) |
 
 ### Download provider
 In order to make full use of the exisiting download software in the open source community(For example, YouTube hasdedicated download software), the following software is current supported:
