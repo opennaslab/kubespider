@@ -45,7 +45,7 @@ docker run -d \
     ${image_registry}/aria2-pro:latest
 
 # 6.Deploy kubespider
-export KUBESPIDER_DEFAULT_VERSION="latest"
+export KUBESPIDER_DEFAULT_VERSION="v0.2.0"
 if [[ ${KUBESPIDER_VERSION} == "" ]]; then
     export KUBESPIDER_VERSION=${KUBESPIDER_DEFAULT_VERSION}
 fi
