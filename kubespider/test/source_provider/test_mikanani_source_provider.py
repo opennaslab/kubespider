@@ -1,12 +1,8 @@
 import unittest
 import logging
 import re
-import sys
-import os
 
 from source_provider.mikanani_source_provider.provider import MikananiSourceProvider
-
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../../../kubespider")
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s-%(levelname)s: %(message)s')
 class MikkananiSouirceProviderTest(unittest.TestCase):
