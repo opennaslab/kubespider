@@ -4,6 +4,7 @@ import hashlib
 import logging
 import threading
 from enum import Enum
+from urllib.parse import urlparse
 
 import urllib
 from urllib import request
@@ -93,3 +94,13 @@ def get_request_controller() -> request.OpenerDirector:
     headers = ("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE")
     handler.addheaders = [headers]
     return handler
+
+
+def get_link_type(url):
+    if url.startswith('magnet:'):
+        return types.LINK_TYPE_MAGNET
+    if urlparse(url).path.endswith('torrent'):
+        return types.LINK_TYPE_TORRENT
+
+    # TODO: implement other type, like music mv or short video
+    return types.LINK_TYPE_GENERAL

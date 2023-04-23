@@ -1,6 +1,5 @@
 import logging
 import json
-from urllib.parse import urlparse
 
 from flask import Flask,jsonify,request
 
@@ -57,7 +56,7 @@ def download_handler():
 
     err = None
     if match_one_provider is False:
-        link_type = get_link_type(source)
+        link_type = helper.get_link_type(source)
         # If we not match the source provider, just download to common path
         # TODO: implement a better classification if no source provider match
         path = helper.convert_file_type_to_path(types.FILE_TYPE_COMMON) + '/' + path
@@ -92,15 +91,6 @@ def download_links_with_provider(source: str, source_provider: sp.SourceProvider
         if err is not None:
             return err
     return None
-
-def get_link_type(url):
-    if url.startswith('magnet:'):
-        return types.LINK_TYPE_MAGNET
-    if urlparse(url).path.endswith('torrent'):
-        return types.LINK_TYPE_TORRENT
-
-    # TODO: implement other type, like music mv or short video
-    return types.LINK_TYPE_GENERAL
 
 def send_ok_response():
     resp = jsonify('OK')

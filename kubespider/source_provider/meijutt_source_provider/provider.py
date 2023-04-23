@@ -72,6 +72,9 @@ class MeijuttSourceProvider(provider.SourceProvider):
             links = div[0].find_all('input', ['class', 'down_url'])
             for link in links:
                 url = link.get('value')
+                link_type = helper.get_link_type(url)
+                if link_type != self.link_type:
+                    continue
                 logging.info('meijutt find %s', helper.format_long_string(url))
                 ret.append({'path': tv_link['tv_name'], 'link': url, 'file_type': types.FILE_TYPE_VIDEO_TV})
         return ret
