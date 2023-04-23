@@ -3,7 +3,9 @@ import uuid
 import hashlib
 import logging
 import threading
+import cgi
 from enum import Enum
+from urllib.parse import urlparse
 
 import urllib
 from urllib import request
@@ -93,3 +95,24 @@ def get_request_controller() -> request.OpenerDirector:
     headers = ("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE")
     handler.addheaders = [headers]
     return handler
+
+
+def get_link_type(url):
+    if url.startswith('magnet:'):
+        return types.LINK_TYPE_MAGNET
+    if urlparse(url).path.endswith('torrent'):
+        return types.LINK_TYPE_TORRENT
+    # rfc6266: guess link type
+    req = get_request_controller()
+    try:
+        resp = req.open(url, timeout=30)
+        if resp.code == 200 and resp.headers.get('content-disposition'):
+            content_disposition = resp.headers.get('content-disposition')
+            _, params = cgi.parse_header(content_disposition)
+            if params['filename'] and params['filename'].endswith('torrent'):
+                return types.LINK_TYPE_TORRENT
+    except Exception as err:
+        logging.warning('Rfc6266 get link type error:%s', err)
+
+    # TODO: implement other type, like music mv or short video
+    return types.LINK_TYPE_GENERAL
