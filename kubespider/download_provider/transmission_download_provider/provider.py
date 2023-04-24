@@ -45,8 +45,8 @@ class TransmissionProvider(
         logging.info('Start torrent download:%s, path:%s', torrent_file_path, download_path)
         download_path = os.path.join(self.download_base_path, download_path)
         try:
-            with open(torrent_file_path, 'rb') as f:
-                self.client.add_torrent(torrent=f.read(), download_dir=download_path)
+            with open(torrent_file_path, 'rb') as torrent_file:
+                self.client.add_torrent(torrent=torrent_file.read(), download_dir=download_path)
         except Exception as err:
             logging.error('Transmission torrent download err:%s', err)
             return err
