@@ -1,0 +1,34 @@
+name: Kubespider unittest
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run unit tests with coverage
+      working-directory: kubespider
+      run: |
+        coverage run -m unittest discover
+
+    - name: Generate code coverage report
+      working-directory: kubespider
+      run: |
+        coverage report -m
