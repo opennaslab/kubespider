@@ -34,7 +34,7 @@ mikanani_source_provider:
    ![img](./images/mikanani_source_provider_cfg_3.jpg)
 * `downloader`：指定使用的下载器，格式为数组，内容需要精确地跟 `downloader_provider.yaml` 中声明的名称一样；下载优先级将由数组顺序决定。
 * `download_param`：下载时传给下载器的额外参数，具体参数需要参考下载器定义。
-* `filter`：用于过滤标题名的正则表达式
+* `filter`：用于过滤标题名的正则表达式。
 
 ## 启用配置
 设置好后，直接重启Kubespider即可。
