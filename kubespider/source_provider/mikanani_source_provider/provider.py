@@ -4,6 +4,8 @@
 import logging
 
 import xml.etree.ElementTree as ET
+import re
+from re import Pattern
 from bs4 import BeautifulSoup
 
 from source_provider import provider
@@ -65,21 +67,52 @@ class MikananiSourceProvider(provider.SourceProvider):
         with open(tmp_xml, 'wb') as cfg_file:
             cfg_file.write(links_data)
             cfg_file.close()
+        pattern = self.load_filter_config()
+        return self.get_links_from_xml(tmp_xml, pattern)
 
+    def get_links_from_xml(self, tmp_xml, pattern: str) -> dict:
+        if pattern is not None:
+            reg = re.compile(pattern)
+        else:
+            reg = None
         try:
             xml_parse = ET.parse(tmp_xml)
             items = xml_parse.findall('.//item')
             ret = []
             for i in items:
                 anime_name = i.find('./guid').text
-                title = self.get_file_title(i.find('./link').text)
+                path = self.get_anime_path(i)
+                item_title = self.get_anime_title(i, reg)
                 logging.info('mikanani find %s', helper.format_long_string(anime_name))
                 url = i.find('./enclosure').attrib['url']
-                ret.append({'path': title, 'link': url, 'file_type': types.FILE_TYPE_VIDEO_TV})
+                if path is not None and item_title is not None:
+                    ret.append({'path': path, 'link': url, 'file_type': types.FILE_TYPE_VIDEO_TV})
+                else:
+                    logging.warning("Skip %s, %s",anime_name, item_title)
             return ret
         except Exception as err:
             logging.info('parse rss xml error:%s', err)
             return []
+
+    def load_filter_config(self) -> str:
+        cfg = provider.load_source_provide_config(self.provider_name)
+        return cfg.get('filter')
+
+    def get_anime_path(self, element) -> str:
+        # get the path of anime source, or None for invalid item
+        return self.get_file_title(element.find('./link').text)
+
+    def get_anime_title(self, element, pattern: Pattern) -> str:
+        # get the episode name of anime source, or None for invalid item
+        title = element.find('./title').text
+        return self.check_anime_title(title, pattern)
+
+    def check_anime_title(self, title, pattern: Pattern) -> str:
+        logging.debug("Checking title %s with pattern %s", title, pattern)
+        if pattern is None or pattern.match(title):
+            return title
+        logging.warning("Episode %s will not be downloaded, filtered by %s", title, pattern)
+        return None
 
     def update_config(self, req_para: str) -> None:
         pass
