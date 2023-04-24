@@ -77,7 +77,7 @@ transmission:
 其中:
 
 * 名称，可自定义（不可重复），可以在 `source_provider.yaml` 中按名称指定下载器。
-* `type`: 表示此下载器的类型，需为 `qbittorrent_download_provider`。
+* `type`: 表示此下载器的类型，需为 `transmission_download_provider`。
 * `enable`: 设置是否使用此 provider，只能使用一个，后续开发优先级后可以多个一起使用。
 * `http_endpoint`: transmission 服务 rpc 地址。
 * `username`: 登录 transmission 的用户名，与 transmission 设置中保持一致。
