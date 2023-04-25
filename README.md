@@ -12,7 +12,7 @@
 
 
 English | [简体中文](./README-CN.md)  
-I am a Cloud Computing Engineer🤓, with a focus on Serverless, FinOps, and Runtime. In my spare time, I developed Kubespider to utilize an idle server in a local area network as a NAS, enabling automatic downloads of TV series, triggering downloads from a local laptop, and adapting to various websites such as YouTube and BiliBili, as well as different types of resources such as TV series, movies, and music.
+I am a Cloud Computing Engineer🤓, with a focus on Serverless, FinOps, and Runtime. In my spare time, I developed Kubespider to utilize an idle server in a local area network as a NAS, enabling automatic downloads of TV series, triggering downloads from a local laptop, and adapting to various websites such as YouTube and BiliBili, as well as different types of resources such as TV series, movies, music and more.
 
 Having been exposed to Terraform, I was impressed by its versatility and inspired to create Kubespider as a general download orchestration system that is compatible with various resource platforms and download software. Kubespider supports multiple download methods, including request trigger, cycle trigger, and update trigger, making it the most comprehensive and unified solution for resource downloads.
 
@@ -87,8 +87,15 @@ Then with aria2 chrome plugin, you can see the download task starts:
 * Install Jellyfin, watch videos on multiple platforms, [install now](./docs/zh/user_guide/jellyfin_install_config/README.md).
 * Install Baidu network disk(only in china), download in the background, [install now](TODO).
 
+## 📝 Configuration
+The global configuration file is located at `.config/kubespider.yaml`, which is installed under `${HOME}/kubespider/.config/kubespider.yaml`. The description of each configuration item is as follows:
+
+|  Configuration Item  | Required |                   Function |
+| :-------- | -----: | -------------------: |
+| `proxy` |      No | The request proxy, such as `http://192.168.1.5:1087` |
+
 ## 🔧 Feature list
-### Source provider  
+### Source provider(Configured as needed)  
 As metioned before, the source provider is used to adpot to different websites, and download related resources based on conditions:
 | Source Provider | Support | Purpose | Configuration |
 | :-------- | -----: | ---: | ------: |
@@ -99,7 +106,7 @@ As metioned before, the source provider is used to adpot to different websites, 
 | Bilibili source provider | Yes | Trigger download bilibili video | [link](./docs/zh/user_guide/bilibili_source_provider/README.md) |
 | general rss source provider | Yes | Automatically download rss source | [link](./docs/zh/user_guide/general_rss_source_provider/README.md) |
 
-### Download provider
+### Download provider(Configured as needed)  
 In order to make full use of the exisiting download software in the open source community(For example, YouTube hasdedicated download software), the following software is current supported:
 | Download Software | Support | Configuration |
 | :---------------- | ------: | ------------: |
@@ -130,7 +137,7 @@ If you are interested in participating in joint development, welcome to STAR/FOR
 * For how to develop chrome extension webhook, please see [link](./docs/zh/contribute/develop_chrome_extension.md).
 * For how to implement other webhook trigger tools, please see [link](./docs/zh/user_guide/api_docs/README.md).
 
-## 📝 Disclaimer
+## 📃 Disclaimer
 All downloading and use of the software are deemed to have carefully read and fully agreed to the following terms:
 * The software is only for personal learning and communication, and it is strictly prohibited for commercial and bad purposes.
 * If any commercial behavior and bad use are found, the software author has the right to revoke the right to use.
