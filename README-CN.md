@@ -92,8 +92,14 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 * 安装Jellyfin，多平台观看视频，[立即安装](./docs/zh/user_guide/jellyfin_install_config/README.md)。
 * 安装百度网盘，后台下载，[立即安装](TODO)。
 
+## 📝 配置
+全局配置文件在`.config/kubespider.yaml`，安装后位于`${HOME}/kubespider/.config/kubespider.yaml`，各配置项解释如下：  
+|  配置项  | 是否必配 |                   功能 |
+| :-------- | -----: | -------------------: |
+| `proxy` |      否 | 请求代理，如`http://192.168.1.5:1087` |
+
 ## 🔧 特性列表
-### 资源提供器
+### 资源提供器(按需配置)
 如前面所述，资源提供器用于对接各种资源网站，条件触发下载相关资源：
 | 资源提供器 | 是否支持 | 用途 | 配置手册 |
 | :-------- | -----: | ---: | ------: |
@@ -104,7 +110,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 | Bilibili资源提供器 | 是 | 触发下载Bilibili视频 | [link](./docs/zh/user_guide/bilibili_source_provider/README.md) |
 | 通用rss资源提供器 | 是 | 自动下载rss订阅资源 | [link](./docs/zh/user_guide/general_rss_source_provider/README.md) |
 
-### 下载提供器
+### 下载提供器(按需配置)
 为了充分利用开源社区已有的下载软件(如YouTube有专门的下载软件)，目前支持如下下载软件：
 | 下载软件 | 是否支持 | 配置手册 |
 | :---- | ------: | -----: |
@@ -134,7 +140,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 * 如何开发调试chrome插件webhook，请看 [link](./docs/zh/contribute/develop_chrome_extension.md)。
 * 如何开发其他webhook触发工具, 请看 [link](./docs/zh/user_guide/api_docs/README.md)。
 
-## 📝 免责声明
+## 📃 免责声明
 一切下载及使用软件时均被视为已经仔细阅读并完全同意以下条款：
 * 软件仅供个人学习与交流使用，严禁用于商业以及不良用途。
 * 如有发现任何商业行为以及不良用途，软件作者有权撤销使用权。
