@@ -6,12 +6,17 @@ chrome.runtime.onInstalled.addListener(function() {
     });
 });
 
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+
 function handleRequestSend(link, tab, server) {
-    var dataSource = tab.url
+    var dataSource = tab.url;
     if (link != null) {
         dataSource = link;
     }
 
+    chrome.action.setBadgeText({text: 'GO'});
     var data = {"dataSource": dataSource, "path": ""};
     fetch(server + '/api/v1/download', {
         method: 'POST',
@@ -22,10 +27,23 @@ function handleRequestSend(link, tab, server) {
         body: JSON.stringify(data),
     })
     .then(response => {
-        response.status == 200 ? console.log("Download OK") : console.log("Download error");
+        if (response.status = 200) {
+            chrome.action.setBadgeText({text: 'OK'});
+            sleep(9000).then(() => {
+                chrome.action.setBadgeText({text: ''});
+            });
+        } else {
+            chrome.action.setBadgeText({text: 'FAIL'});
+            sleep(9000).then(() => {
+                chrome.action.setBadgeText({text: ''});
+            });
+        }
     })
     .catch(error => {
-        console.log("Download error");
+        chrome.action.setBadgeText({text: 'FAIL'});
+        sleep(9000).then(() => {
+            chrome.action.setBadgeText({text: ''});
+        });
     })
 }
 
