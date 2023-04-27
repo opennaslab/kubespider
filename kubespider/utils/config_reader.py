@@ -1,5 +1,7 @@
 import threading
 import yaml
+import os
+import os
 from abc import ABC, abstractmethod
 
 class AbsConfigReader(ABC):
@@ -23,10 +25,20 @@ class AbsConfigReader(ABC):
         pass
 
 class FileConfigReader(AbsConfigReader):
+    """
+    Basic definition of file config loader
+    """
+    """
+    Basic definition of file config loader
+    """
     def __init__(self, file_path: str):
         self.file_path = file_path
 
     def read_file(self) -> str:
+        if not os.path.exists(self.file_path):
+            return ''
+        if not os.path.exists(self.file_path):
+            return ''
         with open(self.file_path, 'r', encoding='utf-8') as f:
             return f.read()
         
@@ -38,7 +50,11 @@ file_locks = {}
 
 class YamlFileConfigReader(FileConfigReader):
     """
+    A config reader that reads from a single yaml file, 
+    or create one on first save call if not exists
     A config reader that reads from a single yaml file
+    A config reader that reads from a single yaml file, 
+    or create one on first save call if not exists
     """
     def __init__(self, file_path: str):
         super().__init__(file_path)
@@ -48,7 +64,10 @@ class YamlFileConfigReader(FileConfigReader):
     def read(self) -> dict:
         self.file_lock.acquire()
         try:
-            return self.read_data_from_file()
+            conf = self.read_data_from_file()
+            if conf == None:
+                conf = {}
+            return conf
         finally:
             self.file_lock.release()
 
@@ -69,7 +88,10 @@ class YamlFileConfigReader(FileConfigReader):
             self.file_lock.release()
     
     def read_data_from_file(self)-> dict:
-        return yaml.safe_load(self.read_file())
+        conf = yaml.safe_load(self.read_file())
+        if conf == None:
+            conf = {}
+        return conf
     
     def write_data_to_file(self, data: dict):
         self.write_file(yaml.dump(data))

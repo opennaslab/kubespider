@@ -14,7 +14,7 @@ import download_provider.transmission_download_provider.provider as transmission
 
 from utils import helper
 from utils.helper import Config
-from utils.config_reader import YamlFileSectionConfigReader
+from utils.config_reader import YamlFileSectionConfigReader, YamlFileConfigReader
 
 source_provider_init_func = {
     'bilibili_source_provider': bilibili_source_provider.BilibiliSourceProvider,
@@ -34,7 +34,7 @@ def get_source_provider(provider_name: str, config: dict):
 
 source_providers = []
 
-source_config = helper.load_config(Config.SOURCE_PROVIDER)
+source_config = YamlFileConfigReader(Config.SOURCE_PROVIDER.config_path()).read()
 for name in source_config:
     source_providers.append(get_source_provider(name, source_config[name]))
 
@@ -57,7 +57,7 @@ def get_download_provider(provider_name: str, config: dict):
 
 download_providers = []
 
-download_config = helper.load_config(Config.DOWNLOAD_PROVIDER)
+download_config = YamlFileConfigReader(Config.DOWNLOAD_PROVIDER.config_path()).read()
 for name in download_config:
     download_providers.append(get_download_provider(name, download_config[name]))
 

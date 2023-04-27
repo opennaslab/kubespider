@@ -6,6 +6,7 @@ import threading
 import cgi
 from enum import Enum
 from urllib.parse import urlparse
+from utils.config_reader import YamlFileConfigReader
 
 import urllib
 from urllib import request
@@ -46,13 +47,6 @@ def load_config(cfg_type: Config):
     finally:
         lock.release()
 
-def dump_config(cfg_type: Config, cfg):
-    lock = locks.get(cfg_type)
-    lock.acquire()
-    try:
-        dump_yaml_config(os.path.join(cfg_base_path, cfg_type), cfg)
-    finally:
-        lock.release()
 
 def load_yaml_config(cfg_path):
     if not os.path.exists(cfg_path):
@@ -77,8 +71,10 @@ def format_long_string(longstr: str) -> str:
         return longstr[:40] + '...'
     return longstr
 
+global_config = YamlFileConfigReader(Config.KUBESPIDER_CONFIG.config_path())
+
 def get_proxy() -> str:
-    cfg = load_config(Config.KUBESPIDER_CONFIG)
+    cfg = global_config.read()
     if cfg is not None:
         return cfg.get('proxy', None)
     return None
