@@ -1,7 +1,5 @@
 import abc
 
-from utils import helper
-from utils.helper import Config
 from utils.config_reader import AbsConfigReader
 
 
@@ -9,7 +7,6 @@ class SourceProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def __init__(self, config_reader: AbsConfigReader) -> None:
         self.config_reader = config_reader
-        pass
 
     @abc.abstractmethod
     def get_provider_name(self) -> str:

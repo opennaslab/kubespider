@@ -4,14 +4,12 @@ import hashlib
 import logging
 import threading
 import cgi
+import urllib
 from enum import Enum
 from urllib.parse import urlparse
-from utils.config_reader import YamlFileConfigReader
-
-import urllib
 from urllib import request
 import yaml
-
+from utils.config_reader import YamlFileConfigReader
 from api import types
 
 class Config(str, Enum):
@@ -22,7 +20,7 @@ class Config(str, Enum):
 
     def __str__(self) -> str:
         return str(self.value)
-    
+
     def config_path(self) -> str:
         return os.path.join(cfg_base_path, self)
 

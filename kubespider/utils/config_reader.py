@@ -1,8 +1,8 @@
 import threading
-import yaml
-import os
 import os
 from abc import ABC, abstractmethod
+
+import yaml
 
 class AbsConfigReader(ABC):
     """
@@ -15,19 +15,14 @@ class AbsConfigReader(ABC):
         Reads config from s specific store, like file or memory dict
         Each call of this function will read the latest data from the store
         """
-        pass
 
     @abstractmethod
     def save(self, new_data: dict):
         """
         Saves new data to the store
         """
-        pass
 
 class FileConfigReader(AbsConfigReader):
-    """
-    Basic definition of file config loader
-    """
     """
     Basic definition of file config loader
     """
@@ -39,12 +34,12 @@ class FileConfigReader(AbsConfigReader):
             return ''
         if not os.path.exists(self.file_path):
             return ''
-        with open(self.file_path, 'r', encoding='utf-8') as f:
-            return f.read()
-        
+        with open(self.file_path, 'r', encoding='utf-8') as file:
+            return file.read()
+
     def write_file(self, data_str: str):
-        with open(self.file_path, 'w', encoding='utf-8') as f:
-            f.write(data_str)
+        with open(self.file_path, 'w', encoding='utf-8') as file:
+            file.write(data_str)
 
 file_locks = {}
 
@@ -64,10 +59,7 @@ class YamlFileConfigReader(FileConfigReader):
     def read(self) -> dict:
         self.file_lock.acquire()
         try:
-            conf = self.read_data_from_file()
-            if conf == None:
-                conf = {}
-            return conf
+            return self.read_data_from_file()
         finally:
             self.file_lock.release()
 
@@ -86,13 +78,13 @@ class YamlFileConfigReader(FileConfigReader):
             self.write_data_to_file(data)
         finally:
             self.file_lock.release()
-    
+
     def read_data_from_file(self)-> dict:
         conf = yaml.safe_load(self.read_file())
-        if conf == None:
+        if conf is None:
             conf = {}
         return conf
-    
+
     def write_data_to_file(self, data: dict):
         self.write_file(yaml.dump(data))
 
@@ -106,6 +98,6 @@ class YamlFileSectionConfigReader(YamlFileConfigReader):
 
     def read(self) -> dict:
         return super().read()[self.section]
-    
+
     def save(self, new_data: dict):
         super().parcial_update(lambda data: data.update({self.section: new_data}))

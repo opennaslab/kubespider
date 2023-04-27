@@ -21,7 +21,7 @@ class MikkananiSouirceProviderTest(unittest.TestCase):
         with open(self.test_file, encoding="utf-8", mode= 'r') as test_file:
             lines = test_file.readlines()
         return list(filter(lambda p: p is not None, map(lambda p: self.provider.check_anime_title(p, pattern), lines)))
-    
+
     def test_read_config(self):
         downloader = self.provider.get_prefer_download_provider()
         self.assertEqual(downloader, 'test_downloader')
@@ -43,7 +43,7 @@ class MikkananiSouirceProviderTest(unittest.TestCase):
 class MemDictConfigReader(AbsConfigReader):
     def __init__(self,config: dict) -> None:
         self.config = config
-    
+
     def save(self, new_data: dict):
         self.config = new_data
 

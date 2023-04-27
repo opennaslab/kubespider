@@ -1,5 +1,4 @@
 import unittest
-import yaml
 import os
 from utils.config_reader import YamlFileConfigReader, YamlFileSectionConfigReader
 
@@ -7,26 +6,25 @@ class TestConfigReader(unittest.TestCase):
     def setUp(self):
         # create a simple yaml file for test
         self.test_file = "./test/utils/test_config.yaml"
-        with open(self.test_file, mode="r") as f:
-            self.default_content = f.read()
+        with open(self.test_file, mode="r", encoding="utf-8") as file:
+            self.default_content = file.read()
         os.mkdir("./test/tmp")
 
     def tearDown(self) -> None:
         # delete the test file
-        with open(self.test_file, mode="w") as f:
-            f.write(self.default_content)
+        with open(self.test_file, mode="w", encoding="utf-8") as file:
+            file.write(self.default_content)
         self.remove_files_and_dirs("./test/tmp")
         return super().tearDown()
 
     def remove_files_and_dirs(self, path):
         for root, dirs, files in os.walk(path, topdown=False):
-          for file in files:
-              os.remove(os.path.join(root, file))
-          for dir in dirs:
-              os.rmdir(os.path.join(root, dir))
+            for file in files:
+                os.remove(os.path.join(root, file))
+            for sub_dir in dirs:
+                os.rmdir(os.path.join(root, sub_dir))
         os.rmdir(path)
 
-    
     def test_yaml_file_reader(self):
         reader = YamlFileConfigReader(self.test_file)
         data = reader.read()
