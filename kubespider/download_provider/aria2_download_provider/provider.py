@@ -3,12 +3,14 @@ import os
 
 import aria2p
 
+from utils.config_reader import AbsConfigReader
 from download_provider import provider
 from api import types
 
 
 class Aria2DownloadProvider(provider.DownloadProvider):
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
+        super().__init__(name, config_reader)
         self.provider_name = name
         self.provider_type = 'aria2_download_provider'
         self.rpc_endpoint_host = ''
@@ -24,12 +26,10 @@ class Aria2DownloadProvider(provider.DownloadProvider):
         return self.provider_type
 
     def provider_enabled(self) -> bool:
-        cfg = provider.load_download_provider_config(self.provider_name)
-        return cfg['enable']
+        return self.config_reader.read()['enable']
 
     def provide_priority(self) -> int:
-        cfg = provider.load_download_provider_config(self.provider_name)
-        return cfg['priority']
+        return self.config_reader.read()['priority']
 
     def get_defective_task(self) -> dict:
         defective_tasks = []
@@ -94,7 +94,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
             return err
 
     def load_config(self) -> TypeError:
-        cfg = provider.load_download_provider_config(self.provider_name)
+        cfg = self.config_reader.read()
         self.rpc_endpoint_host = cfg['rpc_endpoint_host']
         self.rpc_endpoint_port = cfg['rpc_endpoint_port']
         self.download_base_path = cfg['download_base_path']

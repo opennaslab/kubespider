@@ -1,6 +1,7 @@
 import logging
 import os
 
+from utils.config_reader import AbsConfigReader
 from urllib.parse import urlparse
 from download_provider import provider
 from transmission_rpc import Client
@@ -9,7 +10,8 @@ from transmission_rpc import Client
 class TransmissionProvider(
     provider.DownloadProvider  # pylint length
 ):
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
+        super().__init__(name, config_reader)
         self.provider_name = name
         self.provider_type = 'transmission_download_provider'
         self.client = None
@@ -22,12 +24,10 @@ class TransmissionProvider(
         return self.provider_type
 
     def provider_enabled(self) -> bool:
-        cfg = provider.load_download_provider_config(self.provider_name)
-        return cfg['enable']
+        return self.config_reader.read()['enable']
 
     def provide_priority(self) -> int:
-        cfg = provider.load_download_provider_config(self.provider_name)
-        return cfg['priority']
+        return self.config_reader.read()['priority']
 
     def get_defective_task(self) -> dict:
         # Note: The definition of transmission state does not match this method, returning an empty list temporarily.
@@ -67,7 +67,7 @@ class TransmissionProvider(
         return TypeError('Transmission not support general task download')
 
     def load_config(self) -> TypeError:
-        cfg = provider.load_download_provider_config(self.provider_name)
+        cfg = self.config_reader.read()
         self.download_base_path = cfg['download_base_path']
         http_endpoint = cfg['http_endpoint']
         username = cfg['username']

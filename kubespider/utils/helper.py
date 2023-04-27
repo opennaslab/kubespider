@@ -21,6 +21,9 @@ class Config(str, Enum):
 
     def __str__(self) -> str:
         return str(self.value)
+    
+    def config_path(self) -> str:
+        return os.path.join(cfg_base_path, self)
 
 locks = { i.value: threading.Lock() for i in Config }
 cfg_base_path = config_path = os.path.join(os.getenv('HOME'), '.config/')

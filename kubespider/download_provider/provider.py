@@ -1,12 +1,14 @@
 import abc
 
+from utils.config_reader import AbsConfigReader
 from utils import helper
 from utils.helper import Config
 
 
 class DownloadProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
+        self.config_reader = config_reader
         pass
 
     @abc.abstractmethod
@@ -49,8 +51,3 @@ class DownloadProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def load_config(self) -> TypeError:
         pass
-
-
-def load_download_provider_config(provider_name: str) -> dict:
-    cfg = helper.load_config(Config.DOWNLOAD_PROVIDER)
-    return cfg[provider_name]

@@ -11,10 +11,12 @@ from bs4 import BeautifulSoup
 from source_provider import provider
 from api import types
 from utils import helper
+from utils.config_reader import AbsConfigReader
 
 
 class MikananiSourceProvider(provider.SourceProvider):
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
+        super().__init__(config_reader)
         self.provider_listen_type = types.SOURCE_PROVIDER_PERIOD_TYPE
         self.link_type = types.LINK_TYPE_TORRENT
         self.webhook_enable = False
@@ -36,19 +38,16 @@ class MikananiSourceProvider(provider.SourceProvider):
         return None
 
     def get_prefer_download_provider(self) -> list:
-        cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg.get('downloader')
+        return self.config_reader.read().get('downloader')
 
     def get_download_param(self) -> list:
-        cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg.get('download_param')
+        return self.config_reader.read().get('download_param')
 
     def get_link_type(self) -> str:
         return self.link_type
 
     def provider_enabled(self) -> bool:
-        cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg.get('enable', True)
+        return self.config_reader.read().get('enable', True)
 
     def is_webhook_enable(self) -> bool:
         return self.webhook_enable
@@ -95,8 +94,7 @@ class MikananiSourceProvider(provider.SourceProvider):
             return []
 
     def load_filter_config(self) -> str:
-        cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg.get('filter')
+        return self.config_reader.read().get('filter')
 
     def get_anime_path(self, element) -> str:
         # get the path of anime source, or None for invalid item
@@ -118,7 +116,7 @@ class MikananiSourceProvider(provider.SourceProvider):
         pass
 
     def load_config(self) -> None:
-        cfg = provider.load_source_provide_config(self.provider_name)
+        cfg = self.config_reader.read()
         logging.info('mikanani rss link is:%s', cfg['rss_link'])
         self.rss_link = cfg['rss_link']
 

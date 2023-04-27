@@ -8,11 +8,13 @@ import requests
 import execjs
 import libtorrent as lb
 
+from utils.config_reader import AbsConfigReader
 from download_provider import provider
 
 
 class XunleiDownloadProvider(provider.DownloadProvider):
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
+        super().__init__(name, config_reader)
         self.provider_name = name
         self.provider_type = 'xunlei_download_provider'
         self.http_endpoint = ''
@@ -26,12 +28,10 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         return self.provider_type
 
     def provider_enabled(self) -> bool:
-        cfg = provider.load_download_provider_config(self.provider_name)
-        return cfg['enable']
+        return self.config_reader.read()['enable']
 
     def provide_priority(self) -> int:
-        cfg = provider.load_download_provider_config(self.provider_name)
-        return cfg['priority']
+        return self.config_reader.read()['priority']
 
     def get_defective_task(self) -> dict:
         # if xunlei doesn't work, it means other tools couldn't, so just ignore it.
@@ -63,7 +63,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         return self.send_task(token, file_info, url, path)
 
     def load_config(self) -> TypeError:
-        cfg = provider.load_download_provider_config(self.provider_name)
+        cfg = self.config_reader.read()
         self.http_endpoint = cfg['http_endpoint']
         token_js_path = cfg['token_js_path']
         with open(token_js_path, 'r', encoding='utf-8') as js_file:

@@ -9,10 +9,13 @@ from bs4 import BeautifulSoup
 from api import types
 from source_provider import provider
 from utils import helper
+from utils.config_reader import AbsConfigReader
 
 
 class MeijuttSourceProvider(provider.SourceProvider):
-    def __init__(self, name: str) -> None:
+
+    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
+        super().__init__(config_reader)
         self.provider_listen_type = types.SOURCE_PROVIDER_PERIOD_TYPE
         self.link_type = types.LINK_TYPE_MAGNET
         self.webhook_enable = True
@@ -33,19 +36,16 @@ class MeijuttSourceProvider(provider.SourceProvider):
         return None
 
     def get_prefer_download_provider(self) -> list:
-        cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg.get('downloader')
+        return self.config_reader.read().get('downloader')
 
     def get_download_param(self) -> list:
-        cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg.get('download_param')
+        return self.config_reader.read().get('download_param')
 
     def get_link_type(self) -> str:
         return self.link_type
 
     def provider_enabled(self) -> bool:
-        cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg.get('enable', True)
+        return self.config_reader.read().get('enable', True)
 
     def is_webhook_enable(self) -> bool:
         return True
@@ -80,7 +80,7 @@ class MeijuttSourceProvider(provider.SourceProvider):
         return ret
 
     def update_config(self, req_para: str) -> None:
-        cfg = provider.load_source_provide_config(self.provider_name)
+        cfg = self.config_reader.read()
         tv_links = cfg['tv_links']
         urls = [i['link'] for i in tv_links]
         if req_para not in urls:
@@ -90,10 +90,10 @@ class MeijuttSourceProvider(provider.SourceProvider):
             tv_info = {'tv_name': tv_title, 'link': req_para}
             tv_links.append(tv_info)
         cfg['tv_links'] = tv_links
-        provider.save_source_provider_config(self.provider_name, cfg)
+        self.config_reader.save(cfg)
 
     def load_config(self) -> None:
-        cfg = provider.load_source_provide_config(self.provider_name)
+        cfg = self.config_reader.read()
         tv_links = [i['link'] for i in cfg['tv_links']]
         logging.info('meijutt tv link is:%s', ','.join(tv_links))
         self.tv_links = cfg['tv_links']

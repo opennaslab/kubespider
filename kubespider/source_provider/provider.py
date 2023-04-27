@@ -2,11 +2,13 @@ import abc
 
 from utils import helper
 from utils.helper import Config
+from utils.config_reader import AbsConfigReader
 
 
 class SourceProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def __init__(self) -> None:
+    def __init__(self, config_reader: AbsConfigReader) -> None:
+        self.config_reader = config_reader
         pass
 
     @abc.abstractmethod
@@ -70,13 +72,3 @@ class SourceProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def load_config(self) -> None:
         pass
-
-
-def load_source_provide_config(provider_name) -> dict:
-    cfg = helper.load_config(Config.SOURCE_PROVIDER)
-    return cfg[provider_name]
-
-def save_source_provider_config(provider_name, provider_cfg) -> dict:
-    cfg = helper.load_config(Config.SOURCE_PROVIDER)
-    cfg[provider_name] = provider_cfg
-    helper.dump_config(Config.SOURCE_PROVIDER, cfg)

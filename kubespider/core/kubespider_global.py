@@ -14,6 +14,7 @@ import download_provider.transmission_download_provider.provider as transmission
 
 from utils import helper
 from utils.helper import Config
+from utils.config_reader import YamlFileSectionConfigReader
 
 source_provider_init_func = {
     'bilibili_source_provider': bilibili_source_provider.BilibiliSourceProvider,
@@ -27,7 +28,7 @@ source_provider_init_func = {
 def get_source_provider(provider_name: str, config: dict):
     provider_type = config['type']
     try:
-        return source_provider_init_func[provider_type](provider_name)
+        return source_provider_init_func[provider_type](provider_name, YamlFileSectionConfigReader(Config.SOURCE_PROVIDER.config_path(), provider_name))
     except Exception as exc:
         raise Exception(str('unknown source provider type %s', provider_type)) from exc
 
@@ -49,7 +50,7 @@ downloader_provider_init_func = {
 def get_download_provider(provider_name: str, config: dict):
     provider_type = config['type']
     try:
-        return downloader_provider_init_func[provider_type](provider_name)
+        return downloader_provider_init_func[provider_type](provider_name, YamlFileSectionConfigReader(Config.DOWNLOAD_PROVIDER.config_path(), provider_name))
     except Exception as exc:
         raise Exception(str('unknown download provider type %s', provider_type)) from exc
 
