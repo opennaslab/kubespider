@@ -1,8 +1,8 @@
 import logging
 import os
 
-from utils.config_reader import AbsConfigReader
 from urllib.parse import urlparse
+from utils.config_reader import AbsConfigReader
 from download_provider import provider
 from transmission_rpc import Client
 

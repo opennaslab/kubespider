@@ -2,13 +2,11 @@ import os
 import uuid
 import hashlib
 import logging
-import threading
 import cgi
 import urllib
 from enum import Enum
 from urllib.parse import urlparse
 from urllib import request
-import yaml
 from utils.config_reader import YamlFileConfigReader
 from api import types
 
@@ -24,7 +22,6 @@ class Config(str, Enum):
     def config_path(self) -> str:
         return os.path.join(cfg_base_path, self)
 
-locks = { i.value: threading.Lock() for i in Config }
 cfg_base_path = config_path = os.path.join(os.getenv('HOME'), '.config/')
 
 def get_tmp_file_name(url):
@@ -36,27 +33,6 @@ def get_tmp_file_name(url):
 
 def get_unique_hash(data):
     return hashlib.md5(data.encode('utf-8')).hexdigest()
-
-def load_config(cfg_type: Config):
-    lock = locks.get(cfg_type)
-    lock.acquire()
-    try:
-        return load_yaml_config(os.path.join(cfg_base_path, cfg_type))
-    finally:
-        lock.release()
-
-
-def load_yaml_config(cfg_path):
-    if not os.path.exists(cfg_path):
-        return {}
-
-    with open(cfg_path, 'r', encoding='utf-8') as config_file:
-        cfg = yaml.safe_load(config_file)
-        return cfg
-
-def dump_yaml_config(cfg_path, cfg):
-    with open(cfg_path, 'w', encoding='utf-8') as config_file:
-        yaml.dump(cfg, config_file, encoding='utf-8')
 
 def convert_file_type_to_path(file_type: str):
     if file_type in types.file_type_to_path.keys():

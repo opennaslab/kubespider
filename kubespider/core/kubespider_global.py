@@ -12,7 +12,6 @@ import download_provider.youget_download_provider.provider as youget_download_pr
 import download_provider.ytdlp_download_provider.provider as ytdlp_download_provider
 import download_provider.transmission_download_provider.provider as transmission_download_provider
 
-from utils import helper
 from utils.helper import Config
 from utils.config_reader import YamlFileSectionConfigReader, YamlFileConfigReader
 

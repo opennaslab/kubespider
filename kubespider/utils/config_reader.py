@@ -32,8 +32,6 @@ class FileConfigReader(AbsConfigReader):
     def read_file(self) -> str:
         if not os.path.exists(self.file_path):
             return ''
-        if not os.path.exists(self.file_path):
-            return ''
         with open(self.file_path, 'r', encoding='utf-8') as file:
             return file.read()
 
@@ -45,9 +43,6 @@ file_locks = {}
 
 class YamlFileConfigReader(FileConfigReader):
     """
-    A config reader that reads from a single yaml file, 
-    or create one on first save call if not exists
-    A config reader that reads from a single yaml file
     A config reader that reads from a single yaml file, 
     or create one on first save call if not exists
     """
