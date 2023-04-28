@@ -12,8 +12,8 @@ import download_provider.youget_download_provider.provider as youget_download_pr
 import download_provider.ytdlp_download_provider.provider as ytdlp_download_provider
 import download_provider.transmission_download_provider.provider as transmission_download_provider
 
-from utils import helper
 from utils.helper import Config
+from utils.config_reader import YamlFileSectionConfigReader, YamlFileConfigReader
 
 source_provider_init_func = {
     'bilibili_source_provider': bilibili_source_provider.BilibiliSourceProvider,
@@ -27,13 +27,13 @@ source_provider_init_func = {
 def get_source_provider(provider_name: str, config: dict):
     provider_type = config['type']
     try:
-        return source_provider_init_func[provider_type](provider_name)
+        return source_provider_init_func[provider_type](provider_name, YamlFileSectionConfigReader(Config.SOURCE_PROVIDER.config_path(), provider_name))
     except Exception as exc:
         raise Exception(str('unknown source provider type %s', provider_type)) from exc
 
 source_providers = []
 
-source_config = helper.load_config(Config.SOURCE_PROVIDER)
+source_config = YamlFileConfigReader(Config.SOURCE_PROVIDER.config_path()).read()
 for name in source_config:
     source_providers.append(get_source_provider(name, source_config[name]))
 
@@ -49,14 +49,14 @@ downloader_provider_init_func = {
 def get_download_provider(provider_name: str, config: dict):
     provider_type = config['type']
     try:
-        return downloader_provider_init_func[provider_type](provider_name)
+        return downloader_provider_init_func[provider_type](provider_name, YamlFileSectionConfigReader(Config.DOWNLOAD_PROVIDER.config_path(), provider_name))
     except Exception as exc:
         raise Exception(str('unknown download provider type %s', provider_type)) from exc
 
 
 download_providers = []
 
-download_config = helper.load_config(Config.DOWNLOAD_PROVIDER)
+download_config = YamlFileConfigReader(Config.DOWNLOAD_PROVIDER.config_path()).read()
 for name in download_config:
     download_providers.append(get_download_provider(name, download_config[name]))
 

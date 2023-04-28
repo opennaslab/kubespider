@@ -3,13 +3,15 @@ import json
 
 import requests
 
+from utils.config_reader import AbsConfigReader
 from download_provider import provider
 
 
 class YTDlpDownloadProvider(
         provider.DownloadProvider # pylint length
     ):
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
+        super().__init__(name, config_reader)
         self.provider_name = name
         self.provider_type = 'ytdlp_download_provider'
         self.http_endpoint_host = ''
@@ -22,12 +24,10 @@ class YTDlpDownloadProvider(
         return self.provider_type
 
     def provider_enabled(self) -> bool:
-        cfg = provider.load_download_provider_config(self.provider_name)
-        return cfg['enable']
+        return self.config_reader.read()['enable']
 
     def provide_priority(self) -> int:
-        cfg = provider.load_download_provider_config(self.provider_name)
-        return cfg['priority']
+        return self.config_reader.read()['priority']
 
     def get_defective_task(self) -> dict:
         # These tasks is special, other download software could not handle
@@ -60,6 +60,6 @@ class YTDlpDownloadProvider(
         return None
 
     def load_config(self) -> TypeError:
-        cfg = provider.load_download_provider_config(self.provider_name)
+        cfg = self.config_reader.read()
         self.http_endpoint_host = cfg['http_endpoint_host']
         self.http_endpoint_port = cfg['http_endpoint_port']

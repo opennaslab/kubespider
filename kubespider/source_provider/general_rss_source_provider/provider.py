@@ -11,12 +11,13 @@ import logging
 import feedparser
 from api import types
 from source_provider import provider
+from utils.config_reader import AbsConfigReader
 
 class GeneralRssSourceProvider(provider.SourceProvider):
     """
     Description: general rss source provider
     """
-    def __init__(self, name) -> None:
+    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         """
         Description: init class of GeneralRssSourceProvider
                     provider_type: general_rss_source_provider
@@ -34,6 +35,7 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         Args:
             rss_config: config member of rss config, file is ./config/general_rss.json
         """
+        super().__init__(config_reader)
         self.rss_name = None
         self.rss_link = None
         self.webhook_enable = False
@@ -79,8 +81,7 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         return self.provider_listen_type
 
     def provider_enabled(self) -> bool:
-        cfg = provider.load_source_provide_config(self.provider_name)
-        return cfg.get('enable', True)
+        return self.config_reader.read().get('enable', True)
 
     def is_webhook_enable(self) -> bool:
         return self.webhook_enable
@@ -121,7 +122,7 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         pass
 
     def load_config(self) -> None:
-        cfg = provider.load_source_provide_config(self.provider_name)
+        cfg = self.config_reader.read()
         self.rss_name = cfg.get("rss_name")
         self.rss_link = cfg.get("rss_link")
         self.rss_tpye = cfg.get("rss_type")

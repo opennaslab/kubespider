@@ -6,10 +6,12 @@ from api import types
 from core import download_trigger
 from utils import helper
 from utils.helper import Config
+from utils.config_reader import YamlFileConfigReader
 import source_provider.provider as sp
 
 class PeriodServer:
     def __init__(self, source_providers, download_providers) -> None:
+        self.state_config = YamlFileConfigReader(Config.STATE.config_path())
         self.period_seconds = 3600
         self.source_providers = source_providers
         self.download_providers = download_providers
@@ -68,14 +70,9 @@ class PeriodServer:
         return err
 
     def load_state(self, provider_name) -> list:
-        all_state = helper.load_config(Config.STATE)
-        if provider_name not in all_state.keys():
-            return []
-        return all_state[provider_name]
+        return self.state_config.read().get(provider_name, [])
 
     def save_state(self, provider_name, state) -> None:
-        all_state = helper.load_config(Config.STATE)
-        all_state[provider_name] = state
-        helper.dump_config(Config.STATE, all_state)
+        self.state_config.parcial_update(lambda all_state: all_state.update({provider_name: state}))
 
 kubespider_period_server = PeriodServer(None, None)
