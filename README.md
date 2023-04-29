@@ -135,7 +135,22 @@ If you are interested in participating in joint development, welcome to STAR/FOR
 * For how to implement a resource provider for a resource website, please see [link](./docs/zh/contribute/implement_source_provider_cn.md).
 * For how to implement a download provider for download software, please see [link](./docs/en/contribute/implement_download_provider_cn.md).
 * For how to develop chrome extension webhook, please see [link](./docs/zh/contribute/develop_chrome_extension.md).
-* For how to implement other webhook trigger tools, please see [link](./docs/zh/user_guide/api_docs/README.md).
+* For how to implement other webhook trigger tools, please see [link](./docs/zh/README.md user_guide/api_docs/README.md).
+
+## ❤️ Sponsor  
+Thanks to the following companies for sponsoring development tools:
+<table>
+  <thead>
+    <tr>
+      <th align="center" style="width: 80px;">
+        <a href="https://www.jetbrains.com/">
+          <img src="./docs/images/sponsor/jetbrains.png" width="60px"><br>
+          <sub>JetBrains</sub><br>
+        </a>
+      </th>
+    </tr>
+  </thead>
+</table>
 
 ## 📃 Disclaimer
 All downloading and use of the software are deemed to have carefully read and fully agreed to the following terms:
