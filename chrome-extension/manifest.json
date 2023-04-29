@@ -10,6 +10,11 @@
       "contextMenus",
       "tabs"
     ],
+    "action": {
+      "default_icon": {
+        "16": "images/icon16.png"
+      }
+    },
     "host_permissions": ["*://*/*"],
     "action": {
         "default_title": "Kubespider",
