@@ -11,15 +11,13 @@
       "tabs"
     ],
     "action": {
+      "default_title": "Kubespider",
+      "default_popup": "kubespider.html",
       "default_icon": {
         "16": "images/icon16.png"
       }
     },
     "host_permissions": ["*://*/*"],
-    "action": {
-        "default_title": "Kubespider",
-        "default_popup": "kubespider.html"
-    },
     "icons": {
       "16": "images/icon16.png",
       "48": "images/icon48.png",
