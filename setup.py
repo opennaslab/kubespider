@@ -9,8 +9,8 @@ with open('LICENSE', 'rb') as f:
 
 setup(
     name='kubespider',
-    version='0.1.0',
-    description='Unified downloading orchestration system, save your time, enjoy your life.',
+    version='latest',
+    description='A global resource download orchestration system, build your home download center.',
     long_description=readme_content,
     author='jwceisn',
     author_email='jwcesign@gmail.com',
