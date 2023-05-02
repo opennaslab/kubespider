@@ -32,3 +32,4 @@ jobs:
         start: ${{ github.event.inputs.start }}
         end: ${{ github.event.inputs.end }}
         exclude_contributor: ${{ github.event.inputs.exclude_contributor }}
+    

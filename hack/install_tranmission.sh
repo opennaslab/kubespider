@@ -27,6 +27,9 @@ mkdir -p ${HOME}/kubespider/transmission/
 source hack/util.sh
 util::set_registry_for_image
 
+# Some PT website only supports older version
+DEFAULT_VERSION=${DEFAULT_VERSION:-2.94-r1-ls24}
+
 # 5.Install transmission
 docker run -d \
   --name=transmission \
@@ -41,7 +44,7 @@ docker run -d \
   -v ${HOME}/kubespider/transmission/:/config \
   -v ${HOME}/kubespider/nas/:/downloads \
   --restart unless-stopped \
-  linuxserver/transmission:latest
+  linuxserver/transmission:${DEFAULT_VERSION}
 
 # 5.Notice
 echo "[INFO] Deploy Transmission Enhanced Edition success, enjoy your time..."

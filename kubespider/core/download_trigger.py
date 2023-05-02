@@ -28,15 +28,22 @@ class KubespiderDownloader:
             # load config
             provider_now = self.download_providers[index]
             provider_next = self.download_providers[index+1]
-            provider_now.load_config()
-            provider_next.load_config()
+
+            err = provider_now.load_config()
+            if err is not None:
+                continue
+
+            err = provider_next.load_config()
+            if err is not None:
+                continue
 
             tasks = provider_now.get_defective_task()
             logging.info("Find defective tasks:%d/%s", len(tasks), provider_now.get_provider_name())
             for task in tasks:
-                self.download_file(task['url'], task['path'], task['linkType'], provider_next)
+                self.download_file(task['url'], task['path'], task['linkType'],
+                                   download_provoder=provider_next)
 
-    def filter_downloader(self, source_provider: sp.SourceProvider=None) -> list:
+    def filter_downloader_by_source(self, source_provider: sp.SourceProvider=None) -> list:
         if source_provider is None:
             return self.download_providers
         name_list = source_provider.get_prefer_download_provider()
@@ -51,8 +58,21 @@ class KubespiderDownloader:
         logging.info('filtering downloader by name %s type %s, result %s', str(name_list), str(provider_type), str(name))
         return provider
 
-    def download_file(self, url, path, link_type, source_provider: sp.SourceProvider=None) -> TypeError:
-        downloader_list = self.filter_downloader(source_provider)
+    def filter_downloader_by_name(self, name: str) -> dp.DownloadProvider:
+        provider = list(filter(lambda p: p.get_provider_name() == name, self.download_providers))
+        if len(provider) == 0:
+            logging.warning('Downloader %s not found', name)
+            return None
+        return provider[0]
+
+    def download_file(self, url, path, link_type, \
+                      source_provider: sp.SourceProvider=None, \
+                        download_provoder: dp.DownloadProvider=None) -> TypeError:
+        downloader_list = []
+        if download_provoder is not None:
+            downloader_list = [download_provoder]
+        else:
+            downloader_list = self.filter_downloader_by_source(source_provider)
         extra_param = None
         if source_provider is not None:
             extra_param = source_provider.get_download_param()
@@ -73,18 +93,22 @@ class KubespiderDownloader:
 
         return None
 
-    def handle_torrent_download(self, url, path, downloader_list: list, extra_param=None) -> TypeError:
-        tmp_file = helper.get_tmp_file_name(url)
+    def handle_torrent_download(self, url: str, path: str, downloader_list: list, extra_param=None) -> TypeError:
+        tmp_file = None
 
-        req = helper.get_request_controller()
-        try:
-            torrent_data = req.open(url, timeout=10).read()
-        except Exception as err:
-            logging.info('Download torrent error:%s', err)
-            return err
-        with open(tmp_file, 'wb') as torrent_file:
-            torrent_file.write(torrent_data)
-            torrent_file.close()
+        if url.startswith('http'):
+            tmp_file = helper.get_tmp_file_name(url)
+            req = helper.get_request_controller()
+            try:
+                torrent_data = req.open(url, timeout=10).read()
+            except Exception as err:
+                logging.info('Download torrent error:%s', err)
+                return err
+            with open(tmp_file, 'wb') as torrent_file:
+                torrent_file.write(torrent_data)
+                torrent_file.close()
+        else:
+            tmp_file = url
 
         err = None
         for provider in downloader_list:
@@ -120,5 +144,10 @@ class KubespiderDownloader:
                 continue
             break
         return err
+
+    def handle_download_remove(self, downloader_list=None, extra_param=None):
+        for provider in downloader_list:
+            provider.load_config()
+            provider.remove_tasks(extra_param)
 
 kubespider_downloader = KubespiderDownloader(None)

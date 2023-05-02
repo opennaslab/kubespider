@@ -62,6 +62,10 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         file_info = self.list_files(token, url)
         return self.send_task(token, file_info, url, path)
 
+    def remove_tasks(self, para=None):
+        # TODO: Implement it
+        pass
+
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()
         self.http_endpoint = cfg['http_endpoint']

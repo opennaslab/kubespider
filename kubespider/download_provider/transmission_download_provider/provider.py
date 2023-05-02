@@ -66,6 +66,16 @@ class TransmissionProvider(
         logging.warning('Transmission not support general task download! Please use aria2 or else download provider')
         return TypeError('Transmission not support general task download')
 
+    def remove_tasks(self, para=None):
+        if para is None:
+            logging.info('Start to remove all tasks...')
+            try:
+                torrents = self.client.get_torrents()
+                for torrent in torrents:
+                    self.client.remove_torrent(ids=[torrent.id], delete_data=True)
+            except Exception as err:
+                logging.error('Transmission remove all tasks err:%s', err)
+
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()
         self.download_base_path = cfg['download_base_path']
@@ -75,11 +85,16 @@ class TransmissionProvider(
 
         parse_result = urlparse(http_endpoint)
 
-        self.client = Client(
-            protocol=parse_result.scheme,
-            host=parse_result.hostname,
-            port=parse_result.port,
-            path=parse_result.path,
-            username=username,
-            password=password,
-        )
+        try:
+            self.client = Client(
+                protocol=parse_result.scheme,
+                host=parse_result.hostname,
+                port=parse_result.port,
+                path=parse_result.path,
+                username=username,
+                password=password,
+            )
+        except Exception as err:
+            logging.error("Init client error:%s", err)
+            return err
+        return None

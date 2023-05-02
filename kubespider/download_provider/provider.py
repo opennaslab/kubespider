@@ -45,5 +45,9 @@ class DownloadProvider(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
+    def remove_tasks(self, para=None):
+        pass
+
+    @abc.abstractmethod
     def load_config(self) -> TypeError:
         pass

@@ -59,6 +59,10 @@ class YougetDownloadProvider(
             return None
         return None
 
+    def remove_tasks(self, para=None):
+        # TODO: Implement it
+        pass
+
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()
         self.http_endpoint_host = cfg['http_endpoint_host']

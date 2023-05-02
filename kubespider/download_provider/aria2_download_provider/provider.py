@@ -93,6 +93,10 @@ class Aria2DownloadProvider(provider.DownloadProvider):
             logging.warning('Please ensure your aria2-type download server is ok:%s', err)
             return err
 
+    def remove_tasks(self, para=None):
+        # TODO: Implement it
+        pass
+
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()
         self.rpc_endpoint_host = cfg['rpc_endpoint_host']

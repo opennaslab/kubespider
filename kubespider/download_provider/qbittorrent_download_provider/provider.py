@@ -108,6 +108,9 @@ class QbittorrentDownloadProvider(
         logging.warning('qbittorrent not support generatl task download! Please use aria2 or else download provider')
         return TypeError('qbittorrent not support generate task download')
 
+    def remove_tasks(self, para=None):
+        # TODO: Implement it
+        pass
 
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()
