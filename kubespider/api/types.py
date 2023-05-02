@@ -20,3 +20,5 @@ file_type_to_path = {
     FILE_TYPE_MUSIC: "Music",
     FILE_TYPE_PICTIRE: "Picture"
 }
+
+PT_BOT_PATH = "PT"

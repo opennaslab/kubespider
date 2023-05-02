@@ -13,6 +13,7 @@ from api import types
 class Config(str, Enum):
     SOURCE_PROVIDER = 'source_provider.yaml'
     DOWNLOAD_PROVIDER = 'download_provider.yaml'
+    PT_PROVIDER = 'pt_provider.yaml'
     KUBESPIDER_CONFIG = 'kubespider.yaml'
     STATE = 'state.yaml'
 
@@ -25,7 +26,7 @@ class Config(str, Enum):
 cfg_base_path = config_path = os.path.join(os.getenv('HOME'), '.config/')
 
 def get_tmp_file_name(url):
-    file_name = os.path.basename(url)
+    file_name = get_unique_hash(url)
     if file_name is None or file_name == '':
         file_name = uuid.uuid4().hex
     return '/tmp/' + file_name
@@ -69,7 +70,6 @@ def get_request_controller() -> request.OpenerDirector:
     handler.addheaders = [headers]
     return handler
 
-
 def get_link_type(url):
     if url.startswith('magnet:'):
         return types.LINK_TYPE_MAGNET
@@ -89,3 +89,10 @@ def get_link_type(url):
 
     # TODO: implement other type, like music mv or short video
     return types.LINK_TYPE_GENERAL
+
+def parse_cookie_string(cookie: str) -> dict:
+    cookie_dict = {}
+    for item in cookie.split(';'):
+        key, value = item.strip().split('=')
+        cookie_dict[key] = value
+    return cookie_dict

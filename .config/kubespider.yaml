@@ -1,3 +1,13 @@
 ---
 # This address will be as http/https proxy
 # proxy: http://192.168.1.5:1087
+
+# TODO: define the schedule time API
+# Do it when working days or midnight
+
+# The sum downloading size, it is in GB
+pt_sum_max_size: 100
+# The size of single download, it is in GB
+pt_single_max_size: 20
+# The time is in hour
+pt_seeding_time: 48
