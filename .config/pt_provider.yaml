@@ -2,10 +2,10 @@
 hdvideo:
   type: nexusphp_pt_provider
   enable: false
-  main_link: ***
-  rss_link: ***
-  attendance_link: ***
-  cookie: ***
+  main_link: https://hdvideo.one/
+  rss_link: https://hdvideo.one/xx
+  attendance_link: https://hdvideo.one/xx
+  cookie: xxx
   # I advise you to use transmission, and also,
   # do not use this downloader to download the resource you needed.,
   # only for PT provider
