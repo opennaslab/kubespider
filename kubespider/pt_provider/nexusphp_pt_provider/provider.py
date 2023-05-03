@@ -16,6 +16,9 @@ class NexuPHPPTProvider(provider.PTProvider):
     def __init__(self, name: str, config_reader: AbsConfigReader):
         self.name = name
         self.enable = config_reader.read().get('enable', False)
+        if not self.enable:
+            return
+
         self.main_url = config_reader.read().get('main_link', '')
         self.rss_url = config_reader.read().get('rss_link', '')
         self.attendance_url = config_reader.read().get('attendance_link', '')
