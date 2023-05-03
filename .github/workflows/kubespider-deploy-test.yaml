@@ -40,6 +40,11 @@ jobs:
         if [[ $? != 0 ]]; then
           exit 1
         fi
+        log=`docker logs kubespider`
+        if [[ $log =~ 'Traceback' ]]
+        then
+          exit 1
+        fi
 
         #2. Test deploy baidu net disk
         bash hack/install_baidunetdisk.sh
@@ -78,8 +83,8 @@ jobs:
       if: ${{ failure() }}
       run: |
         docker ps -a
-        docker logs baidunetdisk
         docker logs kubespider
+        docker logs baidunetdisk
         docker logs aria2-pro
         docker logs plex
         docker logs xunlei
