@@ -138,14 +138,18 @@ If you are interested in participating in joint development, welcome to STAR/FOR
 * For how to implement other webhook trigger tools, please see [link](./docs/zh/user_guide/api_docs/README.md).
 
 ## ❤️ Sponsor  
-Thanks to the following companies for sponsoring development tools:
+Thanks to the following companies for sponsoring development tools, the ranking is not in any particular order:
 <table>
   <thead>
     <tr>
-      <th align="center" style="width: 80px;">
+      <th align="center" style="height: 80px;">
         <a href="https://www.jetbrains.com/">
-          <img src="./docs/images/sponsor/jetbrains.png" width="60px"><br>
-          <sub>JetBrains</sub><br>
+          <img align="center" src="./docs/images/sponsor/jetbrains.png" height="50px"><br>
+        </a>
+      </th>
+      <th align="center" style="height: 80px;">
+        <a href="https://www.synology.cn/">
+          <img align="center" src="./docs/images/sponsor/synology.png" height="50px"><br>
         </a>
       </th>
     </tr>
