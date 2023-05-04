@@ -141,14 +141,18 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 * 如何开发其他webhook触发工具, 请看 [link](./docs/zh/user_guide/api_docs/README.md)。
 
 ## ❤️ 赞助  
-感谢以下公司赞助开发工具：
+感谢以下公司赞助开发工具，排名不分先后：
 <table>
   <thead>
     <tr>
-      <th align="center" style="width: 80px;">
+      <th align="center" style="height: 80px;">
         <a href="https://www.jetbrains.com/">
-          <img src="./docs/images/sponsor/jetbrains.png" width="60px"><br>
-          <sub>JetBrains</sub><br>
+          <img align="center" src="./docs/images/sponsor/jetbrains.png" height="50px"><br>
+        </a>
+      </th>
+      <th align="center" style="height: 80px;">
+        <a href="https://www.synology.cn/">
+          <img align="center" src="./docs/images/sponsor/synology.png" height="50px"><br>
         </a>
       </th>
     </tr>
