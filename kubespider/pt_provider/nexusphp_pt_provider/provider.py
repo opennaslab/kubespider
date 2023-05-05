@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import os
 from urllib.parse import urlparse, parse_qs
 import xml.etree.ElementTree as ET
 
@@ -21,11 +22,13 @@ class NexuPHPPTProvider(provider.PTProvider):
 
         self.main_url = config_reader.read().get('main_link', '')
         self.rss_url = config_reader.read().get('rss_link', '')
-        self.attendance_url = config_reader.read().get('attendance_link', '')
         self.download_provider = config_reader.read().get('downloader', '')
 
         cookie = config_reader.read().get('cookie', '')
         self.cookie = helper.parse_cookie_string(cookie)
+
+        self.attendance_url = os.path.join(self.main_url, 'attendance.php')
+        self.thank_url = os.path.join(self.main_url, 'thanks.php')
 
     def get_provider_name(self) -> str:
         return self.name
@@ -116,12 +119,13 @@ class NexuPHPPTProvider(provider.PTProvider):
         return 0.0
 
     def go_thanks(self, download_id: str) -> None:
-        thank_url = self.main_url + "/thanks.php"
         data = "id="+download_id
         try:
             headers = {'content-type': 'application/x-www-form-urlencoded'}
-            resp = requests.post(thank_url, data=data, cookies=self.cookie, headers=headers, timeout=30)
+            resp = requests.post(self.thank_url, data=data, cookies=self.cookie, headers=headers, timeout=30)
             if resp.status_code != 200:
                 logging.warning("Do thanks(%s) error:%s", self.name, resp.text)
+            else:
+                logging.info("Do thanks ok:%s", data)
         except Exception as err:
             logging.error("Do thanks(%s) error:%s", self.name, err)
