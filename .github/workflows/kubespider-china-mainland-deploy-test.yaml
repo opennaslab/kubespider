@@ -31,7 +31,7 @@ jobs:
         #1. Test deploy Kubespider
         export CHINA_MAINLAND=TRUE
         bash hack/install_kubespider.sh
-        sleep 10
+        sleep 60
         docker ps | grep -e kubespider -e aria2-pro
         if [[ $? != 0 ]]; then
           exit 1
