@@ -12,7 +12,6 @@
 general_rss_source_provider:
     enable: true
     type: general_rss_source_provider
-
     rss_name: 深影译站
     rss_link: http://192.168.124.10:1200/shinybbs
     file_type: movie
