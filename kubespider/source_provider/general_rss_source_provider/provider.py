@@ -118,7 +118,7 @@ class GeneralRssSourceProvider(provider.SourceProvider):
             titles = self.title_parser.findall(title)
             paths = []
             if len(titles) > 0:
-                if isinstance(titles[0], tuple) or isinstance(titles[0], list):
+                if isinstance(titles[0], (list, tuple)):
                     paths = list(titles[0]) # force tuple to list
                 else:
                     paths.append(titles[0])
