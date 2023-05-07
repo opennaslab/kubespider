@@ -113,12 +113,17 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         """
         get resource download path from the title
         default: rss_name
-        TODO: Implement title parser
         """
         if self.title_parser is not None:
             titles = self.title_parser.findall(title)
+            paths = []
             if len(titles) > 0:
-                return titles[0]
+                if type(titles[0]) is tuple or type(titles[0]) is list:
+                    paths = list(titles[0])
+                else:
+                    paths.append(titles[0]) 
+                # TODO: "/" to "\/" ?
+                return r"/".join(paths)
         return self.rss_name
 
     def update_config(self, req_para: str) -> None:
@@ -126,12 +131,10 @@ class GeneralRssSourceProvider(provider.SourceProvider):
 
     def load_config(self) -> None:
         cfg = self.config_reader.read()
-        self.rss_name = cfg.get("rss_name")
+        self.rss_name = cfg.get("rss_name", "")
         self.rss_link = cfg.get("rss_link")
-        self.rss_tpye = cfg.get("rss_type")
-        self.file_type = cfg.get("file_type") if cfg.get(
-            "file_type") in types.file_type_to_path.keys() else types.FILE_TYPE_COMMON
-        self.link_type = cfg.get("link_type") if cfg.get(
+        self.file_type = cfg.get("file_type", types.FILE_TYPE_COMMON)
+        self.link_type = cfg.get("link_type", types.LINK_TYPE_MAGNET) if cfg.get(
             "link_type") in [
                 types.LINK_TYPE_MAGNET, 
                 types.LINK_TYPE_TORRENT] else types.LINK_TYPE_MAGNET
