@@ -5,7 +5,7 @@ import subprocess
 import logging
 import _thread
 
-import values
+from core import values
 
 
 class DownloadTask:

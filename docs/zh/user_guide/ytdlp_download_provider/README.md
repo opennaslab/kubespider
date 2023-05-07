@@ -8,7 +8,7 @@
 
 ## 安装
 ### 1.安装yt-dlp下载器
-运行如下命令即可（如果你在中国大陆，记得在运行前设置环境变量`http_proxy`）：
+运行如下命令即可：
 ```sh
 git clone https://github.com/jwcesign/kubespider.git
 cd kubespider
@@ -36,6 +36,9 @@ yt-dlp:
   enable: false
   http_endpoint_host: http://127.0.0.1
   http_endpoint_port: 3082
+  auto_format_convet: false
+  target_format: mp4
+  download_proxy: http://192.168.1.8:1087
   priority: 0
 ```
 其中：  
@@ -44,6 +47,9 @@ yt-dlp:
 * `enable`: 设置是否使用此provider，只能使用一个，后续开发优先级后可以多个一起使用。
 * `http_endpoint_host`: qbittorrent服务所在服务器地址。
 * `http_endpoint_port`: qbittorrent的API服务端口，默认8080。
+* `auto_format_convet`: 是否自动转化下载视频格式。
+* `target_format`: 转化目标视频格式。
+* `download_proxy`: 下载代理，国外内容可能需要代理。
 * `priority`: 下载提供器优先级，数字越小，优先级越高，下载资源时按优先级尝试，无法下载或下载失败时切换下载器。
 
 #### 2.测试下载

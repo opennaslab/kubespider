@@ -2,8 +2,8 @@ import _thread
 import logging
 import time
 
-from .core import tasks
-from .core import webhook
+from core import tasks
+from core import webhook
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s-%(levelname)s: %(message)s')
 
