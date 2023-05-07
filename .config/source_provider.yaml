@@ -20,13 +20,17 @@ youtube_source_provider:
   type: youtube_source_provider
   enable: true
   downloader: yt-dlp
-general_rss_source_provider:
-    enable: false
-    type: general_rss_source_provider
-    rss_name: 深影译站
-    rss_link: http://192.168.124.10:1200/shinybbs
-    rss_type: 电影
-    flag: movie
-    decs: decs
-    exec_time: 8
-    check_time: 0
+shinybbs_rss_source_provider:
+  enable: false
+  type: general_rss_source_provider
+  rss_name: 深影译站
+  rss_link: http://192.168.124.10:1200/shinybbs
+  file_type: movie
+  link_type: magnet # [magnet, torrent]
+  downloader: 
+    - qbittorrent
+  download_param:
+    tags:
+      - 电影
+      - RSS
+    category: 电影
