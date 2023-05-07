@@ -20,7 +20,7 @@ youtube_source_provider:
   type: youtube_source_provider
   enable: true
   downloader: yt-dlp
-shinybbs_rss_source_provider:
+general_rss_source_provider:
   enable: false
   type: general_rss_source_provider
   rss_name: 深影译站
