@@ -32,7 +32,6 @@ util::set_registry_for_image
 # 5.Install yt-dlp 
 docker run --name yt-dlp -d \
     --network=host \
-    -e YOUTUBE_PROXY=${http_proxy} \
     -v ${HOME}/kubespider/yt-dlp:/root/config \
     -v ${HOME}/kubespider/nas/:/root/downloads \
     --restart unless-stopped cesign/ytdlp-downloader:latest

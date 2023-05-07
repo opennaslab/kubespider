@@ -3,7 +3,7 @@ import os
 
 from flask import Flask,jsonify,request
 
-import tasks
+from core import tasks
 
 you_get_server = Flask(__name__)
 

@@ -16,6 +16,9 @@ class YTDlpDownloadProvider(
         self.provider_type = 'ytdlp_download_provider'
         self.http_endpoint_host = ''
         self.http_endpoint_port = 0
+        self.auto_convert = False
+        self.target_format = 'mp4'
+        self.download_proxy = ''
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -41,7 +44,13 @@ class YTDlpDownloadProvider(
 
     def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
         headers = {'Content-Type': 'application/json'}
-        data = {'dataSource': url, 'path': path}
+        data = {
+            'dataSource': url,
+            'path': path,
+            'autoFormatConvert': self.auto_convert,
+            'targetFormat': self.target_format,
+            'downloadProxy': self.download_proxy
+        }
         logging.info('Send general task:%s', json.dumps(data))
 
         if not url.startswith('https://www.youtube.com/'):
@@ -65,5 +74,8 @@ class YTDlpDownloadProvider(
 
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()
-        self.http_endpoint_host = cfg['http_endpoint_host']
-        self.http_endpoint_port = cfg['http_endpoint_port']
+        self.http_endpoint_host = cfg.get('http_endpoint_host', None)
+        self.http_endpoint_port = cfg.get('http_endpoint_port', None)
+        self.auto_convert = cfg.get('auto_format_convet', False)
+        self.target_format = cfg.get('target_format', 'mp4')
+        self.download_proxy = cfg.get('download_proxy', '')

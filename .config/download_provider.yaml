@@ -4,6 +4,9 @@ yt-dlp:
   enable: false
   http_endpoint_host: http://127.0.0.1
   http_endpoint_port: 3082
+  auto_format_convet: false
+  target_format: mp4
+  download_proxy: http://192.168.1.8:1087
   priority: 0
 youget:
   type: youget_download_provider
