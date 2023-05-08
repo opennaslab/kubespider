@@ -34,7 +34,7 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         self.rss_name = None
         self.rss_link = None
         self.file_type = types.FILE_TYPE_COMMON
-        self.link_type = types.LINK_TYPE_MAGNET
+        self.link_type = types.LINK_TYPE_GENERAL
         self.provider_listen_type = types.SOURCE_PROVIDER_PERIOD_TYPE
         self.provider_type = "general_rss_source_provider"
         self.provider_name = name
@@ -56,7 +56,7 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         pass
 
     def get_prefer_download_provider(self) -> None:
-        pass
+        return self.config_reader.read().get('downloader')
 
     def get_provider_listen_type(self) -> str:
         return self.provider_listen_type
@@ -92,21 +92,22 @@ class GeneralRssSourceProvider(provider.SourceProvider):
             if not entry['links']:
                 logging.warning("%s, No links were found to download yet ", entry['title'])
                 continue
-            link_exist = False
-            for link_info in entry['links']:
-                # add support for torrent file
-                if link_info["type"] == "application/x-bittorrent" or \
-                        link_info["href"].startswith("magnet:?xt") or \
-                        link_info["href"].endswith("torrent"):
-                    link_exist = True
-                    path = self.get_link_download_path(entry['title'])
-                    links.append({
-                        "link": link_info["href"], 
-                        "file_type": self.file_type, 
-                        "path": path})
-                    break
-            if not link_exist:
-                logging.warning("%s, No magnetic links were found to download yet", entry['title'])
+            # According to the RSS standard, media resources will be saved in the enclosure element
+            # https://en.wikipedia.org/wiki/RSS_enclosure
+            items = [x for x in entry['links'] if x["rel"] == "enclosure"]
+            path = self.get_link_download_path(entry['title'])
+            for link in items:
+                url = link["href"]
+                link_type = types.LINK_TYPE_GENERAL
+                if url.startswith("magnet:?xt"):
+                    link_type = types.LINK_TYPE_MAGNET
+                elif url.endswith("torrent"):
+                    link_type = types.LINK_TYPE_TORRENT
+                links.append({
+                    "link": url,
+                    "file_type": link_type,
+                    "path": path,
+                })
         return links
 
     def get_link_download_path(self, title)->str:
@@ -134,10 +135,7 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         self.rss_name = cfg.get("rss_name", "")
         self.rss_link = cfg.get("rss_link")
         self.file_type = cfg.get("file_type", types.FILE_TYPE_COMMON)
-        self.link_type = cfg.get("link_type", types.LINK_TYPE_MAGNET) if cfg.get(
-            "link_type") in [
-                types.LINK_TYPE_MAGNET,
-                types.LINK_TYPE_TORRENT] else types.LINK_TYPE_MAGNET
+        self.link_type = cfg.get("link_type", types.LINK_TYPE_GENERAL)
         title_pattern = cfg.get("title_pattern", None)
         if title_pattern is not None:
             try:

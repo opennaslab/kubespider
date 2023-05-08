@@ -55,12 +55,12 @@ class PeriodServer:
         for source in links:
             if helper.get_unique_hash(source['link']) in state:
                 continue
-
+            source_link_type = link_type if 'link_type' not in source.keys() else source['link_type']
             logging.info('Find new resource:%s/%s', provider_name, helper.format_long_string(source['link']))
             download_final_path = helper.convert_file_type_to_path(source['file_type']) + '/' + source['path']
             err = download_trigger.kubespider_downloader. \
                 download_file(source['link'], download_final_path, \
-                              link_type, provider)
+                              source_link_type, provider)
             if err is not None:
                 break
             state.append(helper.get_unique_hash(source['link']))
