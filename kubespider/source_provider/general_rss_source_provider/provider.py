@@ -105,8 +105,9 @@ class GeneralRssSourceProvider(provider.SourceProvider):
                     link_type = types.LINK_TYPE_TORRENT
                 links.append({
                     "link": url,
-                    "file_type": link_type,
+                    "file_type": self.file_type,
                     "path": path,
+                    "link_type": link_type
                 })
         return links
 
