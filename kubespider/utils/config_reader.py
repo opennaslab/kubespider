@@ -81,7 +81,7 @@ class YamlFileConfigReader(FileConfigReader):
         return conf
 
     def write_data_to_file(self, data: dict):
-        self.write_file(yaml.dump(data))
+        self.write_file(yaml.dump(data, allow_unicode=True))
 
 class YamlFileSectionConfigReader(YamlFileConfigReader):
     """
