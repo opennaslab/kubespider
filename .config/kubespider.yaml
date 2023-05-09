@@ -9,3 +9,7 @@ pt_sum_max_size: 100
 pt_single_max_size: 20
 # The time is in hour
 pt_seeding_time: 48
+# Token auth setting block
+auth:
+  enable: false
+  token: kubespider
