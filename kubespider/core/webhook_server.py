@@ -1,7 +1,8 @@
 import logging
 import json
 
-from flask import Flask,jsonify,request
+from functools import wraps
+from flask import Flask, jsonify, request
 
 from core import download_trigger
 from core import kubespider_global
@@ -13,13 +14,22 @@ from utils import helper
 
 kubespider_server = Flask(__name__)
 
-@kubespider_server.route('/healthz', methods = ['GET'])
+def auth_required(func):
+    @wraps(func)
+    def decorated(*args, **kwargs):
+        if not check_auth(request.headers):
+            return not_authenticated()
+        return func(*args, **kwargs)
+    return decorated
+
+@kubespider_server.route('/healthz', methods=['GET'])
 def health_check_handler():
     resp = jsonify('OK')
     resp.status_code = 200
     return resp
 
-@kubespider_server.route('/api/v1/downloadproviders', methods = ['GET'])
+@kubespider_server.route('/api/v1/downloadproviders', methods=['GET'])
+@auth_required
 def list_download_provider_handler():
     resp_array = {}
     for i in kubespider_global.download_providers:
@@ -28,7 +38,8 @@ def list_download_provider_handler():
     resp.content_type = "application/json"
     return resp
 
-@kubespider_server.route('/api/v1/sourceproviders', methods = ['GET'])
+@kubespider_server.route('/api/v1/sourceproviders', methods=['GET'])
+@auth_required
 def list_source_provider_handler():
     resp_array = {}
     for i in kubespider_global.source_providers:
@@ -37,7 +48,8 @@ def list_source_provider_handler():
     resp.content_type = "application/json"
     return resp
 
-@kubespider_server.route('/api/v1/download', methods = ['POST'])
+@kubespider_server.route('/api/v1/download', methods=['POST'])
+@auth_required
 def download_handler():
     data = json.loads(request.data.decode("utf-8"))
     source = data['dataSource']
@@ -73,7 +85,8 @@ def download_handler():
         return send_ok_response()
     return send_bad_response(err)
 
-@kubespider_server.route('/api/v1/refresh', methods = ['GET'])
+@kubespider_server.route('/api/v1/refresh', methods=['GET'])
+@auth_required
 def refresh_handler():
     period_server.kubespider_period_server.trigger_run()
     return send_ok_response()
@@ -101,5 +114,22 @@ def send_ok_response():
 def send_bad_response(err):
     resp = jsonify(str(err))
     resp.status_code = 500
+    resp.content_type = 'application/text'
+    return resp
+
+def check_auth(headers):
+    auth_info = helper.get_auth_info()
+    if not auth_info['enable']:
+        return True
+    if headers is None:
+        return False
+    print(headers)
+    if headers.get('token') == auth_info['token']:
+        return True
+    return False
+
+def not_authenticated():
+    resp = jsonify('Auth Required')
+    resp.status_code = 401
     resp.content_type = 'application/text'
     return resp

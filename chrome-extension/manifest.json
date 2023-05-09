@@ -1,7 +1,7 @@
 {
     "name": "Kubespider",
     "manifest_version": 3,
-    "version": "0.1",
+    "version": "0.1.1",
     "description": "Trigger Kubespider execute downloading task",
     "permissions": [
       "storage",

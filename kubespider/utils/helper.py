@@ -96,3 +96,18 @@ def parse_cookie_string(cookie: str) -> dict:
         key, value = item.strip().split('=')
         cookie_dict[key] = value
     return cookie_dict
+
+
+def get_auth_info() -> dict:
+    default_auth_info = {
+        'enable': False,
+        'token': '',
+    }
+    cfg = global_config.read()
+    if cfg is None:
+        return default_auth_info
+    setting_auth_info = cfg.get('auth', None)
+    if setting_auth_info is None:
+        return default_auth_info
+    default_auth_info.update(setting_auth_info)
+    return default_auth_info
