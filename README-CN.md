@@ -87,6 +87,17 @@ Kubespider结合chrome插件，能获得更好的体验。
 Kubesdpier会自动下载现有的所有剧集并且追更：
 ![img](./docs/images/kubespider-chrome-ext-aria2-zh.jpg)
 
+如果将Kubuspider暴露在公网使用，可以启用认证。
+![img](./docs/images/kubespider-chrome-ext-auth.jpg)
+
+并在`${HOME}/kubespider/.config/kubespider.ymal`添加配置以启用认证。
+```yaml
+# Token auth setting block
+auth:
+  enable: true
+  token: kubespider
+```
+
 #### 4.更多（可选）
 * 安装Plex，多平台观看视频，[立即安装](./docs/zh/user_guide/plex_install_config/README.md)。
 * 安装Jellyfin，多平台观看视频，[立即安装](./docs/zh/user_guide/jellyfin_install_config/README.md)。
