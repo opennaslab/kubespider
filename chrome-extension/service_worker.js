@@ -23,7 +23,7 @@ function handleRequestSend(link, tab, server, token) {
         mode: 'cors',
         headers: {
             "Content-type": "application/json",
-            "Token": token,
+            "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify(data),
     }).then(response => {
