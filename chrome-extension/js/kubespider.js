@@ -33,7 +33,7 @@ async function sendRequest() {
             mode: "cors",
             headers: {
                 "Content-type": "application/json",
-                "Token": token,
+                "Authorization": `Bearer ${token}`,
             },
             body: JSON.stringify(data),
         });
@@ -118,7 +118,7 @@ async function refreshDownload() {
             method: 'GET',
             mode: 'cors',
             headers: {
-                'Token': token,
+                "Authorization": `Bearer ${token}`,
             },
         });
         if (response.ok) {

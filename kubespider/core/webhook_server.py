@@ -119,11 +119,19 @@ def send_bad_response(err):
 
 def check_auth(headers):
     auth_token = helper.get_auth_token()
-    if headers is None:
-        return False
     if auth_token is None:
         return True
-    if headers.get('token') == auth_token:
+    if headers is None:
+        return False
+    authorization = headers.get("Authorization")
+    if not authorization:
+        return False
+    try:
+        auth_type, auth_info = authorization.split(None, 1)
+        auth_type = auth_type.lower()
+    except ValueError:
+        return False
+    if auth_type == "bearer" and auth_info == auth_token:
         return True
     return False
 
