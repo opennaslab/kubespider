@@ -10,7 +10,7 @@ from core import period_server
 from core import pt_server
 import download_provider.provider as dp
 from utils import helper
-
+import waitress
 
 def run():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s-%(levelname)s: %(message)s')
@@ -69,7 +69,7 @@ def run_webhook_server():
     if webhook_server_port is None:
         webhook_server_port = 3080
     logging.info('Webhook Server start running...')
-    webhook_server.kubespider_server.run(host='0.0.0.0', port=webhook_server_port)
+    waitress.serve(webhook_server.kubespider_server, host='0.0.0.0', port=webhook_server_port)
 
 def run_period_job_consumer():
     logging.info('Period Server Quene handler start running...')
