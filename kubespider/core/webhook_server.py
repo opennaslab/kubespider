@@ -118,13 +118,12 @@ def send_bad_response(err):
     return resp
 
 def check_auth(headers):
-    auth_info = helper.get_auth_info()
-    if not auth_info['enable']:
-        return True
+    auth_token = helper.get_auth_token()
     if headers is None:
         return False
-    print(headers)
-    if headers.get('token') == auth_info['token']:
+    if auth_token is None:
+        return True
+    if headers.get('token') == auth_token:
         return True
     return False
 

@@ -1,4 +1,4 @@
-chrome.runtime.onInstalled.addListener(function() {
+chrome.runtime.onInstalled.addListener(function () {
     chrome.contextMenus.create({
         "id": "KubespiderMenu",
         "title": "Send to Kubespider",
@@ -6,28 +6,28 @@ chrome.runtime.onInstalled.addListener(function() {
     });
 });
 
-function sleep (time) {
+function sleep(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-function handleRequestSend(link, tab, server) {
-    var dataSource = tab.url;
+function handleRequestSend(link, tab, server, token) {
+    let dataSource = tab.url;
     if (link != null) {
         dataSource = link;
     }
 
     chrome.action.setBadgeText({text: 'GO'});
-    var data = {"dataSource": dataSource, "path": ""};
+    let data = {"dataSource": dataSource, "path": ""};
     fetch(server + '/api/v1/download', {
         method: 'POST',
         mode: 'cors',
         headers: {
             "Content-type": "application/json",
+            "Token": token,
         },
         body: JSON.stringify(data),
-    })
-    .then(response => {
-        if (response.status = 200) {
+    }).then(response => {
+        if (response.status === 200) {
             chrome.action.setBadgeText({text: 'OK'});
             sleep(9000).then(() => {
                 chrome.action.setBadgeText({text: ''});
@@ -38,8 +38,7 @@ function handleRequestSend(link, tab, server) {
                 chrome.action.setBadgeText({text: ''});
             });
         }
-    })
-    .catch(error => {
+    }).catch(error => {
         chrome.action.setBadgeText({text: 'FAIL'});
         sleep(9000).then(() => {
             chrome.action.setBadgeText({text: ''});
@@ -47,14 +46,18 @@ function handleRequestSend(link, tab, server) {
     })
 }
 
-chrome.contextMenus.onClicked.addListener(function(info, tab) {
-    if (info.menuItemId == "KubespiderMenu") {  
-        chrome.storage.sync.get('server', (res) => {
-            if (typeof res.server === "undefined") {
+chrome.contextMenus.onClicked.addListener(function (info, tab) {
+    if (info.menuItemId === "KubespiderMenu") {
+        chrome.storage.sync.get(['server', 'token'], (res) => {
+            if (!res.server) {
                 document.getElementById('server').value = "";
+                chrome.action.setBadgeText({text: 'FAIL'});
+                sleep(9000).then(() => {
+                    chrome.action.setBadgeText({text: ''});
+                });
                 return
             }
-            handleRequestSend(info.linkUrl, tab, res.server);
+            handleRequestSend(info.linkUrl, tab, res.server, res.token);
         });
     }
 })

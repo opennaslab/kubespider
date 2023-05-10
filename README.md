@@ -82,17 +82,6 @@ If I want to download a movie, I can right click and send the download task to K
 Then with aria2 chrome plugin, you can see the download task starts:
 ![img](./docs/images/kubespider-chrome-ext-aria2-en.jpg)
 
-If you are using Kubespider on the public network, you can enable auth for security.
-![img](./docs/images/kubespider-chrome-ext-auth.jpg)
-
-and add a configuration to `${HOME}/kubespider/.config/kubespider.ymal` to enable authentication.
-```yaml
-# Token auth setting block
-auth:
-  enable: true
-  token: kubespider
-```
-
 #### 4.More (Optional)
 * Install Plex, watch videos on multiple platforms, [install now](./docs/zh/user_guide/plex_install_config/README.md).
 * Install Jellyfin, watch videos on multiple platforms, [install now](./docs/zh/user_guide/jellyfin_install_config/README.md).
@@ -104,6 +93,7 @@ The global configuration file is located at `.config/kubespider.yaml`, which is 
 |  Configuration Item  | Required |                   Function |
 | :-------- | -----: | -------------------: |
 | `proxy` |      No | The request proxy, such as `http://192.168.1.5:1087` |
+| `auth_token`| No | The token for authentication |
 
 ## 🔧 Feature list
 ### Source provider(Configured as needed)  

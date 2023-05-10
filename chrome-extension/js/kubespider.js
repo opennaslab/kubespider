@@ -158,10 +158,10 @@ async function displayAuthInfoInput(event) {
 }
 
 /**
- * 读取配置
+ * read chrome store config
  */
 chrome.storage.sync.get(['server', 'path', 'auth', 'token']).then((res) => {
-    // 判断是否开启鉴权调整样式
+    // check enable auth & change style
     if (res.auth) {
         document.getElementById('auth').checked = res.auth;
         let inputGroup = document.getElementById('authInputGroup')
@@ -170,7 +170,7 @@ chrome.storage.sync.get(['server', 'path', 'auth', 'token']).then((res) => {
             document.querySelector('body').style.height = "280px";
         }
     }
-    // 读取并设置
+    // read config
     if (res.token) {
         document.getElementById('token').value = res.token;
     }
