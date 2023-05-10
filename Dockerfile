@@ -1,4 +1,4 @@
-FROM cesign/kubespider-base:latest
+FROM nikolaik/python-nodejs:python3.10-nodejs20-alpine
 
 WORKDIR /root
 COPY ./kubespider ./kubespider
