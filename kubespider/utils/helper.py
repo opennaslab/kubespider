@@ -96,3 +96,9 @@ def parse_cookie_string(cookie: str) -> dict:
         key, value = item.strip().split('=')
         cookie_dict[key] = value
     return cookie_dict
+
+def get_auth_token() -> str:
+    cfg = global_config.read()
+    if cfg is not None:
+        return cfg.get('auth_token', None)
+    return None
