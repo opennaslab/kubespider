@@ -93,7 +93,7 @@ The global configuration file is located at `.config/kubespider.yaml`, which is 
 |  Configuration Item  | Required |                   Function |
 | :-------- | -----: | -------------------: |
 | `proxy` |      No | The request proxy, such as `http://192.168.1.5:1087` |
-| `auth_token`| No | The token for authentication |
+| `auth_token`| No | Authentication token, used for authentication when triggering download requests. If public network access is required, it can be configured to increase security. |
 
 ## 🔧 Feature list
 ### Source provider(Configured as needed)  
