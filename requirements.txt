@@ -11,3 +11,4 @@ feedparser==6.0.10
 transmission-rpc==4.2.0
 coverage==7.2.3
 lxml==4.9.2
+waitress==2.1.2
