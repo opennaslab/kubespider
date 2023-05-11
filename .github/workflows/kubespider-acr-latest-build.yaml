@@ -25,8 +25,22 @@ jobs:
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
 
-    - name: Build and push
+    - name: Kubespider - build and push
       uses: docker/build-push-action@v3
       with:
         push: true
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest
+
+    - name: youget-downloader - build and push
+      uses: docker/build-push-action@v3
+      with:
+        context: ./downloaders/you-get/
+        push: true
+        tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/youget-downloader:latest
+
+    - name: ytdlp-downloader - build and push
+      uses: docker/build-push-action@v3
+      with:
+        context: ./downloaders/you-get/
+        push: true
+        tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/ytdlp-downloader:latest
