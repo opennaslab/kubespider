@@ -11,7 +11,7 @@
 [![GitHub license](https://img.shields.io/github/license/jwcesign/kubespider?style=plastic)](https://github.com/jwcesign/kubespider/blob/master/LICENSE)
 
 [English](./README.md) | 简体中文  
-我是一个云计算工程师🤓，专注Serverles/FinOps/Runtime，利用空闲之余开发了 Kubespider。  
+我是一个云计算工程师🤓，专注Serverless/FinOps/Runtime，利用空闲之余开发了 Kubespider。  
 
 开发Kubespider的出发点是：我有一台空闲的服务器（局域网），想把它作为NAS，实现自动追剧下载，本地笔记本电脑触发下载，同时适配各种网站资源（Youtube、Bilibili等)和资源类型（电视剧、电影、音乐等）。
 

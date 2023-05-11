@@ -1,4 +1,4 @@
-FROM cesign/youget-base:latest
+FROM nikolaik/python-nodejs:python3.10-nodejs20-alpine
 
 WORKDIR /root
 COPY requirements.txt ./
