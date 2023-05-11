@@ -24,8 +24,22 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build and push
+    - name: Kubespider - build and push
       uses: docker/build-push-action@v3
       with:
         push: true
         tags: cesign/kubespider:latest
+
+    - name: youget-downloader - build and push
+      uses: docker/build-push-action@v3
+      with:
+        context: ./downloaders/you-get/
+        push: true
+        tags: cesign/youget-downloader:latest
+
+    - name: ytdlp-downloader - build and push
+      uses: docker/build-push-action@v3
+      with:
+        context: ./downloaders/you-get/
+        push: true
+        tags: cesign/ytdlp-downloader:latest
