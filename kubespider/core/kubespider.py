@@ -8,7 +8,9 @@ from core import webhook_server
 from core import download_trigger
 from core import period_server
 from core import pt_server
+from core import file_handler
 import download_provider.provider as dp
+from watchdog.observers import Observer
 from utils import helper
 import waitress
 
@@ -56,6 +58,7 @@ def run():
     _thread.start_new_thread(run_download_trigger_job, ())
     _thread.start_new_thread(run_webhook_server, ())
     _thread.start_new_thread(run_pt_server, ())
+    _thread.start_new_thread(run_file_handler, ())
 
     while True:
         time.sleep(30)
@@ -85,3 +88,11 @@ def run_download_trigger_job():
 
 def sort_download_provider(provider: dp.DownloadProvider):
     return provider.provide_priority()
+
+def run_file_handler():
+    logging.info('File handler start running...')
+    path = os.path.join(os.getenv('HOME'), '.config/')
+    event_handler = file_handler.FileHandler()
+    observer = Observer()
+    observer.schedule(event_handler, path, recursive=True)
+    observer.start()
