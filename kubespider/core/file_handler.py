@@ -15,5 +15,7 @@ class FileHandler(FileSystemEventHandler):
     def on_modified(self, event):
         if str(event.src_path).endswith("state.yaml") or str(event.src_path).endswith(".config"):
             return
-        logging.info("文件被修改了,{}".format(event.src_path))
-        os.system("python3 {}".format(os.path.join(os.getenv('HOME'), 'start.sh')))
+        change_file = event.src_path
+        logging.info(f"文件被修改了,{change_file}")
+        start_file = os.path.join(os.getenv('HOME'), 'start.sh')
+        os.system(f"sh {start_file}")
