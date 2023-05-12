@@ -40,6 +40,6 @@ jobs:
     - name: ytdlp-downloader - build and push
       uses: docker/build-push-action@v3
       with:
-        context: ./downloaders/you-get/
+        context: ./downloaders/yt-dlp/
         push: true
         tags: cesign/ytdlp-downloader:latest
