@@ -9,9 +9,9 @@
 import logging
 import os
 import sys
-import psutil
 import time
 from pathlib import Path
+import psutil
 from utils.helper import Config
 from watchdog.events import FileSystemEventHandler, FileModifiedEvent
 
@@ -27,19 +27,19 @@ class FileHandler(FileSystemEventHandler):
             self.last_trigger_time = current_time
             filepath = Path(event.src_path)
             if filepath.name not in [
-                Config.DOWNLOAD_PROVIDER, 
-                Config.SOURCE_PROVIDER, 
-                Config.PT_PROVIDER, 
+                Config.DOWNLOAD_PROVIDER,
+                Config.SOURCE_PROVIDER,
+                Config.PT_PROVIDER,
                 Config.KUBESPIDER_CONFIG]:
                 return
             logging.info("config file has be changed, the kubspider will reboot, %s", filepath.name)
 
             # Ref: https://stackoverflow.com/a/33334183
             try:
-                p = psutil.Process(os.getpid())
-                for handler in p.open_files() + p.connections():
+                process = psutil.Process(os.getpid())
+                for handler in process.open_files() + process.connections():
                     os.close(handler.fd)
-            except Exception as e:
-                logging.error(e)
+            except Exception as err:
+                logging.error(err)
             python = sys.executable
             os.execl(python, python, *sys.argv)
