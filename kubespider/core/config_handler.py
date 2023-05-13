@@ -8,13 +8,38 @@
 """
 import logging
 import os
-import signal
-from watchdog.events import FileSystemEventHandler
+import sys
+import psutil
+import time
+from pathlib import Path
+from utils.helper import Config
+from watchdog.events import FileSystemEventHandler, FileModifiedEvent
 
 
 class FileHandler(FileSystemEventHandler):
-    def on_modified(self, event):
-        if str(event.src_path).endswith("state.yaml") or str(event.src_path).endswith(".config"):
-            return
-        logging.info("config file has be changed, the kubspider will reboot, %s", event.src_path)
-        os.kill(os.getpid(), signal.SIGKILL)
+
+    last_trigger_time = time.time()
+
+    # Ref: https://github.com/gorakhargosh/watchdog/issues/346#issuecomment-864091647
+    def on_modified(self, event: FileModifiedEvent):
+        current_time = time.time()
+        if event.src_path.find('~') == -1 and (current_time - self.last_trigger_time) > 1:
+            self.last_trigger_time = current_time
+            filepath = Path(event.src_path)
+            if filepath.name not in [
+                Config.DOWNLOAD_PROVIDER, 
+                Config.SOURCE_PROVIDER, 
+                Config.PT_PROVIDER, 
+                Config.KUBESPIDER_CONFIG]:
+                return
+            logging.info("config file has be changed, the kubspider will reboot, %s", filepath.name)
+
+            # Ref: https://stackoverflow.com/a/33334183
+            try:
+                p = psutil.Process(os.getpid())
+                for handler in p.open_files() + p.connections():
+                    os.close(handler.fd)
+            except Exception as e:
+                logging.error(e)
+            python = sys.executable
+            os.execl(python, python, *sys.argv)
