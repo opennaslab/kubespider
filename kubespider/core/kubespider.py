@@ -1,4 +1,3 @@
-import os
 import logging
 import _thread
 import time
@@ -9,7 +8,7 @@ from core import download_trigger
 from core import period_server
 from core import pt_server
 import download_provider.provider as dp
-from utils import helper
+from utils import global_config
 import waitress
 
 def run():
@@ -49,7 +48,7 @@ def run():
         period_server.PeriodServer(kubespider_global.enabled_source_provider, \
             kubespider_global.enabled_download_provider)
     pt_server.kubespider_pt_server = \
-        pt_server.PTServer(helper.global_config, kubespider_global.enabled_pt_provider)
+        pt_server.PTServer(global_config.get_global_config(), kubespider_global.enabled_pt_provider)
 
     _thread.start_new_thread(run_period_job_producer, ())
     _thread.start_new_thread(run_period_job_consumer, ())
@@ -65,9 +64,7 @@ def run_pt_server():
     pt_server.kubespider_pt_server.run()
 
 def run_webhook_server():
-    webhook_server_port = os.getenv('WEBHOOK_SERVER_PORT')
-    if webhook_server_port is None:
-        webhook_server_port = 3080
+    webhook_server_port = global_config.get_server_port()
     logging.info('Webhook Server start running...')
     waitress.serve(webhook_server.kubespider_server, host='0.0.0.0', port=webhook_server_port)
 

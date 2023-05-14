@@ -3,11 +3,12 @@ import logging
 import queue
 
 from api import types
-from core import download_trigger
+from api.values import Config
 from utils import helper
-from utils.helper import Config
 from utils.config_reader import YamlFileConfigReader
 import source_provider.provider as sp
+from core import download_trigger
+
 
 class PeriodServer:
     def __init__(self, source_providers, download_providers) -> None:

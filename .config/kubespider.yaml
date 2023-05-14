@@ -1,6 +1,8 @@
 ---
 # This address will be as http/https proxy
 proxy:
+# This port will be used to provide the api service
+server_port: 3080
 
 # TODO: define the schedule time API, do it when working days or midnight
 # The sum downloading size, it is in GB

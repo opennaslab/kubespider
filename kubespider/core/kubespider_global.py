@@ -14,7 +14,7 @@ import download_provider.transmission_download_provider.provider as transmission
 
 import pt_provider.nexusphp_pt_provider.provider as nexusphp_pt_provider
 
-from utils.helper import Config
+from api.values import Config
 from utils.config_reader import YamlFileSectionConfigReader, YamlFileConfigReader
 
 # Sorce provider init related
