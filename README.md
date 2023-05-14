@@ -97,7 +97,7 @@ The global configuration file is located at `.config/kubespider.yaml`, which is 
 
 ## 🔧 Feature list
 ### Source provider(Configured as needed)  
-As metioned before, the source provider is used to adpot to different websites, and download related resources based on conditions:
+As mentioned before, the source provider is used to adapt to different websites, and download related resources based on the conditions:
 | Source Provider | Support | Purpose | Configuration |
 | :-------- | -----: | ---: | ------: |
 | mikanani source provider  | Yes     | Automatically download updated anime | [link](./docs/zh/user_guide/mikanani_source_provider/README.md) |
@@ -108,7 +108,7 @@ As metioned before, the source provider is used to adpot to different websites, 
 | general rss source provider | Yes | Automatically download rss source | [link](./docs/zh/user_guide/general_rss_source_provider/README.md) |
 
 ### Download provider(Configured as needed)  
-In order to make full use of the exisiting download software in the open source community(For example, YouTube hasdedicated download software), the following software is current supported:
+In order to make full use of the existing download software in the open-source community(For example, YouTube has dedicated download software), the following software is currently supported:
 | Download Software | Support | Configuration |
 | :---------------- | ------: | ------------: |
 | aria2             | Yes     | [link](./docs/zh/user_guide/aria2_download_provider/README.md) |
