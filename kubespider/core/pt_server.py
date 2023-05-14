@@ -9,8 +9,8 @@ from core import download_trigger
 from pt_provider import provider
 from utils.config_reader import AbsConfigReader
 from utils.config_reader import YamlFileConfigReader
-from utils.helper import Config
-from api.types import PT_BOT_PATH
+from api.values import Config
+from api.values import PT_BOT_PATH
 
 
 class PTServer:
