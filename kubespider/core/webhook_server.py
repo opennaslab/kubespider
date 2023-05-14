@@ -9,7 +9,7 @@ from core import kubespider_global
 from core import period_server
 import source_provider.provider as sp
 from api import types
-from utils import helper
+from utils import global_config, helper
 
 
 kubespider_server = Flask(__name__)
@@ -118,7 +118,7 @@ def send_bad_response(err):
     return resp
 
 def check_auth(headers):
-    auth_token = helper.get_auth_token()
+    auth_token = global_config.get_auth_token()
     if auth_token is None:
         return True
     if headers is None:
