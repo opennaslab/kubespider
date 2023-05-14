@@ -132,6 +132,10 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 
 触发下载使用方法请查看 [link](./docs/zh/user_guide/trigger_download/README.md)。
 
+## 🙋常见问题
+
+我们列举了使用过程中[可能遇到的问题](docs/zh/faq.md)供您参考，也欢迎您记录您的问题和解决方案，共同完善文档。
+
 ## 🤝 参与共建 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
 如果你有兴趣参与共同开发，欢迎 STAR/FORK/PR，Roadmap请查看 [link](./docs/zh/roadmap.md)。

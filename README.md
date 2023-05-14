@@ -129,6 +129,10 @@ Currently, the following file types are supported to trigger downloading:
 
 Please refer to [link](./docs/zh/user_guide/trigger_download/README.md) for how to trigger the download.
 
+## 🙋FAQ
+
+See the [FAQ](docs/en/faq.md) for more details, and feel free to contribute your questions and solutions. Your valuable input will collectively improve the documentation and benefit a wider audience. Join us in making a difference!
+
 ## 🤝 Contribution [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
 If you are interested in participating in joint development, welcome to STAR/FORK/PR, please check [link](./docs/zh/roadmap.md) for Roadmap.
