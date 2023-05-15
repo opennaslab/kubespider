@@ -156,6 +156,11 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
           <img align="center" src="./docs/images/sponsor/synology.png" height="50px"><br>
         </a>
       </th>
+      <th align="center" style="height: 80px;">
+        <a href="https://www.terra-master.com/">
+          <img align="center" src="./docs/images/sponsor/terramaster.svg" height="50px"><br>
+        </a>
+      </th>
     </tr>
   </thead>
 </table>
