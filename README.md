@@ -155,7 +155,7 @@ Thanks to the following companies for sponsoring development tools, the ranking 
       </th>
       <th align="center" style="height: 80px;">
         <a href="https://www.terra-master.com/">
-          <img align="center" src="./docs/images/sponsor/terramaster.jpg" height="50px"><br>
+          <img align="center" src="./docs/images/sponsor/terramaster.svg" height="50px"><br>
         </a>
       </th>
     </tr>
