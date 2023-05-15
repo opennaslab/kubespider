@@ -11,7 +11,7 @@ btbtt12_disposable_source_provider:
 meijutt_source_provider:
   type: meijutt_source_provider
   enable: true
-  tv_links: []
+  tv_links: [ ]
 bilibili_source_provider:
   type: bilibili_source_provider
   enable: true
@@ -27,10 +27,17 @@ general_rss_source_provider:
   rss_link: http://192.168.124.10:1200/shinybbs
   file_type: movie
   link_type: magnet # [magnet, torrent]
-  downloader: 
+  downloader:
     - qbittorrent
   download_param:
     tags:
       - 电影
       - RSS
     category: 电影
+dygod_magic_source_provider:
+  enable: false
+  type: magic_source_provider
+  charset: gb2312
+  handle_host: www.dygod.net
+  link_selector: //*[@id="downlist"]/table/tbody/tr/td/a/@href
+  title_selector: //*[@id="header"]/div/div[3]/div/div[4]/div[1]/h1/text()
