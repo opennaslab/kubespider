@@ -158,6 +158,11 @@ Thanks to the following companies for sponsoring development tools, the ranking 
           <img align="center" src="./docs/images/sponsor/terramaster.svg" height="50px"><br>
         </a>
       </th>
+      <th align="center" style="height: 80px;">
+        <a href="https://www.qnap.com.cn/">
+          <img align="center" src="./docs/images/sponsor/qnap.svg" height="50px"><br>
+        </a>
+      </th>
     </tr>
   </thead>
 </table>
