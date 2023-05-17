@@ -4,6 +4,7 @@ import source_provider.meijutt_source_provider.provider as meijutt_source_provid
 import source_provider.bilibili_source_provider.provider as bilibili_source_provider
 import source_provider.youtube_source_provider.provider as youtube_source_provider
 import source_provider.general_rss_source_provider.provider as general_rss_source_provider
+import source_provider.magic_source_provider.provider as magic_source_provider
 
 import download_provider.aria2_download_provider.provider as aria2_download_provider
 import download_provider.xunlei_download_provider.provider as xunlei_download_provider
@@ -24,7 +25,8 @@ source_provider_init_func = {
     'meijutt_source_provider': meijutt_source_provider.MeijuttSourceProvider,
     'mikanani_source_provider': mikanani_source_provider.MikananiSourceProvider,
     'youtube_source_provider': youtube_source_provider.YouTubeSourceProvider,
-    'general_rss_source_provider': general_rss_source_provider.GeneralRssSourceProvider
+    'general_rss_source_provider': general_rss_source_provider.GeneralRssSourceProvider,
+    'magic_source_provider': magic_source_provider.MagicSourceProvider,
 }
 
 def get_source_provider(provider_name: str, config: dict):
