@@ -38,10 +38,6 @@ def get_source_provider(provider_name: str, config: dict):
 
 source_providers = []
 
-source_config = YamlFileConfigReader(Config.SOURCE_PROVIDER.config_path()).read()
-for name in source_config:
-    source_providers.append(get_source_provider(name, source_config[name]))
-
 
 # Download provider init related
 downloader_provider_init_func = {
@@ -63,10 +59,6 @@ def get_download_provider(provider_name: str, config: dict):
 
 download_providers = []
 
-download_config = YamlFileConfigReader(Config.DOWNLOAD_PROVIDER.config_path()).read()
-for name in download_config:
-    download_providers.append(get_download_provider(name, download_config[name]))
-
 
 # PT provider init related
 pt_provider_init_func = {
@@ -82,10 +74,29 @@ def get_pt_provider(provider_name: str, config: dict):
 
 pt_providers = []
 
-pt_config = YamlFileConfigReader(Config.PT_PROVIDER.config_path()).read()
-for name in pt_config:
-    pt_providers.append(get_pt_provider(name, pt_config[name]))
 
 enabled_source_provider = []
 enabled_download_provider = []
 enabled_pt_provider = []
+
+
+def init_source_config():
+    init_source_providers = []
+    source_config = YamlFileConfigReader(Config.SOURCE_PROVIDER.config_path()).read()
+    for name in source_config:
+        init_source_providers.append(get_source_provider(name, source_config[name]))
+    return init_source_providers
+
+def init_download_config():
+    init_download_providers = []
+    download_config = YamlFileConfigReader(Config.DOWNLOAD_PROVIDER.config_path()).read()
+    for name in download_config:
+        init_download_providers.append(get_download_provider(name, download_config[name]))
+    return init_download_providers
+
+def init_pt_config():
+    init_pt_providers = []
+    pt_config = YamlFileConfigReader(Config.PT_PROVIDER.config_path()).read()
+    for name in pt_config:
+        init_pt_providers.append(get_pt_provider(name, pt_config[name]))
+    return init_pt_providers

@@ -1,19 +1,22 @@
 import logging
 import _thread
+import os
 import time
+import waitress
 
+from watchdog.observers import Observer
 from core import kubespider_global
 from core import webhook_server
 from core import download_trigger
 from core import period_server
 from core import pt_server
+from core import config_handler
 import download_provider.provider as dp
 from utils import global_config
-import waitress
+
 
 def run():
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s-%(levelname)s: %(message)s')
-
+    init_config()
     for provider in kubespider_global.source_providers:
         provider_name = provider.get_provider_name()
         try:
@@ -82,3 +85,22 @@ def run_download_trigger_job():
 
 def sort_download_provider(provider: dp.DownloadProvider):
     return provider.provide_priority()
+
+def run_with_config_handler():
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s-%(levelname)s: %(message)s')
+    logging.info('File handler start running...')
+    event_handler = config_handler.ConfigHandler(run)
+    observer = Observer()
+    observer.schedule(event_handler, os.path.join(os.getenv('HOME'), '.config/'), recursive=True)
+    observer.start()
+    while True:
+        time.sleep(10)
+
+
+def init_config():
+    kubespider_global.source_providers = []
+    kubespider_global.source_providers = kubespider_global.init_source_config()
+    kubespider_global.download_providers = []
+    kubespider_global.download_providers = kubespider_global.init_download_config()
+    kubespider_global.pt_providers = []
+    kubespider_global.pt_providers = kubespider_global.init_pt_config()
