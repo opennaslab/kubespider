@@ -59,20 +59,21 @@ class MeijuttSourceProvider(provider.SourceProvider):
 
     def get_links(self, data_source_url: str) -> dict:
         ret = []
+        controller = helper.get_request_controller()
         for tv_link in self.tv_links:
             try:
-                req = requests.get(tv_link['link'], timeout=30)
+                resp = controller.open(tv_link['link'], timeout=30).read()
             except Exception as err:
                 logging.info('meijutt_source_provider get links error:%s', err)
                 continue
-            dom = BeautifulSoup(req.content, 'html.parser')
+            dom = BeautifulSoup(resp, 'html.parser')
             div = dom.find_all('div', ['class', 'tabs-list current-tab'])
             if len(div) == 0:
                 continue
             links = div[0].find_all('input', ['class', 'down_url'])
             for link in links:
                 url = link.get('value')
-                link_type = helper.get_link_type(url)
+                link_type = helper.get_link_type(url, controller)
                 if link_type != self.link_type:
                     continue
                 logging.info('meijutt find %s', helper.format_long_string(url))

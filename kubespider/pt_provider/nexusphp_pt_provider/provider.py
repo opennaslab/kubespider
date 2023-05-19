@@ -93,7 +93,7 @@ class NexuPHPPTProvider(provider.PTProvider):
         return {'size': size, 'torrent': file}
 
     def download_torrent_file(self, link: str) -> str:
-        tmp_file = helper.get_tmp_file_name(link)
+        tmp_file = helper.get_tmp_file_name(link) + ".torrent"
         resp = requests.get(link, timeout=30, cookies=self.cookie)
         with open(tmp_file, 'wb') as torrent_file:
             torrent_file.write(resp.content)
