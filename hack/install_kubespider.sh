@@ -22,7 +22,7 @@ fi
 
 # 3.Create necessary directory
 mkdir -p ${HOME}/kubespider/nas/
-mkdir -p ${HOME}/kubespider/motrix/
+mkdir -p ${HOME}/kubespider/aria2/
 cp -r ./.config ${HOME}/kubespider
 
 # 4.Set registry
