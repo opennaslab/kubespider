@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       repo:
-        description: "Repo address, like: https://github.com/jwcesign/kubespider.git"
+        description: "Repo address, like: https://github.com/opennaslab/kubespider.git"
         required: true
         type: string
       start:

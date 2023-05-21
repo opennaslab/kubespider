@@ -13,7 +13,7 @@ Plex是一套媒体播放器及媒体服务（英语：Media server）软件，�
 ### 2.安装Plex docker
 运行如下命令即可：
 ```sh
-git clone https://github.com/jwcesign/kubespider.git
+git clone https://github.com/opennaslab/kubespider.git
 cd kubespider
 export PLEX_CLAIM=<获取到的代码>
 bash hack/install_plex.sh

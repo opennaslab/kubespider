@@ -103,7 +103,7 @@ async function saveConfig() {
 }
 
 function openGitHub() {
-    chrome.tabs.create({ url: "https://github.com/jwcesign/kubespider" });
+    chrome.tabs.create({ url: "https://github.com/opennaslab/kubespider" });
 }
 
 async function refreshDownload() {

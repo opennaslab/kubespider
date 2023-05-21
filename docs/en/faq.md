@@ -6,7 +6,7 @@ In this article, we list problems that you may encounter using Kubespider and pr
 
 ## How do I view the container's log?
 
-When you encounter problems such as download tasks not usually starting, you can check the detailed prompt through the log, you can also [submit an issue](https://github.com/jwcesign/kubespider/issues) and attach the log, so that we can quickly locate the cause of the problem:
+When you encounter problems such as download tasks not usually starting, you can check the detailed prompt through the log, you can also [submit an issue](https://github.com/opennaslab/kubespider/issues) and attach the log, so that we can quickly locate the cause of the problem:
 
 Log into the device that deployed the Kubespider via SSH, execute the following command to obtain log:
 

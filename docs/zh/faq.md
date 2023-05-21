@@ -6,7 +6,7 @@
 
 ## 如何查看日志信息？
 
-当遇到下载任务未正常开启等问题，您可以通过日志查看详细的提示信息，您也可以[提交 Issue](https://github.com/jwcesign/kubespider/issues) 并附上日志，方便我们更快地定位问题原因，操作步骤如下：
+当遇到下载任务未正常开启等问题，您可以通过日志查看详细的提示信息，您也可以[提交 Issue](https://github.com/opennaslab/kubespider/issues) 并附上日志，方便我们更快地定位问题原因，操作步骤如下：
 
 通过 SSH 登录 Kubespider 所部署的设备上，执行下述命令获取日志信息：
 
