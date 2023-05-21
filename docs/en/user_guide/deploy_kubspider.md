@@ -8,7 +8,7 @@ So you should install docker on your machine(personal-server or nas). Follow [of
 ### Install motrix server and Kubespider
 1. Clone repo and install
     ```
-    git clone https://github.com/jwcesign/kubespider.git
+    git clone https://github.com/opennaslab/kubespider.git
     bash hack/install.sh
     ```
 2. Start the motrix programe 

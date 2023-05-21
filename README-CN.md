@@ -5,10 +5,10 @@
 
 ## 💥 一款全局资源编排下载系统
 ![Python](https://img.shields.io/badge/python-3.10-blue)
-[![GitHub release](https://img.shields.io/github/v/release/jwcesign/kubespider.svg)](https://github.com/jwcesign/kubespider/releases)
+[![GitHub release](https://img.shields.io/github/v/release/opennaslab/kubespider.svg)](https://github.com/opennaslab/kubespider/releases)
 [![Total Downloads](https://img.shields.io/docker/pulls/cesign/kubespider.svg)](https://hub.docker.com/repository/docker/cesign/kubespider/general)
-[![GitHub stars](https://img.shields.io/github/stars/jwcesign/kubespider?style=plastic)](https://github.com/jwcesign/kubespider/stargazers)
-[![GitHub license](https://img.shields.io/github/license/jwcesign/kubespider?style=plastic)](https://github.com/jwcesign/kubespider/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/stargazers)
+[![GitHub license](https://img.shields.io/github/license/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/blob/master/LICENSE)
 
 [English](./README.md) | 简体中文  
 我是一个云计算工程师🤓，专注Serverless/FinOps/Runtime，利用空闲之余开发了 Kubespider。  
@@ -37,7 +37,7 @@ Kubespider为了适配多种资源平台，提供了许多适配器，按你的�
 ```sh
 # 如果镜像无法下载或速度较慢请设置此环境变量
 # export CHINA_MAINLAND=TRUE
-git clone https://github.com/jwcesign/kubespider.git
+git clone https://github.com/opennaslab/kubespider.git
 cd kubespider
 bash hack/install_kubespider.sh
 ```

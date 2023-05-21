@@ -8,7 +8,7 @@ Transmission 是 Linux 下的一款 BitTorrent 下载软件。 比其他客户�
 ### 1. 安装Transmission
 运行如下命令即可
 ```sh
-git clone https://github.com/jwcesign/kubespider.git
+git clone https://github.com/opennaslab/kubespider.git
 cd kubespider
 bash hack/install_transmission.sh
 ```

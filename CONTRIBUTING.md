@@ -4,7 +4,7 @@ If you want to contribute to Kubespider, please read the following content.
 ## Install Kubespider
 Before developing, you need to install Kubespider first.
 ```sh
-git clone https://github.com/jwcesign/kubespider.git
+git clone https://github.com/opennaslab/kubespider.git
 cd kubespider
 bash hack/install_kubespider.sh
 ```

@@ -10,7 +10,7 @@
 ### 1.安装You-Get下载器
 运行如下命令即可：
 ```sh
-git clone https://github.com/jwcesign/kubespider.git
+git clone https://github.com/opennaslab/kubespider.git
 cd kubespider
 bash hack/install_youget.sh
 ```

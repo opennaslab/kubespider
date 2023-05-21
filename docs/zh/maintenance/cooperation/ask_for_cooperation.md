@@ -1,7 +1,7 @@
 # Kubespider寻求合作
 
 Kubespider自2022年11月开源以来，得到了众多开发者和用户的关注与支持，Star数平稳增长，现已累计贡献者7位，长期维护者4位，BUG响应，新特性迭代都较为迅速，有望成为最受欢迎的NAS资源下载系统之一。  
-[![Star History Chart](https://api.star-history.com/svg?repos=jwcesign/kubespider&type=Date)](https://star-history.com/#jwcesign/kubespider)
+[![Star History Chart](https://api.star-history.com/svg?repos=opennaslab/kubespider&type=Date)](https://star-history.com/#opennaslab/kubespider)
 
 ## 需求
 开发一个软件，首先要明白需求是什么，那作为NAS用户，或多或少都有如下需求：

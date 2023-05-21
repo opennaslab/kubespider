@@ -9,7 +9,7 @@ qbittorrent是一个开源的bt种子下载工具，界面简洁功能强大并�
 ### 1. 安装qBittorrent
 运行如下命令即可
 ```sh
-git clone https://github.com/jwcesign/kubespider.git
+git clone https://github.com/opennaslab/kubespider.git
 cd kubespider
 bash hack/install_qbittorrent.sh
 ```

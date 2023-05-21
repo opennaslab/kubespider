@@ -4,7 +4,7 @@
 ## 安装Kubespider
 在开发之前，你需要首先安装Kubespider。
 ```sh
-git clone https://github.com/jwcesign/kubespider.git
+git clone https://github.com/opennaslab/kubespider.git
 cd kubespider
 bash hack/install_kubespider.sh
 ```
