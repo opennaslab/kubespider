@@ -1,6 +1,6 @@
 aria2p==0.11.2
 beautifulsoup4==4.11.1
-requests==2.28.1
+requests==2.31.0
 setuptools==65.5.1
 pyexecjs==1.5.1
 libtorrent==2.0.7
