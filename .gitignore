@@ -3,6 +3,3 @@ __pycache__
 .vscode
 .DS_Store
 .idea/
-
-# Docs out folder
-site/
