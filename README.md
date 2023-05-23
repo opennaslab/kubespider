@@ -103,16 +103,17 @@ You can have more flexable control of path configuration while installing with d
 
 Parameters needed to start this project in docker shows as follow:
 
-|Parameter|Type|Function|
-|:---:|:---:|:---:|
-|`-v /root/.config`|VOLUMN|Path to store all configurations|
+|Parameter|Type|Function|Note|
+|:---:|:---:|:---:|:---:|
+|`-v /root/.config`|VOLUMN|Path to store all configurations||
+|`-p 3080`|port|Listen port of [Web Api](docs/zh/user_guide/api_docs/README.md) and [Chrome plugin](#3install-chrome-plugin)|Can be changed by [Global configuration](#📝-configuration)|
 
 #### Run with docker cli
 
 Run the following command in machine to be deployed to:
 
 ```bash
-docker run -itd --name kubespider  -v {config_path}/.config:/root/.config  cesign/kubespider:latest
+docker run -itd --name kubespider  -v {config_path}/.config:/root/.config -p 3080:3080 cesign/kubespider:latest
 ```
 
 `{config_path}` should be replaced to the real path in docker host.
@@ -124,8 +125,7 @@ Build your docker-compose.yaml file like list:
 ```yaml
 services:
   kubespider:
-    image: kubespider
-    build: ./kubespider
+    image: cesign/kubespider:latest
     depends_on:
       - qbittorrent
       - aria2-qb
@@ -133,6 +133,8 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Asia/Shanghai
+    ports:
+      - 3080:3080
     volumes:
       - {config_path}:/root/.config
     networks:

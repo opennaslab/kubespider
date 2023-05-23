@@ -106,16 +106,17 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 
 使用docker启动本项目需要的配置项目如下：
 
-|参数|类型|含义|
-|:---:|:---:|:---:|
-|`-v /root/.config`|VOLUMN|存放项目配置|
+|参数|类型|含义|备注|
+|:---:|:---:|:---:|:---:|
+|`-v /root/.config`|VOLUMN|存放项目配置||
+|`-p 3080`|port|[Web Api](docs/zh/user_guide/api_docs/README.md)以及[浏览器插件](#3安装chrome插件)的监听端口|可在[全局配置](#📝-配置)中修改|
 
 #### 直接使用 docker 部署
 
 直接在部署机器上执行
 
 ```bash
-docker run -itd --name kubespider  -v {config_path}/.config:/root/.config  cesign/kubespider:latest
+docker run -itd --name kubespider  -v {config_path}/.config:/root/.config -p 3080:3080 cesign/kubespider:latest
 ```
 
 即可，注意替换命令中`{config_path}`为部署机器上真实存在的配置目录。
@@ -127,8 +128,7 @@ docker run -itd --name kubespider  -v {config_path}/.config:/root/.config  cesig
 ```yaml
 services:
   kubespider:
-    image: kubespider
-    build: ./kubespider
+    image: cesign/kubespider:latest
     depends_on:
       - qbittorrent
       - aria2-qb
@@ -136,6 +136,8 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Asia/Shanghai
+    ports:
+      - 3080:3080
     volumes:
       - {config_path}:/root/.config
     networks:
