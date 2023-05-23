@@ -19,5 +19,5 @@ mkdocs-material==9.1.11
 mkdocs-material-extensions==1.1.1
 mkdocs-redirects==1.2.0
 mkdocs-mermaid2-plugin==0.6.0
-pymdown-extensions==9.11
+pymdown-extensions==10.0
 mkdocs-static-i18n==0.56
