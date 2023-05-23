@@ -26,15 +26,21 @@ To realize a general download orchestration system, it is necessary to adapt var
 * `download-provider`：The provider of each download software receives the request task from `kubespider-core`, and calls the corresponding service to realize the download. The configuration file is in `.config/download_provider.yaml`.
 
 ## 💽 Installation
+
+To adapt to multiple resource platforms, Kubespider provides many adapters. Enable or disable these adapters according to your needs. The configuration file is in the `.config` folder.
+
 ### Premise
+
 1. The operating computer and your server are on the same LAN. (I haven't tried the installation not in the same LAN yet)
 2. The server is a Linux system。
 3. Docker is installed on the server。
 
-### Default installation(Deploy with Docker)
-To adapt to multiple resource platforms, Kubespider provides many adapters. Enable or disable these adapters according to your needs. The configuration file is in the `.config` folder:
+### Install with built-in command
+
+Installing with built-in command can download and config anything needed automatically.
 
 #### 1.Download the repository and install
+
 ```sh
 git clone https://github.com/opennaslab/kubespider.git
 cd kubespider
@@ -88,6 +94,67 @@ Then with aria2 chrome plugin, you can see the download task starts:
 * Install Plex, watch videos on multiple platforms, [install now](./docs/zh/user_guide/plex_install_config/README.md).
 * Install Jellyfin, watch videos on multiple platforms, [install now](./docs/zh/user_guide/jellyfin_install_config/README.md).
 * Install Baidu network disk(only in china), download in the background, [install now](TODO).
+
+### Deploy with docker
+
+You can have more flexable control of path configuration while installing with docker or docker-compose.
+
+#### Parameters
+
+Parameters needed to start this project in docker shows as follow:
+
+|Parameter|Type|Function|
+|:---:|:---:|:---:|
+|`-v /root/.config`|VOLUMN|Path to store all configurations|
+
+#### Run with docker cli
+
+Run the following command in machine to be deployed to:
+
+```bash
+docker run -itd --name kubespider  -v {config_path}/.config:/root/.config  cesign/kubespider:latest
+```
+
+`{config_path}` should be replaced to the real path in docker host.
+
+#### Deploy with docker-compose
+
+Build your docker-compose.yaml file like list:
+
+```yaml
+services:
+  kubespider:
+    image: kubespider
+    build: ./kubespider
+    depends_on:
+      - qbittorrent
+      - aria2-qb
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+    volumes:
+      - {config_path}:/root/.config
+    networks:
+      - kb
+  
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    // and any other config needed by qbtorrent
+    
+  aria2:
+    container_name: aria2-qb
+    image: abcminiuser/docker-aria2-with-webui:latest-ng
+    // and any other config needed by aria2
+
+networks:
+  kb:
+    name: kb
+```
+
+And run `docker-compose up` in your docker host machine.
+
+`{config_path}` should be replaced to the real path in docker host.
 
 ## 📝 Configuration
 The global configuration file is located at `.config/kubespider.yaml`, which is installed under `${HOME}/kubespider/.config/kubespider.yaml`. The description of each configuration item is as follows:

@@ -25,15 +25,21 @@
 * `download-provider`：各下载软件的提供器，接收`kubespider-core`的请求Task，调用对应的服务实现下载。配置文件在`.config/download_provider.yaml`。
 
 ## 💽 安装
+
+Kubespider为了适配多种资源平台，提供了许多适配器，按你的需要开启或关闭这些适配器，配置文件在`.config`文件夹。
+
 ### 前提
+
 1. 操作电脑和你的服务器在同一局域网。（暂时还没有试过不在同一局域网的安装）
 2. 服务器为linux系统。
 3. 服务器已安装Docker。
 
-### 默认安装（使用Docker部署）
-Kubespider为了适配多种资源平台，提供了许多适配器，按你的需要开启或关闭这些适配器，配置文件在`.config`文件夹：
+### 使用脚本安装
+
+使用本项目预设脚本安装，可以自动化下载并配置所需项目。
 
 #### 1.下载代码库并且安装
+
 ```sh
 # 如果镜像无法下载或速度较慢请设置此环境变量
 # export CHINA_MAINLAND=TRUE
@@ -91,6 +97,65 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 * 安装Plex，多平台观看视频，[立即安装](./docs/zh/user_guide/plex_install_config/README.md)。
 * 安装Jellyfin，多平台观看视频，[立即安装](./docs/zh/user_guide/jellyfin_install_config/README.md)。
 * 安装百度网盘，后台下载，[立即安装](TODO)。
+
+### 使用docker进行部署
+
+使用 docker 或者 docker-compose 进行配置可以灵活自定义本项目使用的配置目录。
+
+#### 参数配置
+
+使用docker启动本项目需要的配置项目如下：
+
+|参数|类型|含义|
+|:---:|:---:|:---:|
+|`-v /root/.config`|VOLUMN|存放项目配置|
+
+#### 直接使用 docker 部署
+
+直接在部署机器上执行
+
+```bash
+docker run -itd --name kubespider  -v {config_path}/.config:/root/.config  cesign/kubespider:latest
+```
+
+即可，注意替换命令中`{config_path}`为部署机器上真实存在的配置目录。
+
+#### 使用 docker compose 部署
+
+构建如下 docker-compose.yaml 文件：
+
+```yaml
+services:
+  kubespider:
+    image: kubespider
+    build: ./kubespider
+    depends_on:
+      - qbittorrent
+      - aria2-qb
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+    volumes:
+      - {config_path}:/root/.config
+    networks:
+      - kb
+  
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    // and any other config needed by qbtorrent
+    
+  aria2:
+    container_name: aria2-qb
+    image: abcminiuser/docker-aria2-with-webui:latest-ng
+    // and any other config needed by aria2
+
+networks:
+  kb:
+    name: kb
+```
+
+在部署机器上执行 `docker-compose up` 即可，注意替换命令中`{config_path}`为部署机器上真实存在的配置目录。
 
 ## 📝 配置
 全局配置文件在`.config/kubespider.yaml`，安装后位于`${HOME}/kubespider/.config/kubespider.yaml`，各配置项解释如下：  
