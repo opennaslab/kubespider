@@ -32,7 +32,8 @@ def format_long_string(longstr: str) -> str:
         return longstr[:40] + '...'
     return longstr
 
-def get_request_controller() -> request.OpenerDirector:
+
+def get_request_controller(cookie: str = None) -> request.OpenerDirector:
     proxy_addr = global_config.get_proxy()
 
     proxy_handler = None
@@ -44,19 +45,23 @@ def get_request_controller() -> request.OpenerDirector:
     else:
         handler = request.build_opener()
 
-    headers = ("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE")
-    handler.addheaders = [headers]
+    agent_header = ("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE")
+    handler.addheaders = [agent_header]
+
+    if cookie is not None:
+        cookie_header = ("Cookie", cookie)
+        handler.addheaders.append(cookie_header)
+
     return handler
 
-def get_link_type(url):
+def get_link_type(url: str, controller: request.OpenerDirector) -> str:
     if url.startswith('magnet:'):
         return types.LINK_TYPE_MAGNET
     if urlparse(url).path.endswith('torrent'):
         return types.LINK_TYPE_TORRENT
     # rfc6266: guess link type
-    req = get_request_controller()
     try:
-        resp = req.open(url, timeout=30)
+        resp = controller.open(url, timeout=30)
         if resp.code == 200 and resp.headers.get('content-disposition'):
             content_disposition = resp.headers.get('content-disposition')
             _, params = cgi.parse_header(content_disposition)
@@ -74,3 +79,15 @@ def parse_cookie_string(cookie: str) -> dict:
         key, value = item.strip().split('=')
         cookie_dict[key] = value
     return cookie_dict
+
+def download_torrent_file(url: str, controller: request.OpenerDirector) -> str:
+    try:
+        resp = controller.open(url, timeout=30).read()
+        file = get_tmp_file_name(url) + '.torrent'
+        with open(file, 'wb') as file_wirte:
+            file_wirte.write(resp)
+            file_wirte.close()
+        return file
+    except Exception as err:
+        logging.error("Download torrent file error:%s", err)
+        return None

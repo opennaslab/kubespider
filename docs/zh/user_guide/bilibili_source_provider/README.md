@@ -33,4 +33,4 @@ bilibili_source_provider:
 docker restart kubespider
 ```
 
-安装最终效果测试即可。
+按照最终效果测试即可。

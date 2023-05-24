@@ -38,6 +38,15 @@ dygod_magic_source_provider:
   enable: false
   type: magic_source_provider
   charset: gb2312
-  handle_host: www.dygod.net
+  handle_host:
+    - www.dygod.net
+  #link_type: magnet
+  # This value could be $URL or xpath.
+  # With $URL, the original url will be send to download softwear.
+  # With xpath, the link will be extracted with xpath and send to download softwear.
   link_selector: //*[@id="downlist"]/table/tbody/tr/td/a/@href
   title_selector: //*[@id="header"]/div/div[3]/div/div[4]/div[1]/h1/text()
+  #cookie: xxx
+  #downloader: transmission
+  #download_param: [ ]
+  #file_type: movie

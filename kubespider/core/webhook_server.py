@@ -68,7 +68,8 @@ def download_handler():
 
     err = None
     if match_one_provider is False:
-        link_type = helper.get_link_type(source)
+        contoller = helper.get_request_controller()
+        link_type = helper.get_link_type(source, contoller)
         # If we not match the source provider, just download to common path
         # TODO: implement a better classification if no source provider match
         path = helper.convert_file_type_to_path(types.FILE_TYPE_COMMON) + '/' + path
