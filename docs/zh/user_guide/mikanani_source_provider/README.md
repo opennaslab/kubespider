@@ -27,11 +27,11 @@ mikanani_source_provider:
 * `enable`：是否开启此provider。  
 * `rss_link`：mikanani账号的rss链接，获取方法如下：  
   1. 去[mikanani](https://mikanani.me/)注册账号，开启高级订阅 
-   ![img](./images/mikanani_source_provider_cfg_1.jpg)
+   ![img](../../images/mikanani_source_provider_cfg_1.jpg)
   2. 关注你喜欢的动漫
-   ![img](./images/mikanani_source_provider_cfg_2.jpg)
+   ![img](../../images/mikanani_source_provider_cfg_2.jpg)
   3. 查看RSS链接，选择复制链接地址并设置为`rss_link`即可
-   ![img](./images/mikanani_source_provider_cfg_3.jpg)
+   ![img](../../images/mikanani_source_provider_cfg_3.jpg)
 * `downloader`：指定使用的下载器，格式为数组，内容需要精确地跟 `downloader_provider.yaml` 中声明的名称一样；下载优先级将由数组顺序决定。
 * `download_param`：下载时传给下载器的额外参数，具体参数需要参考下载器定义。
 * `filter`：用于过滤标题名的正则表达式。

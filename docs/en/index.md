@@ -1,6 +1,6 @@
 # Kubespider
 <p align="center">
-  <img src="./docs/images/logo.png" width="200" alt="Kubespider logo">
+  <img src="../images/logo.png" width="200" alt="Kubespider logo">
 </p>
 
 ## 💥 A global resource download orchestration system
@@ -10,8 +10,6 @@
 [![GitHub stars](https://img.shields.io/github/stars/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/stargazers)
 [![GitHub license](https://img.shields.io/github/license/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/blob/master/LICENSE)
 
-
-English | [简体中文](./README-CN.md)  
 We are a community of individuals who share a passion for life and have come together based on shared interests and needs. In our free time, we collaborated to develop Kubespider.  
 
 Kubespider is developed to utilize an idle server in a local area network as a NAS, enabling automatic downloads of TV series, triggering downloads from a local laptop, and adapting to various websites such as YouTube and BiliBili, as well as different types of resources such as TV series, movies, music and more.  
@@ -20,7 +18,7 @@ After being exposed to Terraform and its great versatility, we were inspired to 
 
 ## ⛵ System architecture
 To realize a general download orchestration system, it is necessary to adapt various resource websites and download software, so these two parts are abstracted from the core functions:
-![image](./docs/images/kubespider-architecture.png)
+![image](../images/kubespider-architecture.png)
 * `kubespider-core`: The core module of Kubespider accepts the trigger download request, calls the resource provider for resolution (it will eventually be resolved into a standard mode, such as the user enters the bilibili blogger address, and the corresponding resource provider outputs the mp4 file address download list), and finally calls the download provider to implement Download; this module will also periodically call providers (such as TV series provider) to download additional resources.
 * `source-provider`：The provider of each resource website accepts input of general resource addresses, and outputs standard resource address URLs, such as the personal homepage of a YouTuber, and outputs all mp4 download addresses of the blogger’s videos. The configuration file is in `.config/source_provider.yaml`.
 * `download-provider`：The provider of each download software receives the request task from `kubespider-core`, and calls the corresponding service to realize the download. The configuration file is in `.config/download_provider.yaml`.
@@ -69,24 +67,24 @@ Aria2 default secret is:kubespider
 #### 2.Connect to aria2
 For checking the download tasks on your server conveniently, go to the chrome store to download [AriaNg plugin](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn).  
 Then connect, the plugin configuration is as follows(shown at the end of the script `install_kubespider.sh` execution output):
-![img](./docs/images/aria2-for-chrome-config-en.jpg)
+![img](../images/aria2-for-chrome-config-en.jpg)
 
 Of course, it is not necessary, you can also use the desktop program to connect: [AriaNg](https://github.com/mayswind/AriaNg-Native/releases/)
 
 #### 3.Install Chrome plugin
 With Kubespider Chrome plugin, you can get a better experience.  
 After step 1 has been done, open chrome, then install Kubespider plugin, and configure it as follows(The server address is `http://<server_ip>:3080`):
-![img](./docs/images/kubespider-chrome-ext-install-en.gif)  
+![img](../images/kubespider-chrome-ext-install-en.gif)  
 
 If I want to download a movie, I can right click and send the download task to Kubespider([demo website](https://thepiratebay.org/)):
-![img](./docs/images/kubespider-chrome-ext-usage-en.png)
+![img](../images/kubespider-chrome-ext-usage-en.png)
 
 Then with aria2 chrome plugin, you can see the download task starts:
-![img](./docs/images/kubespider-chrome-ext-aria2-en.jpg)
+![img](../images/kubespider-chrome-ext-aria2-en.jpg)
 
 #### 4.More (Optional)
-* Install Plex, watch videos on multiple platforms, [install now](./docs/zh/user_guide/plex_install_config/README.md).
-* Install Jellyfin, watch videos on multiple platforms, [install now](./docs/zh/user_guide/jellyfin_install_config/README.md).
+* Install Plex, watch videos on multiple platforms, [install now](../zh/user_guide/plex_install_config/README.md).
+* Install Jellyfin, watch videos on multiple platforms, [install now](../zh/user_guide/jellyfin_install_config/README.md).
 * Install Baidu network disk(only in china), download in the background, [install now](TODO).
 
 ## 📝 Configuration
@@ -102,24 +100,24 @@ The global configuration file is located at `.config/kubespider.yaml`, which is 
 As mentioned before, the source provider is used to adapt to different websites, and download related resources based on the conditions:
 | Source Provider | Support | Purpose | Configuration |
 | :-------- | -----: | ---: | ------: |
-| mikanani source provider  | Yes     | Automatically download updated anime | [link](./docs/zh/user_guide/mikanani_source_provider/README.md) |
-| btbtt12 source provider | Yes | Trigger download resource in btbtt12 website | [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) |
-| meijutt source provider | Yes | Download updated TV series | [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
-| YouTube source provider | Yes | Trigger download YouTube video | [link](./docs/zh/user_guide/youtube_source_provider/README.md) |
-| Bilibili source provider | Yes | Trigger download bilibili video | [link](./docs/zh/user_guide/bilibili_source_provider/README.md) |
-| general rss source provider | Yes | Automatically download rss source | [link](./docs/zh/user_guide/general_rss_source_provider/README.md) |
-| Magic source provider |Yes | Trigger download resource via xpath configuration | [link](./docs/zh/user_guide/magic_source_provider/README.md) |
+| mikanani source provider  | Yes     | Automatically download updated anime | [link](../zh/user_guide/mikanani_source_provider/README.md) |
+| btbtt12 source provider | Yes | Trigger download resource in btbtt12 website | [link](../zh/user_guide/btbtt12_disposable_source_provider/README.md) |
+| meijutt source provider | Yes | Download updated TV series | [link](../zh/user_guide/meijutt_source_provider/README.md) |
+| YouTube source provider | Yes | Trigger download YouTube video | [link](../zh/user_guide/youtube_source_provider/README.md) |
+| Bilibili source provider | Yes | Trigger download bilibili video | [link](../zh/user_guide/bilibili_source_provider/README.md) |
+| general rss source provider | Yes | Automatically download rss source | [link](../zh/user_guide/general_rss_source_provider/README.md) |
+| Magic source provider |Yes | Trigger download resource via xpath configuration | [link](../zh/user_guide/magic_source_provider/README.md) |
 
 ### Download provider(Configured as needed)  
 In order to make full use of the existing download software in the open-source community(For example, YouTube has dedicated download software), the following software is currently supported:
 | Download Software | Support | Configuration |
 | :---------------- | ------: | ------------: |
-| aria2             | Yes     | [link](./docs/zh/user_guide/aria2_download_provider/README.md) |
-| xunlei            | Yes     | [link](./docs/zh/user_guide/thunder_install_config/README.md) |
-| qBittorrent       | Yes     | [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) | 
-| you-get           | Yes     | [link](./docs/zh/user_guide/youget_download_provider/README.md)    |
-| yt-dlp            | Yes     | [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
-| transmission      | Yes     | [link](./docs/zh/user_guide/transmission_download_provider/README.md) |
+| aria2             | Yes     | [link](../zh/user_guide/aria2_download_provider/README.md) |
+| xunlei            | Yes     | [link](../zh/user_guide/thunder_install_config/README.md) |
+| qBittorrent       | Yes     | [link](../zh/user_guide/qbittorrent_download_provider/README.md) | 
+| you-get           | Yes     | [link](../zh/user_guide/youget_download_provider/README.md)    |
+| yt-dlp            | Yes     | [link](../zh/user_guide/ytdlp_download_provider/README.md) |
+| transmission      | Yes     | [link](../zh/user_guide/transmission_download_provider/README.md) |
 
 
 ### Basic feature  
@@ -130,20 +128,20 @@ Currently, the following file types are supported to trigger downloading:
 | torrent        | Yes     |
 | general(jpg, mp4, etc.) | Yes |
 
-Please refer to [link](./docs/zh/user_guide/trigger_download/README.md) for how to trigger the download.
+Please refer to [link](../zh/user_guide/trigger_download/README.md) for how to trigger the download.
 
 ## 🙋FAQ
 
-See the [FAQ](docs/en/faq.md) for more details, and feel free to contribute your questions and solutions. Your valuable input will collectively improve the documentation and benefit a wider audience. Join us in making a difference!
+See the [FAQ](./faq.md) for more details, and feel free to contribute your questions and solutions. Your valuable input will collectively improve the documentation and benefit a wider audience. Join us in making a difference!
 
 ## 🤝 Contribution [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
-If you are interested in participating in joint development, welcome to STAR/FORK/PR, please check [link](./docs/zh/roadmap.md) for Roadmap.
+If you are interested in participating in joint development, welcome to STAR/FORK/PR, please check [link](../zh/roadmap.md) for Roadmap.
 * For how to develop/debug Kubespider, please see [link](./CONTRIBUTING.md).
-* For how to implement a resource provider for a resource website, please see [link](./docs/zh/contribute/implement_source_provider_cn.md).
-* For how to implement a download provider for download software, please see [link](./docs/en/contribute/implement_download_provider_cn.md).
-* For how to develop chrome extension webhook, please see [link](./docs/zh/contribute/develop_chrome_extension.md).
-* For how to implement other webhook trigger tools, please see [link](./docs/zh/user_guide/api_docs/README.md).
+* For how to implement a resource provider for a resource website, please see [link](../zh/contribute/implement_source_provider_cn.md).
+* For how to implement a download provider for download software, please see [link](./contribute/implement_download_provider_cn.md).
+* For how to develop chrome extension webhook, please see [link](../zh/contribute/develop_chrome_extension.md).
+* For how to implement other webhook trigger tools, please see [link](../zh/user_guide/api_docs/README.md).
 
 ## ❤️ Sponsor  
 Thanks to the following companies for sponsoring development tools, the ranking is not in any particular order:
@@ -152,22 +150,22 @@ Thanks to the following companies for sponsoring development tools, the ranking 
     <tr>
       <th align="center" style="height: 80px;">
         <a href="https://www.jetbrains.com/">
-          <img align="center" src="./docs/images/sponsor/jetbrains.png" height="50px"><br>
+          <img align="center" src="../images/sponsor/jetbrains.png" height="50px"><br>
         </a>
       </th>
       <th align="center" style="height: 80px;">
         <a href="https://www.synology.cn/">
-          <img align="center" src="./docs/images/sponsor/synology.png" height="50px"><br>
+          <img align="center" src="../images/sponsor/synology.png" height="50px"><br>
         </a>
       </th>
       <th align="center" style="height: 80px;">
         <a href="https://www.terra-master.com/">
-          <img align="center" src="./docs/images/sponsor/terramaster.svg" height="50px"><br>
+          <img align="center" src="../images/sponsor/terramaster.svg" height="50px"><br>
         </a>
       </th>
       <th align="center" style="height: 80px;">
         <a href="https://www.qnap.com.cn/">
-          <img align="center" src="./docs/images/sponsor/qnap.svg" height="50px"><br>
+          <img align="center" src="../images/sponsor/qnap.svg" height="50px"><br>
         </a>
       </th>
     </tr>

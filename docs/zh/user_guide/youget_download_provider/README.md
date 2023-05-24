@@ -4,7 +4,7 @@
 
 ## 最终效果
 效果如图，结合You-Gey，Kubespider会调用You-Get，下载Bilibili视频：
-![img](./images/youget_final_show.gif)
+![img](../../images/youget_final_show.gif)
 
 ## 安装
 ### 1.安装You-Get下载器

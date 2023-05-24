@@ -1,6 +1,6 @@
 # Kubespider
 <p align="center">
-  <img src="./docs/images/logo.png" width="200" alt="Kubespider logo">
+  <img src="../images/logo.png" width="200" alt="Kubespider logo">
 </p>
 
 ## 💥 一款全局资源编排下载系统
@@ -10,7 +10,6 @@
 [![GitHub stars](https://img.shields.io/github/stars/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/stargazers)
 [![GitHub license](https://img.shields.io/github/license/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/blob/master/LICENSE)
 
-[English](./README.md) | 简体中文  
 我们是一群热爱生活的人，因兴趣和共同需求聚集在一起，利用空闲时间共同开发了 Kubespider。  
 
 开发Kubespider的出发点是：局域网有一台空闲的服务器，想把它作为NAS，实现自动追剧下载，本地笔记本电脑触发下载，同时适配各种网站资源（Youtube、Bilibili等）和资源类型（电视剧、电影、音乐等）。  
@@ -19,7 +18,7 @@
 
 ## ⛵ 系统架构
 为了实现一个通用的下载编排系统，需要适配各种资源网站和下载软件，所以将这两部分从核心功能中抽象出来：
-![image](./docs/images/kubespider-architecture.png)
+![image](../images/kubespider-architecture.png)
 * `kubespider-core`：Kubespider核心模块，接受触发下载请求，调用资源提供器provider解析（最终会解析为标准模式，如用户输入bilibili博主地址，对应资源提供器输出mp4文件地址下载列表），最后调用下载提供器provider实现下载；此模块同时也会周期调用providers(如追剧provider)，下载增加的资源。
 * `source-provider`：各资源网站的提供器，接受通用资源地址输入，输出为标准资源地址url，如输入为某个bilibili博主的个人主页，输出为博主视频的所有mp4下载地址。配置文件在`.config/source_provider.yaml`。
 * `download-provider`：各下载软件的提供器，接收`kubespider-core`的请求Task，调用对应的服务实现下载。配置文件在`.config/download_provider.yaml`。
@@ -72,24 +71,24 @@ Aria2 default secret is:kubespider
 为了便于查看下载任务，需要下载Chrome插件AriNg:(1)如果你能访问外网，在chrome商店下载[AriaNg](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn)；(2)如果不能，在Crx4Chrome下载[AriaNg](https://www.crx4chrome.com/crx/85196/)。  
 
 然后连接，插件配置如下(显示在脚本`install_kubespider.sh`执行输出最后)：
-![img](./docs/images/aria2-for-chrome-config-zh.jpg)
+![img](../images/aria2-for-chrome-config-zh.jpg)
 
 当然，非必需的，你也可以使用桌面程序连接：[AriaNg](https://github.com/mayswind/AriaNg-Native/releases/)
 
 #### 3.安装Chrome插件
 Kubespider结合chrome插件，能获得更好的体验。  
 在步骤1下载代码后，打开Chrome，按如下步骤安装Kubespider Chrome插件并且设置(其中地址为`http://<server_ip>:3080`)：
-![img](./docs/images/kubespider-chrome-ext-install-zh.gif)  
+![img](../images/kubespider-chrome-ext-install-zh.gif)  
 
 如我要追剧，直接右键，发送给Kubespider即可([示例网站](https://www.meijutt.tv/))：
-![img](./docs/images/kubespider-chrome-ext-usage-zh.png)
+![img](../images/kubespider-chrome-ext-usage-zh.png)
 
 Kubesdpier会自动下载现有的所有剧集并且追更：
-![img](./docs/images/kubespider-chrome-ext-aria2-zh.jpg)
+![img](../images/kubespider-chrome-ext-aria2-zh.jpg)
 
 #### 4.更多（可选）
-* 安装Plex，多平台观看视频，[立即安装](./docs/zh/user_guide/plex_install_config/README.md)。
-* 安装Jellyfin，多平台观看视频，[立即安装](./docs/zh/user_guide/jellyfin_install_config/README.md)。
+* 安装Plex，多平台观看视频，[立即安装](./user_guide/plex_install_config/README.md)。
+* 安装Jellyfin，多平台观看视频，[立即安装](./user_guide/jellyfin_install_config/README.md)。
 * 安装百度网盘，后台下载，[立即安装](TODO)。
 
 ## 📝 配置
@@ -102,26 +101,26 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 ## 🔧 特性列表
 ### 资源提供器(按需配置)
 如前面所述，资源提供器用于对接各种资源网站，条件触发下载相关资源：
-| 资源提供器          | 是否支持 |                            用途 |                                                                  配置手册 |
-| :------------------ | -------: | ------------------------------: | ------------------------------------------------------------------------: |
-| mikanani资源提供器  |       是 |                  全自动动漫追番 |           [link](./docs/zh/user_guide/mikanani_source_provider/README.md) |
-| btbtt12资源提供器   |       是 |  实现链接触发下载，简化下载流程 | [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) |
-| meijutt资源提供器   |       是 |                      自动追美剧 |            [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
-| YouTube资源提供器   |       是 |             触发下载YouTube视频 |            [link](./docs/zh/user_guide/youtube_source_provider/README.md) |
-| Bilibili资源提供器  |       是 |            触发下载Bilibili视频 |           [link](./docs/zh/user_guide/bilibili_source_provider/README.md) |
-| 通用rss资源提供器   |       是 |             自动下载rss订阅资源 |        [link](./docs/zh/user_guide/general_rss_source_provider/README.md) |
-| 通用xpath资源提供器 |       是 | 触发下载通过xpath配置的内容资源 |              [link](./docs/zh/user_guide/magic_source_provider/README.md) |
+| 资源提供器          | 是否支持 |                            用途 |                                                          配置手册 |
+| :------------------ | -------: | ------------------------------: | ----------------------------------------------------------------: |
+| mikanani资源提供器  |       是 |                  全自动动漫追番 |           [link](./user_guide/mikanani_source_provider/README.md) |
+| btbtt12资源提供器   |       是 |  实现链接触发下载，简化下载流程 | [link](./user_guide/btbtt12_disposable_source_provider/README.md) |
+| meijutt资源提供器   |       是 |                      自动追美剧 |            [link](./user_guide/meijutt_source_provider/README.md) |
+| YouTube资源提供器   |       是 |             触发下载YouTube视频 |            [link](./user_guide/youtube_source_provider/README.md) |
+| Bilibili资源提供器  |       是 |            触发下载Bilibili视频 |           [link](./user_guide/bilibili_source_provider/README.md) |
+| 通用rss资源提供器   |       是 |             自动下载rss订阅资源 |        [link](./user_guide/general_rss_source_provider/README.md) |
+| 通用xpath资源提供器 |       是 | 触发下载通过xpath配置的内容资源 |              [link](./user_guide/magic_source_provider/README.md) |
 
 ### 下载提供器(按需配置)
 为了充分利用开源社区已有的下载软件(如YouTube有专门的下载软件)，目前支持如下下载软件：
-| 下载软件     | 是否支持 |                                                              配置手册 |
-| :----------- | -------: | --------------------------------------------------------------------: |
-| aria2        |       是 |        [link](./docs/zh/user_guide/aria2_download_provider/README.md) |
-| 迅雷         |       是 |         [link](./docs/zh/user_guide/thunder_install_config/README.md) |
-| qBittorrent  |       是 |  [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) |
-| you-get      |       是 |       [link](./docs/zh/user_guide/youget_download_provider/README.md) |
-| yt-dlp       |       是 |        [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
-| transmission |       是 | [link](./docs/zh/user_guide/transmission_download_provider/README.md) |
+| 下载软件     | 是否支持 |                                                      配置手册 |
+| :----------- | -------: | ------------------------------------------------------------: |
+| aria2        |       是 |        [link](./user_guide/aria2_download_provider/README.md) |
+| 迅雷         |       是 |         [link](./user_guide/thunder_install_config/README.md) |
+| qBittorrent  |       是 |  [link](./user_guide/qbittorrent_download_provider/README.md) |
+| you-get      |       是 |       [link](./user_guide/youget_download_provider/README.md) |
+| yt-dlp       |       是 |        [link](./user_guide/ytdlp_download_provider/README.md) |
+| transmission |       是 | [link](./user_guide/transmission_download_provider/README.md) |
 
 ### 基本特性
 目前支持如下文件触发下载：
@@ -131,21 +130,21 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 | torrent              |       是 |
 | 通用文件(jpg, mp4等) |       是 |
 
-触发下载使用方法请查看 [link](./docs/zh/user_guide/trigger_download/README.md)。
+触发下载使用方法请查看 [link](./user_guide/trigger_download/README.md)。
 
 ## 🙋常见问题
 
-我们列举了使用过程中[可能遇到的问题](docs/zh/faq.md)供您参考，也欢迎您记录您的问题和解决方案，共同完善文档。
+我们列举了使用过程中[可能遇到的问题](./faq.md)供您参考，也欢迎您记录您的问题和解决方案，共同完善文档。
 
 ## 🤝 参与共建 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 
-如果你有兴趣参与共同开发，欢迎 STAR/FORK/PR，Roadmap请查看 [link](./docs/zh/roadmap.md)。
+如果你有兴趣参与共同开发，欢迎 STAR/FORK/PR，Roadmap请查看 [link](./roadmap.md)。
 
 * 如何开发调试Kubespider，请看 [link](./CONTRIBUTING-CN.md)。
-* 如何编写资源网站的资源提供器，请看 [link](./docs/zh/contribute/implement_source_provider_cn.md)。
-* 如何编写下载软件的下载提供器，请看 [link](./docs/zh/contribute/implement_download_provider_cn.md)。
-* 如何开发调试chrome插件webhook，请看 [link](./docs/zh/contribute/develop_chrome_extension.md)。
-* 如何开发其他webhook触发工具, 请看 [link](./docs/zh/user_guide/api_docs/README.md)。
+* 如何编写资源网站的资源提供器，请看 [link](./contribute/implement_source_provider_cn.md)。
+* 如何编写下载软件的下载提供器，请看 [link](./contribute/implement_download_provider_cn.md)。
+* 如何开发调试chrome插件webhook，请看 [link](./contribute/develop_chrome_extension.md)。
+* 如何开发其他webhook触发工具, 请看 [link](./user_guide/api_docs/README.md)。
 
 ## ❤️ 赞助  
 感谢以下公司赞助开发工具，排名不分先后：
@@ -154,22 +153,22 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
     <tr>
       <th align="center" style="height: 80px;">
         <a href="https://www.jetbrains.com/">
-          <img align="center" src="./docs/images/sponsor/jetbrains.png" height="50px"><br>
+          <img align="center" src="../images/sponsor/jetbrains.png" height="50px"><br>
         </a>
       </th>
       <th align="center" style="height: 80px;">
         <a href="https://www.synology.cn/">
-          <img align="center" src="./docs/images/sponsor/synology.png" height="50px"><br>
+          <img align="center" src="../images/sponsor/synology.png" height="50px"><br>
         </a>
       </th>
       <th align="center" style="height: 80px;">
         <a href="https://www.terra-master.com/">
-          <img align="center" src="./docs/images/sponsor/terramaster.svg" height="50px"><br>
+          <img align="center" src="../images/sponsor/terramaster.svg" height="50px"><br>
         </a>
       </th>
       <th align="center" style="height: 80px;">
         <a href="https://www.qnap.com.cn/">
-          <img align="center" src="./docs/images/sponsor/qnap.svg" height="50px"><br>
+          <img align="center" src="../images/sponsor/qnap.svg" height="50px"><br>
         </a>
       </th>
     </tr>

@@ -6,7 +6,7 @@ YouTube是一个美国网络视频共享网站，总部设在加利福尼亚州�
 
 ## 最终效果
 最终效果如下图，在Chrome中右键，选择`Send to Kubespider`，Kubespider会自动下载YouTube视频资源。
-![img](./images/youtube_final_show.gif)
+![img](../../images/youtube_final_show.gif)
 
 ## 配置
 ### 1.前提

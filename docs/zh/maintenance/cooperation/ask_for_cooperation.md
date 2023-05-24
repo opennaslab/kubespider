@@ -21,7 +21,7 @@ Kubespider自2022年11月开源以来，得到了众多开发者和用户的关�
 
 ## 软件设计
 在开源社区，有许许多多针对不同网站的下载软件，同时资源网站也多种多样，Kubespider要做的就是把这两部分联合起来，提供给用户统一、便携、自动化的下载体验，架构下图所示：
-![img](./images/kubespider-architecture.png)
+![img](../../images/kubespider-architecture.png)
 * `kubespider-core`：Kubespider核心模块，开放统一的资源下载API，可对接APP或者Chrome插件，触发资源下载，也会周期调用各`source-provider`以下载更新的资源。
 * `source-provider`：各资源网站的提供器，适配各种资源网站解析，如B站和YouTube。
 * `download-provider`：各下载软件的提供器，适配各种下载软件，如迅雷和Transmission。
@@ -32,10 +32,10 @@ Kubespider自2022年11月开源以来，得到了众多开发者和用户的关�
 
 ## 实际效果
 最后的实际效果，用户安装配置好后，在对应资源网站，鼠标右键即可触发下载：
-![img](images/youtube_final_show.gif)
+![img](../../images/youtube_final_show.gif)
 
 也可以自动下载更新的资源，如自动下载周更的动漫：
-![img](./images/download_automatically.png)
+![img](../../images/download_automatically.png)
 
 ## 后续计划
 * 支持消息推送。
