@@ -63,7 +63,7 @@ class SourceProvider(metaclass=abc.ABCMeta):
 * `update_config`: 更新资源提供器配置信息，在webhook ebable时，此接口可用于更新配置文件，如接受美剧地址，刷写地址到配置文件，然后周期下载更新剧集。
 * `load_config`: 获取资源提供器配置信息。
 
-在实现如上函数后，还需要在`kubespider/core/kubespider_global.py`中初始化对应provider，如下：
+在实现如上函数后，还需要在`kubespider/core/config_handler.py`中初始化对应provider，如下：
 ```python
 source_providers = [
     mikanani_source_provider.MikananiSourceProvider(),
@@ -178,7 +178,7 @@ class MeijuttSourceProvider(provider.SourceProvider):
 * `update_config`: 在webhook开启情况下，如果请求的url通过`should_handle`检查，则会调用此函数把美剧地址存如provider config文件。
 * `load_config`: 读取配置文件函数。
 
-最后，在`kubespider/core/kubespider_global.py`中初始化meijutt provider，如下：
+最后，在`kubespider/core/config_handler.py`中初始化meijutt provider，如下：
 ```python
 source_providers = [
     mikanani_source_provider.MikananiSourceProvider(),
