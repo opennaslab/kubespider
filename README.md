@@ -35,7 +35,7 @@ To adapt to multiple resource platforms, Kubespider provides many adapters. Enab
 2. The server is a Linux system。
 3. Docker is installed on the server。
 
-### Install with built-in command
+### Default installation (with docker)
 
 Installing with built-in command can download and config anything needed automatically.
 
@@ -95,69 +95,9 @@ Then with aria2 chrome plugin, you can see the download task starts:
 * Install Jellyfin, watch videos on multiple platforms, [install now](./docs/zh/user_guide/jellyfin_install_config/README.md).
 * Install Baidu network disk(only in china), download in the background, [install now](TODO).
 
-### Deploy with docker
+### Other installation
 
-You can have more flexable control of path configuration while installing with docker or docker-compose.
-
-#### Parameters
-
-Parameters needed to start this project in docker shows as follow:
-
-|Parameter|Type|Function|Note|
-|:---:|:---:|:---:|:---:|
-|`-v /root/.config`|VOLUMN|Path to store all configurations||
-|`-p 3080`|port|Listen port of [Web Api](docs/zh/user_guide/api_docs/README.md) and [Chrome plugin](#3install-chrome-plugin)|Can be changed by [Global configuration](#📝-configuration)|
-
-#### Run with docker cli
-
-Run the following command in machine to be deployed to:
-
-```bash
-docker run -itd --name kubespider  -v {config_path}/.config:/root/.config -p 3080:3080 cesign/kubespider:latest
-```
-
-`{config_path}` should be replaced to the real path in docker host.
-
-#### Deploy with docker-compose
-
-Build your docker-compose.yaml file like list:
-
-```yaml
-services:
-  kubespider:
-    image: cesign/kubespider:latest
-    depends_on:
-      - qbittorrent
-      - aria2-qb
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Asia/Shanghai
-    ports:
-      - 3080:3080
-    volumes:
-      - {config_path}:/root/.config
-    networks:
-      - kb
-  
-  qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:latest
-    // and any other config needed by qbtorrent
-    
-  aria2:
-    container_name: aria2-qb
-    image: abcminiuser/docker-aria2-with-webui:latest-ng
-    // and any other config needed by aria2
-
-networks:
-  kb:
-    name: kb
-```
-
-And run `docker-compose up` in your docker host machine.
-
-`{config_path}` should be replaced to the real path in docker host.
-
+If you want to deploy with docker-cli or docker-compose mannually, please follow the instruction of [Other installation](docs/en/user_guide/installation/README.md).
 ## 📝 Configuration
 The global configuration file is located at `.config/kubespider.yaml`, which is installed under `${HOME}/kubespider/.config/kubespider.yaml`. The description of each configuration item is as follows:
 
