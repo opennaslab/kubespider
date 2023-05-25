@@ -5,7 +5,7 @@ meijutt有丰富的美剧内容，提供高质量下载资源。官方地址：[
 
 ## 最终效果
 最终效果如下图，在Chrome中右键，选择`Send to Kubespider`，Kubespider会自动下载已有剧集并追更。
-![img](./images/meijutt_download.gif)
+![img](../../images/meijutt_download.gif)
 
 ## 配置
 ### 1.前提
