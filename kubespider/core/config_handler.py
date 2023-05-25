@@ -10,6 +10,7 @@
 import logging
 import os
 from multiprocessing import Process
+import shutil
 from watchdog.events import FileSystemEventHandler, FileModifiedEvent
 
 from api.values import Config
@@ -130,3 +131,26 @@ def init_pt_config():
     for name in pt_config:
         init_pt_providers.append(get_pt_provider(name, pt_config[name]))
     return init_pt_providers
+
+def prepare_config() -> None:
+    miss_cfg = []
+    if not os.path.exists(values.Config.SOURCE_PROVIDER.config_path()):
+        miss_cfg.append(values.Config.SOURCE_PROVIDER)
+    if not os.path.exists(values.Config.DOWNLOAD_PROVIDER.config_path()):
+        miss_cfg.append(values.Config.DOWNLOAD_PROVIDER)
+    if not os.path.exists(values.Config.PT_PROVIDER.config_path()):
+        miss_cfg.append(values.Config.PT_PROVIDER)
+    if not os.path.exists(values.Config.KUBESPIDER_CONFIG):
+        miss_cfg.append(values.Config.KUBESPIDER_CONFIG)
+
+    if len(miss_cfg) == 0:
+        return
+
+    logging.info("Config files(%s) miss, try to init them", ','.join(miss_cfg))
+    for cfg in miss_cfg:
+        template_cfg = values.CFG_TEMPLATE_PATH + cfg
+        target_cfg = values.CFG_BASE_PATH + cfg
+        try:
+            shutil.copy(template_cfg, target_cfg)
+        except Exception as err:
+            raise Exception(str('failed to copy %s to %s:%s', template_cfg, target_cfg)) from err
