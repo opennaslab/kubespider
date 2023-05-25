@@ -42,10 +42,13 @@ jobs:
         ROOT=$(pwd)
 
         pylint $(git ls-files '*.py' | grep -v "downloaders/") --max-line-length=240
-        
+        skip_downloaders=(tiktok-dlp)
         cd downloaders
         for downloader in $(ls)
         do
+          if [[ ${skip_downloaders[@]} =~ ${downloader} ]]; then
+            continue
+          fi
           cd ${downloader}
           pylint $(git ls-files '*.py') --max-line-length=240 --rcfile=${ROOT}/.pylintrc
           cd ..

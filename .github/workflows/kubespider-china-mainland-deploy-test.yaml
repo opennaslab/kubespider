@@ -66,6 +66,14 @@ jobs:
         if [[ $? != 0 ]]; then
           exit 1
         fi
+        
+        #5. Test deploy tiktok-dlp
+        bash hack/install_tiktokdlp.sh
+        sleep 10
+        docker ps | grep -e tiktok-dlp
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
 
     - name: Find error
       if: ${{ failure() }}
