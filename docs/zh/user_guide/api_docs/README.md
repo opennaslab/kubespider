@@ -27,6 +27,17 @@ API接口 GET /api/v1/sourceproviders
 ```
 true代表此download provider开启，反之则关闭。
 
+## 获取所有PT提供器
+API接口 GET /api/v1/ptproviders
+
+响应内容:
+```json
+{
+    "hdvideo":true
+}
+```
+true代表此pt provider开启，反之则关闭。
+
 ## 触发下载
 API接口 POST /api/v1/download
 

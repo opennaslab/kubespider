@@ -5,8 +5,8 @@ from functools import wraps
 from flask import Flask, jsonify, request
 
 from core import download_trigger
-from core import kubespider_global
 from core import period_server
+import core.kubespider_controller as kc
 import source_provider.provider as sp
 from api import types
 from utils import global_config, helper
@@ -31,8 +31,10 @@ def health_check_handler():
 @kubespider_server.route('/api/v1/downloadproviders', methods=['GET'])
 @auth_required
 def list_download_provider_handler():
+    download_providers = kc.kubespider_controller.download_providers
+
     resp_array = {}
-    for i in kubespider_global.download_providers:
+    for i in download_providers:
         resp_array[i.get_provider_name()] = i.provider_enabled()
     resp = jsonify(resp_array)
     resp.content_type = "application/json"
@@ -41,8 +43,22 @@ def list_download_provider_handler():
 @kubespider_server.route('/api/v1/sourceproviders', methods=['GET'])
 @auth_required
 def list_source_provider_handler():
+    source_providers = kc.kubespider_controller.source_providers
+
     resp_array = {}
-    for i in kubespider_global.source_providers:
+    for i in source_providers:
+        resp_array[i.get_provider_name()] = i.provider_enabled()
+    resp = jsonify(resp_array)
+    resp.content_type = "application/json"
+    return resp
+
+@kubespider_server.route('/api/v1/ptproviders', methods=['GET'])
+@auth_required
+def list_pt_provider_handler():
+    pt_providers = kc.kubespider_controller.pt_providers
+
+    resp_array = {}
+    for i in pt_providers:
         resp_array[i.get_provider_name()] = i.provider_enabled()
     resp = jsonify(resp_array)
     resp.content_type = "application/json"
@@ -60,7 +76,7 @@ def download_handler():
 
     match_one_provider = False
     match_provider = None
-    for provider in kubespider_global.enabled_source_provider:
+    for provider in kc.kubespider_controller.enabled_source_providers:
         if provider.is_webhook_enable() and provider.should_handle(source):
             match_provider = provider
             # Do not break here, in order to check whether it matchs multiple provider
