@@ -18,6 +18,7 @@ FILE_TYPE_TO_PATH = {
 }
 
 CFG_BASE_PATH = os.path.join(os.getenv('HOME'), '.config/')
+CFG_TEMPLATE_PATH = os.path.join(os.getenv('HOME'), '.config_template/')
 
 class Config(str, Enum):
     SOURCE_PROVIDER = 'source_provider.yaml'

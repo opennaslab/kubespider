@@ -2,10 +2,11 @@ FROM nikolaik/python-nodejs:python3.10-nodejs20-alpine
 
 WORKDIR /root
 COPY ./kubespider ./kubespider
-COPY ./.config ./.config
+COPY ./.config ./.config_template
 COPY requirements.txt ./
 
-RUN python3 -m pip install --upgrade pip \
+RUN mkdir .config \
+    && python3 -m pip install --upgrade pip \
     && pip install -r requirements.txt \
     && rm -rf requirements.txt
 
