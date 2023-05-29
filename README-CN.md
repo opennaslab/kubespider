@@ -171,6 +171,11 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
           <img align="center" src="./docs/images/sponsor/qnap.svg" height="50px"><br>
         </a>
       </th>
+      <th align="center" style="height: 80px;">
+        <a href="https://www.asustor.com/zh-cn/">
+          <img align="center" src="./docs/images/sponsor/asustor.png" height="50px"><br>
+        </a>
+      </th>
     </tr>
   </thead>
 </table>
