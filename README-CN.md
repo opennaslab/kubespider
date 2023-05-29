@@ -25,15 +25,21 @@
 * `download-provider`：各下载软件的提供器，接收`kubespider-core`的请求Task，调用对应的服务实现下载。配置文件在`.config/download_provider.yaml`。
 
 ## 💽 安装
+
+Kubespider为了适配多种资源平台，提供了许多适配器，按你的需要开启或关闭这些适配器，配置文件在`.config`文件夹。
+
 ### 前提
+
 1. 操作电脑和你的服务器在同一局域网。（暂时还没有试过不在同一局域网的安装）
 2. 服务器为linux系统。
 3. 服务器已安装Docker。
 
 ### 默认安装（使用Docker部署）
-Kubespider为了适配多种资源平台，提供了许多适配器，按你的需要开启或关闭这些适配器，配置文件在`.config`文件夹：
+
+使用本项目预设脚本安装，可以自动化下载并配置所需项目。
 
 #### 1.下载代码库并且安装
+
 ```sh
 # 如果镜像无法下载或速度较慢请设置此环境变量
 # export CHINA_MAINLAND=TRUE
@@ -91,6 +97,10 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 * 安装Plex，多平台观看视频，[立即安装](./docs/zh/user_guide/plex_install_config/README.md)。
 * 安装Jellyfin，多平台观看视频，[立即安装](./docs/zh/user_guide/jellyfin_install_config/README.md)。
 * 安装百度网盘，后台下载，[立即安装](TODO)。
+
+### 其他安装方式
+
+如果需要使用 docker-cli 或者 docker-compose 部署，请参考[其他安装方式](docs/zh/user_guide/installation/README.md)。
 
 ## 📝 配置
 全局配置文件在`.config/kubespider.yaml`，安装后位于`${HOME}/kubespider/.config/kubespider.yaml`，各配置项解释如下：  

@@ -26,15 +26,21 @@ To realize a general download orchestration system, it is necessary to adapt var
 * `download-provider`：The provider of each download software receives the request task from `kubespider-core`, and calls the corresponding service to realize the download. The configuration file is in `.config/download_provider.yaml`.
 
 ## 💽 Installation
+
+To adapt to multiple resource platforms, Kubespider provides many adapters. Enable or disable these adapters according to your needs. The configuration file is in the `.config` folder.
+
 ### Premise
+
 1. The operating computer and your server are on the same LAN. (I haven't tried the installation not in the same LAN yet)
 2. The server is a Linux system。
 3. Docker is installed on the server。
 
-### Default installation(Deploy with Docker)
-To adapt to multiple resource platforms, Kubespider provides many adapters. Enable or disable these adapters according to your needs. The configuration file is in the `.config` folder:
+### Default installation (with docker)
+
+Installing with built-in command can download and config anything needed automatically.
 
 #### 1.Download the repository and install
+
 ```sh
 git clone https://github.com/opennaslab/kubespider.git
 cd kubespider
@@ -89,6 +95,9 @@ Then with aria2 chrome plugin, you can see the download task starts:
 * Install Jellyfin, watch videos on multiple platforms, [install now](./docs/zh/user_guide/jellyfin_install_config/README.md).
 * Install Baidu network disk(only in china), download in the background, [install now](TODO).
 
+### Other installation
+
+If you want to deploy with docker-cli or docker-compose mannually, please follow the instruction of [Other installation](docs/en/user_guide/installation/README.md).
 ## 📝 Configuration
 The global configuration file is located at `.config/kubespider.yaml`, which is installed under `${HOME}/kubespider/.config/kubespider.yaml`. The description of each configuration item is as follows:
 

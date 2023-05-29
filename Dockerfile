@@ -5,7 +5,9 @@ COPY ./kubespider ./kubespider
 COPY ./.config ./.config_template
 COPY requirements.txt ./
 
-RUN mkdir .config \
+VOLUME /root/.config
+
+RUN mkdir -p .config \
     && python3 -m pip install --upgrade pip \
     && pip install -r requirements.txt \
     && rm -rf requirements.txt
