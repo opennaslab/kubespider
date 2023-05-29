@@ -26,6 +26,9 @@ def run() -> None:
     # webhook doesn't belong to kubespider_controller, so let's extract it here
     _thread.start_new_thread(run_webhook_server, ())
 
+    while True:
+        time.sleep(30)
+
 def run_with_config_handler():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s-%(levelname)s: %(message)s')
     config_handler.prepare_config()

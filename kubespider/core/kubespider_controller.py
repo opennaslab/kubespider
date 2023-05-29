@@ -2,7 +2,6 @@
 
 import logging
 import _thread
-import time
 
 from core import download_trigger
 from core import period_server
@@ -84,8 +83,6 @@ class Kubespider:
         _thread.start_new_thread(self.run_download_trigger_job, ())
         _thread.start_new_thread(self.run_pt_server, ())
 
-        while True:
-            time.sleep(30)
 
 kubespider_controller = Kubespider()
 

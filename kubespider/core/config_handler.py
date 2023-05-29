@@ -140,7 +140,7 @@ def prepare_config() -> None:
         miss_cfg.append(values.Config.DOWNLOAD_PROVIDER)
     if not os.path.exists(values.Config.PT_PROVIDER.config_path()):
         miss_cfg.append(values.Config.PT_PROVIDER)
-    if not os.path.exists(values.Config.KUBESPIDER_CONFIG):
+    if not os.path.exists(values.Config.KUBESPIDER_CONFIG.config_path()):
         miss_cfg.append(values.Config.KUBESPIDER_CONFIG)
 
     if len(miss_cfg) == 0:
