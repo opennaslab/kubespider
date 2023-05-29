@@ -148,7 +148,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 
 ## ❤️ 赞助  
 感谢以下公司赞助开发工具，排名不分先后：
-<table>
+<table style="background-color: white">
   <thead>
     <tr>
       <th align="center" style="height: 80px;">

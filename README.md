@@ -147,7 +147,7 @@ If you are interested in participating in joint development, welcome to STAR/FOR
 
 ## ❤️ Sponsor  
 Thanks to the following companies for sponsoring development tools, the ranking is not in any particular order:
-<table>
+<table style="background-color: white">
   <thead>
     <tr>
       <th align="center" style="height: 80px;">
