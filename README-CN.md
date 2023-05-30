@@ -158,7 +158,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 
 ## ❤️ 赞助  
 感谢以下公司赞助开发工具，排名不分先后：
-<table>
+<table style="background-color: white">
   <thead>
     <tr>
       <th align="center" style="height: 80px;">
@@ -179,6 +179,11 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
       <th align="center" style="height: 80px;">
         <a href="https://www.qnap.com.cn/">
           <img align="center" src="./docs/images/sponsor/qnap.svg" height="50px"><br>
+        </a>
+      </th>
+      <th align="center" style="height: 80px;">
+        <a href="https://www.asustor.com/zh-cn/">
+          <img align="center" src="./docs/images/sponsor/asustor.png" height="50px"><br>
         </a>
       </th>
     </tr>
