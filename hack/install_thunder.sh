@@ -3,6 +3,9 @@
 
 set -e
 
+# 0.Set env
+source hack/env.sh
+
 # 1.Echo logo
 cat << "EOF"
  _          _                     _     _
