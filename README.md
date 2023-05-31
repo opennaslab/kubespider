@@ -42,6 +42,8 @@ Installing with built-in command can download and config anything needed automat
 #### 1.Download the repository and install
 
 ```sh
+# Define KUBESPIDER_HOME to specify the installation path
+# export KUBESPIDER_HOME=xxx
 git clone https://github.com/opennaslab/kubespider.git
 cd kubespider
 bash hack/install_kubespider.sh
@@ -69,8 +71,8 @@ Aria2 default secret is:kubespider
 *******************************************
 ```
 * This step will install `Kubespide` and `Aria2` resource downloader as the default downloader.
-* After installation, **all downloaded files will be stored in `${HOME}/kubespider/nas`**.
-* Configuration files are located in `${HOME}/kubespider/.config`.
+* After installation, **all downloaded files will be stored in `${HOME}/kubespider/nas`** by default.
+* Configuration files are located in `${HOME}/kubespider/.config` by default.
 
 #### 2.Connect to aria2
 For checking the download tasks on your server conveniently, go to the chrome store to download [AriaNg plugin](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn).  
@@ -99,7 +101,7 @@ Then with aria2 chrome plugin, you can see the download task starts:
 
 If you want to deploy with docker-cli or docker-compose mannually, please follow the instruction of [Other installation](docs/en/user_guide/installation/README.md).
 ## 📝 Configuration
-The global configuration file is located at `.config/kubespider.yaml`, which is installed under `${HOME}/kubespider/.config/kubespider.yaml`. The description of each configuration item is as follows:
+The global configuration file is located at `.config/kubespider.yaml`, which is installed under `${HOME}/kubespider/.config/kubespider.yaml` by default. The description of each configuration item is as follows:
 
 |  Configuration Item  | Required |                   Function |
 | :-------- | -----: | -------------------: |

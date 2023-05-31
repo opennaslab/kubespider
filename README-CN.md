@@ -41,6 +41,8 @@ Kubespider为了适配多种资源平台，提供了许多适配器，按你的�
 #### 1.下载代码库并且安装
 
 ```sh
+# 定义如下环境变量指定安装路径
+# export KUBESPIDER_HOME=xxx
 # 如果镜像无法下载或速度较慢请设置此环境变量
 # export CHINA_MAINLAND=TRUE
 git clone https://github.com/opennaslab/kubespider.git
@@ -71,8 +73,8 @@ Aria2 default secret is:kubespider
 *******************************************
 ```
 * 此步骤会安装`Kubespide`和`Aria2`资源下载程序，作为默认的下载器。
-* 安装后，**所有下载文件会存储到 `${HOME}/kubespider/nas`**。
-* 配置文件在 `${HOME}/kubespider/.config`。
+* 安装后，默认**所有下载文件会存储到 `${HOME}/kubespider/nas`**。
+* 配置文件默认在 `${HOME}/kubespider/.config`。
 
 #### 2.连接aria2
 为了便于查看下载任务，需要下载Chrome插件AriNg:(1)如果你能访问外网，在chrome商店下载[AriaNg](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn)；(2)如果不能，在Crx4Chrome下载[AriaNg](https://www.crx4chrome.com/crx/85196/)。  

@@ -2,15 +2,9 @@
 
 set -e
 
-# 1.Echo logo
-cat << "EOF"
- _          _                     _     _
-| | ___   _| |__   ___  ___ _ __ (_) __| | ___ _ __
-| |/ / | | | '_ \ / _ \/ __| '_ \| |/ _` |/ _ \ '__|
-|   <| |_| | |_) |  __/\__ \ |_) | | (_| |  __/ |
-|_|\_\\__,_|_.__/ \___||___/ .__/|_|\__,_|\___|_|
-                           |_|  
-EOF
+# 1.Load env and echo logo
+source hack/env.sh
+
 echo "[INFO] Start to deploy baidu net disk..."
 
 # 2.Check env
@@ -21,8 +15,8 @@ if [[ $? != 0 ]]; then
 fi
 
 # 3.Create necessary directory
-mkdir -p ${HOME}/kubespider/nas/
-mkdir -p ${HOME}/kubespider/baidunetdisk/
+mkdir -p ${KUBESPIDER_HOME}/kubespider/nas/
+mkdir -p ${KUBESPIDER_HOME}/kubespider/baidunetdisk/
 
 # 4.Set registry
 source hack/util.sh
@@ -32,8 +26,8 @@ util::set_registry_for_image
 docker run -itd --name=baidunetdisk \
     -p 5800:5800 \
     -p 5900:5900 \
-    -v ${HOME}/kubespider/baidu:/config \
-    -v ${HOME}/kubespider/nas:/config/baidunetdiskdownload \
+    -v ${KUBESPIDER_HOME}/kubespider/baidu:/config \
+    -v ${KUBESPIDER_HOME}/kubespider/nas:/config/baidunetdiskdownload \
     --restart unless-stopped \
     ${image_registry}/baidunetdisk:latest
 
