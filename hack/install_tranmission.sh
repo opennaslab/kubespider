@@ -2,15 +2,9 @@
 
 set -e
 
-# 1.Echo logo
-cat << "EOF"
- _          _                     _     _
-| | ___   _| |__   ___  ___ _ __ (_) __| | ___ _ __
-| |/ / | | | '_ \ / _ \/ __| '_ \| |/ _` |/ _ \ '__|
-|   <| |_| | |_) |  __/\__ \ |_) | | (_| |  __/ |
-|_|\_\\__,_|_.__/ \___||___/ .__/|_|\__,_|\___|_|
-                           |_|
-EOF
+# 1.Load env and echo logo
+source hack/env.sh
+
 echo "[INFO] Start to deploy transmission..."
 
 # 2.Check env
@@ -21,7 +15,7 @@ if [[ $? != 0 ]]; then
 fi
 
 # 3.Create necessary directory
-mkdir -p ${HOME}/kubespider/transmission/
+mkdir -p ${KUBESPIDER_HOME}/kubespider/transmission/
 
 # 4.Set registry
 source hack/util.sh
@@ -41,8 +35,8 @@ docker run -d \
   -p 9091:9091 \
   -p 51413:51413 \
   -p 51413:51413/udp \
-  -v ${HOME}/kubespider/transmission/:/config \
-  -v ${HOME}/kubespider/nas/:/downloads \
+  -v ${KUBESPIDER_HOME}/kubespider/transmission/:/config \
+  -v ${KUBESPIDER_HOME}/kubespider/nas/:/downloads \
   --restart unless-stopped \
   linuxserver/transmission:${DEFAULT_VERSION}
 

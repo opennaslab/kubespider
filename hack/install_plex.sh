@@ -2,15 +2,9 @@
 
 set -e
 
-# 1.Echo logo
-cat << "EOF"
- _          _                     _     _
-| | ___   _| |__   ___  ___ _ __ (_) __| | ___ _ __
-| |/ / | | | '_ \ / _ \/ __| '_ \| |/ _` |/ _ \ '__|
-|   <| |_| | |_) |  __/\__ \ |_) | | (_| |  __/ |
-|_|\_\\__,_|_.__/ \___||___/ .__/|_|\__,_|\___|_|
-                           |_|  
-EOF
+# 1.Load env and echo logo
+source hack/env.sh
+
 echo "[INFO] Start to deploy plex ..."
 
 # 2. Check cliam code
@@ -21,7 +15,7 @@ if [[ $claim == "" ]];then
 fi
 
 # 3. Creat directory
-mkdir -p ${HOME}/kubespider/plex/
+mkdir -p ${KUBESPIDER_HOME}/kubespider/plex/
 
 # 4.Set registry
 source hack/util.sh
@@ -30,8 +24,8 @@ util::set_registry_for_image
 # 5. Install Plex
 docker run -itd --name plex \
     -p 32400:32400 \
-    -v ${HOME}/kubespider/plex:/config \
-    -v ${HOME}/kubespider/nas:/nas \
+    -v ${KUBESPIDER_HOME}/kubespider/plex:/config \
+    -v ${KUBESPIDER_HOME}/kubespider/nas:/nas \
     -e PUID=1000 \
     -e VERSION=docker \
     -e PLEX_CLAIM=${claim} \

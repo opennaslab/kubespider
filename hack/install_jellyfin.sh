@@ -2,24 +2,18 @@
 
 set -e
 
-# 1.Echo logo
-cat << "EOF"
- _          _                     _     _
-| | ___   _| |__   ___  ___ _ __ (_) __| | ___ _ __
-| |/ / | | | '_ \ / _ \/ __| '_ \| |/ _` |/ _ \ '__|
-|   <| |_| | |_) |  __/\__ \ |_) | | (_| |  __/ |
-|_|\_\\__,_|_.__/ \___||___/ .__/|_|\__,_|\___|_|
-                           |_|  
-EOF
+# 1.Load env and echo logo
+source hack/env.sh
+
 echo "[INFO] Start to deploy jellyfin ..."
 
 # 2. Creat directory
-mkdir -p ${HOME}/kubespider/jellyfin/
+mkdir -p ${KUBESPIDER_HOME}/kubespider/jellyfin/
 
 # 3. Install Jellyfin
 docker run -d -p 8096:8096 \
-    -v ${HOME}/kubespider/jellyfin/config:/config \
-    -v ${HOME}/kubespider/nas/:/media \
+    -v ${KUBESPIDER_HOME}/kubespider/jellyfin/config:/config \
+    -v ${KUBESPIDER_HOME}/kubespider/nas/:/media \
     --name jellyfin \
     --restart unless-stopped jellyfin/jellyfin
 

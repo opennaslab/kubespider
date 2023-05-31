@@ -1,17 +1,10 @@
-# Ref: https://github.com/cnk3x/xunlei
 #!/bin/sh
 
 set -e
 
-# 1.Echo logo
-cat << "EOF"
- _          _                     _     _
-| | ___   _| |__   ___  ___ _ __ (_) __| | ___ _ __
-| |/ / | | | '_ \ / _ \/ __| '_ \| |/ _` |/ _ \ '__|
-|   <| |_| | |_) |  __/\__ \ |_) | | (_| |  __/ |
-|_|\_\\__,_|_.__/ \___||___/ .__/|_|\__,_|\___|_|
-                           |_|  
-EOF
+# 1.Load env and echo logo
+source hack/env.sh
+
 echo "[INFO] Start to deploy you-get downloader..."
 
 # 2.Check env
@@ -22,8 +15,8 @@ if [[ $? != 0 ]]; then
 fi
 
 # 3.Create necessary directory
-mkdir -p ${HOME}/kubespider/nas/
-mkdir -p ${HOME}/kubespider/youget/
+mkdir -p ${KUBESPIDER_HOME}/kubespider/nas/
+mkdir -p ${KUBESPIDER_HOME}/kubespider/youget/
 
 # 4.Set registry
 source hack/util.sh
