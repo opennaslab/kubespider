@@ -50,3 +50,7 @@ dygod_magic_source_provider:
   #downloader: transmission
   #download_param: [ ]
   #file_type: movie
+douyin_source_provider:
+  enable: false
+  type: tiktok_source_provider
+  downloader: tiktok-dlp

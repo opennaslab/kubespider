@@ -49,3 +49,10 @@ transmission:
   username: admin
   password: admin
   priority: 5
+tiktok-dlp:
+  type: tiktok_download_provider
+  enable: false
+  priority: 6
+  http_endpoint_host: http://127.0.0.1
+  http_endpoint_port: 3083
+  cookie:
