@@ -105,7 +105,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 如果需要使用 docker-cli 或者 docker-compose 部署，请参考[其他安装方式](docs/zh/user_guide/installation/README.md)。
 
 ## 📝 配置
-全局配置文件在`.config/kubespider.yaml`，安装后位于`${HOME}/kubespider/.config/kubespider.yaml`，各配置项解释如下：  
+全局配置文件在`.config/kubespider.yaml`，安装后默认位于`${HOME}/kubespider/.config/kubespider.yaml`，各配置项解释如下：  
 |  配置项  | 是否必配 |                   功能 |
 | :-------- | -----: | -------------------: |
 | `proxy` |      否 | 请求代理，如`http://192.168.1.5:1087` |

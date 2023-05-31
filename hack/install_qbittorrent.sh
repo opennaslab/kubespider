@@ -26,8 +26,8 @@ util::set_registry_for_image
 docker run -itd  \
     --name=qbittorrentee  \
     -e WEBUIPORT=8080  \
-    -e PUID=1026 \
-    -e PGID=100 \
+    -e PUID=$UID \
+    -e PGID=$GID \
     -e TZ=Asia/Shanghai \
     --network=host \
     -v ${KUBESPIDER_HOME}/kubespider/qbittorrent/:/config  \

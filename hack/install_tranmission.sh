@@ -27,8 +27,8 @@ DEFAULT_VERSION=${DEFAULT_VERSION:-2.94-r1-ls24}
 # 5.Install transmission
 docker run -d \
   --name=transmission \
-  -e PUID=1000 \
-  -e PGID=1000 \
+  -e PUID=$UID \
+  -e PGID=$GID \
   -e TZ=Asia/Shanghai \
   -e USER=admin \
   -e PASS=admin \
