@@ -7,7 +7,7 @@
 ## 最终效果
 
 效果如图，Kubespider通过对接此下载器，可以下载抖音视频。
-![img](../../../images/tiktok_final_show.gif)
+![tiktok_final_show.gif](../../../images/tiktok_final_show.gif)
 
 ## 安装
 
@@ -43,10 +43,10 @@ bb0151d71ea3    smilekung/tiktok-dlp:latest        "python3 app.py"    8 minutes
 为了支持更稳定的下载，如遇到不能下载的情况，需要设置cookie。可以按照以下步骤获取cookie：
 
 1.打开chrome的隐身模式并登录抖音账号，[https://www.douyin.com/](https://www.douyin.com/)。
-![img.png](../../../images/douyin_config_step1.png)
+![douyin_config_step1.png](../../../images/douyin_config_step1.png)
 
 2.F12选择Application，查看cookie信息  
-![img.png](../../../images/douyin_config_step2.png)
+![douyin_config_step2.png](../../../images/douyin_config_step2.png)
 
 找到以下Name的cookie，复制Value的内容。
 `msToken`、`ttwid`、`odin_tt`、`passport_csrf_token`、`sid_guard`
@@ -101,21 +101,24 @@ docker restart kubespider
 
 添加后，直接分享到快捷指令，即可下载。
 
-步骤如下：
+### 最终效果
+![tiktok_shortcut_final_show.gif](../../../images/tiktok_shortcut_final_show.gif)
+
+详细步骤如下：
 
 ### 1. 设置kubespider服务地址和端口
 
 需要修改词典中`server`，填写对应的kubespider服务地址和端口。
-![img.png](../../../images/tiktok_shortcut_step1.png)
+![tiktok_shortcut_step1.png](../../../images/tiktok_shortcut_step1.png)
 
 ### 2. 检查是否配置成功
 
 点击快捷指令，弹窗提示配置成功即可。
-![img.png](../../../images/tiktok_shortcut_step2.png)
+![tiktok_shortcut_step2.png](../../../images/tiktok_shortcut_step2.png)
 
 ### 3. 分享到快捷指令
 
 在需要下载的视频时，点击分享，选择更多分享，选择kubespider即可。
-![img.png](../../../images/tiktok_shortcut_step3.png)
+![tiktok_shortcut_step3.png](../../../images/tiktok_shortcut_step3.png)
 
-![img.png](../../../images/tiktok_shortcut_step4.png)
+![tiktok_shortcut_step4.png](../../../images/tiktok_shortcut_step4.png)

@@ -24,6 +24,7 @@ import source_provider.bilibili_source_provider.provider as bilibili_source_prov
 import source_provider.youtube_source_provider.provider as youtube_source_provider
 import source_provider.general_rss_source_provider.provider as general_rss_source_provider
 import source_provider.magic_source_provider.provider as magic_source_provider
+import source_provider.tiktok_source_provider.provider as tiktok_source_provider
 
 import download_provider.aria2_download_provider.provider as aria2_download_provider
 import download_provider.xunlei_download_provider.provider as xunlei_download_provider
@@ -31,6 +32,7 @@ import download_provider.qbittorrent_download_provider.provider as qbittorrent_d
 import download_provider.youget_download_provider.provider as youget_download_provider
 import download_provider.ytdlp_download_provider.provider as ytdlp_download_provider
 import download_provider.transmission_download_provider.provider as transmission_download_provider
+import download_provider.tiktok_dlp_download_provider.provider as tiktok_dlp_download_provider
 
 import pt_provider.nexusphp_pt_provider.provider as nexusphp_pt_provider
 
@@ -44,6 +46,7 @@ source_provider_init_func = {
     'youtube_source_provider': youtube_source_provider.YouTubeSourceProvider,
     'general_rss_source_provider': general_rss_source_provider.GeneralRssSourceProvider,
     'magic_source_provider': magic_source_provider.MagicSourceProvider,
+    'tiktok_source_provider': tiktok_source_provider.TiktokSourceProvider,
 }
 
 # Download provider init related
@@ -54,6 +57,7 @@ downloader_provider_init_func = {
     'youget_download_provider': youget_download_provider.YougetDownloadProvider,
     'ytdlp_download_provider': ytdlp_download_provider.YTDlpDownloadProvider,
     'transmission_download_provider': transmission_download_provider.TransmissionProvider,
+    'tiktok_download_provider': tiktok_dlp_download_provider.TiktokDownloadProvider,
 }
 
 # PT provider init related
