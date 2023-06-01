@@ -7,7 +7,7 @@
 ## 最终效果
 
 最终效果如下图，在Chrome中右键，选择Send to Kubespider，Kubespider会自动根据xpath配置下载资源。
-![演示](../../images/magic_final_show.gif)
+![演示](../../../images/magic_final_show.gif)
 
 ## 配置
 
@@ -49,7 +49,7 @@ dygod_magic_source_provider:
 ### 1.如何获取xpath
 
 如不知道如何配置xpath，可以使用chrome devtool -> copy xpath 进行xpath复制。
-![img.png](../../images/magic_copy_xpath.png)
+![img.png](../../../images/magic_copy_xpath.png)
 
 但复制的xpath可能需要微调，具体请参考[xpath文档](https://www.w3.org/TR/xpath-31/#id-path-expressions)
 
@@ -57,4 +57,4 @@ dygod_magic_source_provider:
 
 可以使用chrome devtool -> console -> $x(xpath)进行xpath验证，检查输出数组中每个元素的value是否符合预期。
 
-![img.png](../../images/magic_validate_xpath.png)
+![img.png](../../../images/magic_validate_xpath.png)

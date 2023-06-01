@@ -31,22 +31,22 @@ docker ps | grep youget
 
 #### Bilibili下载设置
 1.打开chrome的隐身模式  
-<img src='./images/bilibili_config_step1.png' style="width: 600px;">
+<img src='../../../images/bilibili_config_step1.png' style="width: 600px;">
 
 2.登陆bilibili  
-<img src='./images/bilibili_config_step2.png' style="width: 600px;">
+<img src='../../../images/bilibili_config_step2.png' style="width: 600px;">
 
 3.F12选择network，查看cookie信息  
-<img src='./images/bilibili_config_step3.png' style="width: 600px;">  
+<img src='../../../images/bilibili_config_step3.png' style="width: 600px;">  
 找到关键信息并复制：`SESSDATA=xxx; bili_jct=xxx;`
 找到并复制后关闭窗口。
 
 4.在chrome市场安装插件`Get cookies.txt LOCALLY`  
-<img src='./images/bilibili_config_step4.png' style="width: 600px;">  
+<img src='../../../images/bilibili_config_step4.png' style="width: 600px;">  
 下载地址：[link](https://chrome.google.com/webstore/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc?hl=en)  
 
 5.复制bilibili完整cookie(非隐身模式)  
-<img src='./images/bilibili_config_step5.png' style="width: 600px;">
+<img src='../../../images/bilibili_config_step5.png' style="width: 600px;">
 
 6.将复制内容拷贝到`${HOME}/kubespider/youget/bilibili_cookie.txt`  
 ```txt
