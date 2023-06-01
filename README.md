@@ -99,7 +99,9 @@ Then with aria2 chrome plugin, you can see the download task starts:
 
 ### Other installation
 
-If you want to deploy with docker-cli or docker-compose mannually, please follow the instruction of [Other installation](docs/en/user_guide/installation/README.md).
+* Install with docker-cli/docker-compose command mannually, see [link](./docs/en/user_guide/install_with_command/README.md).
+* Install Kubespider on Synology, see [link](./docs/zh/user_guide/synology_installation/README.md).
+
 ## 📝 Configuration
 The global configuration file is located at `.config/kubespider.yaml`, which is installed under `${HOME}/kubespider/.config/kubespider.yaml` by default. The description of each configuration item is as follows:
 
