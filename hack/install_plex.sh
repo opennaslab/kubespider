@@ -26,10 +26,10 @@ docker run -itd --name plex \
     -p 32400:32400 \
     -v ${KUBESPIDER_HOME}/kubespider/plex:/config \
     -v ${KUBESPIDER_HOME}/kubespider/nas:/nas \
-    -e PUID=1000 \
+    -e PUID=$UID \
     -e VERSION=docker \
     -e PLEX_CLAIM=${claim} \
-    -e PGID=1000 \
+    -e PGID=$GID \
     --restart unless-stopped \
     ${image_registry}/plex:latest
 
