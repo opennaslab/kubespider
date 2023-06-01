@@ -4,7 +4,7 @@ aria2 是一个轻量级的多协议和多源命令行下载实用程序。 它�
 
 ## 最终效果
 效果如图，结合aria下载软件，Kubespider会调用aria2，下载bt链接资源：
-![img](../../images/final_show.gif)
+![img](../../../images/final_show.gif)
 
 ## 安装
 ### 1.安装aria2
@@ -26,7 +26,7 @@ root@cesign [10:49:25 PM] [+41.0°C] [~/kubespider/.config]
 ## 配置
 ### 1.通用配置
 通过下载aria2 chrome插件，即可查看下载任务，其中配置在运行 `install_kubespider.sh` 后已输出：
-![img](../../images/aria2-config-for-chrome.jpg)
+![img](../../../images/aria2-config-for-chrome.jpg)
 
 ### 2.Kubespider对接配置（可选）
 

@@ -4,7 +4,7 @@
 
 ## 最终效果
 效果如图，结合yt-dlp，Kubespider会调用yt-dlp，下载YouTube视频：
-![img](../../images/ytdlp_final_show.gif)
+![img](../../../images/ytdlp_final_show.gif)
 
 ## 安装
 ### 1.安装yt-dlp下载器
