@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM nikolaik/python-nodejs:python3.10-nodejs20-alpine
+FROM nikolaik/python-nodejs:python3.10-nodejs20-slim
 
 WORKDIR /app
 COPY ./kubespider ./kubespider
