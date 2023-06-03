@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM nikolaik/python-nodejs:python3.10-nodejs20-slim
+FROM python:3.10-alpine
 
 WORKDIR /app
 COPY ./kubespider ./kubespider
@@ -14,6 +14,8 @@ ENV HOME="/app" \
 
 RUN set -ex \
     && apk add --no-cache \
+        nodejs \
+        npm \
         bash \
         su-exec \
         tzdata \
