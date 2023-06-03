@@ -26,8 +26,8 @@ util::set_registry_for_image
 docker run --name youget -d \
     --network=host \
     -e BILIBILI_COOKIE_PATH=/root/config/bilibili_cookie.txt \
-    -v ${HOME}/kubespider/youget:/root/config \
-    -v ${HOME}/kubespider/nas/:/root/downloads \
+    -v ${KUBESPIDER_HOME}/kubespider/youget:/root/config \
+    -v ${KUBESPIDER_HOME}/kubespider/nas/:/root/downloads \
     --restart unless-stopped cesign/youget-downloader:latest
 
 # 6.Notice
