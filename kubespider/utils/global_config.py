@@ -21,3 +21,9 @@ def get_server_port() -> int:
     if cfg is not None:
         return cfg.get('server_port', 3080)
     return 3080
+
+def auto_change_download_provider() -> bool:
+    cfg = get_global_config().read()
+    if cfg is not None:
+        return bool(cfg.get('auto_change_download_provider', False))
+    return False
