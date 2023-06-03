@@ -16,21 +16,24 @@ jobs:
     steps:
     - uses: actions/checkout@v3
   
+    - name: Set Up QEMU
+      uses: docker/setup-qemu-action@v2
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
     
     - name: Build images
       run: |
         set -x
-        docker build -t cesign/kubespider:latest -f Dockerfile ./
+        docker buildx build -t --platform linux/amd64 cesign/kubespider:latest -f Dockerfile --load ./
         docker tag cesign/kubespider:latest registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest
     
         cd downloaders/you-get
-        docker build -t cesign/youget-downloader:latest -f Dockerfile ./
+        docker buildx build -t --platform linux/amd64 cesign/youget-downloader:latest -f Dockerfile --load ./
         cd ../../
         
         cd downloaders/tiktok-dlp
-        docker build -t smilekung/tiktok-dlp:latest -f Dockerfile ./
+        docker buildx build -t --platform linux/amd64 smilekung/tiktok-dlp:latest -f Dockerfile --load ./
         cd ../../
     - name: Deploy test
       run: |
