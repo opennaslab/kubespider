@@ -45,6 +45,8 @@ if [[ ${KUBESPIDER_VERSION} == "" ]]; then
 fi
 docker run -itd --name kubespider \
     -v ${KUBESPIDER_HOME}/kubespider/.config:/root/.config \
+    -e PUID=$UID \
+    -e PGID=$GID \
     --network=host \
     --restart unless-stopped \
     ${image_registry}/kubespider:${KUBESPIDER_VERSION}
