@@ -44,7 +44,7 @@ if [[ ${KUBESPIDER_VERSION} == "" ]]; then
     export KUBESPIDER_VERSION=${KUBESPIDER_DEFAULT_VERSION}
 fi
 docker run -itd --name kubespider \
-    -v ${KUBESPIDER_HOME}/kubespider/.config:/root/.config \
+    -v ${KUBESPIDER_HOME}/kubespider/.config:/app/.config \
     -e PUID=$UID \
     -e PGID=$GID \
     --network=host \

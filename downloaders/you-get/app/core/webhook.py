@@ -11,7 +11,7 @@ you_get_server = Flask(__name__)
 def download_handler():
     data = json.loads(request.data.decode("utf-8"))
     source = data['dataSource']
-    path = os.path.join('/root/downloads', data['path'])
+    path = os.path.join('/app/downloads', data['path'])
     args = [source, '-o', path]
 
     tasks.you_get_tasks.equeue(tasks.DownloadTask(args, 0))

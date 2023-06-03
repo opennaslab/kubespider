@@ -10,7 +10,7 @@ ytdlp_server = Flask(__name__)
 @ytdlp_server.route('/api/v1/download', methods = ['POST'])
 def download_handler():
     para = json.loads(request.data.decode("utf-8"))
-    para['path'] = os.path.join('/root/downloads', para['path'])
+    para['path'] = os.path.join('/app/downloads', para['path'])
 
     tasks.yt_dlp_tasks.equeue(tasks.DownloadTask(para, 0))
     return send_ok_response()

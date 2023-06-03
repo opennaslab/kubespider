@@ -45,6 +45,7 @@ jobs:
         file: ./downloaders/you-get/Dockerfile
         platforms: |
           linux/amd64
+          linux/arm64
         push: true
         tags: cesign/youget-downloader:latest
 
@@ -55,5 +56,6 @@ jobs:
         file: ./downloaders/yt-dlp/Dockerfile
         platforms: |
           linux/amd64
+          linux/arm64
         push: true
         tags: cesign/ytdlp-downloader:latest

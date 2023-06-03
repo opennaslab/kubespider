@@ -25,8 +25,8 @@ util::set_registry_for_image
 # 5.Install yt-dlp 
 docker run --name yt-dlp -d \
     --network=host \
-    -v ${KUBESPIDER_HOME}/kubespider/yt-dlp:/root/config \
-    -v ${KUBESPIDER_HOME}/kubespider/nas/:/root/downloads \
+    -v ${KUBESPIDER_HOME}/kubespider/yt-dlp:/app/config \
+    -v ${KUBESPIDER_HOME}/kubespider/nas/:/app/downloads \
     --restart unless-stopped cesign/ytdlp-downloader:latest
 
 # 6.Notice

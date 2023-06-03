@@ -1,15 +1,38 @@
-FROM nikolaik/python-nodejs:python3.10-nodejs20-alpine
+# syntax=docker/dockerfile:1
 
-WORKDIR /root
+FROM python:3.10-alpine
+
+WORKDIR /app
 COPY requirements.txt ./
 COPY app app
-RUN mkdir -p /root/downloads
-RUN mkdir -p /root/config
 
-RUN python3 -m pip install --upgrade pip \
+ENV HOME="/app" \
+    PUID=1000 \
+    PGID=1000 \
+    UMASK=022
+
+RUN set -ex \
+    && apk add --no-cache \
+        nodejs \
+        npm \
+        bash \
+        su-exec \
+        tzdata \
+        shadow \
+    && mkdir -p /app/downloads \
+    && mkdir -p /app/config \
+    && python3 -m pip install --upgrade pip \
     && pip install -r requirements.txt \
-    && rm -rf requirements.txt
+    && addgroup -S youget -g 911 \
+    && adduser -S youget -G youget -h /app -u 911 -s /bin/bash youget \
+    && rm -rf \
+        /app/.cache \
+        /tmp/*
+
+COPY --chmod=755 entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT [ "/entrypoint.sh" ]
+
+CMD ["python3", "/app/app/app.py"]
 
 EXPOSE 3081
-
-CMD ["python3", "/root/app/app.py"]
