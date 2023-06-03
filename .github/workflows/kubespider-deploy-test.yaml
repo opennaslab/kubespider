@@ -25,7 +25,7 @@ jobs:
     - name: Build images
       run: |
         set -x
-        docker buildx build --platform linux/amd64,linux/arm64 -t cesign/kubespider:latest -f Dockerfile --load ./
+        docker buildx build --platform linux/amd64 -t cesign/kubespider:latest -f Dockerfile --load ./
         docker tag cesign/kubespider:latest registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest
     
         cd downloaders/you-get
