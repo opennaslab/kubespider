@@ -1,17 +1,39 @@
-FROM nikolaik/python-nodejs:python3.10-nodejs20-alpine
+# syntax=docker/dockerfile:1
 
-WORKDIR /root
+FROM python:3.10-alpine
+
+WORKDIR /app
 COPY ./kubespider ./kubespider
 COPY ./.config ./.config_template
 COPY requirements.txt ./
 
-VOLUME /root/.config
+ENV HOME="/app" \
+    PUID=1000 \
+    PGID=1000 \
+    UMASK=022
 
-RUN mkdir -p .config \
+RUN set -ex \
+    && apk add --no-cache \
+        nodejs \
+        npm \
+        bash \
+        su-exec \
+        tzdata \
+        shadow \
     && python3 -m pip install --upgrade pip \
     && pip install -r requirements.txt \
-    && rm -rf requirements.txt
+    && addgroup -S kubespider -g 911 \
+    && adduser -S kubespider -G kubespider -h /app -u 911 -s /bin/bash kubespider \
+    && rm -rf \
+        /app/.cache \
+        /tmp/*
+
+COPY --chmod=755 entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT [ "/entrypoint.sh" ]
+
+CMD ["python3", "/app/kubespider/app.py"]
+
+VOLUME /app/.config
 
 EXPOSE 3080
-
-CMD ["python3", "/root/kubespider/app.py"]

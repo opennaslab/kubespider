@@ -15,14 +15,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-  
+
+    - name: Set Up QEMU
+      uses: docker/setup-qemu-action@v2
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
     
     - name: Build images
       run: |
         set -x
-        docker build -t registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest -f Dockerfile ./
+        docker buildx build --platform linux/amd64 -t registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest -f Dockerfile --load ./
     
     - name: China mainland deploy test
       run: |
