@@ -1,11 +1,11 @@
 FROM nikolaik/python-nodejs:python3.10-nodejs20-alpine
 
-WORKDIR /kubespider
+WORKDIR /app
 COPY ./kubespider ./kubespider
 COPY ./.config ./.config_template
 COPY requirements.txt ./
 
-ENV HOME="/kubespider" \
+ENV HOME="/app" \
     PUID=1000 \
     PGID=1000 \
     UMASK=022
@@ -19,17 +19,17 @@ RUN set -ex \
     && python3 -m pip install --upgrade pip \
     && pip install -r requirements.txt \
     && addgroup -S kubespider -g 911 \
-    && adduser -S kubespider -G kubespider -h /kubespider -u 911 -s /bin/bash kubespider \
+    && adduser -S kubespider -G kubespider -h /app -u 911 -s /bin/bash kubespider \
     && rm -rf \
-        /kubespider/.cache \
+        /app/.cache \
         /tmp/*
 
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
-CMD ["python3", "/kubespider/kubespider/app.py"]
+CMD ["python3", "/app/kubespider/app.py"]
 
-VOLUME /kubespider/.config
+VOLUME /app/.config
 
 EXPOSE 3080
