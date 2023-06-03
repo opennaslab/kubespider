@@ -3,6 +3,8 @@
 proxy:
 # This port will be used to provide the api service
 server_port: 3080
+# Change download provider automaticlly for pending and faileds tasks
+auto_change_download_provider: false
 
 # TODO: define the schedule time API, do it when working days or midnight
 # The sum downloading size, it is in GB

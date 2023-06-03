@@ -1,7 +1,7 @@
 import logging
 import time
 
-from utils import helper
+from utils import helper,global_config
 from api import types
 import download_provider.provider as dp
 import source_provider.provider as sp
@@ -16,7 +16,8 @@ class KubespiderDownloader:
             # For certain download providers, the task start time is not available.
             # Therefore, specifying a time here would be futile.
             time.sleep(180)
-            self.handle_defective_downloade()
+            if global_config.auto_change_download_provider():
+                self.handle_defective_downloade()
 
     def handle_defective_downloade(self):
         provider_len = len(self.download_providers)
