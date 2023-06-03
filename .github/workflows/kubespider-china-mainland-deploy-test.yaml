@@ -26,7 +26,18 @@ jobs:
       run: |
         set -x
         docker buildx build --platform linux/amd64 -t registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest -f Dockerfile --load ./
-    
+
+        cd downloaders/you-get
+        docker buildx build --platform linux/amd64 -t cesign/youget-downloader:latest -f Dockerfile --load ./
+        cd ../../
+
+        cd downloaders/yt-dlp
+        docker buildx build --platform linux/amd64 -t cesign/ytdlp-downloader:latest -f Dockerfile --load ./
+        cd ../../
+
+        cd downloaders/tiktok-dlp
+        docker buildx build --platform linux/amd64 -t smilekung/tiktok-dlp:latest -f Dockerfile --load ./
+        cd ../../
     - name: China mainland deploy test
       run: |
         set -x
@@ -74,6 +85,32 @@ jobs:
         bash hack/install_tiktokdlp.sh
         sleep 10
         docker ps | grep -e tiktok-dlp
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
+
+        #6. Test deploy youget
+        bash hack/install_youget.sh
+        sleep 10
+        docker ps | grep -e youget
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
+        # ffmpeg needs to be installed to merge video and audio
+        docker exec youget ffmpeg -version
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
+
+        #7. Test deploy yt-dlp
+        bash hack/install_ytdlp.sh
+        sleep 10
+        docker ps | grep -e yt-dlp
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
+        # ffmpeg needs to be installed to merge video and audio
+        docker exec yt-dlp ffmpeg -version
         if [[ $? != 0 ]]; then
           exit 1
         fi

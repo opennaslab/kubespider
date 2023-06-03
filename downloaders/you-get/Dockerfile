@@ -17,6 +17,7 @@ RUN set -ex \
         su-exec \
         tzdata \
         shadow \
+        ffmpeg \
     && mkdir -p /app/downloads \
     && mkdir -p /app/config \
     && python3 -m pip install --upgrade pip \
