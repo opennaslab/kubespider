@@ -3,7 +3,8 @@ FROM python:3.9-alpine
 ENV HOME="/app" \
     PUID=1000 \
     PGID=1000 \
-    UMASK=022
+    UMASK=022 \
+    TZ=Asia/Shanghai
 
 WORKDIR /app
 
