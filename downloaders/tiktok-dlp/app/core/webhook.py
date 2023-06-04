@@ -10,7 +10,7 @@ tiktok_dlp = Flask(__name__)
 @tiktok_dlp.route('/api/v1/download', methods=['POST'])
 def download_handler():
     para = json.loads(request.data.decode("utf-8"))
-    para['path'] = os.path.join('/root/downloads', para['path'])
+    para['path'] = os.path.join('/app/downloads', para['path'])
     tasks.tiktok_dlp_tasks.equeue(tasks.DownloadTask(para, 0))
     return send_ok_response()
 
