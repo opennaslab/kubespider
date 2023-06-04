@@ -36,7 +36,7 @@ jobs:
         cd ../../
 
         cd downloaders/tiktok-dlp
-        docker buildx build --platform linux/amd64 -t smilekung/tiktok-dlp:latest -f Dockerfile --load ./
+        docker buildx build --platform linux/amd64 -t cesign/tiktok-dlp:latest -f Dockerfile --load ./
         cd ../../
     - name: Deploy test
       run: |

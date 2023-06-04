@@ -57,3 +57,13 @@ jobs:
           linux/amd64
         push: true
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/ytdlp-downloader:latest
+
+    - name: tiktokdlp-downloader - build and push
+      uses: docker/build-push-action@v3
+      with:
+        context: ./downloaders/tiktok-dlp/
+        file: ./downloaders/tiktok-dlp/Dockerfile
+        platforms: |
+          linux/amd64
+        push: true
+        tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/tiktok-dlp:latest

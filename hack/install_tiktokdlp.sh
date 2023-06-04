@@ -25,8 +25,11 @@ util::set_registry_for_image
 # 5.Install tiktok-dlp
 docker run --name tiktok-dlp -d \
     --network=host \
-    -v ${HOME}/kubespider/nas/:/root/downloads \
-    --restart unless-stopped smilekung/tiktok-dlp:latest
+    -e PUID=$UID \
+    -e PGID=$GID \
+    -v ${KUBESPIDER_HOME}/kubespider/nas/:/app/downloads \
+    --restart unless-stopped \
+    cesign/tiktok-dlp:latest
 
 # 6.Notice
 echo "[INFO] Deploy tiktok-dlp success, enjoy your time..."
