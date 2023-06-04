@@ -6,15 +6,14 @@ from enum import Enum
 from api import types
 
 
-PT_BOT_PATH = "PT"
-
 FILE_TYPE_TO_PATH = {
     types.FILE_TYPE_COMMON: "Common",
     types.FILE_TYPE_VIDEO_TV: "TV",
     types.FILE_TYPE_VIDEO_MOVIE: "Movie",
     types.FILE_TYPE_VIDEO_MIXED: "VideoMixed",
     types.FILE_TYPE_MUSIC: "Music",
-    types.FILE_TYPE_PICTIRE: "Picture"
+    types.FILE_TYPE_PICTIRE: "Picture",
+    types.FILE_TYPE_PT: "PT"
 }
 
 CFG_BASE_PATH = os.path.join(os.getenv('HOME'), '.config/')
