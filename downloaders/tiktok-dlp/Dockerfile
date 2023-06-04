@@ -10,6 +10,8 @@ WORKDIR /app
 
 RUN set -ex \
     && apk add --no-cache \
+        nodejs \
+        npm \
         bash \
         su-exec \
         tzdata \
