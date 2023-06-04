@@ -9,8 +9,8 @@ from core import download_trigger
 from pt_provider import provider
 from utils.config_reader import AbsConfigReader
 from utils.config_reader import YamlFileConfigReader
-from api.values import Config
-from api.values import PT_BOT_PATH
+from api.values import Config, FILE_TYPE_TO_PATH
+from api.types import FILE_TYPE_PT
 
 
 class PTServer:
@@ -60,7 +60,7 @@ class PTServer:
             logging.error('Downloader not found: %s', provider_name)
             return
 
-        download_path = os.path.join(PT_BOT_PATH, provider_name)
+        download_path = os.path.join(FILE_TYPE_TO_PATH[FILE_TYPE_PT], provider_name)
         err = download_trigger.kubespider_downloader.handle_torrent_download(pt_source, download_path, [download_provider])
         if err is not None:
             logging.error('Download error: %s', err)

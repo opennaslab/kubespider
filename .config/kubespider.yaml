@@ -1,11 +1,16 @@
 ---
+### beta prameters start
 # This address will be as http/https proxy
 proxy:
 # This port will be used to provide the api service
 server_port: 3080
 # Change download provider automaticlly for pending and faileds tasks
 auto_change_download_provider: false
+# The auth_token will be used auth the webhook api
+auth_token:
+### beta prameters end
 
+#### alpha parameters start
 # TODO: define the schedule time API, do it when working days or midnight
 # The sum downloading size, it is in GB
 pt_sum_max_size: 100
@@ -13,5 +18,4 @@ pt_sum_max_size: 100
 pt_single_max_size: 20
 # The time is in hour
 pt_seeding_time: 48
-# The auth_token will be used auth the webhook api
-auth_token:
+#### alpha parameters end
