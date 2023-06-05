@@ -10,13 +10,13 @@ Run with following command to install:
 ```sh
 docker run --name youget -d \
     --network=host \
-    -e BILIBILI_COOKIE_PATH=/root/config/bilibili_cookie.txt \
-    -v ${HOME}/kubespider/youget:/root/config \
-    -v ${HOME}/kubespider/nas/:/root/downloads \
+    -e BILIBILI_COOKIE_PATH=/app/config/bilibili_cookie.txt \
+    -v ${HOME}/kubespider/youget:/app/config \
+    -v ${HOME}/kubespider/nas/:/app/downloads \
     --restart unless-stopped cesign/youget-downloader:latest
 ```
-`/root/config`: cookie config path.  
-`/root/downloads`: download file store path.  
+`/app/config`: cookie config path.  
+`/app/downloads`: download file store path.  
 `BILIBILI_COOKIE_PATH`: bilibili cookie path.
 
 ## Build
