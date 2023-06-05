@@ -2,14 +2,16 @@
 
 FROM python:3.10-alpine
 
-WORKDIR /app
-COPY requirements.txt ./
-COPY app app
-
 ENV HOME="/app" \
     PUID=1000 \
     PGID=1000 \
-    UMASK=022
+    UMASK=022 \
+    TZ=Asia/Shanghai
+
+WORKDIR /app
+
+COPY requirements.txt ./
+COPY app app
 
 RUN set -ex \
     && apk add --no-cache \

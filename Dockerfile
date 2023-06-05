@@ -10,7 +10,8 @@ COPY requirements.txt ./
 ENV HOME="/app" \
     PUID=1000 \
     PGID=1000 \
-    UMASK=022
+    UMASK=022 \
+    TZ=Asia/Shanghai
 
 RUN set -ex \
     && apk add --no-cache \

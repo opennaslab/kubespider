@@ -8,7 +8,7 @@ Parameters needed to start this project in docker shows as follow:
 
 |Parameter|Type|Function|Note|
 |:---:|:---:|:---:|:---:|
-|`-v /root/.config`|VOLUMN|Path to store all configurations||
+|`-v /app/.config`|VOLUMN|Path to store all configurations||
 |`-p 3080`|port|Listen port of [Web Api](../user_guide/api_docs/README.md) and Chrome plugin|Can be changed by Global configuration|
 
 ## Run with docker cli
@@ -16,7 +16,7 @@ Parameters needed to start this project in docker shows as follow:
 Run the following command in machine to be deployed to:
 
 ```bash
-docker run -itd --name kubespider  -v {config_path}/.config:/root/.config -p 3080:3080 cesign/kubespider:latest
+docker run -itd --name kubespider  -v {config_path}/.config:/app/.config -p 3080:3080 cesign/kubespider:latest
 ```
 
 `{config_path}` should be replaced to the real path in docker host.
@@ -39,7 +39,7 @@ services:
     ports:
       - 3080:3080
     volumes:
-      - {config_path}:/root/.config
+      - {config_path}:/app/.config
     networks:
       - kb
   

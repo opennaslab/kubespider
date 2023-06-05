@@ -36,7 +36,7 @@ docker rm kubespider --force
 export image_registry=cesign
 export KUBESPIDER_VERSION=lates
 docker run -itd --name kubespider \
-    -v ${HOME}/kubespider/.config:/root/.config \
+    -v ${HOME}/kubespider/.config:/app/.config \
     --network=host \
     --restart unless-stopped \
     ${image_registry}/kubespider:${KUBESPIDER_VERSION}
@@ -48,7 +48,7 @@ docker run -itd --name kubespider \
 
 ```sh
 # 在Kubespider代码文件夹运行
-docker cp kubespider kubespider:/root/ && docker restart kubespider
+docker cp kubespider kubespider:/app/ && docker restart kubespider
 ```
 
 ## 提PR
