@@ -161,6 +161,8 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 * 如何开发调试chrome插件webhook，请看 [link](./docs/zh/contribute/develop_chrome_extension.md)。
 * 如何开发其他webhook触发工具, 请看 [link](./docs/zh/user_guide/api_docs/README.md)。
 
+如果你想更多的参与社区，欢迎加入我们的 [Telegram开发者群](https://t.me/+RR09tPuCvI9iNTc1).
+
 ## ❤️ 赞助  
 感谢以下公司赞助开发工具，排名不分先后：
 <table style="background-color: white">
