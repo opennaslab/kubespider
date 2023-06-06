@@ -148,7 +148,6 @@ Currently, the following file types are supported to trigger downloading:
 Please refer to [link](./docs/zh/user_guide/trigger_download/README.md) for how to trigger the download.
 
 ## 🙋 FAQ
-
 See the [FAQ](docs/en/faq.md) for more details, and feel free to contribute your questions and solutions. Your valuable input will collectively improve the documentation and benefit a wider audience. Join us in making a difference!
 
 ## 🤝 Contribution [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
@@ -159,6 +158,9 @@ If you are interested in participating in joint development, welcome to STAR/FOR
 * For how to implement a download provider for download software, please see [link](./docs/en/contribute/implement_download_provider_cn.md).
 * For how to develop chrome extension webhook, please see [link](./docs/zh/contribute/develop_chrome_extension.md).
 * For how to implement other webhook trigger tools, please see [link](./docs/zh/user_guide/api_docs/README.md).
+
+If you want to participate more in the community, welcome to join our [Telegram developer group](https://t.me/+RR09tPuCvI9iNTc1).
+
 
 ## ❤️ Sponsor  
 Thanks to the following companies for sponsoring development tools, the ranking is not in any particular order:
