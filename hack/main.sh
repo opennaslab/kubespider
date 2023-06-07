@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+#
 #  _          _                     _     _
 # | | ___   _| |__   ___  ___ _ __ (_) __| | ___ _ __
 # | |/ / | | | '_ \ / _ \/ __| '_ \| |/ _` |/ _ \ '__|
@@ -10,8 +10,8 @@
 # Copyright (c) 2023 opennaslab/kubespider
 #
 # This is free software, licensed under the Apache License 2.0 License.
-
-
+#
+#
 # The functions that the script can call are 'INFO' 'WARN' 'ERROR' 'if_port'.
 # INFO function use(log output): INFO "xxxx"
 # WARN function use(log output): WARN "xxxx"
@@ -60,13 +60,49 @@ function if_port {
 
 function get_uid_gid {
 
-TODO
+    DEFAULT_UID=${UID:-1000}
+    DEFAULT_GID=${GID:-1000}
+
+    INFO "Please enter a user ID (default ${DEFAULT_UID})"
+    read -ep "PUID:" SET_UID
+    [[ -z "${SET_UID}" ]] && SET_UID=${DEFAULT_UID}
+
+    INFO "Please enter a user ID (default ${DEFAULT_GID})"
+    read -ep "PUID:" SET_GID
+    [[ -z "${SET_GID}" ]] && SET_GID=${DEFAULT_GID}
+
+    clear
+    INFO "You set the user id to ${SET_UID}"
+    INFO "You set the group id to ${SET_GID}"
+
+    INFO "Please confirm your settings (enter [n] to reset) [Y/n]"
+    read -ep "Enter your choice:" YN
+    [[ -z "${YN}" ]] && YN="y"
+    if [[ ${YN} == [Nn] ]]; then
+        clear
+        get_uid_gid
+    fi
 
 }
 
 function get_umask {
 
-TODO
+    DEFAULT_UMASK=$(umask)
+
+    INFO "Please enter a user ID (default ${DEFAULT_UMASK})"
+    read -ep "Umask:" SET_UMASK
+    [[ -z "${SET_UMASK}" ]] && SET_UMASK=${DEFAULT_UMASK}
+
+    clear
+    INFO "You set the umask to ${SET_UMASK}"
+
+    INFO "Please confirm your settings (enter [n] to reset) [Y/n]"
+    read -ep "Enter your choice:" YN
+    [[ -z "${YN}" ]] && YN="y"
+    if [[ ${YN} == [Nn] ]]; then
+        clear
+        get_umask
+    fi
 
 }
 
@@ -280,4 +316,4 @@ function main {
 
 }
 
-main
+get_umask
