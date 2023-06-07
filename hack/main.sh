@@ -178,6 +178,12 @@ TODO
 
 }
 
+function emby_install {
+
+TODO
+
+}
+
 function plex_install {
 
 TODO
@@ -243,10 +249,11 @@ function mediaserver_main {
 
     echo -e "———————————————————————————————————————————————————————————————————————"
     echo -e "1. Jellyfin installation"
-    echo -e "2. Plex installation"
-    echo -e "3. Back to previous menu"
+    echo -e "2. Emby installation"
+    echo -e "3. Plex installation"
+    echo -e "4. Back to previous menu"
     echo -e "———————————————————————————————————————————————————————————————————————"
-    read -ep "Please enter the number [1-3]:" num
+    read -ep "Please enter the number [1-4]:" num
     case "$num" in
         1)
         clear
@@ -254,15 +261,19 @@ function mediaserver_main {
         ;;
         2)
         clear
-        plex_install
+        emby_install
         ;;
         3)
+        clear
+        plex_install
+        ;;
+        4)
         clear
         main_menu
         ;;
         *)
         clear
-        WARN 'Please enter the correct number [1-3]'
+        WARN 'Please enter the correct number [1-4]'
         mediaserver_main
         ;;
         esac
