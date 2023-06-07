@@ -224,7 +224,7 @@ function downloader_main {
         ;;
         7)
         clear
-        xunlei
+        xunlei_install
         ;;
         8)
         clear
@@ -316,4 +316,4 @@ function main {
 
 }
 
-get_umask
+main
