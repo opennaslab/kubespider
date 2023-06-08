@@ -145,7 +145,48 @@ EOF
 
 function kubespider_install {
 
-TODO
+    DEFAULT_CONFIG_DIR=${HOME}/kubespider/.config
+    INFO "Please enter your kubespider config file save path (default ${DEFAULT_CONFIG_DIR})"
+    read -ep "DIR:" SET_CONFIG_DIR
+    [[ -z "${SET_CONFIG_DIR}" ]] && SET_CONFIG_DIR=${DEFAULT_CONFIG_DIR}
+    INFO "You set the config file save path ${SET_CONFIG_DIR}"
+
+    DEFAULT_PORT_DIR=3080
+    INFO "Please enter your kubespider port (default ${DEFAULT_PORT_DIR})"
+    read -ep "DIR:" SET_PORT_DIR
+    [[ -z "${SET_PORT_DIR}" ]] && SET_PORT_DIR=${DEFAULT_PORT_DIR}
+    INFO "You set the port ${SET_PORT_DIR}"
+
+    get_uid_gid
+    get_umask
+    get_tz
+
+    INFO "Whether to use Alibaba Cloud source to pull the image (default n) [Y/n]"
+    read -ep "Enter your choice:" YN
+    [[ -z "${YN}" ]] && YN="n"
+    if [[ ${YN} == [Nn] ]]; then
+        IMAGE_SOURCE=registry.cn-hangzhou.aliyuncs.com/jwcesign
+    elif [[ ${YN} == [Yy] ]]; then
+        IMAGE_SOURCE=index.docker.io/cesign
+    fi
+
+    clear
+    INFO "Start deploying kubespider"
+    docker run -itd --name kubespider \
+        -v ${SET_CONFIG_DIR}:/app/.config \
+        -e PUID=${SET_UID} \
+        -e PGID=${SET_GID} \
+        -e UMASK=${SET_UMASK} \
+        -e TZ=${SET_TZ} \
+        -p ${SET_PORT_DIR}:3080 \
+        --restart unless-stopped \
+        ${IMAGE_SOURCE}/kubespider:latest
+    if [ $? -eq 0 ]; then
+        INFO "Kubespider installed successfully"
+    else
+        ERROR "Kubespider installation failed"
+        exit 1
+    fi
 
 }
 
@@ -310,6 +351,7 @@ function main_menu {
     read -ep "Please enter the number [1-4]:" num
     case "$num" in
         1)
+        clear
         kubespider_install
         ;;
         2)
