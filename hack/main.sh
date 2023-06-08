@@ -12,7 +12,7 @@
 # This is free software, licensed under the Apache License 2.0 License.
 #
 #
-# The functions that the script can call are 'INFO' 'WARN' 'ERROR' 'if_port'.
+# The functions that the script can call are 'INFO' 'WARN' 'ERROR' 'if_port' 'get_uid_gid' 'get_umask' 'get_tz'.
 # INFO function use(log output): INFO "xxxx"
 # WARN function use(log output): WARN "xxxx"
 # ERROR function use(log output): ERROR "xxxx"
@@ -102,6 +102,25 @@ function get_umask {
     if [[ ${YN} == [Nn] ]]; then
         clear
         get_umask
+    fi
+
+}
+
+function get_tz {
+
+    INFO "Please enter your time zone (default UTC)"
+    read -ep "TZ:" SET_TZ
+    [[ -z "${SET_TZ}" ]] && SET_TZ=UTC
+
+    clear
+    INFO "You set the umask to ${SET_TZ}"
+
+    INFO "Please confirm your settings (enter [n] to reset) [Y/n]"
+    read -ep "Enter your choice:" YN
+    [[ -z "${YN}" ]] && YN="y"
+    if [[ ${YN} == [Nn] ]]; then
+        clear
+        get_tz
     fi
 
 }
