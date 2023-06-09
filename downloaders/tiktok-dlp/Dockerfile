@@ -8,6 +8,9 @@ ENV HOME="/app" \
 
 WORKDIR /app
 
+COPY ./app ./
+COPY requirements.txt ./
+
 RUN set -ex \
     && apk add --no-cache \
         nodejs \
@@ -16,21 +19,13 @@ RUN set -ex \
         su-exec \
         tzdata \
         shadow \
-        git \
-    && git clone -b main https://github.com/imgyh/tiktok.git /app \
     && mkdir -p /app/downloads \
     && mkdir -p /app/config \
     && python3 -m pip install --upgrade pip \
-    && pip install -r requirements_docker.txt \
+    && pip install -r requirements.txt \
     && addgroup -S tiktokdlp -g 911 \
-    && adduser -S tiktokdlp -G tiktokdlp -h /app -u 911 -s /bin/bash tiktokdlp \
-    && rm -rf \
-        /app/.git \
-        /app/.github \
-        /app/.cache \
-        /tmp/*
+    && adduser -S tiktokdlp -G tiktokdlp -h /app -u 911 -s /bin/bash tiktokdlp
 
-COPY ./app ./
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
