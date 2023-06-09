@@ -39,7 +39,7 @@ services:
     ports:
       - 3080:3080
     volumes:
-      - {config_path}:/root/.config
+      - {config_path}:/app/.config
     networks:
       - kb
   
