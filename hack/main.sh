@@ -12,7 +12,9 @@
 # This is free software, licensed under the Apache License 2.0 License.
 #
 #
-# The functions that the script can call are 'INFO' 'WARN' 'ERROR' 'if_port' 'get_uid_gid' 'get_umask' 'get_tz'.
+# The functions that the script can call are 'INFO' 'WARN' 'ERROR' 'if_port' 'get_uid_gid' 
+#                                            'get_umask' 'get_tz' 'get_port' 'get_volume' 
+#                                            'get_env' 'docker_source_choose'.
 # INFO function use(log output): INFO "xxxx"
 # WARN function use(log output): WARN "xxxx"
 # ERROR function use(log output): ERROR "xxxx"
