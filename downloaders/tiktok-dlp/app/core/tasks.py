@@ -3,9 +3,9 @@ import time
 import logging
 import _thread
 
-from apiproxy.douyin.douyin import Douyin
-from apiproxy.douyin.download import Download
-from apiproxy.douyin import douyin_headers
+from thirdparty.douyin.douyin import Douyin
+from thirdparty.douyin.download import Download
+from thirdparty.douyin import douyin_headers
 
 
 class DownloadTask:
