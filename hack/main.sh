@@ -116,6 +116,17 @@ function get_volume {
 
 }
 
+function get_env {
+
+    DEFAULT_ENV_VALUE=$1
+    ENV_NAME=$2
+    OUTPUT=$3
+    INFO "${OUTPUT} (default ${DEFAULT_ENV_VALUE})"
+    read -ep "${ENV_NAME}:" SET_ENV
+    [[ -z "${SET_ENV}" ]] && SET_ENV=${DEFAULT_ENV_VALUE}
+
+}
+
 function docker_source_choose {
 
     INFO "Whether to use Alibaba Cloud source to pull the image (default n) [Y/n]"
