@@ -71,18 +71,6 @@ function get_uid_gid {
     read -ep "PUID:" SET_GID
     [[ -z "${SET_GID}" ]] && SET_GID=${DEFAULT_GID}
 
-    clear
-    INFO "You set the user id to ${SET_UID}"
-    INFO "You set the group id to ${SET_GID}"
-
-    INFO "Please confirm your settings (enter [n] to reset) [Y/n]"
-    read -ep "Enter your choice:" YN
-    [[ -z "${YN}" ]] && YN="y"
-    if [[ ${YN} == [Nn] ]]; then
-        clear
-        get_uid_gid
-    fi
-
 }
 
 function get_umask {
@@ -93,17 +81,6 @@ function get_umask {
     read -ep "Umask:" SET_UMASK
     [[ -z "${SET_UMASK}" ]] && SET_UMASK=${DEFAULT_UMASK}
 
-    clear
-    INFO "You set the umask to ${SET_UMASK}"
-
-    INFO "Please confirm your settings (enter [n] to reset) [Y/n]"
-    read -ep "Enter your choice:" YN
-    [[ -z "${YN}" ]] && YN="y"
-    if [[ ${YN} == [Nn] ]]; then
-        clear
-        get_umask
-    fi
-
 }
 
 function get_tz {
@@ -112,15 +89,42 @@ function get_tz {
     read -ep "TZ:" SET_TZ
     [[ -z "${SET_TZ}" ]] && SET_TZ=UTC
 
-    clear
-    INFO "You set the umask to ${SET_TZ}"
+}
 
-    INFO "Please confirm your settings (enter [n] to reset) [Y/n]"
+function get_port {
+
+    DEFAULT_PORT=$1
+    OUTPUT=$2
+    INFO "${OUTPUT} (default ${DEFAULT_PORT})"
+    read -ep "PORT:" SET_PORT
+    [[ -z "${SET_PORT}" ]] && SET_PORT=${DEFAULT_PORT}
+    if_port "${SET_PORT}"
+    if [[ ${TEST_IF_PORT} = '0' ]]; then
+        WARN "${SET_PORT} port is occupied, please re-enter an unoccupied port"
+        get_port "$1" "$2"
+    fi
+
+}
+
+function get_volume {
+
+    DEFAULT_VOLUME=$1
+    OUTPUT=$2
+    INFO "${OUTPUT} (default ${DEFAULT_VOLUME})"
+    read -ep "DIR:" SET_VOLUME
+    [[ -z "${SET_VOLUME}" ]] && SET_VOLUME=${DEFAULT_VOLUME}
+
+}
+
+function docker_source_choose {
+
+    INFO "Whether to use Alibaba Cloud source to pull the image (default n) [Y/n]"
     read -ep "Enter your choice:" YN
-    [[ -z "${YN}" ]] && YN="y"
+    [[ -z "${YN}" ]] && YN="n"
     if [[ ${YN} == [Nn] ]]; then
-        clear
-        get_tz
+        IMAGE_SOURCE=registry.cn-hangzhou.aliyuncs.com/jwcesign
+    elif [[ ${YN} == [Yy] ]]; then
+        IMAGE_SOURCE=index.docker.io/cesign
     fi
 
 }
@@ -145,40 +149,27 @@ EOF
 
 function kubespider_install {
 
-    DEFAULT_CONFIG_DIR=${HOME}/kubespider/.config
-    INFO "Please enter your kubespider config file save path (default ${DEFAULT_CONFIG_DIR})"
-    read -ep "DIR:" SET_CONFIG_DIR
-    [[ -z "${SET_CONFIG_DIR}" ]] && SET_CONFIG_DIR=${DEFAULT_CONFIG_DIR}
-    INFO "You set the config file save path ${SET_CONFIG_DIR}"
+    get_volume "${HOME}/kubespider/.config" "Please enter your kubespider config file save path"
+    kubespider_dir=${SET_VOLUME}
 
-    DEFAULT_PORT_DIR=3080
-    INFO "Please enter your kubespider port (default ${DEFAULT_PORT_DIR})"
-    read -ep "DIR:" SET_PORT_DIR
-    [[ -z "${SET_PORT_DIR}" ]] && SET_PORT_DIR=${DEFAULT_PORT_DIR}
-    INFO "You set the port ${SET_PORT_DIR}"
+    get_port "3080" "Please enter your kubespider port"
+    kubespider_port=${SET_PORT}
 
     get_uid_gid
     get_umask
     get_tz
 
-    INFO "Whether to use Alibaba Cloud source to pull the image (default n) [Y/n]"
-    read -ep "Enter your choice:" YN
-    [[ -z "${YN}" ]] && YN="n"
-    if [[ ${YN} == [Nn] ]]; then
-        IMAGE_SOURCE=registry.cn-hangzhou.aliyuncs.com/jwcesign
-    elif [[ ${YN} == [Yy] ]]; then
-        IMAGE_SOURCE=index.docker.io/cesign
-    fi
+    docker_source_choose
 
     clear
     INFO "Start deploying kubespider"
     docker run -itd --name kubespider \
-        -v ${SET_CONFIG_DIR}:/app/.config \
+        -v ${kubespider_dir}:/app/.config \
         -e PUID=${SET_UID} \
         -e PGID=${SET_GID} \
         -e UMASK=${SET_UMASK} \
         -e TZ=${SET_TZ} \
-        -p ${SET_PORT_DIR}:3080 \
+        -p ${kubespider_port}:3080 \
         --restart unless-stopped \
         ${IMAGE_SOURCE}/kubespider:latest
     if [ $? -eq 0 ]; then
