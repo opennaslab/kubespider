@@ -8,7 +8,7 @@
 ## 最终效果
 
 最终效果如下图，通过短视频分享按钮获取分享链接，填入Chrome扩展，Kubespider会自动下载抖音视频资源。
-![img](../../../images/tiktok_final_show.gif)
+![img](images/tiktok_final_show.gif)
 
 ## 配置
 

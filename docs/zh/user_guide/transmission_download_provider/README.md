@@ -2,7 +2,7 @@
 ## 简介
 Transmission 是 Linux 下的一款 BitTorrent 下载软件。 比其他客户端使用更少的资源, 比较适合保种使用。
 ## 最终效果
-![使用界面](../../../images/transmission_final_show.gif)
+![使用界面](images/transmission_final_show.gif)
 
 ## 安装
 ### 1. 安装Transmission
@@ -33,7 +33,7 @@ http://<your-nas-ip>:9091
 username = admin
 password = admin
 ```
-![登录界面](../../../images/transmission_login_page.png)
+![登录界面](images/transmission_login_page.png)
 登录之后则可以进入上述最终效果中的使用界面
 ## 配置
 ### 1.Transmission 配置

@@ -7,24 +7,24 @@ Chrome插件都是html+css+js的组合，和前端开发几乎一致。只需要
 ## 开发流程
 ### 1.导入Chrome插件
 在Chrome中点击如下按钮，选择管理扩展程序：  
-<img src="../../images/chrome-open-ext.png" width="400">  
+<img src="images/chrome-open-ext.png" width="400">  
 
 然后点击点击开启开发者模式：  
-<img src="../../images/chrome-open-dev.png" width="400">  
+<img src="images/chrome-open-dev.png" width="400">  
 
 然后点击加载已解压的扩展程序：  
-<img src="../../images/chrome-load-ext.png" width="400">  
+<img src="images/chrome-load-ext.png" width="400">  
   
 到下载库下的chrome-extension文件夹，选择导入即可：  
-<img src="../../images/chrome-go-dir.png" width="400">  
+<img src="images/chrome-go-dir.png" width="400">  
 最后点击确定。
 
 ### 2.测试插件
 点击插件，测试即可：  
-<img src="../../images/chrome-test-ext.png" width="400">  
+<img src="images/chrome-test-ext.png" width="400">  
 
 如果有修改，在管理程序页面重新载入插件即可：  
-<img src="../../images/chrome-reload-ext.png" width="400">  
+<img src="images/chrome-reload-ext.png" width="400">  
 
 ### 3.提交PR代码
 测试结束后，提交代码即可。
