@@ -135,9 +135,9 @@ function docker_source_choose {
     read -ep "Enter your choice:" YN
     [[ -z "${YN}" ]] && YN="n"
     if [[ ${YN} == [Nn] ]]; then
-        IMAGE_SOURCE=registry.cn-hangzhou.aliyuncs.com/jwcesign
-    elif [[ ${YN} == [Yy] ]]; then
         IMAGE_SOURCE=index.docker.io/cesign
+    elif [[ ${YN} == [Yy] ]]; then
+        IMAGE_SOURCE=registry.cn-hangzhou.aliyuncs.com/jwcesign
     fi
 
 }
@@ -196,7 +196,48 @@ function kubespider_install {
 
 function aria2_install {
 
-TODO
+    get_volume "${HOME}/kubespider/aria2" "Please enter your aria2 config file save path"
+    aria2_config_dir=${SET_VOLUME}
+    get_volume "${HOME}/kubespider/nas" "Please enter your download path"
+    download_dir=${SET_VOLUME}
+
+    get_port "6800" "Please enter your aria2 rpc port"
+    aria2_rpc_port=${SET_PORT}
+    get_port "6888" "Please enter your aria2 listen port"
+    aria2_listen_port=${SET_PORT}
+
+    get_env "password" "RPC_SECRET" "Please enter your aria2 rpc secret"
+    aria2_rpc_secret=${SET_ENV}
+
+    get_uid_gid
+    get_umask
+    get_tz
+
+    docker_source_choose
+
+    clear
+    INFO "Start deploying aria2"
+    docker run -d \
+        --name aria2-pro \
+        --restart unless-stopped \
+        --log-opt max-size=1m \
+        --network host \
+        -e PUID=${SET_UID} \
+        -e PGID=${SET_GID} \
+        -e SET_UMASK=${SET_UMASK} \
+        -e TZ=${SET_TZ} \
+        -e RPC_SECRET=${aria2_rpc_secret} \
+        -e RPC_PORT=${aria2_rpc_port} \
+        -e LISTEN_PORT=${aria2_listen_port} \
+        -v ${aria2_config_dir}:/config \
+        -v ${download_dir}:/downloads \
+        ${IMAGE_SOURCE}/aria2-pro:latest
+    if [ $? -eq 0 ]; then
+        INFO "Aria2 installed successfully"
+    else
+        ERROR "Aria2 installation failed"
+        exit 1
+    fi
 
 }
 
