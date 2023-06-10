@@ -3,7 +3,7 @@
 qbittorrent是一个开源的bt种子下载工具，界面简洁功能强大并且支持多平台安装使用。在Linux版本上已支持基于WebUI的Docker版本，方便Nas用户使用。qbittorrent-enhanced-edition则在原始版本的基础上添加额外功能，感谢 [SuperNG6](https://github.com/SuperNG6/Docker-qBittorrent-Enhanced-Edition) 的Docker移植。
 
 ## 最终效果
-![使用界面](../../../images/qbittorrent_final_show.gif)
+![使用界面](images/qbittorrent_final_show.gif)
 
 ## 安装
 ### 1. 安装qBittorrent
@@ -34,14 +34,14 @@ http://<your-nas-ip>:8080
 username = admin
 password = adminadmin
 ```
-![登录界面](../../../images/login_page.png)
+![登录界面]images/login_page.png)
 
 登录之后则可以进入上述最终效果中的使用界面
 
 ## 配置
 ### 1.WebAPI配置
 默认配置足以运行，但是如果有特殊需求如更改用户名或密码，则可以进入WebAPI配置项中进行配置
-![WebUI配置](../../../images/webui_config.png)
+![WebUI配置](images/webui_config.png)
 **需要注意，如果更改了WebAPI相关配置，在Kubespider对接配置中进行对应的修改**
 
 ### 2.添加Tracker列表
@@ -53,7 +53,7 @@ password = adminadmin
 https://jsd.cdn.zzko.cn/gh/XIU2/TrackersListCollection/best.txt
 ```
 
-![添加Tracker](../../../images/add_tracker.png)
+![添加Tracker](images/add_tracker.png)
 
 > 感谢[XIU2](https://github.com/XIU2/TrackersListCollection)的收集和更新
 

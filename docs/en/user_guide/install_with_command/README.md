@@ -9,7 +9,7 @@ Parameters needed to start this project in docker shows as follow:
 |Parameter|Type|Function|Note|
 |:---:|:---:|:---:|:---:|
 |`-v /app/.config`|VOLUMN|Path to store all configurations||
-|`-p 3080`|port|Listen port of [Web Api](../user_guide/api_docs/README.md) and Chrome plugin|Can be changed by Global configuration|
+|`-p 3080`|port|Listen port of [Web Api](../../../zh/user_guide/api_docs/README.md) and Chrome plugin|Can be changed by Global configuration|
 
 ## Run with docker cli
 

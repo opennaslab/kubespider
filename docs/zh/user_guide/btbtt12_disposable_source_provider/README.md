@@ -5,7 +5,7 @@ BT之家单版社区平台，最快提供最新最全高清电影、动漫、韩
 
 ## 最终效果
 最终效果如下图，在Chrome中右键，选择`Send to Kubespider`，Kubespider会自动下载链接中的资源。
-![img](../../../images/btbt12_download.gif)
+![img](images/btbt12_download.gif)
 
 ## 配置
 ### 1.前提
