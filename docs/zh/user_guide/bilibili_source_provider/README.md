@@ -6,7 +6,7 @@
 
 ## 最终效果
 最终效果如下图，在Chrome中右键，选择`Send to Kubespider`，Kubespider会自动下载B站视频资源。
-![img](../../../images/bilibili_final_show.gif)
+![img](images/bilibili_final_show.gif)
 
 ## 配置
 ### 1.前提

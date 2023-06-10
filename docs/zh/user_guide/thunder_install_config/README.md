@@ -4,7 +4,7 @@
 
 ## 最终效果
 效果如图，结合迅雷，Kubespider会调用迅雷，下载所有剧集并追更：
-![img](../../../images/xunlei_final_show.gif)
+![img](images/xunlei_final_show.gif)
 
 ## 安装
 ### 1.安装迅雷
@@ -58,24 +58,24 @@ curl http://<server_ip>:2345/webman/3rdparty/pan-xunlei-com/index.cgi/\#/home
 
 #### 2.获取JS脚本
 游览器访问`http://<server_ip>:2345`，F12找到步骤1的文件，按如下步骤获取格式化代码：
-![img](../../../images/get_xunlei_js.jpg)
+![img](images/get_xunlei_js.jpg)
 
 #### 3.获取关键加密代码
 `Ctrl+F` 搜索 `pan_auth`字段，找到给`pan_auth`赋值的变量以及函数（如这里的s和Q8e）：
-![img](../../../images/get_key_step1.jpg)
+![img](images/get_key_step1.jpg)
 
 然后搜索函数（如这里的Q8e），相关加密代码段（如下连续代码），并记住`函数1`和`函数2`名字:
-![img](../../../images/get_key_step2.jpg)
+![img](images/get_key_step2.jpg)
 
 #### 4.设置get_token.js
 现在打开`${home}/kubespider/.config/dependencies/xunlei_download_provider/get_token.js`:
-![img](../../../images/get_key_step3.jpg)  
+![img](images/get_key_step3.jpg)  
 
 将函数1的名字替换为步骤3的函数1名字，函数2名字替换为函数2名字，代码段替换为步骤2的代码段。
 
 #### 5.获取device_id并设置
 游览器访问`http://<server_ip>:2345`，F12后点击Netowk，找到如下获取device_id并设置:
-![img](../../../images/get_device_id.jpg)
+![img](images/get_device_id.jpg)
 如上，device_id为`5c78ea560a34ed4b4fbe6686da1172b4`。
 
 #### 6.设置download_provider文件
