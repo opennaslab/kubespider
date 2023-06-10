@@ -36,7 +36,10 @@ class MeijuttSourceProvider(provider.SourceProvider):
         return None
 
     def get_prefer_download_provider(self) -> list:
-        return self.config_reader.read().get('downloader')
+        downloader_name = self.config_reader.read().get('downloader', None)
+        if downloader_name is None:
+            return None
+        return [downloader_name]
 
     def get_download_param(self) -> list:
         return self.config_reader.read().get('download_param')

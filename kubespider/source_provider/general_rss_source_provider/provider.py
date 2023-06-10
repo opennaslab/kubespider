@@ -56,7 +56,10 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         pass
 
     def get_prefer_download_provider(self) -> None:
-        return self.config_reader.read().get('downloader')
+        downloader_name = self.config_reader.read().get('downloader', None)
+        if downloader_name is None:
+            return None
+        return [downloader_name]
 
     def get_provider_listen_type(self) -> str:
         return self.provider_listen_type

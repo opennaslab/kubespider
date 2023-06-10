@@ -24,7 +24,7 @@ class MikkananiSouirceProviderTest(unittest.TestCase):
 
     def test_read_config(self):
         downloader = self.provider.get_prefer_download_provider()
-        self.assertEqual(downloader, 'test_downloader')
+        self.assertEqual(downloader, ['test_downloader'])
         param = self.provider.get_download_param()
         self.assertEqual({'tags': ["test"]}, param)
 
