@@ -79,9 +79,9 @@ class TransmissionProvider(
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()
         self.download_base_path = cfg['download_base_path']
-        http_endpoint = cfg['http_endpoint']
-        username = cfg['username']
-        password = cfg['password']
+        http_endpoint = cfg.get('http_endpoint')
+        username = cfg.get('username', 'admin')
+        password = cfg.get('password', 'admin')
 
         parse_result = urlparse(http_endpoint)
 
