@@ -34,7 +34,12 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
         return None
 
     def get_prefer_download_provider(self) -> list:
-        return self.config_reader.read().get('downloader')
+        downloader_names = self.config_reader.read().get('downloader', None)
+        if downloader_names is None:
+            return None
+        if isinstance(downloader_names, list):
+            return downloader_names
+        return [downloader_names]
 
     def get_download_param(self) -> list:
         return self.config_reader.read().get('download_param')

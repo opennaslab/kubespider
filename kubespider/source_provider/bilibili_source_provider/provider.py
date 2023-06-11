@@ -31,10 +31,12 @@ class BilibiliSourceProvider(provider.SourceProvider):
         return "youget_download_provider"
 
     def get_prefer_download_provider(self) -> list:
-        downloader_name = self.config_reader.read().get('downloader', None)
-        if downloader_name is None:
+        downloader_names = self.config_reader.read().get('downloader', None)
+        if downloader_names is None:
             return None
-        return [downloader_name]
+        if isinstance(downloader_names, list):
+            return downloader_names
+        return [downloader_names]
 
     def get_download_param(self) -> list:
         return self.config_reader.read().get('download_param')
