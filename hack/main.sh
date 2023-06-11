@@ -12,7 +12,9 @@
 # This is free software, licensed under the Apache License 2.0 License.
 #
 #
-# The functions that the script can call are 'INFO' 'WARN' 'ERROR' 'if_port' 'get_uid_gid' 'get_umask' 'get_tz'.
+# The functions that the script can call are 'INFO' 'WARN' 'ERROR' 'if_port' 'get_uid_gid' 
+#                                            'get_umask' 'get_tz' 'get_port' 'get_volume' 
+#                                            'get_env' 'docker_source_choose'.
 # INFO function use(log output): INFO "xxxx"
 # WARN function use(log output): WARN "xxxx"
 # ERROR function use(log output): ERROR "xxxx"
@@ -71,18 +73,6 @@ function get_uid_gid {
     read -ep "PUID:" SET_GID
     [[ -z "${SET_GID}" ]] && SET_GID=${DEFAULT_GID}
 
-    clear
-    INFO "You set the user id to ${SET_UID}"
-    INFO "You set the group id to ${SET_GID}"
-
-    INFO "Please confirm your settings (enter [n] to reset) [Y/n]"
-    read -ep "Enter your choice:" YN
-    [[ -z "${YN}" ]] && YN="y"
-    if [[ ${YN} == [Nn] ]]; then
-        clear
-        get_uid_gid
-    fi
-
 }
 
 function get_umask {
@@ -93,17 +83,6 @@ function get_umask {
     read -ep "Umask:" SET_UMASK
     [[ -z "${SET_UMASK}" ]] && SET_UMASK=${DEFAULT_UMASK}
 
-    clear
-    INFO "You set the umask to ${SET_UMASK}"
-
-    INFO "Please confirm your settings (enter [n] to reset) [Y/n]"
-    read -ep "Enter your choice:" YN
-    [[ -z "${YN}" ]] && YN="y"
-    if [[ ${YN} == [Nn] ]]; then
-        clear
-        get_umask
-    fi
-
 }
 
 function get_tz {
@@ -112,15 +91,53 @@ function get_tz {
     read -ep "TZ:" SET_TZ
     [[ -z "${SET_TZ}" ]] && SET_TZ=UTC
 
-    clear
-    INFO "You set the umask to ${SET_TZ}"
+}
 
-    INFO "Please confirm your settings (enter [n] to reset) [Y/n]"
+function get_port {
+
+    DEFAULT_PORT=$1
+    OUTPUT=$2
+    INFO "${OUTPUT} (default ${DEFAULT_PORT})"
+    read -ep "PORT:" SET_PORT
+    [[ -z "${SET_PORT}" ]] && SET_PORT=${DEFAULT_PORT}
+    if_port "${SET_PORT}"
+    if [[ ${TEST_IF_PORT} = '0' ]]; then
+        WARN "${SET_PORT} port is occupied, please re-enter an unoccupied port"
+        get_port "$1" "$2"
+    fi
+
+}
+
+function get_volume {
+
+    DEFAULT_VOLUME=$1
+    OUTPUT=$2
+    INFO "${OUTPUT} (default ${DEFAULT_VOLUME})"
+    read -ep "DIR:" SET_VOLUME
+    [[ -z "${SET_VOLUME}" ]] && SET_VOLUME=${DEFAULT_VOLUME}
+
+}
+
+function get_env {
+
+    DEFAULT_ENV_VALUE=$1
+    ENV_NAME=$2
+    OUTPUT=$3
+    INFO "${OUTPUT} (default ${DEFAULT_ENV_VALUE})"
+    read -ep "${ENV_NAME}:" SET_ENV
+    [[ -z "${SET_ENV}" ]] && SET_ENV=${DEFAULT_ENV_VALUE}
+
+}
+
+function docker_source_choose {
+
+    INFO "Whether to use Alibaba Cloud source to pull the image (default n) [Y/n]"
     read -ep "Enter your choice:" YN
-    [[ -z "${YN}" ]] && YN="y"
+    [[ -z "${YN}" ]] && YN="n"
     if [[ ${YN} == [Nn] ]]; then
-        clear
-        get_tz
+        IMAGE_SOURCE=index.docker.io/cesign
+    elif [[ ${YN} == [Yy] ]]; then
+        IMAGE_SOURCE=registry.cn-hangzhou.aliyuncs.com/jwcesign
     fi
 
 }
@@ -145,40 +162,27 @@ EOF
 
 function kubespider_install {
 
-    DEFAULT_CONFIG_DIR=${HOME}/kubespider/.config
-    INFO "Please enter your kubespider config file save path (default ${DEFAULT_CONFIG_DIR})"
-    read -ep "DIR:" SET_CONFIG_DIR
-    [[ -z "${SET_CONFIG_DIR}" ]] && SET_CONFIG_DIR=${DEFAULT_CONFIG_DIR}
-    INFO "You set the config file save path ${SET_CONFIG_DIR}"
+    get_volume "${HOME}/kubespider/.config" "Please enter your kubespider config file save path"
+    kubespider_dir=${SET_VOLUME}
 
-    DEFAULT_PORT_DIR=3080
-    INFO "Please enter your kubespider port (default ${DEFAULT_PORT_DIR})"
-    read -ep "DIR:" SET_PORT_DIR
-    [[ -z "${SET_PORT_DIR}" ]] && SET_PORT_DIR=${DEFAULT_PORT_DIR}
-    INFO "You set the port ${SET_PORT_DIR}"
+    get_port "3080" "Please enter your kubespider port"
+    kubespider_port=${SET_PORT}
 
     get_uid_gid
     get_umask
     get_tz
 
-    INFO "Whether to use Alibaba Cloud source to pull the image (default n) [Y/n]"
-    read -ep "Enter your choice:" YN
-    [[ -z "${YN}" ]] && YN="n"
-    if [[ ${YN} == [Nn] ]]; then
-        IMAGE_SOURCE=registry.cn-hangzhou.aliyuncs.com/jwcesign
-    elif [[ ${YN} == [Yy] ]]; then
-        IMAGE_SOURCE=index.docker.io/cesign
-    fi
+    docker_source_choose
 
     clear
     INFO "Start deploying kubespider"
     docker run -itd --name kubespider \
-        -v ${SET_CONFIG_DIR}:/app/.config \
+        -v ${kubespider_dir}:/app/.config \
         -e PUID=${SET_UID} \
         -e PGID=${SET_GID} \
         -e UMASK=${SET_UMASK} \
         -e TZ=${SET_TZ} \
-        -p ${SET_PORT_DIR}:3080 \
+        -p ${kubespider_port}:3080 \
         --restart unless-stopped \
         ${IMAGE_SOURCE}/kubespider:latest
     if [ $? -eq 0 ]; then
@@ -192,7 +196,48 @@ function kubespider_install {
 
 function aria2_install {
 
-TODO
+    get_volume "${HOME}/kubespider/aria2" "Please enter your aria2 config file save path"
+    aria2_config_dir=${SET_VOLUME}
+    get_volume "${HOME}/kubespider/nas" "Please enter your download path"
+    download_dir=${SET_VOLUME}
+
+    get_port "6800" "Please enter your aria2 rpc port"
+    aria2_rpc_port=${SET_PORT}
+    get_port "6888" "Please enter your aria2 listen port"
+    aria2_listen_port=${SET_PORT}
+
+    get_env "password" "RPC_SECRET" "Please enter your aria2 rpc secret"
+    aria2_rpc_secret=${SET_ENV}
+
+    get_uid_gid
+    get_umask
+    get_tz
+
+    docker_source_choose
+
+    clear
+    INFO "Start deploying aria2"
+    docker run -d \
+        --name aria2-pro \
+        --restart unless-stopped \
+        --log-opt max-size=1m \
+        --network host \
+        -e PUID=${SET_UID} \
+        -e PGID=${SET_GID} \
+        -e SET_UMASK=${SET_UMASK} \
+        -e TZ=${SET_TZ} \
+        -e RPC_SECRET=${aria2_rpc_secret} \
+        -e RPC_PORT=${aria2_rpc_port} \
+        -e LISTEN_PORT=${aria2_listen_port} \
+        -v ${aria2_config_dir}:/config \
+        -v ${download_dir}:/downloads \
+        ${IMAGE_SOURCE}/aria2-pro:latest
+    if [ $? -eq 0 ]; then
+        INFO "Aria2 installed successfully"
+    else
+        ERROR "Aria2 installation failed"
+        exit 1
+    fi
 
 }
 
