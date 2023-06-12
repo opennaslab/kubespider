@@ -19,7 +19,7 @@ class PTServer:
 
         self.single_file_threshold = config_reader.read().get('pt_single_max_size', 100.0)
         self.sum_file_threshold = config_reader.read().get('pt_sum_max_size', 100.0)
-        self.seeding_time = config_reader.read().get('pt_seeding_time') * 3600
+        self.seeding_time = config_reader.read().get('pt_seeding_time', 48) * 3600
 
         self.state_config = YamlFileConfigReader(Config.STATE.config_path())
         state = self.state_config.read().get('pt_state', {})
