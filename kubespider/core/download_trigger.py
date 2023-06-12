@@ -8,8 +8,8 @@ import source_provider.provider as sp
 
 
 class KubespiderDownloader:
-    def __init__(self, download_providers: dp.DownloadProvider):
-        self.download_providers: dp.DownloadProvider = download_providers
+    def __init__(self, download_providers: list[dp.DownloadProvider]):
+        self.download_providers: list[dp.DownloadProvider] = download_providers
 
     def period_run(self):
         while True:
