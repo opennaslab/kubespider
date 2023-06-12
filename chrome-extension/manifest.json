@@ -1,14 +1,15 @@
 {
     "name": "Kubespider",
     "manifest_version": 3,
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Trigger Kubespider execute downloading task",
     "permissions": [
       "storage",
       "declarativeNetRequest",
       "declarativeNetRequestFeedback",
       "contextMenus",
-      "tabs"
+      "tabs",
+      "cookies"
     ],
     "action": {
       "default_title": "Kubespider",
