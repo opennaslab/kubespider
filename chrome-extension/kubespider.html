@@ -52,7 +52,7 @@
     }
   </style>
 </head>
-<body style="width: 300px; height: 220px; margin-top: 5px;">
+<body style="width: 300px; height: auto; padding: 5px 0 10px 0;">
     <div class="container">
         <ul class="nav nav-tabs">
             <li class="nav-item">
@@ -82,20 +82,26 @@
                 <button type="button" class="btn btn-primary btn-sm" id="download">Download</button>
             </div>
             <div id="configPage" class="tab-pane fade">
-                <div class="input-group pos input-group-sm mb-3">
+                <div class="input-group input-group-sm mb-3">
                     <span class="input-group-text">SERVER</span>
                     <input type="text" class="form-control form-control-sm" placeholder="server" id="server">
                 </div>
-                <div class="input-group pos input-group-sm mb-3">
+                <div class="input-group input-group-sm mb-3">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="auth">
                         <label class="form-check-label" for="auth">enable auth</label>
                     </div>
                 </div>
                 <div id="authInputGroup" hidden="hidden">
-                    <div class="input-group pos input-group-sm mb-3">
+                    <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text">TOKEN</span>
                         <input type="text" class="form-control form-control-sm" placeholder="token" id="token">
+                    </div>
+                </div>
+                <div class="input-group input-group-sm mb-3" hidden="hidden">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="capture_cookies">
+                        <label class="form-check-label" for="capture_cookies">capture cookies</label>
                     </div>
                 </div>
                 <button type="button" class="btn btn-primary btn-sm" id="save">Save</button>

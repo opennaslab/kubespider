@@ -10,10 +10,10 @@ async function sendRequest() {
         return;
     }
 
-    let { path, server, token } = await chrome.storage.sync.get(['path', 'server', 'token']);
+    let {path, server, token} = await chrome.storage.sync.get(['path', 'server', 'token']);
 
     if (path !== inputPath) {
-        chrome.storage.sync.set({ 'path': inputPath }, () => {
+        chrome.storage.sync.set({'path': inputPath}, () => {
             console.log('path set successed!');
         });
     }
@@ -26,7 +26,7 @@ async function sendRequest() {
         return;
     }
 
-    let data = { "dataSource": dataSource, "path": inputPath };
+    let data = {"dataSource": dataSource, "path": inputPath};
     try {
         let response = await fetch(`${server}/api/v1/download`, {
             method: "POST",
@@ -65,6 +65,8 @@ async function saveConfig() {
     let authEnable = document.getElementById('auth').checked;
     let token = document.getElementById('token').value;
 
+    let captureCookies = document.getElementById('capture_cookies').checked;
+
     saveBtn.classList.add('btn-loading');
     try {
         let response = await fetch(`${serverValue}/healthz`, {
@@ -80,6 +82,7 @@ async function saveConfig() {
                 server: serverValue,
                 auth: authEnable,
                 token: token,
+                captureCookies: captureCookies,
             });
             await sleep(3000);
             saveBtn.classList.remove('btn-success');
@@ -103,12 +106,12 @@ async function saveConfig() {
 }
 
 function openGitHub() {
-    chrome.tabs.create({ url: "https://github.com/opennaslab/kubespider" });
+    chrome.tabs.create({url: "https://github.com/opennaslab/kubespider"});
 }
 
 async function refreshDownload() {
     let refreshBtn = document.getElementById('refresh');
-    let { server, token } = await chrome.storage.sync.get('server');
+    let {server, token} = await chrome.storage.sync.get(['server', 'token']);
     if (!server) return;
 
     refreshBtn.classList.add('btn-loading');
@@ -150,25 +153,17 @@ async function displayAuthInfoInput(event) {
     let authInput = document.getElementById('auth')
     let inputGroup = document.getElementById('authInputGroup')
     inputGroup.hidden = !authInput.checked;
-    if (authInput.checked) {
-        document.querySelector('body').style.height = "280px";
-    } else {
-        document.querySelector('body').style.height = "220px";
-    }
 }
 
 /**
  * read chrome store config
  */
-chrome.storage.sync.get(['server', 'path', 'auth', 'token']).then((res) => {
+chrome.storage.sync.get(['server', 'path', 'auth', 'token', 'captureCookies']).then((res) => {
     // check enable auth & change style
     if (res.auth) {
         document.getElementById('auth').checked = res.auth;
         let inputGroup = document.getElementById('authInputGroup')
         inputGroup.hidden = !res.auth;
-        if (res.auth) {
-            document.querySelector('body').style.height = "280px";
-        }
     }
     // read config
     if (res.token) {
@@ -179,6 +174,9 @@ chrome.storage.sync.get(['server', 'path', 'auth', 'token']).then((res) => {
     }
     if (res.path) {
         document.getElementById('path').value = res.path;
+    }
+    if (res.captureCookies) {
+        document.getElementById('capture_cookies').checked = res.captureCookies;
     }
 })
 
