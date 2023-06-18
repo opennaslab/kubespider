@@ -261,7 +261,30 @@ TODO
 
 function ytdlp_install {
 
-TODO
+    get_volume "${HOME}/kubespider/yt-dlp" "Please enter your yt-dlp config file save path"
+    ytdlp_config_dir=${SET_VOLUME}
+    get_volume "${HOME}/kubespider/nas" "Please enter your download path"
+    download_dir=${SET_VOLUME}
+
+    get_uid_gid
+    get_umask
+    get_tz
+
+    docker_source_choose
+
+    clear
+
+    docker run --name yt-dlp -d \
+        --network=host \
+        -e PUID=${SET_UID} \
+        -e PGID=${SET_GID} \
+        -e UMASK=${SET_UMASK} \
+        -e TZ=${SET_TZ} \
+
+        -v ${ytdlp_config_dir}:/app/config \
+        -v ${download_dir}:/app/downloads \
+        --restart unless-stopped \
+        cesign/ytdlp-downloader:latest
 
 }
 
