@@ -131,7 +131,7 @@ function get_env {
 
 function docker_source_choose {
 
-    INFO "Whether to use Alibaba Cloud source to pull the image (default n) [Y/n]"
+    INFO "Whether to use Alibaba Cloud source to pull the image (default n) [y/N]"
     read -ep "Enter your choice:" YN
     [[ -z "${YN}" ]] && YN="n"
     if [[ ${YN} == [Nn] ]]; then
