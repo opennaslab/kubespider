@@ -69,7 +69,7 @@ function get_uid_gid {
     read -ep "PUID:" SET_UID
     [[ -z "${SET_UID}" ]] && SET_UID=${DEFAULT_UID}
 
-    INFO "Please enter a user ID (default ${DEFAULT_GID})"
+    INFO "Please enter a group ID (default ${DEFAULT_GID})"
     read -ep "PUID:" SET_GID
     [[ -z "${SET_GID}" ]] && SET_GID=${DEFAULT_GID}
 
@@ -79,7 +79,7 @@ function get_umask {
 
     DEFAULT_UMASK=$(umask)
 
-    INFO "Please enter a user ID (default ${DEFAULT_UMASK})"
+    INFO "Please enter a umask (default ${DEFAULT_UMASK})"
     read -ep "Umask:" SET_UMASK
     [[ -z "${SET_UMASK}" ]] && SET_UMASK=${DEFAULT_UMASK}
 
@@ -280,7 +280,6 @@ function ytdlp_install {
         -e PGID=${SET_GID} \
         -e UMASK=${SET_UMASK} \
         -e TZ=${SET_TZ} \
-
         -v ${ytdlp_config_dir}:/app/config \
         -v ${download_dir}:/app/downloads \
         --restart unless-stopped \
