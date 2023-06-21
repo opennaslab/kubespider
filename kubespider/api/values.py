@@ -4,7 +4,6 @@ import os
 from enum import Enum
 
 from api import types
-from utils import helper
 
 FILE_TYPE_TO_PATH = {
     types.FILE_TYPE_COMMON: "Common",
@@ -18,11 +17,6 @@ FILE_TYPE_TO_PATH = {
 
 CFG_BASE_PATH = os.path.join(os.getenv('HOME'), '.config/')
 CFG_TEMPLATE_PATH = os.path.join(os.getenv('HOME'), '.config_template/')
-
-if not helper.is_running_in_docker():
-    if not os.path.exists(CFG_BASE_PATH):
-        os.makedirs(CFG_BASE_PATH)
-    CFG_TEMPLATE_PATH = os.path.join(os.path.dirname(os.getcwd()), ".config/")
 
 
 class Config(str, Enum):

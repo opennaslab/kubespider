@@ -3,7 +3,6 @@ import hashlib
 import logging
 import cgi
 import urllib
-import os
 from urllib.parse import urlparse
 from urllib import request
 
