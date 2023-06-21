@@ -16,6 +16,7 @@ from watchdog.events import FileSystemEventHandler, FileModifiedEvent
 from api.values import Config
 from api import values
 from utils.config_reader import YamlFileSectionConfigReader, YamlFileConfigReader
+from utils import helper
 
 import source_provider.mikanani_source_provider.provider as mikanani_source_provider
 import source_provider.btbtt12_disposable_source_provider.provider as btbtt12_disposable_source_provider
@@ -151,6 +152,13 @@ def prepare_config() -> None:
         return
 
     logging.info("Config files(%s) miss, try to init them", ','.join(miss_cfg))
+
+    # local run, make sure the current working directory like this {repo_root}/kubespider/kubespider
+    if not helper.is_running_in_docker():
+        if not os.path.exists(values.CFG_BASE_PATH):
+            os.makedirs(values.CFG_BASE_PATH)
+        values.CFG_TEMPLATE_PATH = os.path.join(os.path.dirname(os.getcwd()), '.config/')
+
     for cfg in miss_cfg:
         template_cfg = values.CFG_TEMPLATE_PATH + cfg
         target_cfg = values.CFG_BASE_PATH + cfg

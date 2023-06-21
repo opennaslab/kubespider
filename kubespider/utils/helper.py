@@ -3,6 +3,7 @@ import hashlib
 import logging
 import cgi
 import urllib
+import os
 from urllib.parse import urlparse
 from urllib import request
 
@@ -91,3 +92,7 @@ def download_torrent_file(url: str, controller: request.OpenerDirector) -> str:
     except Exception as err:
         logging.error("Download torrent file error:%s", err)
         return None
+
+def is_running_in_docker() -> bool:
+    # check is running in docker container
+    return os.path.exists('/.dockerenv')
