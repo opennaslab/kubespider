@@ -3,6 +3,7 @@ import hashlib
 import logging
 import cgi
 import urllib
+import os
 from urllib.parse import urlparse
 from urllib import request
 
@@ -93,13 +94,5 @@ def download_torrent_file(url: str, controller: request.OpenerDirector) -> str:
         return None
 
 def is_running_in_docker() -> bool:
-    """
-    判断是否在Docker容器环境中运行
-    """
-    # 检查cgroup是否存在
-    try:
-        with open('/proc/1/cgroup', 'rt') as f:
-            return 'docker' in f.read()
-    except IOError:
-        return False
-
+    # check is running in docker container
+    return os.path.exists('/.dockerenv')
