@@ -255,7 +255,39 @@ TODO
 
 function youget_install {
 
-TODO
+    get_volume "${HOME}/kubespider/youget" "Please enter your youget config file save path"
+    youget_config_dir=${SET_VOLUME}
+    get_volume "${HOME}/kubespider/nas" "Please enter your download path"
+    download_dir=${SET_VOLUME}
+
+    get_port "3081" "Please enter your youget port"
+    youget_port=${SET_PORT}
+
+    get_uid_gid
+    get_umask
+    get_tz
+
+    docker_source_choose
+
+    clear
+
+    docker run -d \
+        --name youget \
+        -p ${youget_port}:3081 \
+        -e PUID=${SET_UID} \
+        -e PGID=${SET_GID} \
+        -e UMASK=${SET_UMASK} \
+        -e BILIBILI_COOKIE_PATH=/app/config/bilibili_cookie.txt \
+        -v ${youget_config_dir}:/app/config \
+        -v ${download_dir}:/app/downloads \
+        --restart unless-stopped \
+        cesign/youget-downloader:latest
+    if [ $? -eq 0 ]; then
+        INFO "youget installed successfully"
+    else
+        ERROR "youget installation failed"
+        exit 1
+    fi
 
 }
 
@@ -266,6 +298,9 @@ function ytdlp_install {
     get_volume "${HOME}/kubespider/nas" "Please enter your download path"
     download_dir=${SET_VOLUME}
 
+    get_port "3082" "Please enter your yt-dlp port"
+    ytdlp_port=${SET_PORT}
+
     get_uid_gid
     get_umask
     get_tz
@@ -274,8 +309,9 @@ function ytdlp_install {
 
     clear
 
-    docker run --name yt-dlp -d \
-        --network=host \
+    docker run -d \
+        --name yt-dlp \
+        -p ${ytdlp_port}:3082 \
         -e PUID=${SET_UID} \
         -e PGID=${SET_GID} \
         -e UMASK=${SET_UMASK} \
@@ -284,6 +320,50 @@ function ytdlp_install {
         -v ${download_dir}:/app/downloads \
         --restart unless-stopped \
         cesign/ytdlp-downloader:latest
+    if [ $? -eq 0 ]; then
+        INFO "yt-dlp installed successfully"
+    else
+        ERROR "yt-dlp installation failed"
+        exit 1
+    fi
+
+}
+
+function tiktokdlp_install {
+
+    get_volume "${HOME}/kubespider/tiktokdlp" "Please enter your tiktokdlp config file save path"
+    tiktokdlp_config_dir=${SET_VOLUME}
+    get_volume "${HOME}/kubespider/nas" "Please enter your download path"
+    download_dir=${SET_VOLUME}
+
+    get_port "3083" "Please enter your tiktokdlp port"
+    tiktokdlp_port=${SET_PORT}
+
+    get_uid_gid
+    get_umask
+    get_tz
+
+    docker_source_choose
+
+    clear
+
+    docker run -d \
+        --name tiktok-dlp \
+        -p ${tiktokdlp_port}:3083 \
+        -e PUID=${SET_UID} \
+        -e PGID=${SET_GID} \
+        -e UMASK=${SET_UMASK} \
+        -e TZ=${SET_TZ} \
+        -v ${tiktokdlp_config_dir}:/app/config \
+        -v ${download_dir}:/app/downloads \
+        --restart unless-stopped \
+        cesign/tiktok-dlp:latest
+    if [ $? -eq 0 ]; then
+        INFO "tiktok-dlp installed successfully"
+    else
+        ERROR "tiktok-dlp installation failed"
+        exit 1
+    fi
 
 }
 
@@ -327,9 +407,10 @@ function downloader_main {
     echo -e "5. ytdlp installation"
     echo -e "6. baidunetdisk installation"
     echo -e "7. xunlei installation"
-    echo -e "8. Back to previous menu"
+    echo -e "8. tiktok-dlp installation"
+    echo -e "9. Back to previous menu"
     echo -e "———————————————————————————————————————————————————————————————————————"
-    read -ep "Please enter the number [1-8]:" num
+    read -ep "Please enter the number [1-9]:" num
     case "$num" in
         1)
         clear
@@ -361,11 +442,15 @@ function downloader_main {
         ;;
         8)
         clear
+        tiktokdlp_install
+        ;;
+        9)
+        clear
         main_menu
         ;;
         *)
         clear
-        WARN 'Please enter the correct number [1-8]'
+        WARN 'Please enter the correct number [1-9]'
         downloader_main
         ;;
         esac

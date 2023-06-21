@@ -36,4 +36,4 @@ ENTRYPOINT [ "/entrypoint.sh" ]
 
 CMD ["python3", "/app/app/app.py"]
 
-EXPOSE 3081
+EXPOSE 3082
