@@ -269,6 +269,8 @@ function youget_install {
 
     docker_source_choose
 
+    clear
+
     docker run -d \
         --name youget \
         -p ${youget_port}:3081 \
