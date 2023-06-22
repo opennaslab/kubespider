@@ -1,0 +1,54 @@
+.kubespider-notification {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    /* Ensure that the component is on top */
+    z-index: 99999999999;
+    font-size: 15px;
+}
+
+.kubespider-toast {
+    width: 300px;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 4px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0px 0px 20px rgb(204, 203, 203);
+    background-color: aliceblue;
+    margin-bottom: 20px;
+    transition: height 3s;
+    word-wrap: break-word;
+    font-size: 15px;
+}
+
+.kubespider-toast-header {
+    height: 30px;
+    display: flex;
+    padding: 5px;
+    padding-bottom: 10px;
+    align-items: center;
+    border-bottom: 1px solid rgb(214, 214, 214);
+    font-size: 20px;
+}
+
+.kubespider-toast-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+.kubespider-toast-state {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 10px;
+    font-size: 15px;
+}
+
+.kubespider-toast-body {
+    font-family: Arial, Helvetica, sans-serif;
+    padding-left: 10px;
+    padding-right: 30px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    white-space: pre-wrap;
+    font-size: 15px;
+}

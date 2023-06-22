@@ -9,11 +9,13 @@
       "declarativeNetRequestFeedback",
       "contextMenus",
       "tabs",
-      "cookies"
+      "cookies",
+      "activeTab",
+      "scripting"
     ],
     "action": {
       "default_title": "Kubespider",
-      "default_popup": "kubespider.html",
+      "default_popup": "icon.html",
       "default_icon": {
         "16": "images/icon16.png"
       }
@@ -26,11 +28,12 @@
     },
     "content_scripts": [
       {
-        "js": ["js/bootstrap.bundle.min.js"],
+        "css": ["css/content.css"],
+        "js": ["js/bootstrap.bundle.min.js", "js/content.js"],
         "matches": [ "http://*/*", "https://*/*"]
       }
     ],
     "background": {
-      "service_worker": "service_worker.js"
+      "service_worker": "background.js"
     }
 }
