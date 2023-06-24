@@ -9,6 +9,7 @@
 
 import logging
 import os
+import time
 from multiprocessing import Process
 import shutil
 from watchdog.events import FileSystemEventHandler, FileModifiedEvent
@@ -85,6 +86,9 @@ class ConfigHandler(FileSystemEventHandler):
         if filepath not in monitor_files:
             return
         logging.info("%s file has be changed, the kubspider will reboot", event.src_path)
+
+        # wait some file handling process finish, to avoid config getting empty
+        time.sleep(3)
         self.p_run.terminate()
 
         if self.p_run.is_alive():
