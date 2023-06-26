@@ -118,6 +118,6 @@ def retry(attempt_times=3, delay=1, exception=Exception):
                 except exception:
                     time.sleep(delay)
                     total_attempt_times += 1
-            return retry_handle
+            return None
         return retry_handle
     return decorator
