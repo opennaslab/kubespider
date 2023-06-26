@@ -1,9 +1,11 @@
+import functools
 import uuid
 import hashlib
 import logging
 import cgi
 import urllib
 import os
+import time
 from urllib.parse import urlparse
 from urllib import request
 
@@ -96,3 +98,26 @@ def download_torrent_file(url: str, controller: request.OpenerDirector) -> str:
 def is_running_in_docker() -> bool:
     # check is running in docker container
     return os.path.exists('/.dockerenv')
+
+def retry(attempt_times=3, delay=1, exception=Exception):
+    """
+    try serval times to invoke the target method.
+
+    params:
+        attempt_times: The number of attempts, default 3.
+        delay: The time between each attempt, time unit is second, default 1 second.
+        exception: The exception to catch while invoking the method, default Exception.
+    """
+    def decorator(function):
+        @functools.wraps(function)
+        def retry_handle(*args, **kwargs):
+            total_attempt_times = 1
+            while total_attempt_times <= attempt_times:
+                try:
+                    return function(*args, **kwargs)
+                except exception:
+                    time.sleep(delay)
+                    total_attempt_times += 1
+            return None
+        return retry_handle
+    return decorator
