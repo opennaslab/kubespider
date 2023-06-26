@@ -2,6 +2,8 @@
 
 FROM python:3.10-alpine
 
+RUN touch /.dockerenv
+
 WORKDIR /app
 COPY ./kubespider ./kubespider
 COPY ./.config ./.config_template
