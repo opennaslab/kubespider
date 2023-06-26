@@ -2,6 +2,7 @@ import logging
 import time
 
 from utils import helper,global_config
+from utils.helper import retry
 from api import types
 import download_provider.provider as dp
 import source_provider.provider as sp
@@ -94,6 +95,7 @@ class KubespiderDownloader:
 
         return None
 
+    @retry(delay=0.3)
     def handle_torrent_download(self, url: str, path: str, downloader_list: list, extra_param=None) -> TypeError:
         tmp_file = None
 
@@ -122,6 +124,7 @@ class KubespiderDownloader:
             break
         return err
 
+    @retry(delay=0.3)
     def handle_magnet_download(self, url, path, downloader_list=None, extra_param=None) -> TypeError:
         err = None
         for provider in downloader_list:
@@ -134,6 +137,7 @@ class KubespiderDownloader:
             break
         return err
 
+    @retry(delay=0.3)
     def handle_general_download(self, url, path, downloader_list=None, extra_param=None) -> TypeError:
         err = None
         for provider in downloader_list:
