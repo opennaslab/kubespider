@@ -151,6 +151,8 @@ def prepare_config() -> None:
         miss_cfg.append(values.Config.PT_PROVIDER)
     if not os.path.exists(values.Config.KUBESPIDER_CONFIG.config_path()):
         miss_cfg.append(values.Config.KUBESPIDER_CONFIG)
+    if not os.path.exists(values.Config.DEPENDENCIES_CONFIG.config_path()):
+        miss_cfg.append(values.Config.DEPENDENCIES_CONFIG)
 
     if len(miss_cfg) == 0:
         return
@@ -167,6 +169,9 @@ def prepare_config() -> None:
         template_cfg = values.CFG_TEMPLATE_PATH + cfg
         target_cfg = values.CFG_BASE_PATH + cfg
         try:
-            shutil.copy(template_cfg, target_cfg)
+            if os.path.isdir(template_cfg):
+                shutil.copytree(template_cfg, target_cfg)
+            else:
+                shutil.copy(template_cfg, target_cfg)
         except Exception as err:
             raise Exception(str('failed to copy %s to %s:%s', template_cfg, target_cfg)) from err

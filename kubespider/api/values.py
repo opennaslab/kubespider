@@ -24,6 +24,7 @@ class Config(str, Enum):
     DOWNLOAD_PROVIDER = 'download_provider.yaml'
     PT_PROVIDER = 'pt_provider.yaml'
     KUBESPIDER_CONFIG = 'kubespider.yaml'
+    DEPENDENCIES_CONFIG = 'dependencies/'
     STATE = 'state.yaml'
 
     def __str__(self) -> str:
