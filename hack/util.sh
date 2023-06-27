@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 export image_registry=""
 

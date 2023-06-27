@@ -1,5 +1,5 @@
 # Ref: https://github.com/imgyh/tiktok
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
