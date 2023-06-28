@@ -125,3 +125,120 @@ jobs:
         docker logs xunlei
         docker logs youget
         docker logs tiktok-dlp
+
+  china-mainland-test:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: true
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set Up QEMU
+      uses: docker/setup-qemu-action@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Build images
+      run: |
+        set -x
+        docker buildx build --platform linux/amd64 -t registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest -f Dockerfile --load ./
+
+        cd downloaders/you-get
+        docker buildx build --platform linux/amd64 -t cesign/youget-downloader:latest -f Dockerfile --load ./
+        cd ../../
+
+        cd downloaders/yt-dlp
+        docker buildx build --platform linux/amd64 -t cesign/ytdlp-downloader:latest -f Dockerfile --load ./
+        cd ../../
+
+        cd downloaders/tiktok-dlp
+        docker buildx build --platform linux/amd64 -t cesign/tiktok-dlp:latest -f Dockerfile --load ./
+        cd ../../
+    - name: China mainland deploy test
+      run: |
+        set -x
+
+        #1. Test deploy Kubespider
+        export CHINA_MAINLAND=TRUE
+        ./hack/install_kubespider.sh
+        sleep 60
+        docker ps | grep -e kubespider -e aria2-pro
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
+        log=`docker logs kubespider`
+        if [[ $log =~ 'Traceback' ]]
+        then
+          exit 1
+        fi
+
+        #2. Test deploy baidu net disk
+        ./hack/install_baidunetdisk.sh
+        sleep 10
+        docker ps | grep -e baidunetdisk
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
+
+        #3. Test deploy plex
+        export PLEX_CLAIM=fake_claim
+        ./hack/install_plex.sh
+        sleep 10
+        docker ps | grep -e plex
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
+
+        #4. Test deploy thunder
+        ./hack/install_thunder.sh
+        sleep 10
+        docker ps | grep -e xunlei
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
+        
+        #5. Test deploy tiktok-dlp
+        ./hack/install_tiktokdlp.sh
+        sleep 10
+        docker ps | grep -e tiktok-dlp
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
+
+        #6. Test deploy youget
+        ./hack/install_youget.sh
+        sleep 10
+        docker ps | grep -e youget
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
+        # ffmpeg needs to be installed to merge video and audio
+        docker exec youget ffmpeg -version
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
+
+        #7. Test deploy yt-dlp
+        ./hack/install_ytdlp.sh
+        sleep 10
+        docker ps | grep -e yt-dlp
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
+        # ffmpeg needs to be installed to merge video and audio
+        docker exec yt-dlp ffmpeg -version
+        if [[ $? != 0 ]]; then
+          exit 1
+        fi
+
+    - name: Find error
+      if: ${{ failure() }}
+      run: |
+        docker ps -a
+        docker logs kubespider
+        docker logs baidunetdisk
+        docker logs aria2-pro
+        docker logs plex
+        docker logs xunlei
