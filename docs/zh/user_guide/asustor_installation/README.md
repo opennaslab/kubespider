@@ -2,6 +2,16 @@
 
 本文档将介绍如何在[Asustor 华芸](https://www.asustor.com/zh-cn/)NAS上安装kubespider。
 
+## 场景
+对于NAS玩家，或多或少都有资源下载需求，包括但不限于： 
+* 自动下载更新的TV/Movie/文件/其他，方便后续个人学习使用。
+* 有一个大型文件或各式各样的文件下载，希望能方便的触发NAS机器下载。
+* 自定义条件，自动触发下载相关资源，如自动下载豆瓣评分大于8的资源。
+* 在某些资源网站上，有下载需求，如B站，YouTube，抖音等各种资源网站，供个人学习使用。
+* 入门/资深网站玩家，需要对自己的账号维护，如自动刷上传下载量。
+
+如果你有这些需求，那么Kubespider就是你要找的All-in-one的资源下载系统，打造属于自己的家庭NAS下载中心。
+
 ## 安装依赖项目
 
 安装kubespeder需要以下依赖项目：
@@ -18,7 +28,7 @@ Kubespider需要使用docker环境才能运行，docker的介绍请参考[使用
 
 在ADM的`App Central`中搜索docker engine并安装。
 
-![install docker](../../../images/user_guide/asustor_installation/01-install-docker.webp)
+![install docker](./images/01-install-docker.webp)
 
 ### 安装 Portainer
 
@@ -36,9 +46,9 @@ Kubespider需要使用docker环境才能运行，docker的介绍请参考[使用
 
 安装完 portainer 之后，在ADM桌面会看到新出现的 portainer 图标，双击即可打开 portainer 的控制页面。点击左侧的`local/Containers`，然后点击右边的`Add container`，打开创建页面。
 
-![portainer](../../../images/user_guide/asustor_installation/02-portainer.webp)
+![portainer](./images/02-portainer.webp)
 
-![new container](../../../images/user_guide/asustor_installation/03-new-container.webp)
+![new container](./images/03-new-container.webp)
 
 在新打开的页面中，在Name区域自行输入新容器的名字，此处为kubespider；
 
@@ -50,7 +60,7 @@ Kubespider需要使用docker环境才能运行，docker的介绍请参考[使用
 
 稍作等待后，在`Container list`页面中看到刚刚创建的`kubespider`并显示running，即表示创建成功。
 
-![running](../../../images/user_guide/asustor_installation/04-running.webp)
+![running](./images/04-running.webp)
 
 ### 安装aria2下载器
 
