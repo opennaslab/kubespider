@@ -1,5 +1,5 @@
 # Ref: https://github.com/SuperNG6/Docker-qBittorrent-Enhanced-Edition
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 

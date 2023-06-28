@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 export KUBESPIDER_HOME=${KUBESPIDER_HOME:-${HOME}}
 

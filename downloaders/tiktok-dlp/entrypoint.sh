@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 groupmod -o -g ${PGID} tiktokdlp
 usermod -o -u ${PUID} tiktokdlp

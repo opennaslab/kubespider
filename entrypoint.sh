@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 groupmod -o -g ${PGID} kubespider
 usermod -o -u ${PUID} kubespider
