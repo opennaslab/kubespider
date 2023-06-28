@@ -1,5 +1,5 @@
 # Ref: https://github.com/cnk3x/xunlei
-#!/bin/sh
+#!/usr/bin/env bash
 
 set -e
 

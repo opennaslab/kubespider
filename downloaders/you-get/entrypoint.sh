@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 groupmod -o -g ${PGID} youget
 usermod -o -u ${PUID} youget

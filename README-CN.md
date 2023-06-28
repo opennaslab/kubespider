@@ -105,6 +105,8 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 * 使用docker-cli或者docker-compose部署，请参考 [link](./docs/zh/user_guide/install_with_command/README.md)。
 * 在群辉上安装Kubespider，请参考 [link](./docs/zh/user_guide/synology_installation/README.md)。
 * 在铁威马上安装Kubespider，请参考 [link](./docs/zh/user_guide/terramaster_installation/README.md)。
+* 在asustor上安装Kubespider，请参考 [link](./docs/zh/user_guide/asustor_installation/README.md)。
+
 ## 📝 配置
 全局配置文件在`.config/kubespider.yaml`，安装后默认位于`${HOME}/kubespider/.config/kubespider.yaml`，各配置项解释如下：  
 |  配置项  | 是否必配 |                   功能 |
