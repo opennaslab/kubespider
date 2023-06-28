@@ -44,7 +44,7 @@ jobs:
 
         #1. Test deploy Kubespider
         export CHINA_MAINLAND=TRUE
-        bash hack/install_kubespider.sh
+        ./hack/install_kubespider.sh
         sleep 60
         docker ps | grep -e kubespider -e aria2-pro
         if [[ $? != 0 ]]; then
@@ -57,7 +57,7 @@ jobs:
         fi
 
         #2. Test deploy baidu net disk
-        bash hack/install_baidunetdisk.sh
+        ./hack/install_baidunetdisk.sh
         sleep 10
         docker ps | grep -e baidunetdisk
         if [[ $? != 0 ]]; then
@@ -66,7 +66,7 @@ jobs:
 
         #3. Test deploy plex
         export PLEX_CLAIM=fake_claim
-        bash hack/install_plex.sh
+        ./hack/install_plex.sh
         sleep 10
         docker ps | grep -e plex
         if [[ $? != 0 ]]; then
@@ -74,7 +74,7 @@ jobs:
         fi
 
         #4. Test deploy thunder
-        bash hack/install_thunder.sh
+        ./hack/install_thunder.sh
         sleep 10
         docker ps | grep -e xunlei
         if [[ $? != 0 ]]; then
@@ -82,7 +82,7 @@ jobs:
         fi
         
         #5. Test deploy tiktok-dlp
-        bash hack/install_tiktokdlp.sh
+        ./hack/install_tiktokdlp.sh
         sleep 10
         docker ps | grep -e tiktok-dlp
         if [[ $? != 0 ]]; then
@@ -90,7 +90,7 @@ jobs:
         fi
 
         #6. Test deploy youget
-        bash hack/install_youget.sh
+        ./hack/install_youget.sh
         sleep 10
         docker ps | grep -e youget
         if [[ $? != 0 ]]; then
@@ -103,7 +103,7 @@ jobs:
         fi
 
         #7. Test deploy yt-dlp
-        bash hack/install_ytdlp.sh
+        ./hack/install_ytdlp.sh
         sleep 10
         docker ps | grep -e yt-dlp
         if [[ $? != 0 ]]; then
