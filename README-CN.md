@@ -128,6 +128,7 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 | Bilibili资源提供器 | 是 | 触发下载Bilibili视频 | [link](./docs/zh/user_guide/bilibili_source_provider/README.md) |
 | 通用rss资源提供器 | 是 | 自动下载rss订阅资源 | [link](./docs/zh/user_guide/general_rss_source_provider/README.md) |
 | 魔法资源提供器 | 是 | 触发下载通过xpath配置的内容资源 | [link](./docs/zh/user_guide/magic_source_provider/README.md) |
+| 抖音资源提供器 | 是 | 触发下载带水印的抖音视频 | [link](./docs/zh/user_guide/tiktok_source_provider/README.md) |
 
 ### 下载提供器(按需配置)
 为了充分利用开源社区已有的下载软件(如YouTube有专门的下载软件)，目前支持如下下载软件：
