@@ -2,6 +2,9 @@
 
 import logging
 import os
+import time
+import sys
+import re
 from urllib.parse import urlparse, parse_qs
 import xml.etree.ElementTree as ET
 
@@ -23,12 +26,14 @@ class NexuPHPPTProvider(provider.PTProvider):
         self.main_url = config_reader.read().get('main_link', '')
         self.rss_url = config_reader.read().get('rss_link', '')
         self.download_provider = config_reader.read().get('downloader', '')
+        self.keeping_time = config_reader.read().get('keep_time', 120)
+        self.max_sum_size = config_reader.read().get('max_sum_size', 200.0)
+        self.cost_sum_size = config_reader.read().get('cost_sum_size', 20.0)
 
         cookie = config_reader.read().get('cookie', '')
         self.cookie = helper.parse_cookie_string(cookie)
 
         self.attendance_url = os.path.join(self.main_url, 'attendance.php')
-        self.thank_url = os.path.join(self.main_url, 'thanks.php')
 
     def get_provider_name(self) -> str:
         return self.name
@@ -55,42 +60,41 @@ class NexuPHPPTProvider(provider.PTProvider):
     def get_download_provider(self) -> str:
         return self.download_provider
 
+    def get_cost_sum_size(self) -> float:
+        return float(self.cost_sum_size)
+
+    def get_max_sum_size(self) -> float:
+        return float(self.max_sum_size)
+
+    def get_keeping_time(self) -> int:
+        return self.keeping_time
+
     def get_links_from_xml(self, tmp_xml) -> list:
         try:
             xml_parse = ET.parse(tmp_xml)
             items = xml_parse.findall('.//item')
             links = []
             for i in items:
-                text = i.find('./link').text
-                link = self.parse_link_info(text)
-                if link is not None:
-                    links.append(link)
+                size = self.parse_filesize_from_title(i.find('./title').text)
+
+                resp = requests.get(i.find('./link').text, timeout=30, cookies=self.cookie)
+                # rate limited, wait some time
+                if resp.status_code != 200:
+                    time.sleep(180)
+                    continue
+
+                is_free = self.is_free_resource(resp.text)
+
+                torrent_link = i.find('./enclosure').attrib['url']
+                file = self.download_torrent_file(torrent_link)
+                logging.info("PT provider(%s) find link:%s, size:%s, free:%s", self.name, torrent_link, size, is_free)        
+
+                link = {'size': size, 'torrent': file, 'free': is_free}
+                links.append(link)
             return links
         except Exception as err:
             logging.info('parse rss xml error:%s', err)
             return []
-
-    def parse_link_info(self, link: str) -> dict:
-        resp = requests.get(link, timeout=30, cookies=self.cookie)
-        size = 0.0
-        try:
-            tree = html.fromstring(resp.text)
-            item = tree.xpath("//td[b='大小：']/text()[1]")[0]
-            size = self.parse_link_size(item)
-        except Exception as err:
-            logging.info('parse link info error:%s', err)
-            return None
-
-        parsed_url = urlparse(link)
-        query_params = parse_qs(parsed_url.query)
-
-        torrent_link = self.main_url + "/download.php?id="+query_params['id'][0]
-
-        self.go_thanks(query_params['id'][0])
-
-        file = self.download_torrent_file(torrent_link)
-        logging.info("PT provider(%s) find link:%s, size:%s", self.name, torrent_link, size)
-        return {'size': size, 'torrent': file}
 
     def download_torrent_file(self, link: str) -> str:
         tmp_file = helper.get_tmp_file_name(link) + ".torrent"
@@ -100,32 +104,27 @@ class NexuPHPPTProvider(provider.PTProvider):
             torrent_file.close()
         return tmp_file
 
-    def parse_link_size(self, info: str) -> float:
-        if 'GB' in info:
-            size_data = info.split('GB')
-            if len(size_data) != 2:
-                return 0.0
-            return float(size_data[0])
-        if 'MB' in info:
-            size_data = info.split('MB')
-            if len(size_data) != 2:
-                return 0.0
-            return float(size_data[0])/1024.0
-        if 'TB' in info:
-            size_data = info.split('TB')
-            if len(size_data) != 2:
-                return 0.0
-            return float(size_data[0])*1024.0
-        return 0.0
+    # parse_filesize_from_title return the size in GB
+    # demo: <![CDATA[ [电视剧]Secret Door 2023 S01 WEB-DL 2160p H265 AAC 2Audio-HDVWEB[1.55 GB] ]]>
+    def parse_filesize_from_title(self, title: str) -> int:
+        mbMatch = re.search(r"\[(\d+\.\d+)\sMB\]", title)
+        if mbMatch:
+            return int(mbMatch.group(1))
 
-    def go_thanks(self, download_id: str) -> None:
-        data = "id="+download_id
-        try:
-            headers = {'content-type': 'application/x-www-form-urlencoded'}
-            resp = requests.post(self.thank_url, data=data, cookies=self.cookie, headers=headers, timeout=30)
-            if resp.status_code != 200:
-                logging.warning("Do thanks(%s) error:%s", self.name, resp.text)
-            else:
-                logging.info("Do thanks ok:%s", data)
-        except Exception as err:
-            logging.error("Do thanks(%s) error:%s", self.name, err)
+        gbMatch = re.search(r"\[(\d+\.\d+)\sGB\]", title)
+        if gbMatch:
+            return int(gbMatch.group(1))
+
+        tbMatch = re.search(r"\[(\d+\.\d+)\sTB\]", title)
+        if tbMatch:
+            return int(tbMatch.group(1))
+
+        # return max sieze and ignore this
+        return sys.maxsize
+
+    def is_free_resource(self, data: str) -> bool:
+        if 'class="twoupfree"' in data:
+            return True
+        if 'class="free"' in data:
+            return True
+        return False

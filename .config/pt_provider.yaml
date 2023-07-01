@@ -2,6 +2,7 @@
 hdvideo:
   type: nexusphp_pt_provider
   enable: false
+  do_thanks: false
   main_link: https://hdvideo.one
   rss_link: https://hdvideo.one/xx
   cookie: xxx
@@ -9,3 +10,9 @@ hdvideo:
   # do not use this downloader to download the resource you needed.,
   # only for PT provider
   downloader: transmission
+  # time in hour for seeding and downloading
+  keeping_time: 120
+  # size in GB
+  max_sum_size: 200
+  # the sized needed to be download, size in GB
+  cost_sum_size: 20
