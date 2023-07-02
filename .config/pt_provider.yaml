@@ -2,17 +2,34 @@
 hdvideo:
   type: nexusphp_pt_provider
   enable: false
-  do_thanks: false
+  attendance: true
   main_link: https://hdvideo.one
-  rss_link: https://hdvideo.one/xx
+  rss_link: xxx
   cookie: xxx
-  # I suggest you to use transmission, and also,
+  # I suggest you to use transmission type, and also,
   # do not use this downloader to download the resource you needed.,
   # only for PT provider
-  downloader: transmission
+  downloader: transmission-hdvideo
   # time in hour for seeding and downloading
   keeping_time: 120
   # size in GB
   max_sum_size: 200
   # the sized needed to be download, size in GB
-  cost_sum_size: 20
+  cost_sum_size: 0
+mteam:
+  type: nexusphp_pt_provider
+  enable: false
+  attendance: false
+  main_link: https://kp.m-team.cc
+  rss_link: xxx
+  cookie: xxx
+  # I suggest you to use transmission type, and also,
+  # do not use this downloader to download the resource you needed.,
+  # only for PT provider
+  downloader: transmission-mteam
+  # time in hour for seeding and downloading
+  keeping_time: 120
+  # size in GB
+  max_sum_size: 200
+  # the sized needed to be download, size in GB
+  cost_sum_size: 0
