@@ -20,7 +20,8 @@ class PTProvider(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def get_links(self) -> list:
-        # links list
+        # links list, return in following format
+        #  list of {'size': size, 'torrent': file, 'free': is_free}
         pass
 
     @abc.abstractmethod
@@ -30,4 +31,16 @@ class PTProvider(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def get_download_provider(self) -> str:
+        pass
+
+    @abc.abstractmethod
+    def get_cost_sum_size(self) -> float:
+        pass
+
+    @abc.abstractmethod
+    def get_max_sum_size(self) -> float:
+        pass
+
+    @abc.abstractmethod
+    def get_keeping_time(self) -> int:
         pass

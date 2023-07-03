@@ -9,13 +9,3 @@ auto_change_download_provider: false
 # The auth_token will be used auth the webhook api
 auth_token:
 ### beta prameters end
-
-#### alpha parameters start
-# TODO: define the schedule time API, do it when working days or midnight
-# The sum downloading size, it is in GB
-pt_sum_max_size: 100
-# The size of single download, it is in GB
-pt_single_max_size: 20
-# The time is in hour
-pt_seeding_time: 48
-#### alpha parameters end

@@ -8,7 +8,6 @@ from core import period_server
 from core import pt_server
 from core import config_handler
 import download_provider.provider as dp
-from utils import global_config
 
 
 class Kubespider:
@@ -59,7 +58,7 @@ class Kubespider:
         period_server.kubespider_period_server = \
             period_server.PeriodServer(self.enabled_source_providers, self.enabled_download_providers)
         pt_server.kubespider_pt_server = \
-            pt_server.PTServer(global_config.get_global_config(), self.enabled_pt_providers)
+            pt_server.PTServer(self.enabled_pt_providers)
 
     def run_pt_server(self) -> None:
         logging.info('PT Server start running...')

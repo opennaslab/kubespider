@@ -7,49 +7,60 @@ import logging
 
 from core import download_trigger
 from pt_provider import provider
-from utils.config_reader import AbsConfigReader
 from utils.config_reader import YamlFileConfigReader
 from api.values import Config, FILE_TYPE_TO_PATH
 from api.types import FILE_TYPE_PT
 
 
 class PTServer:
-    def __init__(self, config_reader: AbsConfigReader, pt_providers: list) -> None:
+    def __init__(self, pt_providers: list) -> None:
         self.pt_providers = pt_providers
-
-        self.single_file_threshold = config_reader.read().get('pt_single_max_size', 100.0)
-        self.sum_file_threshold = config_reader.read().get('pt_sum_max_size', 100.0)
-        self.seeding_time = config_reader.read().get('pt_seeding_time', 48) * 3600
-
         self.state_config = YamlFileConfigReader(Config.STATE.config_path())
-        state = self.state_config.read().get('pt_state', {})
-        self.time = state.get('last_start_time', 0)
-        self.size = state.get('download_sum_size', 0.0)
-
 
     def run(self):
         while True:
-            logging.info("Downloading size is:%f, threshold:%f", self.size, self.sum_file_threshold)
-            current_time = int(time.time())
-            if current_time - self.time > self.seeding_time:
-                for iter_provider in self.pt_providers:
-                    self.trigger_remove_tasks(iter_provider)
-                self.size = 0.0
-                self.time = current_time
-
             for iter_provider in self.pt_providers:
-                iter_provider.go_attendance()
+                provider_name = iter_provider.get_provider_name()
+                provider_state = self.load_state(provider_name)
+                keeping_time = iter_provider.get_keeping_time()
+                cost_sum_size = iter_provider.get_cost_sum_size()
+                max_sum_size = iter_provider.get_max_sum_size()
+
+                logging.info("PT provider(%s) downloading size is:%f/%s, cost downloading size:%f/%f",
+                             provider_name, provider_state['download_sum_size'],
+                             max_sum_size, provider_state['costs_sum_size'], cost_sum_size)
+
+                current_time = int(time.time())
+                if current_time - provider_state['last_start_time'] > keeping_time:
+                    self.trigger_remove_tasks(iter_provider)
+                    provider_state['last_start_time'] = current_time
+                    iter_provider.go_attendance()
 
                 links = iter_provider.get_links()
                 for link in links:
                     link_size = float(link['size'])
-                    if link_size < self.single_file_threshold and \
-                        link_size + self.size < self.sum_file_threshold:
-                        self.trigger_download_tasks(link['torrent'], iter_provider)
-                        self.size += link_size
-                        logging.info('Add one task(%fGB), now is %fGB', link_size, self.size)
+                    if link['torrent'] in provider_state['torrent_list']:
+                        continue
 
-            self.save_state()
+                    if link['free']:
+                        if link_size + provider_state['download_sum_size'] < max_sum_size:
+                            self.trigger_download_tasks(link['torrent'], iter_provider)
+                            provider_state['download_sum_size'] += link_size
+                            provider_state['torrent_list'].append(link['torrent'])
+                            logging.info('Add one task(%fGB), now is %fGB', link_size, provider_state['download_sum_size'])
+                    else:
+                        if provider_state['costs_sum_size'] <= 0.0:
+                            continue
+
+                        # In order to meet the download requirements, we need to make the threshold higher
+                        if link_size + provider_state['costs_sum_size'] < cost_sum_size + 5.0:
+                            self.trigger_download_tasks(link['torrent'], iter_provider)
+                            provider_state['costs_sum_size'] += link_size
+                            provider_state['torrent_list'].append(link['torrent'])
+                            logging.info('Add one task(%fGB), now is %fGB', link_size, provider_state['costs_sum_size'])
+
+                self.save_state(provider_name, provider_state)
+
             time.sleep(3600)
 
     def trigger_download_tasks(self, pt_source: str, pt_provider: provider.PTProvider):
@@ -74,12 +85,26 @@ class PTServer:
 
         download_trigger.kubespider_downloader.handle_download_remove([download_provider])
 
-    def save_state(self):
-        state = {'pt_state': {
-                    'last_start_time': self.time, 
-                    'download_sum_size': self.size
-                }
+    def save_state(self, provider_name: str, provider_state: dict):
+        all_pt_state = self.state_config.read().get('pt_state', {})
+        all_pt_state[provider_name] = provider_state
+        self.state_config.parcial_update(lambda all_state: all_state.update({'pt_state': all_pt_state}))
+
+    def load_state(self, provider_name: str) -> dict:
+        empty_state = {
+            'last_start_time': 0,
+            'download_sum_size': 0,
+            'costs_sum_size': 0,
+            'torrent_list': []
         }
-        self.state_config.parcial_update(lambda all_state: all_state.update(state))
+        all_pt_state = self.state_config.read().get('pt_state', {})
+        if all_pt_state is None:
+            return empty_state
+
+        state = all_pt_state.get(provider_name, {})
+        if len(state) == 0:
+            return empty_state
+        return state
+
 
 kubespider_pt_server: PTServer = None
