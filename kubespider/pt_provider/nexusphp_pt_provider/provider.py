@@ -103,7 +103,7 @@ class NexuPHPPTProvider(provider.PTProvider):
                 file = self.download_torrent_file(torrent_link)
                 if file == "":
                     continue
-                logging.info("PT provider(%s) find link:%s, size:%s, free:%s", self.name, torrent_link, size, is_free)
+                logging.info("PT provider(%s) find link(%d):%s, size:%s, free:%s", self.name, items.index(item), torrent_link, size, is_free)
 
                 link = {'size': size, 'torrent': file, 'free': is_free}
                 links.append(link)

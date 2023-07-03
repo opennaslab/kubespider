@@ -40,6 +40,7 @@ class PTServer:
                 for link in links:
                     link_size = float(link['size'])
                     if link['torrent'] in provider_state['torrent_list']:
+                        logging.info("PT provider(%s) already download torrent:%s, stkip it", provider_name, link['torrent'])
                         continue
 
                     if link['free']:
