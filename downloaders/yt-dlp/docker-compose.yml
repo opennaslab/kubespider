@@ -1,0 +1,19 @@
+# This configuration file is for the **development** setup.
+version: "2.2"
+x-yt-dlp: &yt-dlp
+  build:
+    context: .
+    # args:
+  volumes:
+    - .:/app
+  # env_file:
+  #   - .env
+
+services:
+  server:
+    <<: *yt-dlp
+    command: dev_server
+    ports:
+      - "3082:3082"
+    # environment:
+    

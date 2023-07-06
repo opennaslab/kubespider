@@ -43,3 +43,24 @@ docker cp kubespider kubespider:/app/ && docker restart kubespider
 
 ## 提PR
 如果你完成了开发，并且经过足够的测试，你可以在此代码库上创建PR。维护者会尽可能快地检查并合入代码。
+
+
+## 开发的另一个选择
+安装后在根目录执行
+
+```sh
+UID=${UID} GID=${GID} docker-compose up
+```
+会自动构筑镜像，并监听 kubespider 下的文件变更自动重启
+
+### 其它
+停止容器
+```sh
+docker-compose down
+```
+
+查看构筑的镜像并删除，执行完这些后可以重新构筑
+```sh
+docker-compose images 
+docker-compose rmi xxx
+```
