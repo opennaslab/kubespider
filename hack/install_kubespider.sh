@@ -23,10 +23,8 @@ source hack/util.sh
 util::set_registry_for_image
 
 # 5.Set os related args
-aria2_os_related_arg=""
 kubespider_os_related_arg=""
 if [[ "$(uname)" == "Darwin" ]]; then
-    aria2_os_related_arg="-p 6800:6800 -p 6888:6888"
     kubespider_os_related_arg="-p 3080:3080"
 else
     kubespider_os_related_arg="--network=host"
@@ -37,7 +35,8 @@ docker run -d \
     --name aria2-pro \
     --restart unless-stopped \
     --log-opt max-size=1m \
-    $aria2_os_related_arg \
+    -p 6800:6800 \
+    -p 6888:6888 \
     -e PUID=$UID \
     -e PGID=$GID \
     -e RPC_SECRET=kubespider \
@@ -70,7 +69,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
         echo "[WARN] Can not find the aria2-pro container IPAddress. Please check your aria2 container IPAddress and modify your download_provider.yaml manually"
     else
         cd ${KUBESPIDER_HOME}/kubespider/.config
-        sed -ig "21s#http.*#http://$aria2_container_ip#g" download_provider.yaml
+        line=$(awk '/aria2/{flag=1; next} flag && /rpc_endpoint_host/{print NR; exit}' download_provider.yaml)
+        sed -i "" "${line}s#http.*#http://$aria2_container_ip#g" download_provider.yaml
     fi
 fi
 
