@@ -13,7 +13,7 @@
 
 English | [简体中文](./README-CN.md)  
 
-[Installation](#💽-installation) | [Configuration](#🔧-feature-list) | [Developer Group](https://t.me/+RR09tPuCvI9iNTc1)
+[Installation](#-installation) | [Configuration](#-feature-list) | [Developer Group](https://t.me/+RR09tPuCvI9iNTc1)
 
 We are a community of individuals who share a passion for life and have come together based on shared interests and needs. In our free time, we collaborated to develop Kubespider.  
 
