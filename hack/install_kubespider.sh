@@ -29,7 +29,6 @@ if [[ "$(uname)" == "Darwin" ]]; then
     aria2_os_related_arg="-p 6800:6800 -p 6888:6888"
     kubespider_os_related_arg="-p 3080:3080"
 else
-    aria2_os_related_arg="--network=host"
     kubespider_os_related_arg="--network=host"
 fi
 
