@@ -84,7 +84,13 @@ class MagicSourceProvider(provider.SourceProvider):
         if '$URL' == self.link_selector:
             links = [data_source_url]
         else:
-            links = [i.strip() for i in dom.xpath(self.link_selector)]
+            # Some website's link is not always at the same place.
+            # So if not, you can define multiple selectors
+            if isinstance(self.link_selector, list):
+                for selector in self.link_selector:
+                    links.extend([i.strip() for i in dom.xpath(selector)])
+            else:
+                links = [i.strip() for i in dom.xpath(self.link_selector)]
 
         links = self.filter_links(data_source_url, links)
 
