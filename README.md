@@ -12,6 +12,9 @@
 
 
 English | [简体中文](./README-CN.md)  
+
+[Installation](#💽-installation) | [Configuration](#🔧-feature-list) | [Developer Group](https://t.me/+RR09tPuCvI9iNTc1)
+
 We are a community of individuals who share a passion for life and have come together based on shared interests and needs. In our free time, we collaborated to develop Kubespider.  
 
 Kubespider is developed to utilize an idle server in a local area network as a NAS, enabling automatic downloads of TV series, triggering downloads from a local laptop, and adapting to various websites such as YouTube and BiliBili, as well as different types of resources such as TV series, movies, music and more.  
