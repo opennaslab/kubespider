@@ -153,6 +153,9 @@ Currently, the following file types are supported to trigger downloading:
 
 Please refer to [link](./docs/zh/user_guide/trigger_download/README.md) for how to trigger the download.
 
+### Other
+* Suport resource websites'(NexusPHP framework) account maintenance, please refer to [link](./docs/zh/user_guide/nexusphp_pt_provider/README.md).
+
 ## 🙋 FAQ
 See the [FAQ](docs/en/faq.md) for more details, and feel free to contribute your questions and solutions. Your valuable input will collectively improve the documentation and benefit a wider audience. Join us in making a difference!
 
