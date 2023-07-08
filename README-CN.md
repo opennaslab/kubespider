@@ -154,6 +154,9 @@ Kubesdpier会自动下载现有的所有剧集并且追更：
 
 触发下载使用方法请查看 [link](./docs/zh/user_guide/trigger_download/README.md)。
 
+### 其他
+* 支持资源网站(NexusPHP框架)账号维护，请查看 [link](./docs/zh/user_guide/nexusphp_pt_provider/README.md)。
+
 ## 🙋 常见问题
 
 我们列举了使用过程中[可能遇到的问题](docs/zh/faq.md)供您参考，也欢迎您记录您的问题和解决方案，共同完善文档。
