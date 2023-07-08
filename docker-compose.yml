@@ -1,0 +1,22 @@
+# This configuration file is for the **development** setup.
+version: "2.2"
+x-kubespider: &kubespider
+  build:
+    context: .
+    # args:
+  volumes:
+    - ${KUBESPIDER_HOME}/kubespider/.config:/app/.config
+    - ./kubespider:/app/kubespider
+  # env_file:
+  #   - .env
+
+services:
+  server:
+    <<: *kubespider
+    command: dev_server
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+    network_mode: host
+    # environment:
+    
