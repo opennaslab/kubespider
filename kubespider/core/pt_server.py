@@ -34,6 +34,8 @@ class PTServer:
                 if current_time - provider_state['last_start_time'] > keeping_time:
                     self.trigger_remove_tasks(iter_provider)
                     provider_state['last_start_time'] = current_time
+                    provider_state['download_sum_size'] = 0.0
+                    provider_state['costs_sum_size'] = 0.0
                     iter_provider.go_attendance()
 
                 links = iter_provider.get_links()
