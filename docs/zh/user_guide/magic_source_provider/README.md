@@ -58,3 +58,41 @@ dygod_magic_source_provider:
 可以使用chrome devtool -> console -> $x(xpath)进行xpath验证，检查输出数组中每个元素的value是否符合预期。
 
 ![img.png](images/magic_validate_xpath.png)
+
+## 收录配置
+
+### 馒头资源网站(https://kp.m-team.cc)
+PT资源站，包含各类资源，关键配置如下：
+```yaml
+mteam_magic_source_provider:
+  charset: utf-8
+  cookie: {config needed}
+  downloader: {config needed}
+  enable: true
+  file_type: {config needed}
+  handle_host:
+  - kp.m-team.cc
+  link_selector: //*[@id="outer"]/table[1]/tr[5]/td[2]/a[1]/@href
+  link_type: torrent
+  title_selector: //*[@id="top"]/text()
+  type: magic_source_provider
+```
+* `downloader`: 建议使用 transmission 下载软件.
+
+### hdvideo(https://hdvideo.one)
+PT资源站，主要包含电影和电视剧，关键配置如下：
+```yaml
+hdvideo_magic_source_provider:
+  charset: utf-8
+  cookie: {config needed}
+  downloader: {config needed}
+  enable: true
+  file_type: {config needed}
+  handle_host:
+  - hdvideo.one
+  link_selector: //*[@id="outer"]/table[2]/tr[5]/td[2]/a[1]/@href
+  link_type: torrent
+  title_selector: //*[@id="top"]/text()
+  type: magic_source_provider
+```
+* `downloader`: 建议使用 transmission 下载软件.
