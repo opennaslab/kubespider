@@ -13,7 +13,7 @@
 
 English | [简体中文](./README-CN.md)  
 
-[Installation](#-installation) | [Configuration](#-feature-list) | [Developer Group](https://t.me/+RR09tPuCvI9iNTc1)
+[Installation](#-installation) | [Configuration](#-feature-list) | [Developer Group](https://t.me/opennaslab)
 
 We are a community of individuals who share a passion for life and have come together based on shared interests and needs. In our free time, we collaborated to develop Kubespider.  
 
@@ -168,7 +168,7 @@ If you are interested in participating in joint development, welcome to STAR/FOR
 * For how to develop chrome extension webhook, please see [link](./docs/zh/contribute/develop_chrome_extension.md).
 * For how to implement other webhook trigger tools, please see [link](./docs/zh/user_guide/api_docs/README.md).
 
-If you want to participate more in the community, welcome to join our [Telegram developer group](https://t.me/+RR09tPuCvI9iNTc1).
+If you want to participate more in the community, welcome to join our [Telegram developer group](https://t.me/opennaslab).
 
 
 ## ❤️ Sponsor  
