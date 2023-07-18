@@ -77,7 +77,8 @@ mteam_magic_source_provider:
   title_selector: //*[@id="top"]/text()
   type: magic_source_provider
 ```
-* `downloader`: 建议使用 transmission 下载软件.
+* `downloader`: 建议使用 transmission 下载软件.  
+![mteamshow](./images/mteam-show.png)
 
 ### hdvideo(https://hdvideo.one)
 PT资源站，主要包含电影和电视剧，关键配置如下：
@@ -95,4 +96,5 @@ hdvideo_magic_source_provider:
   title_selector: //*[@id="top"]/text()
   type: magic_source_provider
 ```
-* `downloader`: 建议使用 transmission 下载软件.
+* `downloader`: 建议使用 transmission 下载软件.  
+![hdvideo](./images/hdvideo-show.png)

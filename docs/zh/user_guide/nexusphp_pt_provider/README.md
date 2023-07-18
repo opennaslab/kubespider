@@ -57,7 +57,8 @@ hdvideo:
 * enable: 控制是否启用此提供器。
 * attendance: 是否执行签到，此配置需要根据具体资源网站是否支持签到配置。
 * main_link: 资源网站主页地址。
-* rss_link: 资源订阅rss地址，这里尽量保证获取的内容中存在free类型的资源，如馒头，尽量订阅 music 类型的资源。
+* rss_link: 资源订阅rss地址，这里尽量保证获取的内容中存在free类型的资源，如馒头，尽量订阅 music 类型的资源（存在大范围free）。同时RSS链接中包含文件大小信息，如下：  
+  ![rss_link](./images/rss_link.png)
 * cookie: 资源网站Cookie地址，获取方式为 F12查看cookie即可：
   ![get_cookie](./images/get_cookie.png)
   示例为：`c_secure_uid=xxx; c_secure_pass=xxx; c_secure_ssl=xxx; c_secure_tracker_ssl=xxx; c_secure_login=xxx`
