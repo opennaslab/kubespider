@@ -17,6 +17,7 @@ fi
 # 3.Create necessary directory
 mkdir -p ${KUBESPIDER_HOME}/kubespider/nas/
 mkdir -p ${KUBESPIDER_HOME}/kubespider/aria2/
+mkdir -p ${KUBESPIDER_HOME}/kubespider/.config
 
 # 4.Set registry
 source hack/util.sh
