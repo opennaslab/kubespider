@@ -6,7 +6,7 @@ pyexecjs==1.5.1
 libtorrent==2.0.7
 qbittorrent-api==2023.2.43
 flask==2.2.5
-pyyaml==5.4
+pyyaml==6.0.1
 feedparser==6.0.10
 transmission-rpc==4.2.0
 coverage==7.2.3
