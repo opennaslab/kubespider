@@ -16,5 +16,5 @@ setup(
     author_email='jwcesign@gmail.com',
     url='https://github.com/opennaslab/kubespider',
     license=license_content,
-    packages=find_packages(exclude=('tests', 'docs', '.github', '.config', 'chrome-extension', 'hack'))
+    packages=find_packages(exclude=('tests', 'docs', '.github', '.config', 'chrome-extension', 'hack', 'kubespider-extension'))
 )
