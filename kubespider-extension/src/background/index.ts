@@ -37,28 +37,40 @@ Browser.contextMenus.onClicked.addListener(async (info, tab) => {
       return;
     }
     const { server, token, captureCookies } = await Storage.read();
-    if (!server || server === "") {
-      Notification.error(
-        tabId,
-        "Kubespider",
-        "Please set server address first!"
-      );
-      return;
-    }
     const cookies = captureCookies
       ? await Cookies.getAll(dataSource)
       : undefined;
+
+    if (!server || server === "") {
+      Notification.error(tabId, {
+        title: "Kubespider",
+        content: "Please set server address first!",
+      });
+      return;
+    }
+
+    const reply = await Notification.info(tabId, {
+      title: "Kubespider",
+      content: `${dataSource} is downloading...`,
+      delay: -1,
+    });
+    const { messageId } = reply.payload as { messageId?: number };
+
     const response = await api(
       downloadRequest(server, dataSource, undefined, cookies, token)
     );
     if (response.status === 200) {
-      Notification.success(
-        tabId,
-        "Kubespider",
-        `${dataSource} download success`
-      );
+      Notification.success(tabId, {
+        id: messageId,
+        title: "Kubespider",
+        content: `${dataSource} download success`,
+      });
     } else {
-      Notification.error(tabId, "Kubespider", `${response.body}`);
+      Notification.error(tabId, {
+        id: messageId,
+        title: "Kubespider",
+        content: `${dataSource} download failed, ${response.body}`,
+      });
     }
   }
 });
@@ -78,14 +90,30 @@ consumer.addListener(MessageType.Download, async (payload): Promise<Reply> => {
   const tabId = await Tab.getCurrentTabId();
   const cookies = captureCookies ? await Cookies.getAll(dataSource) : undefined;
 
+  const reply = await Notification.info(tabId, {
+    title: "Kubespider",
+    content: `${dataSource} is downloading...`,
+    delay: -1,
+  });
+  const { messageId } = reply.payload as { messageId?: number };
+
   const response = await api(
     downloadRequest(server, dataSource, path, cookies, token)
   );
+
   if (response.status === 200) {
-    Notification.success(tabId, "Kubespider", `${dataSource} download success`);
+    Notification.success(tabId, {
+      id: messageId,
+      title: "Kubespider",
+      content: `${dataSource} download success`,
+    });
     return SuccessReply();
   } else {
-    Notification.error(tabId, "Kubespider", `${response.body}`);
+    Notification.error(tabId, {
+      id: messageId,
+      title: "Kubespider",
+      content: `${dataSource} download failed, ${response.body}`,
+    });
     return ErrorReply();
   }
 });

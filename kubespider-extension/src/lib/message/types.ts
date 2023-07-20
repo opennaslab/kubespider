@@ -9,24 +9,24 @@ interface Message<T = unknown> {
   payload: T;
 }
 
-interface Reply {
+interface Reply<T = unknown> {
   success: boolean;
-  message?: string;
+  payload: T;
 }
 
-const SuccessReply = (message?: string): Promise<Reply> =>
+const SuccessReply = (payload?: unknown): Promise<Reply> =>
   new Promise((resolve) => {
     resolve({
       success: true,
-      message,
+      payload,
     });
   });
 
-const ErrorReply = (message?: string): Promise<Reply> =>
+const ErrorReply = (payload?: unknown): Promise<Reply> =>
   new Promise((resolve) => {
     resolve({
       success: false,
-      message,
+      payload,
     });
   });
 
