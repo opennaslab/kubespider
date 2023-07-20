@@ -12,7 +12,7 @@ mkdir -p ${KUBESPIDER_HOME}/kubespider/jellyfin/
 
 # 3. Install Jellyfin
 docker run -d -p 8096:8096 \
-    -v ${KUBESPIDER_HOME}/kubespider/jellyfin/config:/config \
+    -v ${KUBESPIDER_HOME}/kubespider/jellyfin/:/config \
     -v ${KUBESPIDER_HOME}/kubespider/nas/:/media \
     --name jellyfin \
     --restart unless-stopped jellyfin/jellyfin
