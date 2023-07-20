@@ -16,17 +16,35 @@ function Overlay() {
   const [messages, setMessages] = useState([] as MessageData[]);
 
   const onMessage = useEvent((message: MessageData) => {
-    setMessages([...messages, message]);
+    setMessages([...messages.filter((m) => m.id !== message.id), message]);
+  });
+
+  const removeMessage = useEvent((id: string) => {
+    setMessages(messages.filter((message) => message.id !== id));
   });
 
   useEffect(() => {
     consumer.addListener(
       MessageType.Notification,
       (payload): Promise<Reply> => {
-        const { title, content, type, delay } = payload as MessageData;
-        onMessage({ id: uuidv4(), title, content, type, delay });
+        const { id, title, content, type, delay } = payload as MessageData;
+        const messageId = id || uuidv4();
+        const delayTime = delay || 4500;
+        // render message
+        onMessage({ id: messageId, title, content, type, delay });
+        // remove message
+        if (delayTime > 0) {
+          setTimeout(() => {
+            removeMessage(messageId);
+          }, delayTime);
+        }
+        // return message id
         return new Promise((resolve) => {
-          resolve(SuccessReply());
+          resolve(
+            SuccessReply({
+              messageId,
+            })
+          );
         });
       }
     );
@@ -40,7 +58,6 @@ function Overlay() {
           title={message.title}
           content={message.content}
           type={message.type}
-          delay={message.delay}
         />
       ))}
     </div>

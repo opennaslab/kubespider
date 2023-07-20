@@ -1,29 +1,51 @@
-import { sender, MessageType } from ".";
+import { sender, MessageType, Reply } from ".";
+
+interface NotificationPayload {
+  id?: number;
+  title: string;
+  content: string;
+  delay?: number;
+}
 
 namespace Notification {
   export function success(
     reciver: number,
-    title: string,
-    content: string
-  ): void {
-    sender.sendMessage({
+    payload: NotificationPayload
+  ): Promise<Reply> {
+    return sender.sendMessage({
       type: MessageType.Notification,
       reciver: reciver,
       payload: {
         type: "success",
-        title: title,
-        content: content,
+        ...payload,
       },
     });
   }
-  export function error(reciver: number, title: string, content: string): void {
-    sender.sendMessage({
+
+  export function error(
+    reciver: number,
+    payload: NotificationPayload
+  ): Promise<Reply> {
+    return sender.sendMessage({
       type: MessageType.Notification,
       reciver: reciver,
       payload: {
         type: "error",
-        title: title,
-        content: content,
+        ...payload,
+      },
+    });
+  }
+
+  export function info(
+    reciver: number,
+    payload: NotificationPayload
+  ): Promise<Reply> {
+    return sender.sendMessage({
+      type: MessageType.Notification,
+      reciver: reciver,
+      payload: {
+        type: "info",
+        ...payload,
       },
     });
   }
