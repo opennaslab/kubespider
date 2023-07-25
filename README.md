@@ -35,8 +35,8 @@ To adapt to multiple resource platforms, Kubespider provides many adapters. Enab
 ### Premise
 
 1. The operating computer and your server are on the same LAN. (I haven't tried the installation not in the same LAN yet)
-2. The server is a Linux system。
-3. Docker is installed on the server。
+2. The server is a Linux system.
+3. Docker is installed on the server.
 
 ### Default installation (with docker)
 
