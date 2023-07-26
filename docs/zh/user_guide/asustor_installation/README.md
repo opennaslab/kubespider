@@ -1,6 +1,6 @@
-# Kubespider华芸Asustor NAS安装手册
+# Kubespider爱速特Asustor NAS安装手册
 
-本文档将介绍如何在[Asustor 华芸](https://www.asustor.com/zh-cn/)NAS上安装kubespider。
+本文档将介绍如何在[Asustor 爱速特](https://www.asustor.com/zh-cn/)NAS上安装kubespider。
 
 ## 场景
 对于NAS玩家，或多或少都有资源下载需求，包括但不限于： 
@@ -86,4 +86,4 @@ kubespider至少需要1个下载器才能正常运行，用户可以使用portai
 
 kubespider具有丰富的配置功能，用户可在仔细阅读项目的[说明文档](../../../../README-CN.md)后自行调整配置参数，以获得最佳使用体验。
 
-本文档在[Asustor 华芸公司](https://www.asustor.com/zh-cn/)的支持下编写。
+本文档在[Asustor 爱速特公司](https://www.asustor.com/zh-cn/)的支持下编写。
