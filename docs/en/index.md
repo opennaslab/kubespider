@@ -79,7 +79,8 @@ Of course, it is not necessary, you can also use the desktop program to connect:
 With Kubespider Chrome plugin, you can get a better experience.  
 After step 1 has been done, open chrome, then install Kubespider plugin, and configure it as follows(The server address is `http://<server_ip>:3080`): ![img](../images/kubespider-chrome-ext-install-en.gif)
 
-If I want to download a movie, I can right click and send the download task to Kubespider([demo website](https://thepiratebay.org/)): ![img](../images/kubespider-chrome-ext-usage-en.png)
+For example, if I want to download a torrent-related file, I can right click and send the download task to Kubespider([demo website](https://ubuntu.com/download/alternative-downloads)):
+![img](../images/kubespider-chrome-ext-usage.png)
 
 Then with aria2 chrome plugin, you can see the download task starts: ![img](../images/kubespider-chrome-ext-aria2-en.jpg)
 
