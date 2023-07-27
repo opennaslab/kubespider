@@ -35,6 +35,9 @@ jobs:
       fail-fast: true
 
     steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -54,16 +57,10 @@ jobs:
 
       - name: Push images to DockerHub
         run: |
-          set -x
-          docker tag p3terx/aria2-pro:${{ github.event.inputs.aria2-pro-version }} cesign/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
-          docker tag johngong/baidunetdisk:${{ github.event.inputs.baidu-disk-version }} cesign/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
-          docker tag linuxserver/plex:${{ github.event.inputs.plex-version }} cesign/plex:${{ github.event.inputs.plex-version }}
-          docker tag cnk3x/xunlei:${{ github.event.inputs.thunder-version }} cesign/xunlei:${{ github.event.inputs.thunder-version }}
-
-          docker push cesign/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
-          docker push cesign/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
-          docker push cesign/plex:${{ github.event.inputs.plex-version }}
-          docker push cesign/xunlei:${{ github.event.inputs.thunder-version }}
+          docker buildx imagetools create --tag cesign/aria2-pro:${{ github.event.inputs.aria2-pro-version }} p3terx/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
+          docker buildx imagetools create --tag cesign/baidunetdisk:${{ github.event.inputs.baidu-disk-version }} johngong/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
+          docker buildx imagetools create --tag cesign/plex:${{ github.event.inputs.plex-version }} linuxserver/plex:${{ github.event.inputs.plex-version }}
+          docker buildx imagetools create --tag cesign/xunlei:${{ github.event.inputs.thunder-version }} cnk3x/xunlei:${{ github.event.inputs.thunder-version }}
 
   sync-to-aliyun:
     runs-on: ubuntu-20.04
