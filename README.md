@@ -92,8 +92,8 @@ After step 1 has been done, open chrome, then install Kubespider plugin, and con
 For example, if I want to download a torrent-related file, I can right click and send the download task to Kubespider([demo website](https://ubuntu.com/download/alternative-downloads)):
 ![img](./docs/images/kubespider-chrome-ext-usage.png)
 
-Then with aria2 chrome plugin, you can see the download task starts:
-![img](./docs/images/kubespider-chrome-ext-aria2-en.jpg)
+Then with aria2 chrome plugin, you can see the download task starts:  
+![img](./docs/images/kubespider-chrome-ext-aria2.png)
 
 #### 4.More (Optional)
 * Install Plex, watch videos on multiple platforms, [install now](./docs/zh/user_guide/plex_install_config/README.md).

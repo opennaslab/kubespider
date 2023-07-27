@@ -86,7 +86,8 @@ Kubespider结合chrome插件，能获得更好的体验。
 例如，我想要下载一个torrent的大文件，直接右键，发送给Kubespider即可([示例网站](https://ubuntu.com/download/alternative-downloads)):
 ![img](../images/kubespider-chrome-ext-usage.png)
 
-Kubesdpier会自动下载现有的所有剧集并且追更： ![img](../images/kubespider-chrome-ext-aria2-zh.jpg)
+然后，使用aria2 Chrome插件查看下载任务，你可以看见下载任务已开始：  
+![img](../images/kubespider-chrome-ext-aria2.png)
 
 #### 4.更多（可选）
 * 安装Plex，多平台观看视频，[立即安装](./user_guide/plex_install_config/README.md)。
