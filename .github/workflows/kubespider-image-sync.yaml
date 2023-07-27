@@ -27,61 +27,76 @@ on:
         default: "latest"
 
 jobs:
-  sync:
+  sync-to-dockerhub:
     runs-on: ubuntu-20.04
     strategy:
+      matrix:
+        arch: [ linux/amd64, linux/arm64 ]
       fail-fast: true
 
     steps:
-    - uses: actions/checkout@v3
-  
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-    - name: Download images
-      run: |
-        set -x
-        docker pull p3terx/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
-        docker pull johngong/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
-        docker pull linuxserver/plex:${{ github.event.inputs.plex-version }}
-        docker pull cnk3x/xunlei:${{ github.event.inputs.thunder-version }}
-    
-    - name: Login to ACR
-      uses: aliyun/acr-login@v1
-      with:
-        login-server: https://registry.cn-hangzhou.aliyuncs.com
-        username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}
-    
-    - name: Push images to ACR
-      run: |
-        set -x
-        docker tag p3terx/aria2-pro:${{ github.event.inputs.aria2-pro-version }} registry.cn-hangzhou.aliyuncs.com/jwcesign/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
-        docker tag johngong/baidunetdisk:${{ github.event.inputs.baidu-disk-version }} registry.cn-hangzhou.aliyuncs.com/jwcesign/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
-        docker tag linuxserver/plex:${{ github.event.inputs.plex-version }} registry.cn-hangzhou.aliyuncs.com/jwcesign/plex:${{ github.event.inputs.plex-version }}
-        docker tag cnk3x/xunlei:${{ github.event.inputs.thunder-version }} registry.cn-hangzhou.aliyuncs.com/jwcesign/xunlei:${{ github.event.inputs.thunder-version }}
-        
-        docker push registry.cn-hangzhou.aliyuncs.com/jwcesign/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
-        docker push registry.cn-hangzhou.aliyuncs.com/jwcesign/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
-        docker push registry.cn-hangzhou.aliyuncs.com/jwcesign/plex:${{ github.event.inputs.plex-version }}
-        docker push registry.cn-hangzhou.aliyuncs.com/jwcesign/xunlei:${{ github.event.inputs.thunder-version }}
+      - name: Download images
+        run: |
+          set -x
+          docker pull --platform=${{ matrix.arch }} p3terx/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
+          docker pull --platform=${{ matrix.arch }} johngong/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
+          docker pull --platform=${{ matrix.arch }} linuxserver/plex:${{ github.event.inputs.plex-version }}
+          docker pull --platform=${{ matrix.arch }} cnk3x/xunlei:${{ github.event.inputs.thunder-version }}
 
-    - name: Login to DockerHub
-      uses: aliyun/acr-login@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    
-    - name: Push images to DockerHub
-      run: |
-        set -x
-        docker tag p3terx/aria2-pro:${{ github.event.inputs.aria2-pro-version }} cesign/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
-        docker tag johngong/baidunetdisk:${{ github.event.inputs.baidu-disk-version }} cesign/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
-        docker tag linuxserver/plex:${{ github.event.inputs.plex-version }} cesign/plex:${{ github.event.inputs.plex-version }}
-        docker tag cnk3x/xunlei:${{ github.event.inputs.thunder-version }} cesign/xunlei:${{ github.event.inputs.thunder-version }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push images to DockerHub
+        run: |
+          set -x
+          docker tag p3terx/aria2-pro:${{ github.event.inputs.aria2-pro-version }} cesign/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
+          docker tag johngong/baidunetdisk:${{ github.event.inputs.baidu-disk-version }} cesign/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
+          docker tag linuxserver/plex:${{ github.event.inputs.plex-version }} cesign/plex:${{ github.event.inputs.plex-version }}
+          docker tag cnk3x/xunlei:${{ github.event.inputs.thunder-version }} cesign/xunlei:${{ github.event.inputs.thunder-version }}
+
+          docker push cesign/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
+          docker push cesign/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
+          docker push cesign/plex:${{ github.event.inputs.plex-version }}
+          docker push cesign/xunlei:${{ github.event.inputs.thunder-version }}
+
+  sync-to-aliyun:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: true
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Download images
+        run: |
+          set -x
+          docker pull p3terx/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
+          docker pull johngong/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
+          docker pull linuxserver/plex:${{ github.event.inputs.plex-version }}
+          docker pull cnk3x/xunlei:${{ github.event.inputs.thunder-version }}
+
+      - name: Login to ACR
+        uses: aliyun/acr-login@v1
+        with:
+          login-server: https://registry.cn-hangzhou.aliyuncs.com
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Push images to ACR
+        run: |
+          set -x
+          docker tag p3terx/aria2-pro:${{ github.event.inputs.aria2-pro-version }} registry.cn-hangzhou.aliyuncs.com/jwcesign/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
+          docker tag johngong/baidunetdisk:${{ github.event.inputs.baidu-disk-version }} registry.cn-hangzhou.aliyuncs.com/jwcesign/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
+          docker tag linuxserver/plex:${{ github.event.inputs.plex-version }} registry.cn-hangzhou.aliyuncs.com/jwcesign/plex:${{ github.event.inputs.plex-version }}
+          docker tag cnk3x/xunlei:${{ github.event.inputs.thunder-version }} registry.cn-hangzhou.aliyuncs.com/jwcesign/xunlei:${{ github.event.inputs.thunder-version }}
           
-        docker push cesign/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
-        docker push cesign/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
-        docker push cesign/plex:${{ github.event.inputs.plex-version }}
-        docker push cesign/xunlei:${{ github.event.inputs.thunder-version }}
-
+          docker push registry.cn-hangzhou.aliyuncs.com/jwcesign/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
+          docker push registry.cn-hangzhou.aliyuncs.com/jwcesign/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
+          docker push registry.cn-hangzhou.aliyuncs.com/jwcesign/plex:${{ github.event.inputs.plex-version }}
+          docker push registry.cn-hangzhou.aliyuncs.com/jwcesign/xunlei:${{ github.event.inputs.thunder-version }}
