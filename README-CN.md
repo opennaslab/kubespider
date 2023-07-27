@@ -92,8 +92,8 @@ Kubespider结合chrome插件，能获得更好的体验。
 在步骤1下载代码后，打开Chrome，按如下步骤安装Kubespider Chrome插件并且设置(其中地址为`http://<server_ip>:3080`)：
 ![img](./docs/images/kubespider-chrome-ext-install-zh.gif)  
 
-如我要追剧，直接右键，发送给Kubespider即可([示例网站](https://www.meijutt.tv/))：
-![img](./docs/images/kubespider-chrome-ext-usage-zh.png)
+例如，我想要下载一个torrent的大文件，直接右键，发送给Kubespider即可([示例网站](https://ubuntu.com/download/alternative-downloads)):
+![img](./docs/images/kubespider-chrome-ext-usage.png)
 
 Kubesdpier会自动下载现有的所有剧集并且追更：
 ![img](./docs/images/kubespider-chrome-ext-aria2-zh.jpg)
