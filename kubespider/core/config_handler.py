@@ -27,6 +27,7 @@ import source_provider.youtube_source_provider.provider as youtube_source_provid
 import source_provider.general_rss_source_provider.provider as general_rss_source_provider
 import source_provider.magic_source_provider.provider as magic_source_provider
 import source_provider.tiktok_source_provider.provider as tiktok_source_provider
+import source_provider.bilibili_vlogger_subscribe_source_provider.provider as bilibili_vlogger_subscribe_source_provider
 
 import download_provider.aria2_download_provider.provider as aria2_download_provider
 import download_provider.xunlei_download_provider.provider as xunlei_download_provider
@@ -49,6 +50,7 @@ source_provider_init_func = {
     'general_rss_source_provider': general_rss_source_provider.GeneralRssSourceProvider,
     'magic_source_provider': magic_source_provider.MagicSourceProvider,
     'tiktok_source_provider': tiktok_source_provider.TiktokSourceProvider,
+    'bilibili_vlogger_subscribe_source_provider': bilibili_vlogger_subscribe_source_provider.BilibiliVloggerSubscribeSourceProvider,
 }
 
 # Download provider init related

@@ -2,9 +2,10 @@ import logging
 import os
 
 from urllib.parse import urlparse
+from transmission_rpc import Client
+
 from utils.config_reader import AbsConfigReader
 from download_provider import provider
-from transmission_rpc import Client
 
 
 class TransmissionProvider(

@@ -2,9 +2,9 @@ import logging
 import os
 
 import qbittorrentapi
-from utils.config_reader import AbsConfigReader
 from qbittorrentapi.definitions import TorrentStates
 
+from utils.config_reader import AbsConfigReader
 from download_provider import provider
 from api import types
 
