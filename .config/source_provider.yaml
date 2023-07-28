@@ -54,3 +54,9 @@ douyin_source_provider:
   enable: false
   type: tiktok_source_provider
   downloader: tiktok-dlp
+bilibili_vlogger_subscribe_source_provider:
+  enable: false
+  type: bilibili_vlogger_subscribe_source_provider
+  downloader: youget
+  vlogger:
+    - 367877

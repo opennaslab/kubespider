@@ -26,7 +26,7 @@ docker rm kubespider --force
 ### 3.使用最新镜像启动Kubespider
 ```sh
 export image_registry=cesign
-export KUBESPIDER_VERSION=lates
+export KUBESPIDER_VERSION=latest
 docker run -itd --name kubespider \
     -v ${HOME}/kubespider/.config:/app/.config \
     --network=host \
