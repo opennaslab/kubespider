@@ -1,7 +1,7 @@
 import logging
 import time
 
-from utils import helper,global_config
+from utils import helper, global_config
 from utils.helper import retry
 from api import types
 import download_provider.provider as dp
@@ -29,7 +29,7 @@ class KubespiderDownloader:
         for index in range(provider_len - 2, -1, -1):
             # load config
             provider_now = self.download_providers[index]
-            provider_next = self.download_providers[index+1]
+            provider_next = self.download_providers[index + 1]
 
             err = provider_now.load_config()
             if err is not None:
@@ -45,7 +45,7 @@ class KubespiderDownloader:
                 self.download_file(task['url'], task['path'], task['linkType'],
                                    download_provoder=provider_next)
 
-    def filter_downloader_by_source(self, source_provider: sp.SourceProvider=None) -> list:
+    def filter_downloader_by_source(self, source_provider: sp.SourceProvider = None) -> list:
         if source_provider is None:
             return self.download_providers
         name_list = source_provider.get_prefer_download_provider()
@@ -57,7 +57,8 @@ class KubespiderDownloader:
         if provider_type is not None:
             provider = list(filter(lambda p: p.get_provider_type() == provider_type, provider))
         name = list(map(lambda p: p.get_provider_name(), provider))
-        logging.info('filtering downloader by name %s type %s, result %s', str(name_list), str(provider_type), str(name))
+        logging.info('filtering downloader by name %s type %s, result %s', str(name_list), str(provider_type),
+                     str(name))
         return provider
 
     def filter_downloader_by_name(self, name: str) -> dp.DownloadProvider:
@@ -68,8 +69,8 @@ class KubespiderDownloader:
         return provider[0]
 
     def download_file(self, url, path, link_type, \
-                      source_provider: sp.SourceProvider=None, \
-                        download_provoder: dp.DownloadProvider=None) -> TypeError:
+                      source_provider: sp.SourceProvider = None, \
+                      download_provoder: dp.DownloadProvider = None) -> TypeError:
         downloader_list = []
         if download_provoder is not None:
             downloader_list = [download_provoder]
@@ -81,7 +82,8 @@ class KubespiderDownloader:
 
         logging.info('download link type %s, with provider size %s', link_type, len(downloader_list))
         if len(downloader_list) == 0:
-            logging.error('Downloader for %s not found, check your configuration!!!', source_provider.get_provider_name())
+            logging.error('Downloader for %s not found, check your configuration!!!',
+                          source_provider.get_provider_name())
         if link_type == types.LINK_TYPE_TORRENT:
             return self.handle_torrent_download(url, path, downloader_list, extra_param)
 
@@ -154,5 +156,6 @@ class KubespiderDownloader:
         for provider in downloader_list:
             provider.load_config()
             provider.remove_tasks(extra_param)
+
 
 kubespider_downloader = KubespiderDownloader(None)

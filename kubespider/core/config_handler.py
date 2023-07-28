@@ -10,6 +10,7 @@
 import logging
 import os
 import time
+import traceback
 from multiprocessing import Process
 import shutil
 from watchdog.events import FileSystemEventHandler, FileModifiedEvent
@@ -39,6 +40,7 @@ import download_provider.tiktok_dlp_download_provider.provider as tiktok_dlp_dow
 
 import pt_provider.nexusphp_pt_provider.provider as nexusphp_pt_provider
 
+import notification_provider.pushdeer_provider.provider as pushdeer_provider
 
 # Sorce provider init related
 source_provider_init_func = {
@@ -69,6 +71,11 @@ pt_provider_init_func = {
     'nexusphp_pt_provider': nexusphp_pt_provider.NexuPHPPTProvider,
 }
 
+notification_provider_init_func = {
+    'pushdeer_provider': pushdeer_provider.PushDeerProvider,
+}
+
+
 class ConfigHandler(FileSystemEventHandler):
 
     def __init__(self, run):
@@ -76,7 +83,7 @@ class ConfigHandler(FileSystemEventHandler):
         self.p_run = Process(target=run)
         self.p_run.start()
 
-    def on_modified(self,  event: FileModifiedEvent):
+    def on_modified(self, event: FileModifiedEvent):
         filepath = os.path.basename(event.src_path)
 
         monitor_files = [
@@ -84,6 +91,7 @@ class ConfigHandler(FileSystemEventHandler):
             str(Config.KUBESPIDER_CONFIG),
             str(Config.PT_PROVIDER),
             str(Config.SOURCE_PROVIDER),
+            str(Config.NOTIFICATION_PROVIDER),
         ]
         if filepath not in monitor_files:
             return
@@ -104,23 +112,42 @@ class ConfigHandler(FileSystemEventHandler):
 def get_source_provider(provider_name: str, config: dict):
     provider_type = config['type']
     try:
-        return source_provider_init_func[provider_type](provider_name, YamlFileSectionConfigReader(Config.SOURCE_PROVIDER.config_path(), provider_name))
+        return source_provider_init_func[provider_type](provider_name, YamlFileSectionConfigReader(
+            Config.SOURCE_PROVIDER.config_path(), provider_name))
     except Exception as exc:
         raise Exception(str('unknown source provider type %s', provider_type)) from exc
+
 
 def get_download_provider(provider_name: str, config: dict):
     provider_type = config['type']
     try:
-        return downloader_provider_init_func[provider_type](provider_name, YamlFileSectionConfigReader(Config.DOWNLOAD_PROVIDER.config_path(), provider_name))
+        return downloader_provider_init_func[provider_type](provider_name, YamlFileSectionConfigReader(
+            Config.DOWNLOAD_PROVIDER.config_path(), provider_name))
     except Exception as exc:
         raise Exception(str('unknown download provider type %s', provider_type)) from exc
+
 
 def get_pt_provider(provider_name: str, config: dict):
     provider_type = config['type']
     try:
-        return pt_provider_init_func[provider_type](provider_name, YamlFileSectionConfigReader(Config.PT_PROVIDER.config_path(), provider_name))
+        return pt_provider_init_func[provider_type](provider_name,
+                                                    YamlFileSectionConfigReader(Config.PT_PROVIDER.config_path(),
+                                                                                provider_name))
     except Exception as exc:
         raise Exception(str('unknown pt provider type %s', provider_type)) from exc
+
+
+def get_notification_provider(provider_name: str, config: dict):
+    provider_type = config['type']
+    try:
+        return notification_provider_init_func[provider_type](
+            provider_name,
+            YamlFileSectionConfigReader(Config.NOTIFICATION_PROVIDER.config_path(), provider_name)
+        )
+    except Exception as exc:
+        traceback.print_exc()
+        raise Exception(str('unknown pt provider type %s', provider_type)) from exc
+
 
 def init_source_config():
     init_source_providers = []
@@ -129,12 +156,14 @@ def init_source_config():
         init_source_providers.append(get_source_provider(name, source_config[name]))
     return init_source_providers
 
+
 def init_download_config():
     init_download_providers = []
     download_config = YamlFileConfigReader(values.Config.DOWNLOAD_PROVIDER.config_path()).read()
     for name in download_config:
         init_download_providers.append(get_download_provider(name, download_config[name]))
     return init_download_providers
+
 
 def init_pt_config():
     init_pt_providers = []
@@ -143,19 +172,28 @@ def init_pt_config():
         init_pt_providers.append(get_pt_provider(name, pt_config[name]))
     return init_pt_providers
 
+
+def init_notification_config():
+    init_notification_providers = []
+    notification_config = YamlFileConfigReader(values.Config.NOTIFICATION_PROVIDER.config_path()).read()
+    for name, conf in notification_config.items():
+        init_notification_providers.append(get_notification_provider(name, conf))
+    return init_notification_providers
+
+
 def prepare_config() -> None:
     miss_cfg = []
-    if not os.path.exists(values.Config.SOURCE_PROVIDER.config_path()):
-        miss_cfg.append(values.Config.SOURCE_PROVIDER)
-    if not os.path.exists(values.Config.DOWNLOAD_PROVIDER.config_path()):
-        miss_cfg.append(values.Config.DOWNLOAD_PROVIDER)
-    if not os.path.exists(values.Config.PT_PROVIDER.config_path()):
-        miss_cfg.append(values.Config.PT_PROVIDER)
-    if not os.path.exists(values.Config.KUBESPIDER_CONFIG.config_path()):
-        miss_cfg.append(values.Config.KUBESPIDER_CONFIG)
-    if not os.path.exists(values.Config.DEPENDENCIES_CONFIG.config_path()):
-        miss_cfg.append(values.Config.DEPENDENCIES_CONFIG)
-
+    confs = [
+        values.Config.SOURCE_PROVIDER,
+        values.Config.DOWNLOAD_PROVIDER,
+        values.Config.PT_PROVIDER,
+        values.Config.KUBESPIDER_CONFIG,
+        values.Config.DEPENDENCIES_CONFIG,
+        values.Config.NOTIFICATION_PROVIDER
+    ]
+    for conf in confs:
+        if not os.path.exists(conf.config_path()):
+            miss_cfg.append(conf)
     if len(miss_cfg) == 0:
         return
 

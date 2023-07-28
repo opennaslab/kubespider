@@ -7,7 +7,7 @@ from api.values import Config
 from utils import helper
 from utils.config_reader import YamlFileConfigReader
 import source_provider.provider as sp
-from core import download_trigger
+from core import download_trigger, notification_server
 
 
 class PeriodServer:
@@ -63,8 +63,12 @@ class PeriodServer:
                 download_file(source['link'], download_final_path, \
                               source_link_type, provider)
             if err is not None:
+                notification_server.kubespider_notification_server.send_message(
+                    f"[{provider_name}] download the resource {source['link']} failed")
                 break
             state.append(helper.get_unique_hash(source['link']))
+            notification_server.kubespider_notification_server.send_message(
+                f"[{provider_name}] start download new resource {source['link']}")
 
         self.save_state(provider_name, state)
 
@@ -75,5 +79,6 @@ class PeriodServer:
 
     def save_state(self, provider_name, state) -> None:
         self.state_config.parcial_update(lambda all_state: all_state.update({provider_name: state}))
+
 
 kubespider_period_server = PeriodServer(None, None)

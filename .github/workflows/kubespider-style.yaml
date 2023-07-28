@@ -40,7 +40,6 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         ROOT=$(pwd)
-
         pylint $(git ls-files '*.py' | grep -v "downloaders/") --max-line-length=240
         skip_downloaders=(tiktok-dlp)
         cd downloaders

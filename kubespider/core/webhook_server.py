@@ -4,15 +4,15 @@ import json
 from functools import wraps
 from flask import Flask, jsonify, request
 
-from core import download_trigger
+from core import download_trigger, notification_server
 from core import period_server
 import core.kubespider_controller as kc
 import source_provider.provider as sp
 from api import types
 from utils import global_config, helper
 
-
 kubespider_server = Flask(__name__)
+
 
 def auth_required(func):
     @wraps(func)
@@ -20,13 +20,16 @@ def auth_required(func):
         if not check_auth(request.headers):
             return not_authenticated()
         return func(*args, **kwargs)
+
     return decorated
+
 
 @kubespider_server.route('/healthz', methods=['GET'])
 def health_check_handler():
     resp = jsonify('OK')
     resp.status_code = 200
     return resp
+
 
 @kubespider_server.route('/api/v1/downloadproviders', methods=['GET'])
 @auth_required
@@ -40,6 +43,7 @@ def list_download_provider_handler():
     resp.content_type = "application/json"
     return resp
 
+
 @kubespider_server.route('/api/v1/sourceproviders', methods=['GET'])
 @auth_required
 def list_source_provider_handler():
@@ -52,6 +56,7 @@ def list_source_provider_handler():
     resp.content_type = "application/json"
     return resp
 
+
 @kubespider_server.route('/api/v1/ptproviders', methods=['GET'])
 @auth_required
 def list_pt_provider_handler():
@@ -63,6 +68,7 @@ def list_pt_provider_handler():
     resp = jsonify(resp_array)
     resp.content_type = "application/json"
     return resp
+
 
 @kubespider_server.route('/api/v1/download', methods=['POST'])
 @auth_required
@@ -99,8 +105,11 @@ def download_handler():
             period_server.kubespider_period_server.trigger_run()
 
     if err is None:
+        notification_server.kubespider_notification_server.send_message(f"[webhook] start download {source}")
         return send_ok_response()
+    notification_server.kubespider_notification_server.send_message(f"[webhook] download {source} failed")
     return send_bad_response(err)
+
 
 @kubespider_server.route('/api/v1/refresh', methods=['GET'])
 @auth_required
@@ -108,19 +117,21 @@ def refresh_handler():
     period_server.kubespider_period_server.trigger_run()
     return send_ok_response()
 
+
 def download_links_with_provider(source: str, source_provider: sp.SourceProvider):
     link_type = source_provider.get_link_type()
     links = source_provider.get_links(source)
     for download_link in links:
         # The path rule should be like: {file_type}/{file_title}
         download_final_path = helper.convert_file_type_to_path(download_link['file_type']) + '/' + download_link['path']
-        err = download_trigger.kubespider_downloader.\
+        err = download_trigger.kubespider_downloader. \
             download_file(download_link['link'], \
-                          download_final_path, link_type,\
+                          download_final_path, link_type, \
                           source_provider)
         if err is not None:
             return err
     return None
+
 
 def send_ok_response():
     resp = jsonify('OK')
@@ -128,11 +139,13 @@ def send_ok_response():
     resp.content_type = 'application/text'
     return resp
 
+
 def send_bad_response(err):
     resp = jsonify(str(err))
     resp.status_code = 500
     resp.content_type = 'application/text'
     return resp
+
 
 def check_auth(headers):
     auth_token = global_config.get_auth_token()
@@ -151,6 +164,7 @@ def check_auth(headers):
     if auth_type == "bearer" and auth_info == auth_token:
         return True
     return False
+
 
 def not_authenticated():
     resp = jsonify('Auth Required')

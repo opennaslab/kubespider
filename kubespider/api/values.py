@@ -23,6 +23,7 @@ class Config(str, Enum):
     SOURCE_PROVIDER = 'source_provider.yaml'
     DOWNLOAD_PROVIDER = 'download_provider.yaml'
     PT_PROVIDER = 'pt_provider.yaml'
+    NOTIFICATION_PROVIDER = 'notification_provider.yaml'
     KUBESPIDER_CONFIG = 'kubespider.yaml'
     DEPENDENCIES_CONFIG = 'dependencies/'
     STATE = 'state.yaml'
