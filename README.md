@@ -127,6 +127,7 @@ As mentioned before, the source provider is used to adapt to different websites,
 | meijutt source provider | Yes | Download updated TV series | [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
 | YouTube source provider | Yes | Trigger download YouTube video | [link](./docs/zh/user_guide/youtube_source_provider/README.md) |
 | Bilibili source provider | Yes | Trigger download bilibili video | [link](./docs/zh/user_guide/bilibili_source_provider/README.md) |
+| Bilibili vlogger subscribe source provider | Yes | Automatically download updated Bilibili vlogger's video | [link](./docs/zh/user_guide/bilibili_vlogger_subscribe_source_provider/README.md) |
 | general rss source provider | Yes | Automatically download rss source | [link](./docs/zh/user_guide/general_rss_source_provider/README.md) |
 | Magic source provider | Yes | Trigger download resource via xpath configuration | [link](./docs/zh/user_guide/magic_source_provider/README.md) |
 | Douyin source provider | Yes | Trigger download Douyin video with watermark | [link](./docs/zh/user_guide/tiktok_source_provider/README.md) |
