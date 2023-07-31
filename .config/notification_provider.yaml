@@ -1,0 +1,7 @@
+---
+pushdeer:
+  type: pushdeer_provider
+  enable: true
+  host: https://api2.pushdeer.com
+  push_keys:
+    - your push keys
