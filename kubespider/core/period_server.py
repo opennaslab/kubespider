@@ -64,11 +64,13 @@ class PeriodServer:
                               source_link_type, provider)
             if err is not None:
                 notification_server.kubespider_notification_server.send_message(
-                    f"[{provider_name}] download the resource {source['link']} failed")
+                    title=f"[{provider_name}] download failed", **source
+                )
                 break
             state.append(helper.get_unique_hash(source['link']))
             notification_server.kubespider_notification_server.send_message(
-                f"[{provider_name}] start download new resource {source['link']}")
+                title=f"[{provider_name}] start download", **source
+            )
 
         self.save_state(provider_name, state)
 
