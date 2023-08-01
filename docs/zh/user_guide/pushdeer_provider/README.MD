@@ -87,11 +87,10 @@ https://api2.pushdeer.com/message/push?pushkey=<key>&text=标题&desp=<markdown>
 ```yaml
 pushdeer:
   type: pushdeer_provider
-  enable: true
+  enable: false
   host: https://api2.pushdeer.com
-  push_keys: [
-    "your push keys",
-  ]
+  push_keys: 
+    - "your push keys"
 ```
 这里包含4个配置属性：
 * `type`: 消息通知提供器的类型。
@@ -99,7 +98,9 @@ pushdeer:
 * `host`: 服务器地址。
 * `push_keys`: 列表格式,key为需要接受通知的对象的密钥,支持多人发送。
 
-## 使用自架服务器端和自架版客户端
+### 问题排查
+
+如果遇到消息推送失败大概率是token的问题,可以检查下对应的客户端是否是官方版本。官方版本和自架版的token不通用。
 
 ### 自架服务器端
 参考pushdeer官方文档
