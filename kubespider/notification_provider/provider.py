@@ -11,7 +11,7 @@ class NotificationProvider(metaclass=abc.ABCMeta):
         self.config_reader = config_reader
 
     @abc.abstractmethod
-    def push(self, *args, **kwargs) -> bool:
+    def push(self, title: str, **kwargs) -> bool:
         # push message
         pass
 
@@ -22,4 +22,8 @@ class NotificationProvider(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def provider_enabled(self) -> bool:
+        pass
+
+    @abc.abstractmethod
+    def format_message(self, title, **kwargs) -> str:
         pass

@@ -105,9 +105,13 @@ def download_handler():
             period_server.kubespider_period_server.trigger_run()
 
     if err is None:
-        notification_server.kubespider_notification_server.send_message(f"[webhook] start download {source}")
+        notification_server.kubespider_notification_server.send_message(
+            title="[webhook] start download", source=source, path=path
+        )
         return send_ok_response()
-    notification_server.kubespider_notification_server.send_message(f"[webhook] download {source} failed")
+    notification_server.kubespider_notification_server.send_message(
+        title="[webhook] download failed", source=source, path=path
+    )
     return send_bad_response(err)
 
 

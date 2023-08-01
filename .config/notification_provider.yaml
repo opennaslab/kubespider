@@ -5,3 +5,10 @@ pushdeer:
   host: https://api2.pushdeer.com
   push_keys:
     - your push keys
+telegram:
+  type: telegram_provider
+  enable: false
+  host: https://api.telegram.org
+  bot_token: your bot token
+  channel_name: your channel name
+  channel_chat_id:

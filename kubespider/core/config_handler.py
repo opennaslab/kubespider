@@ -41,6 +41,7 @@ import download_provider.tiktok_dlp_download_provider.provider as tiktok_dlp_dow
 import pt_provider.nexusphp_pt_provider.provider as nexusphp_pt_provider
 
 import notification_provider.pushdeer_provider.provider as pushdeer_provider
+import notification_provider.telegram_provider.provider as telegram_provider
 
 # Sorce provider init related
 source_provider_init_func = {
@@ -73,6 +74,7 @@ pt_provider_init_func = {
 
 notification_provider_init_func = {
     'pushdeer_provider': pushdeer_provider.PushDeerProvider,
+    'telegram_provider': telegram_provider.TelegramProvider,
 }
 
 
