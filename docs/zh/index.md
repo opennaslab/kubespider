@@ -185,6 +185,16 @@ Kubespider结合chrome插件，能获得更好的体验。
           <img align="center" src="../images/sponsor/qnap.svg" height="50px"><br>
         </a>
       </th>
+      <th align="center" style="height: 80px;">
+        <a href="https://www.asustor.com/zh-cn/">
+          <img align="center" src="../images/sponsor/asustor.png" height="50px"><br>
+        </a>
+      </th>
+      <th align="center" style="height: 80px;">
+        <a href="https://www.ugnas.com/">
+          <img align="center" src="../images/sponsor/ugnas.png" height="50px"><br>
+        </a>
+      </th>
     </tr>
   </thead>
 </table>

@@ -180,6 +180,16 @@ Thanks to the following companies for sponsoring development tools, the ranking 
           <img align="center" src="../images/sponsor/qnap.svg" height="50px"><br>
         </a>
       </th>
+      <th align="center" style="height: 80px;">
+        <a href="https://www.asustor.com/zh-cn/">
+          <img align="center" src="../images/sponsor/asustor.png" height="50px"><br>
+        </a>
+      </th>
+      <th align="center" style="height: 80px;">
+        <a href="https://www.ugnas.com/">
+          <img align="center" src="../images/sponsor/ugnas.png" height="50px"><br>
+        </a>
+      </th>
     </tr>
   </thead>
 </table>
