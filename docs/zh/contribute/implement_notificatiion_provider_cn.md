@@ -29,18 +29,24 @@ class NotificationProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def provider_enabled(self) -> bool:
         pass
+
+    @abc.abstractmethod
+    def format_message(self, title, **kwargs) -> str:
+        pass
+
 ```
 
 * `__init__`: 资源提供器初始化函数，初始化一些必要状态。
 * `get_provider_name`: 获取消息通知提供器名称。
 * `provider_enabled`: 获取消息通知提供器是否启用，从配置文件中获取。
 * `push`: 消息推送的方法。
+* `format_message`: 对需要发送的消息进行格式化。
 
 在实现如上函数后，还需要在`kubespider/core/config_handler.py`中初始化对应provider，如下：
 
 ```python
 notification_provider_init_func = {
-    'pushdeer_provider': pushdeer_provider.PushDeerProvider,
+    'pushdeer_notification_provider': pushdeer_notification_provider.PushDeerNotificationProvider,
 }
 ```
 

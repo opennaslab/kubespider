@@ -143,6 +143,12 @@ In order to make full use of the existing download software in the open-source c
 | yt-dlp            | Yes     | [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
 | transmission      | Yes     | [link](./docs/zh/user_guide/transmission_download_provider/README.md) |
 
+### Notification provider(Configured as needed)  
+In order to make full use of the existing notification software in the open-source community, the following software is currently supported:
+| Notification Software | Support | Configuration |
+| :-------------------- | ------: | ------------: |
+|      Pushdeer         |   yes   | [link](./docs/zh/user_guide/pushdeer_notification_provider/README.md) |
+|      Telegram         |   yes   | [link](./docs/zh/user_guide/telegram_notification_provider/README.md) |
 
 ### Basic feature  
 Currently, the following file types are supported to trigger downloading:

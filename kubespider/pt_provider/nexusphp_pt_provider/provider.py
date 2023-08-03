@@ -41,7 +41,7 @@ class NexuPHPPTProvider(provider.PTProvider):
     def get_links(self) -> list:
         while True:
             try:
-                resp = self.controller.open(self.rss_url, timeout=30).read()
+                resp = self.controller.get(self.rss_url, timeout=30).content
                 tmp_xml = helper.get_tmp_file_name('') + '.xml'
                 with open(tmp_xml, 'wb') as tmp_file:
                     tmp_file.write(resp)
@@ -59,7 +59,7 @@ class NexuPHPPTProvider(provider.PTProvider):
         if not self.attendance:
             return
         try:
-            self.controller.open(self.attendance_url, timeout=30)
+            self.controller.get(self.attendance_url, timeout=30)
         except Exception as err:
             logging.warning("Do attendance(%s) error:%s", self.name, err)
 
@@ -89,7 +89,7 @@ class NexuPHPPTProvider(provider.PTProvider):
             try:
                 size = self.parse_filesize_from_title(item.find('./title').text)
 
-                resp = self.controller.open(item.find('./link').text, timeout=30).read()
+                resp = self.controller.get(item.find('./link').text, timeout=30).content
                 # if too small response, it means rate limited, wait some time
                 if len(resp) < 200:
                     logging.info("Not corrent data, wait 3min:%s", str(resp))
@@ -115,10 +115,9 @@ class NexuPHPPTProvider(provider.PTProvider):
 
     def download_torrent_file(self, link: str) -> str:
         tmp_file = helper.get_tmp_file_name(link) + ".torrent"
-        resp = self.controller.open(link, timeout=30).read()
+        resp = self.controller.get(link, timeout=30).content
         with open(tmp_file, 'wb') as torrent_file:
             torrent_file.write(resp)
-            torrent_file.close()
         return tmp_file
 
 

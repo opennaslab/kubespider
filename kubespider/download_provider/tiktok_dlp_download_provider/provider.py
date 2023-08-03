@@ -1,9 +1,9 @@
 import logging
 import json
 
-import requests
-
 from utils.config_reader import AbsConfigReader
+from utils.helper import get_request_controller
+
 from download_provider import provider
 
 
@@ -15,6 +15,7 @@ class TiktokDownloadProvider(provider.DownloadProvider):
         self.http_endpoint_host = ''
         self.http_endpoint_port = 0
         self.cookie = ''
+        self.reqeust_handler = get_request_controller()
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -44,7 +45,7 @@ class TiktokDownloadProvider(provider.DownloadProvider):
         logging.info('Send general task:%s', json.dumps(data))
         try:
             path = self.http_endpoint_host + ":" + str(self.http_endpoint_port) + '/api/v1/download'
-            req = requests.post(path, headers=headers, data=json.dumps(data), timeout=30)
+            req = self.reqeust_handler.post(path, headers=headers, data=json.dumps(data), timeout=30)
             if req.status_code != 200:
                 logging.error("Send general task error:%s", req.status_code)
         except Exception as err:

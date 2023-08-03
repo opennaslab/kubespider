@@ -105,13 +105,12 @@ class KubespiderDownloader:
             tmp_file = helper.get_tmp_file_name(url)
             req = helper.get_request_controller()
             try:
-                torrent_data = req.open(url, timeout=10).read()
+                torrent_data = req.get(url, timeout=10).content
             except Exception as err:
                 logging.info('Download torrent error:%s', err)
                 return err
             with open(tmp_file, 'wb') as torrent_file:
                 torrent_file.write(torrent_data)
-                torrent_file.close()
         else:
             tmp_file = url
 

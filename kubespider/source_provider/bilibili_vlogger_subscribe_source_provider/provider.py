@@ -2,12 +2,11 @@
 # Function: subscribe a bilibili vlogger
 # encoding:utf-8
 import logging
-import json
-
 from api import types
 from utils.config_reader import AbsConfigReader
 from utils import helper
 from source_provider import provider
+
 
 class BilibiliVloggerSubscribeSourceProvider(provider.SourceProvider):
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
@@ -53,7 +52,7 @@ class BilibiliVloggerSubscribeSourceProvider(provider.SourceProvider):
     def should_handle(self, data_source_url: str) -> bool:
         return False
 
-    def get_links(self, data_source_url: str) -> dict:
+    def get_links(self, data_source_url: str) -> list:
         vloggers = self.config_reader.read().get('vlogger', None)
         if vloggers is None:
             return None
@@ -65,13 +64,12 @@ class BilibiliVloggerSubscribeSourceProvider(provider.SourceProvider):
 
         for vlogger in vloggers:
             try:
-                data_link = "https://api.bilibili.com/x/space/wbi/arc/search?mid="+str(vlogger)
-                resp = controller.open(data_link, timeout=30).read()
-                resp = json.loads(resp)
+                data_link = "https://api.bilibili.com/x/space/wbi/arc/search?mid=" + str(vlogger)
+                resp = controller.get(data_link, timeout=30).json()
 
                 for video in resp['data']['list']['vlist']:
                     path = video['title']
-                    link = "https://www.bilibili.com/video/"+video['bvid']
+                    link = "https://www.bilibili.com/video/" + video['bvid']
                     file_type = types.FILE_TYPE_VIDEO_MIXED
                     logging.info("BilibiliVloggerSubscribeSourceProvider get links %s", link)
                     ret.append({'path': path, 'link': link, 'file_type': file_type})

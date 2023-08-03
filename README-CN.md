@@ -145,6 +145,13 @@ Kubespider结合chrome插件，能获得更好的体验。
 | yt-dlp   | 是   | [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
 | transmission | 是   | [link](./docs/zh/user_guide/transmission_download_provider/README.md) |
 
+### 消息通知提供器(按需配置)
+为了充分利用开源社区已有的消息通知软件，目前支持如下消息通知软件：
+| 通知软件   | 是否支持 | 配置手册 |
+| :-------- | ------: | -----: |
+| Pushdeer  |   是    | [link](./docs/zh/user_guide/pushdeer_notification_provider/README.md) |
+| Telegram  |   是    | [link](./docs/zh/user_guide/telegram_notification_provider/README.md) |
+
 ### 基本特性
 目前支持如下文件触发下载：
 | 下载类型 | 是否支持 |

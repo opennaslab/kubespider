@@ -60,10 +60,10 @@ class MikananiSourceProvider(provider.SourceProvider):
     def should_handle(self, data_source_url: str) -> bool:
         return False
 
-    def get_links(self, data_source_url: str) -> dict:
+    def get_links(self, data_source_url: str) -> list:
         try:
             req = helper.get_request_controller()
-            links_data = req.open(self.rss_link, timeout=30).read()
+            links_data = req.get(self.rss_link, timeout=30).content
         except Exception as err:
             logging.info('mikanani get links error:%s', err)
             return []
@@ -74,7 +74,7 @@ class MikananiSourceProvider(provider.SourceProvider):
         pattern = self.load_filter_config()
         return self.get_links_from_xml(tmp_xml, pattern)
 
-    def get_links_from_xml(self, tmp_xml, pattern: str) -> dict:
+    def get_links_from_xml(self, tmp_xml, pattern: str) -> list:
         if pattern is not None:
             reg = re.compile(pattern)
         else:
@@ -92,7 +92,7 @@ class MikananiSourceProvider(provider.SourceProvider):
                 if path is not None and item_title is not None:
                     ret.append({'path': path, 'link': url, 'file_type': types.FILE_TYPE_VIDEO_TV})
                 else:
-                    logging.warning("Skip %s, %s",anime_name, item_title)
+                    logging.warning("Skip %s, %s", anime_name, item_title)
             return ret
         except Exception as err:
             logging.info('parse rss xml error:%s', err)
@@ -129,7 +129,7 @@ class MikananiSourceProvider(provider.SourceProvider):
         # example: https://mikanani.me/Home/Episode/5350b283db7d8e4665a08dda24d0d0c66259fc71
         try:
             req = helper.get_request_controller()
-            data = req.open(link, timeout=30).read()
+            data = req.get(link, timeout=30).content
         except Exception as err:
             logging.info('mikanani get anime title error:%s', err)
             return ""

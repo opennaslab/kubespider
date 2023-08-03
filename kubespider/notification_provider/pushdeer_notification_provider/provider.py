@@ -1,18 +1,19 @@
 import json
 from urllib.parse import urljoin
 import logging
-import requests
 
 from notification_provider import provider
 from utils.config_reader import AbsConfigReader
+from utils.helper import get_request_controller
 
 
-class PushDeerProvider(provider.NotificationProvider):
+class PushDeerNotificationProvider(provider.NotificationProvider):
 
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         self.name = name
         self.enable, self.host, self.push_keys, self.type = \
             self._init_conf(config_reader)
+        self.request_handler = get_request_controller()
 
     @staticmethod
     def _init_conf(config_reader):
@@ -41,7 +42,7 @@ class PushDeerProvider(provider.NotificationProvider):
             "desp": "",
         }
         url = urljoin(self.host, "message/push")
-        resp = requests.post(url, data=data, timeout=5).json()
+        resp = self.request_handler.post(url, data=data, timeout=5).json()
         if resp.get('code') != 0:
             resp['key'] = key
             logging.error("[Pushdeer] push failed : %s", json.dumps(resp, ensure_ascii=False))

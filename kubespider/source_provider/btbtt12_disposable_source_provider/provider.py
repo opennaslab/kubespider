@@ -3,13 +3,12 @@
 # encoding:utf-8
 import logging
 from urllib.parse import urlparse
-
-import requests
 from bs4 import BeautifulSoup
 
 from source_provider import provider
 from api import types
 from utils.config_reader import AbsConfigReader
+from utils.helper import get_request_controller
 
 
 class Btbtt12DisposableSourceProvider(provider.SourceProvider):
@@ -20,6 +19,7 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
         self.webhook_enable = True
         self.provider_type = 'btbtt12_disposable_source_provider'
         self.provider_name = name
+        self.request_handler = get_request_controller()
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -80,7 +80,7 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
 
     def get_file_type_and_title(self, data_source_url: str) -> tuple[str, str]:
         try:
-            req = requests.get(data_source_url, timeout=30)
+            req = self.request_handler.get(data_source_url, timeout=30)
         except Exception as err:
             logging.error('meijutt_source_provider get video title/type error:%s', err)
             return "", ""
