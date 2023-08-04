@@ -10,7 +10,6 @@
 import logging
 import os
 import time
-import traceback
 from multiprocessing import Process
 import shutil
 from watchdog.events import FileSystemEventHandler, FileModifiedEvent
@@ -40,8 +39,8 @@ import download_provider.tiktok_dlp_download_provider.provider as tiktok_dlp_dow
 
 import pt_provider.nexusphp_pt_provider.provider as nexusphp_pt_provider
 
-import notification_provider.pushdeer_provider.provider as pushdeer_provider
-import notification_provider.telegram_provider.provider as telegram_provider
+import notification_provider.pushdeer_notification_provider.provider as pushdeer_notification_provider
+import notification_provider.telegram_notification_provider.provider as telegram_notification_provider
 
 # Sorce provider init related
 source_provider_init_func = {
@@ -73,8 +72,8 @@ pt_provider_init_func = {
 }
 
 notification_provider_init_func = {
-    'pushdeer_provider': pushdeer_provider.PushDeerProvider,
-    'telegram_provider': telegram_provider.TelegramProvider,
+    'pushdeer_notification_provider': pushdeer_notification_provider.PushDeerNotificationProvider,
+    'telegram_notification_provider': telegram_notification_provider.TelegramNotificationProvider,
 }
 
 
@@ -147,7 +146,6 @@ def get_notification_provider(provider_name: str, config: dict):
             YamlFileSectionConfigReader(Config.NOTIFICATION_PROVIDER.config_path(), provider_name)
         )
     except Exception as exc:
-        traceback.print_exc()
         raise Exception(str('unknown pt provider type %s', provider_type)) from exc
 
 

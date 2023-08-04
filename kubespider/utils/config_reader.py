@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 
 import yaml
 
+
 class AbsConfigReader(ABC):
     """
     Abstract class for config reader
@@ -22,10 +23,12 @@ class AbsConfigReader(ABC):
         Saves new data to the store
         """
 
+
 class FileConfigReader(AbsConfigReader):
     """
     Basic definition of file config loader
     """
+
     def __init__(self, file_path: str):
         self.file_path = file_path
 
@@ -39,13 +42,16 @@ class FileConfigReader(AbsConfigReader):
         with open(self.file_path, 'w', encoding='utf-8') as file:
             file.write(data_str)
 
+
 file_locks = {}
+
 
 class YamlFileConfigReader(FileConfigReader):
     """
     A config reader that reads from a single yaml file, 
     or create one on first save call if not exists
     """
+
     def __init__(self, file_path: str):
         super().__init__(file_path)
         self.file_lock = file_locks.get(file_path, threading.Lock())
@@ -74,19 +80,21 @@ class YamlFileConfigReader(FileConfigReader):
         finally:
             self.file_lock.release()
 
-    def read_data_from_file(self)-> dict:
+    def read_data_from_file(self) -> dict:
         conf = yaml.safe_load(self.read_file())
         if conf is None:
             conf = {}
         return conf
 
     def write_data_to_file(self, data: dict):
-        self.write_file(yaml.dump(data, allow_unicode=True))
+        self.write_file(yaml.dump(data, allow_unicode=True, sort_keys=False))
+
 
 class YamlFileSectionConfigReader(YamlFileConfigReader):
     """
     A config reader that reads from a section of yaml file
     """
+
     def __init__(self, file_path: str, section: str):
         super().__init__(file_path)
         self.section = section

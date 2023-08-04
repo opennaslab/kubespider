@@ -3,13 +3,13 @@
 # encoding:utf-8
 from urllib.parse import urlparse
 import logging
-import requests
 from bs4 import BeautifulSoup
 
 from api import types
 from source_provider import provider
 from utils import helper
 from utils.config_reader import AbsConfigReader
+from utils.helper import get_request_controller
 
 
 class MeijuttSourceProvider(provider.SourceProvider):
@@ -22,6 +22,7 @@ class MeijuttSourceProvider(provider.SourceProvider):
         self.provider_type = 'meijutt_source_provider'
         self.tv_links = []
         self.provider_name = name
+        self.request_handler = get_request_controller()
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -62,12 +63,11 @@ class MeijuttSourceProvider(provider.SourceProvider):
             return True
         return False
 
-    def get_links(self, data_source_url: str) -> dict:
+    def get_links(self, data_source_url: str) -> list:
         ret = []
-        controller = helper.get_request_controller()
         for tv_link in self.tv_links:
             try:
-                resp = controller.open(tv_link['link'], timeout=30).read()
+                resp = self.request_handler.get(tv_link['link'], timeout=30).content
             except Exception as err:
                 logging.info('meijutt_source_provider get links error:%s', err)
                 continue
@@ -78,7 +78,7 @@ class MeijuttSourceProvider(provider.SourceProvider):
             links = div[0].find_all('input', ['class', 'down_url'])
             for link in links:
                 url = link.get('value')
-                link_type = helper.get_link_type(url, controller)
+                link_type = helper.get_link_type(url, self.request_handler)
                 if link_type != self.link_type:
                     continue
                 logging.info('meijutt find %s', helper.format_long_string(url))
@@ -107,7 +107,7 @@ class MeijuttSourceProvider(provider.SourceProvider):
     def get_tv_title(self, req_para: str) -> str:
         # example link: https://www.meijutt.tv/content/meiju28277.html
         try:
-            req = requests.get(req_para, timeout=30)
+            req = self.request_handler.get(req_para, timeout=30)
         except Exception as err:
             logging.info('meijutt_source_provider get tv title error:%s', err)
             return ""

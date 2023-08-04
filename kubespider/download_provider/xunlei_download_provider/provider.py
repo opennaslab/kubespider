@@ -3,12 +3,13 @@
 import logging
 import time
 import json
-import requests
 
 import execjs
 import libtorrent as lb
 
 from utils.config_reader import AbsConfigReader
+from utils.helper import get_request_controller
+
 from download_provider import provider
 
 
@@ -20,6 +21,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         self.http_endpoint = ''
         self.device_id = ''
         self.js_ctx = execjs.compile('')
+        self.request_handler = get_request_controller()
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -79,7 +81,8 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         try:
             list_files_path = '/webman/3rdparty/pan-xunlei-com/index.cgi/drive/v1/resource/list?pan_auth=' + token + '&device_space='
             req_data = {'urls': url}
-            req = requests.post(self.http_endpoint+list_files_path, json=req_data, headers={'pan-auth': token}, timeout=30)
+            req = self.request_handler.post(self.http_endpoint + list_files_path, json=req_data,
+                                            headers={'pan-auth': token}, timeout=30)
             return json.loads(req.text)
         except Exception as err:
             logging.error("List files error:%s", err)
@@ -95,7 +98,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
             if 'file_size' in file_info['list']['resources'][0]:
                 file_size = file_info['list']['resources'][0]['file_size']
             req_payload = {
-                "type":"user#download-url",
+                "type": "user#download-url",
                 "name": file_info['list']['resources'][0]['name'],
                 "file_name": file_info['list']['resources'][0]['name'],
                 "file_size": str(file_size),
@@ -109,7 +112,8 @@ class XunleiDownloadProvider(provider.DownloadProvider):
                     "parent_folder_id": path_id
                 }
             }
-            req = requests.post(self.http_endpoint + path, json=req_payload, headers={'pan-auth': token}, timeout=30)
+            req = self.request_handler.post(self.http_endpoint + path, json=req_payload, headers={'pan-auth': token},
+                                            timeout=30)
             if req.status_code != 200:
                 logging.error("Create tasks error:%s", req.text)
                 return ValueError("Create task error")
@@ -124,15 +128,16 @@ class XunleiDownloadProvider(provider.DownloadProvider):
 
     def create_sub_path(self, token: str, dir_name: str, parent_id: str) -> TypeError:
         try:
-            path = '/webman/3rdparty/pan-xunlei-com/index.cgi/drive/v1/files?pan_auth='+ token +'&device_space='
-            rep = requests.get(self.http_endpoint + path, headers={'pan-auth': token}, timeout=30)
+            path = '/webman/3rdparty/pan-xunlei-com/index.cgi/drive/v1/files?pan_auth=' + token + '&device_space='
+            rep = self.request_handler.get(self.http_endpoint + path, headers={'pan-auth': token}, timeout=30)
             data = {
                 "parent_id": parent_id,
                 "name": dir_name,
                 "space": "device_id#" + self.device_id,
                 "kind": "drive#folder"
             }
-            rep = requests.post(self.http_endpoint + path, headers={'pan-auth': token}, timeout=30, json=data)
+            rep = self.request_handler.post(self.http_endpoint + path, headers={'pan-auth': token}, timeout=30,
+                                            json=data)
             return json.loads(rep.text)['file']['id']
         except Exception as err:
             logging.error('Create dir error:%s', err)
@@ -150,11 +155,11 @@ class XunleiDownloadProvider(provider.DownloadProvider):
                 if len(dir_list) == cnt:
                     return parent_id
                 file_path = '/webman/3rdparty/pan-xunlei-com/index.cgi/drive/v1/files?space=device_id%23' + \
-                    self.device_id + '&limit=200&filters=%7B%22kind%22%3A%7B%22eq%22%3A%22drive%23folder%22%7D%7D&page_token=&' + \
-                        'pan_auth=' + token + '&device_space=&parent_id=' + parent_id
-                rep = requests.get(self.http_endpoint + file_path, headers={'pan-auth': token}, timeout=30)
+                            self.device_id + '&limit=200&filters=%7B%22kind%22%3A%7B%22eq%22%3A%22drive%23folder%22%7D%7D&page_token=&' + \
+                            'pan_auth=' + token + '&device_space=&parent_id=' + parent_id
+                rep = self.request_handler.get(self.http_endpoint + file_path, headers={'pan-auth': token}, timeout=30)
                 if rep.status_code != 200:
-                    raise Exception('Get files id error:'+rep.text)
+                    raise Exception('Get files id error:' + rep.text)
                 dirs = json.loads(rep.text)
                 if parent_id == "":
                     parent_id = dirs['files'][0]['id']
@@ -185,13 +190,14 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         file_count = int(file_info['list']['resources'][0]['file_count'])
         if file_count == 1:
             return '--1,'
-        return '0-' + str(file_count-1)
+        return '0-' + str(file_count - 1)
 
     def get_pan_token(self) -> str:
         xunlei_e = int(time.time())
         xunlei_cn = int(time.time())
         try:
-            rep = requests.get(self.http_endpoint+'/webman/3rdparty/pan-xunlei-com/index.cgi/device/now', timeout=30)
+            rep = self.request_handler.get(self.http_endpoint + '/webman/3rdparty/pan-xunlei-com/index.cgi/device/now',
+                                           timeout=30)
             xunlei_a1 = int(json.loads(rep.text).get('now'))
             xunlei_kn = xunlei_a1 - xunlei_cn
             token = self.js_ctx.call('GetXunLeiToken', xunlei_e + xunlei_kn)

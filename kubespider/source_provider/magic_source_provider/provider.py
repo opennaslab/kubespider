@@ -71,7 +71,7 @@ class MagicSourceProvider(provider.SourceProvider):
         ret = []
         try:
             controller = helper.get_request_controller(self.cookie)
-            resp = controller.open(data_source_url, timeout=30).read()
+            resp = controller.get(data_source_url, timeout=30).content
         except Exception as err:
             logging.warning('MagicSourceProvider get links error:%s', err)
             return ret

@@ -1,15 +1,15 @@
 import logging
 import json
 
-import requests
-
 from utils.config_reader import AbsConfigReader
+from utils.helper import get_request_controller
+
 from download_provider import provider
 
 
 class YTDlpDownloadProvider(
-        provider.DownloadProvider # pylint length
-    ):
+    provider.DownloadProvider  # pylint length
+):
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(name, config_reader)
         self.provider_name = name
@@ -19,6 +19,7 @@ class YTDlpDownloadProvider(
         self.auto_convert = False
         self.target_format = 'mp4'
         self.download_proxy = ''
+        self.request_handler = get_request_controller()
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -60,7 +61,7 @@ class YTDlpDownloadProvider(
         # So just return None
         try:
             path = self.http_endpoint_host + ":" + str(self.http_endpoint_port) + '/api/v1/download'
-            req = requests.post(path, headers=headers, data=json.dumps(data), timeout=30)
+            req = self.request_handler.post(path, headers=headers, data=json.dumps(data), timeout=30)
             if req.status_code != 200:
                 logging.error("Send general task error:%s", req.status_code)
         except Exception as err:

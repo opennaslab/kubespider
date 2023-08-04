@@ -1,18 +1,22 @@
 import logging
 from urllib.parse import urljoin
 
-import requests
-
 from notification_provider import provider
 from utils.config_reader import AbsConfigReader
+from utils.helper import get_request_controller
 
 
-class TelegramProvider(provider.NotificationProvider):
+class TelegramNotificationProvider(provider.NotificationProvider):
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
+        self.config_reader = config_reader
         self.name = name
-        self.request_handler = requests.session()
+        self.request_handler = get_request_controller()
         self.type, self.enable, self.host, self.token, self.channel_name, self.chat_id = \
             self._init_conf(config_reader)
+        if not self.chat_id:
+            self.chat_id = self.get_channel_chat_id(self.channel_name)
+            if self.chat_id:
+                self.save_conf(channel_chat_id=self.chat_id)
 
     @staticmethod
     def _init_conf(config_reader: AbsConfigReader) -> tuple:
@@ -29,17 +33,17 @@ class TelegramProvider(provider.NotificationProvider):
     def get_channel_chat_id(self, channel_name) -> str:
         url = urljoin(self.host, f"/bot{self.token}/getUpdates")
         resp = self.request_handler.get(url, timeout=5).json()
-        for item in resp.get("result", [])[::-1]:
-            chat = item.get("my_chat_member", {}).get("chat", {})
-            if chat.get("type") == "channel" and chat.get("title") == channel_name:
-                return chat.get("id")
-        raise ValueError(f"chat_id not found, response:{resp}")
+        for res in resp.get("result", [])[::-1]:
+            for value in res.values():
+                if isinstance(value, dict):
+                    chat = value.get("chat", {})
+                    if chat.get("type") == "channel" and chat.get("title") == channel_name:
+                        return chat.get("id")
+        logging.error("[Telegram] chat_id not found, response: %s", resp)
+        return ""
 
     def push(self, title, **kwargs) -> bool:
         try:
-            if not self.chat_id:
-                self.chat_id = self.get_channel_chat_id(self.channel_name)
-                # TODO save the chat_id to notification_provider.yaml
             url = urljoin(self.host, f"/bot{self.token}/sendMessage")
             data = {
                 'chat_id': self.chat_id,
@@ -59,3 +63,7 @@ class TelegramProvider(provider.NotificationProvider):
         for key, value in kwargs.items():
             message.append(f"`{key}`: {value}")
         return "\n".join(message)
+
+    def save_conf(self, **kwargs) -> None:
+        logging.info("[Telegram] update telegram conf: %s", kwargs)
+        self.config_reader.parcial_update(lambda notification_conf: notification_conf["telegram"].update(kwargs))
