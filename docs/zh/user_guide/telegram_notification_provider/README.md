@@ -41,7 +41,7 @@ telegram:
   channel_name: your channel name
   enable: false
   host: https://api.telegram.org
-  type: telegram_provider
+  type: telegram_notification_provider
 ```
 这里包含6个配置属性：
 * `bot_token`: 机器人的token。

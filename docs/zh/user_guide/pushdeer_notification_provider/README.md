@@ -86,7 +86,7 @@ https://api2.pushdeer.com/message/push?pushkey=<key>&text=标题&desp=<markdown>
 
 ```yaml
 pushdeer:
-  type: pushdeer_provider
+  type: pushdeer_notification_provider
   enable: false
   host: https://api2.pushdeer.com
   push_keys: 
