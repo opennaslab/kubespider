@@ -125,7 +125,7 @@ def refresh_handler():
 def download_links_with_provider(source: str, source_provider: sp.SourceProvider):
     link_type = source_provider.get_link_type()
     links = source_provider.get_links(source)
-    if len(links) == 0 and source_provider.get_provider_listen_type() == types.SOURCE_PROVIDER_DISPOSABLE_TYPE:
+    if len(links) == 0:
         # Notify the users who use the webhook
         return TypeError("No links found")
     for download_link in links:
