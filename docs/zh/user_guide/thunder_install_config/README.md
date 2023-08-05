@@ -15,7 +15,7 @@ cd kubespider
 bash hack/install_thunder.sh
 ```
 
-当然也可以自己安装迅雷（参照[迅雷](https://github.com/cnk3x/xunlei)的文档）。但是确保不要打开迅雷面板的认证（即设置环境变量 `XL_BA_USER` 和 `XL_BA_PASSWORD`），不然kbuespider无法调用迅雷。
+当然也可以自己安装迅雷（参照[迅雷](https://github.com/cnk3x/xunlei)的文档）。但是确保不要打开迅雷面板的认证（即设置环境变量 `XL_BA_USER` 和 `XL_BA_PASSWORD`），不然Kubespider无法调用迅雷。
 
 ### 2.确认安装
 运行如下命令，确认迅雷已经安装成功：
