@@ -13,7 +13,7 @@ class TelegramNotificationProvider(provider.NotificationProvider):
         self.request_handler = get_request_controller()
         self.type, self.enable, self.host, self.token, self.channel_name, self.chat_id = \
             self._init_conf(config_reader)
-        if not self.chat_id:
+        if not self.chat_id and self.enable:
             self.chat_id = self.get_channel_chat_id(self.channel_name)
             if self.chat_id:
                 self.save_conf(channel_chat_id=self.chat_id)

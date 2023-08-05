@@ -147,8 +147,8 @@ In order to make full use of the existing download software in the open-source c
 In order to make full use of the existing notification software in the open-source community, the following software is currently supported:
 | Notification Software | Support | Configuration |
 | :-------------------- | ------: | ------------: |
-|      Pushdeer         |   yes   | [link](./docs/zh/user_guide/pushdeer_notification_provider/README.md) |
-|      Telegram         |   yes   | [link](./docs/zh/user_guide/telegram_notification_provider/README.md) |
+|      Pushdeer         |   Yes   | [link](./docs/zh/user_guide/pushdeer_notification_provider/README.md) |
+|      Telegram         |   Yes   | [link](./docs/zh/user_guide/telegram_notification_provider/README.md) |
 
 ### Basic feature  
 Currently, the following file types are supported to trigger downloading:

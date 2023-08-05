@@ -15,7 +15,7 @@ class TiktokDownloadProvider(provider.DownloadProvider):
         self.http_endpoint_host = ''
         self.http_endpoint_port = 0
         self.cookie = ''
-        self.reqeust_handler = get_request_controller()
+        self.reqeust_handler = get_request_controller(use_proxy=False)
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -59,6 +59,6 @@ class TiktokDownloadProvider(provider.DownloadProvider):
 
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()
-        self.http_endpoint_host = cfg['http_endpoint_host']
-        self.http_endpoint_port = cfg['http_endpoint_port']
-        self.cookie = cfg['cookie']
+        self.http_endpoint_host = cfg.get('http_endpoint_host', 'http://127.0.0.1')
+        self.http_endpoint_port = cfg.get('http_endpoint_port', 3083)
+        self.cookie = cfg.get('cookie', '')

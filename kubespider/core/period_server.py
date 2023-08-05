@@ -47,6 +47,8 @@ class PeriodServer:
 
         provider.load_config()
         links = provider.get_links("")
+        if links is None:
+            return None
         link_type = provider.get_link_type()
 
         provider_name = provider.get_provider_name()

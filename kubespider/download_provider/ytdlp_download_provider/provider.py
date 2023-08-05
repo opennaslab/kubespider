@@ -19,7 +19,7 @@ class YTDlpDownloadProvider(
         self.auto_convert = False
         self.target_format = 'mp4'
         self.download_proxy = ''
-        self.request_handler = get_request_controller()
+        self.request_handler = get_request_controller(use_proxy=False)
 
     def get_provider_name(self) -> str:
         return self.provider_name
