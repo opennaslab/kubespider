@@ -14,7 +14,7 @@ class YougetDownloadProvider(
         self.provider_type = 'youget_download_provider'
         self.http_endpoint_host = ''
         self.http_endpoint_port = 0
-        self.request_handler = get_request_controller()
+        self.request_handler = get_request_controller(use_proxy=False)
 
     def get_provider_name(self) -> str:
         return self.provider_name

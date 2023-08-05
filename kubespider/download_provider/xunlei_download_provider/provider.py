@@ -21,7 +21,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         self.http_endpoint = ''
         self.device_id = ''
         self.js_ctx = execjs.compile('')
-        self.request_handler = get_request_controller()
+        self.request_handler = get_request_controller(use_proxy=False)
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -70,12 +70,12 @@ class XunleiDownloadProvider(provider.DownloadProvider):
 
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()
-        self.http_endpoint = cfg['http_endpoint']
-        token_js_path = cfg['token_js_path']
+        self.http_endpoint = cfg.get('http_endpoint', 'http://127.0.0.1:2345')
+        token_js_path = cfg.get('token_js_path', '/app/.config/dependencies/xunlei_download_provider/get_token.js')
         with open(token_js_path, 'r', encoding='utf-8') as js_file:
             js_text = js_file.read()
         self.js_ctx = execjs.compile(js_text)
-        self.device_id = cfg['device_id']
+        self.device_id = cfg.get('device_id', '')
 
     def list_files(self, token: str, url: str) -> dict:
         try:
