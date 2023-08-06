@@ -45,10 +45,14 @@ def get_request_controller(cookie: str = None, use_proxy=True) -> requests.Sessi
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE"
     }
-    if cookie is not None:
-        headers.update({"Cookie": cookie})
     session.headers = headers
     session.proxies = proxies
+    if cookie is None:
+        return session
+
+    coockie_dict = parse_cookie_string(cookie)
+    for cookie_name, cookie_value in coockie_dict.items():
+        session.cookies.set(cookie_name, cookie_value)
     return session
 
 
