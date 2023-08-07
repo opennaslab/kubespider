@@ -63,7 +63,7 @@ def get_link_type(url: str, controller: requests.Session) -> str:
         return types.LINK_TYPE_TORRENT
     # rfc6266: guess link type
     try:
-        resp = controller.get(url, timeout=30)
+        resp = controller.head(url, timeout=30)
         if resp.status_code == 200 and resp.headers.get('content-disposition'):
             content_disposition = resp.headers.get('content-disposition')
             _, params = cgi.parse_header(content_disposition)
