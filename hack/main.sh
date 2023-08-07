@@ -281,7 +281,7 @@ function youget_install {
         -v ${youget_config_dir}:/app/config \
         -v ${download_dir}:/app/downloads \
         --restart unless-stopped \
-        cesign/youget-downloader:latest
+        ${IMAGE_SOURCE}/youget-downloader:latest
     if [ $? -eq 0 ]; then
         INFO "youget installed successfully"
     else
@@ -319,7 +319,7 @@ function ytdlp_install {
         -v ${ytdlp_config_dir}:/app/config \
         -v ${download_dir}:/app/downloads \
         --restart unless-stopped \
-        cesign/ytdlp-downloader:latest
+        ${IMAGE_SOURCE}/ytdlp-downloader:latest
     if [ $? -eq 0 ]; then
         INFO "yt-dlp installed successfully"
     else
@@ -357,7 +357,7 @@ function tiktokdlp_install {
         -v ${tiktokdlp_config_dir}:/app/config \
         -v ${download_dir}:/app/downloads \
         --restart unless-stopped \
-        cesign/tiktok-dlp:latest
+        ${IMAGE_SOURCE}/tiktok-dlp:latest
     if [ $? -eq 0 ]; then
         INFO "tiktok-dlp installed successfully"
     else
@@ -369,7 +369,32 @@ function tiktokdlp_install {
 
 function baidunetdisk_install {
 
-TODO
+    get_port "5800" "Please enter your baidunetdisk web port"
+    baidunetdisk_port=${SET_PORT}
+
+    get_volume "${HOME}/kubespider/baidu" "Please enter your baidunetdisk config file save path"
+    baidunetdisk_config_dir=${SET_VOLUME}
+    get_volume "${HOME}/kubespider/nas" "Please enter your download path"
+    download_dir=${SET_VOLUME}
+
+    get_uid_gid
+    get_tz
+
+    docker_source_choose
+
+    clear
+
+    docker run -itd \
+        --name=baidunetdisk \
+        -p ${baidunetdisk_port}:5800 \
+        -e USER_ID=${SET_UID} \
+        -e GROUP_ID=${SET_GID} \
+        -e TZ=${SET_TZ} \
+        -e NOVNC_LANGUAGE="zh_Hans" \
+        -v ${baidunetdisk_config_dir}:/config \
+        -v ${download_dir}:/config/baidunetdiskdownload \
+        --restart unless-stopped \
+        ${IMAGE_SOURCE}/baidunetdisk:latest
 
 }
 
