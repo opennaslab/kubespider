@@ -1,9 +1,10 @@
 import logging
+import time
 from urllib.parse import urljoin
 
 from notification_provider import provider
 from utils.config_reader import AbsConfigReader
-from utils.helper import get_request_controller
+from utils.helper import get_request_controller, retry
 
 
 class TelegramNotificationProvider(provider.NotificationProvider):
@@ -42,21 +43,28 @@ class TelegramNotificationProvider(provider.NotificationProvider):
         logging.error("[Telegram] chat_id not found, response: %s", resp)
         return ""
 
+    @retry()
     def push(self, title, **kwargs) -> bool:
-        try:
-            url = urljoin(self.host, f"/bot{self.token}/sendMessage")
-            data = {
-                'chat_id': self.chat_id,
-                'text': self.format_message(title, **kwargs),
-                'parse_mode': 'Markdown'}
-            resp = self.request_handler.post(url, data=data, timeout=5).json()
-            if not resp.get("ok"):
-                logging.warning("[Telegram] push failed response: %s", resp)
-                return False
+        url = urljoin(self.host, f"/bot{self.token}/sendMessage")
+        text = self.format_message(title, **kwargs)
+        data = {
+            'chat_id': self.chat_id,
+            'text': text,
+            'parse_mode': 'Markdown'}
+        resp = self.request_handler.post(url, data=data, timeout=5).json()
+        if resp.get("ok"):
             return True
-        except Exception as err:
-            logging.error("[Telegram] push failed exc: %s", err)
-            return False
+        if resp.get("error_code") == 400:
+            # 格式化之后的 markdown 文本格式识别出错,记录下来用于分析
+            logging.error(
+                "[Telegram] push failed, exc:%s, text:%s", resp.get("description"), text
+            )
+        if resp.get("error_code") == 429:
+            # 请求过于频繁,等待提示时间
+            retry_after = resp.get("parameters", {}).get("retry_after", 5)
+            time.sleep(retry_after)
+            raise Exception("time sleep require")
+        return False
 
     def format_message(self, title, **kwargs) -> str:
         message = [f"*{title}*"] if title else []
