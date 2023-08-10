@@ -118,7 +118,7 @@ db1cc15b490f   cesign/kubespider:latest        "/entrypoint.sh pyth…"   2 minu
 
 ** 安装下载器 **
 
-> 如果你已经安装了下载器，例如`aria2`或`qbittorrent`，可以跳过这一章节直接访问[文档](/user_guide/aria2_download_provider/)进行配置，随后进入后续的安装`Kubespider`章节
+> 如果你已经安装了下载器，例如`aria2`或`qbittorrent`，可以跳过这一章节直接访问[文档](../aria2_download_provider/)进行配置，随后进入后续的安装`Kubespider`章节
 
 `Kubesipder`需要搭配下载器使用，这里以`aria2`为例。首先还是需要创建一个文件夹用于保存`aria2`的配置文件以及下载的内容，例如在`nas`的共享文件夹中创建了一个名为`aria2`的文件夹，用于保存配置文件以及下载的文件
 
@@ -203,7 +203,7 @@ drwxrwx---+ 1 hakureisk   hakureisk     62 Jun 10 20:03 ..
 -rw-rw----+ 1 TimeMachine TimeMachine   93 Jun 10 20:03 state.yaml
 ```
 
-按照上面默认的配置文件，此时`kubespider`已经可以使用`aria2`作为下载器，如果你的`aria2`配置与上述配置文件不同，请按照[文档](/user_guide/aria2_download_provider/)修改`download_provider.yaml`文件进行配置
+按照上面默认的配置文件，此时`kubespider`已经可以使用`aria2`作为下载器，如果你的`aria2`配置与上述配置文件不同，请按照[文档](../aria2_download_provider/)修改`download_provider.yaml`文件进行配置
 
 ### 5. 安装浏览器插件
 为了方便下载浏览器中的资源，我们提供了一个浏览器插件，目前仅支持chromium内核的浏览器
