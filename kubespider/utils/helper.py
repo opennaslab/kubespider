@@ -119,7 +119,7 @@ def retry(attempt_times=3, delay=1, exception=Exception):
                 try:
                     return function(*args, **kwargs)
                 except exception as err:
-                    logging.error('Error happened(%s), retrying...', err)
+                    logging.error('Error happened, func: %s, err: %s, retrying...', function.__name__, err)
                     time.sleep(delay)
                     total_attempt_times += 1
             return None

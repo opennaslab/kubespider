@@ -60,3 +60,9 @@ bilibili_vlogger_subscribe_source_provider:
   downloader: youget
   vlogger:
     - 367877
+alist_source_provider:
+  enable: false
+  type: alist_source_provider
+  host:
+  watch_dirs:
+    -
