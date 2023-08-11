@@ -53,6 +53,7 @@ if [[ ${KUBESPIDER_VERSION} == "" ]]; then
     export KUBESPIDER_VERSION=${KUBESPIDER_DEFAULT_VERSION}
 fi
 docker run -itd --name kubespider \
+    --log-opt max-size=5m \
     -v ${KUBESPIDER_HOME}/kubespider/.config:/app/.config \
     -e PUID=$UID \
     -e PGID=$GID \
