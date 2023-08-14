@@ -56,7 +56,7 @@
 <image src="./images/aria-6.png" alt="aria-5">
 
 
-#### 安装 Kubespider
+### 安装 Kubespider
 
 参考安装 `Aria2` 创建 `Kubespider` 容器
 
