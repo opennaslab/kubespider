@@ -395,6 +395,12 @@ function baidunetdisk_install {
         -v ${download_dir}:/config/baidunetdiskdownload \
         --restart unless-stopped \
         ${IMAGE_SOURCE}/baidunetdisk:latest
+    if [ $? -eq 0 ]; then
+        INFO "baidunetdisk installed successfully"
+    else
+        ERROR "baidunetdisk installation failed"
+        exit 1
+    fi
 
 }
 
