@@ -5,29 +5,25 @@ import qbittorrentapi
 from qbittorrentapi.definitions import TorrentStates
 
 from utils.config_reader import AbsConfigReader
-from download_provider import provider
+from download_provider.provider import DownloadProvider
 from api import types
+from api.values import Task
 
 
-class QbittorrentDownloadProvider(
-        provider.DownloadProvider # pylint length
-    ):
+class QbittorrentDownloadProvider(DownloadProvider):
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(name, config_reader)
         self.provider_name = name
         self.provider_type = 'qbittorrent_download_provider'
         self.http_endpoint_host = ''
         self.http_endpoint_port = 0
-        self.client = None
+        self.client: qbittorrentapi.Client = None
         self.username = ''
         self.password = ''
         self.download_base_path = ''
         self.verify_webui_certificate = False
         self.download_tags = ['']
         self.download_category = ''
-
-    def get_provider_name(self) -> str:
-        return self.provider_name
 
     def get_provider_type(self) -> str:
         return self.provider_type
@@ -38,45 +34,41 @@ class QbittorrentDownloadProvider(
     def provide_priority(self) -> int:
         return self.config_reader.read()['priority']
 
-    def get_defective_task(self) -> dict:
+    def get_defective_task(self) -> list[Task]:
         torrents_info = self.client.torrents_info()
         defective_tasks = []
         for single_torrent in torrents_info:
             if single_torrent.state_enum == TorrentStates.ERROR:
-                fail_task = {
-                    'path': single_torrent.save_path.removeprefix(self.download_base_path),
-                    'url': single_torrent.magnet_uri,
-                    'linkType': types.LINK_TYPE_MAGNET
-                }
+                fail_task = Task(
+                    url=single_torrent.magnet_uri,
+                    path=single_torrent.save_path.removeprefix(self.download_base_path),
+                    link_type=types.LINK_TYPE_MAGNET,
+                )
                 defective_tasks.append(fail_task)
                 single_torrent.delete(delete_files=True)
                 continue
             if single_torrent.state_enum == TorrentStates.METADATA_DOWNLOAD or \
-                single_torrent.state_enum == TorrentStates.STALLED_DOWNLOAD:
+                    single_torrent.state_enum == TorrentStates.STALLED_DOWNLOAD:
                 if single_torrent.downloaded <= 0.0:
-                    pending_task = {
-                        'path': single_torrent.save_path.removeprefix(self.download_base_path),
-                        'url': single_torrent.magnet_uri,
-                        'linkType': types.LINK_TYPE_MAGNET
-                    }
+                    pending_task = Task(
+                        url=single_torrent.magnet_uri,
+                        path=single_torrent.save_path.removeprefix(self.download_base_path),
+                        link_type=types.LINK_TYPE_MAGNET,
+                    )
                     defective_tasks.append(pending_task)
                     single_torrent.delete(delete_files=True)
                     continue
         return defective_tasks
 
-    def send_torrent_task(self, torrent_file_path: str, download_path: str, extra_param=None) -> TypeError:
-        download_path = os.path.join(self.download_base_path, download_path)
-        logging.info('Start torrent download:%s, path:%s', torrent_file_path, download_path)
-        tags = []
-        if extra_param is not None:
-            category = extra_param.get('category', self.download_category)
-            tags += extra_param.get('tags', [])
-        else:
-            category = self.download_category
-        tags += self.download_tags
+    def send_torrent_task(self, task: Task) -> TypeError:
+        download_path = os.path.join(self.download_base_path, task.path)
+        logging.info('Start torrent download:%s, path:%s', task.url, download_path)
+        tags = task.extra_param('tags', self.download_tags)
+        category = task.extra_param('category', self.download_category)
         try:
             logging.info('Create download task category:%s, tags:%s', category, tags)
-            ret = self.client.torrents_add(torrent_files=torrent_file_path, save_path=download_path, category=category, tags=tags)
+            ret = self.client.torrents_add(torrent_files=task.url, save_path=download_path, category=category,
+                                           tags=tags)
             logging.info('Create download task results:%s', ret)
             return None
         except Exception as err:
@@ -84,19 +76,14 @@ class QbittorrentDownloadProvider(
             return err
         return None
 
-    def send_magnet_task(self, url: str, path: str, extra_param=None) -> TypeError:
-        logging.info('Start magent download:%s, path:%s', url, path)
-        download_path = os.path.join(self.download_base_path, path)
-        tags = []
-        if extra_param is not None:
-            category = extra_param.get('category', self.download_category)
-            tags += extra_param.get('tags', [])
-        else:
-            category = self.download_category
-        tags += self.download_tags
+    def send_magnet_task(self, task: Task) -> TypeError:
+        logging.info('Start magent download:%s, path:%s', task.url, task.path)
+        download_path = os.path.join(self.download_base_path, task.path)
+        tags = task.extra_param('tags', self.download_tags)
+        category = task.extra_param('category', self.download_category)
         try:
             logging.info('Create download task category:%s, tags:%s', category, tags)
-            ret = self.client.torrents_add(urls=url, save_path=download_path, category=category, tags=tags)
+            ret = self.client.torrents_add(urls=task.url, save_path=download_path, category=category, tags=tags)
             logging.info('Create download task results:%s', ret)
             return None
         except Exception as err:
@@ -104,13 +91,15 @@ class QbittorrentDownloadProvider(
             return err
         return None
 
-    def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
-        logging.warning('qbittorrent not support generatl task download! Please use aria2 or else download provider')
-        return TypeError('qbittorrent not support generate task download')
+    def send_general_task(self, task: Task) -> TypeError:
+        logging.warning('qbittorrent not support general task download! Please use aria2 or else download provider')
+        return TypeError('qbittorrent not support general task download')
 
-    def remove_tasks(self, para=None):
-        # TODO: Implement it
-        pass
+    def remove_tasks(self, tasks: list[Task]):
+        try:
+            self.client.torrents_delete(torrent_hashes='all', delete_files=True)
+        except Exception as err:
+            logging.warning('qbittorrent remove all tasks error:%s', err)
 
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()

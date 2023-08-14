@@ -2,12 +2,15 @@
 
 import logging
 import _thread
+
 from core import download_trigger
 from core import period_server
 from core import pt_server
 from core import config_handler
 from core import notification_server
-import download_provider.provider as dp
+from core import source_manager
+from source_provider.provider import SourceProvider
+from download_provider.provider import DownloadProvider
 
 
 class Kubespider:
@@ -17,8 +20,8 @@ class Kubespider:
         self.download_providers = []
         self.pt_providers = []
         self.notifications_providers = []
-        self.enabled_source_providers = []
-        self.enabled_download_providers = []
+        self.enabled_source_providers: list[SourceProvider] = []
+        self.enabled_download_providers: list[DownloadProvider] = []
         self.enabled_pt_providers = []
         self.enabled_notifications_providers = []
 
@@ -65,14 +68,18 @@ class Kubespider:
             except KeyError:
                 logging.warning('Notification Provider:%s not exists, treat as disabled', provider_name)
 
-        download_trigger.kubespider_downloader = \
-            download_trigger.KubespiderDownloader(self.enabled_download_providers)
-        period_server.kubespider_period_server = \
-            period_server.PeriodServer(self.enabled_source_providers, self.enabled_download_providers)
-        pt_server.kubespider_pt_server = \
-            pt_server.PTServer(self.enabled_pt_providers)
-        notification_server.kubespider_notification_server = \
-            notification_server.NotificationServer(self.enabled_notifications_providers)
+        # download provider aggregate
+        download_trigger.kubespider_downloader = download_trigger.KubespiderDownloader(self.enabled_download_providers)
+        # source provider aggregate
+        source_manager.source_provider_manager = source_manager.SourceProviderManager(self.enabled_source_providers)
+
+        period_server.kubespider_period_server = period_server.PeriodServer(self.enabled_source_providers)
+
+        pt_server.kubespider_pt_server = pt_server.PTServer(self.enabled_pt_providers)
+
+        notification_server.kubespider_notification_server = notification_server.NotificationServer(
+            self.enabled_notifications_providers
+        )
 
     def run_pt_server(self) -> None:
         logging.info('PT Server start running...')
@@ -105,5 +112,5 @@ class Kubespider:
 kubespider_controller = Kubespider()
 
 
-def sort_download_provider(provider: dp.DownloadProvider):
+def sort_download_provider(provider: DownloadProvider):
     return provider.provide_priority()

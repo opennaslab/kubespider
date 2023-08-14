@@ -1,5 +1,6 @@
 import abc
 
+from api.values import Resource, Event
 from utils.config_reader import AbsConfigReader
 
 
@@ -20,23 +21,23 @@ class SourceProvider(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def get_provider_listen_type(self) -> str:
-        # listen type of provider, disposable or periodly
+        # listen type of provider, disposable or period
         pass
 
     @abc.abstractmethod
     def get_download_provider_type(self) -> str:
-        # in general, if this source provider needs to work with specific downlad
+        # in general, if this source provider needs to work with specific download
         # provider, return the TYPE of the download provider
         pass
 
     @abc.abstractmethod
     def get_prefer_download_provider(self) -> list:
-        # if the provider is configed to use some specified download providers,
+        # if the provider is confined to use some specified download providers,
         # return them here in a list
         pass
 
     @abc.abstractmethod
-    def get_download_param(self) -> list:
+    def get_download_param(self) -> dict:
         # get the specific params for downloader
         pass
 
@@ -53,17 +54,16 @@ class SourceProvider(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def should_handle(self, data_source_url: str) -> bool:
+    def should_handle(self, event: Event) -> bool:
         pass
 
-    # Return the download links for the source provider, the return struct should be format like:
-    # {'path': 'file_path', 'link': 'download_link', 'file_type': 'file type'}
+    # Return the download resources for the source provider
     @abc.abstractmethod
-    def get_links(self, data_source_url: str) -> dict:
+    def get_links(self, event: Event) -> list[Resource]:
         pass
 
     @abc.abstractmethod
-    def update_config(self, req_para: str) -> None:
+    def update_config(self, event: Event) -> None:
         pass
 
     @abc.abstractmethod

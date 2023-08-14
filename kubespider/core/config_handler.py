@@ -42,7 +42,7 @@ import pt_provider.nexusphp_pt_provider.provider as nexusphp_pt_provider
 import notification_provider.pushdeer_notification_provider.provider as pushdeer_notification_provider
 import notification_provider.telegram_notification_provider.provider as telegram_notification_provider
 
-# Sorce provider init related
+# Source provider init related
 source_provider_init_func = {
     'bilibili_source_provider': bilibili_source_provider.BilibiliSourceProvider,
     'btbtt12_disposable_source_provider': btbtt12_disposable_source_provider.Btbtt12DisposableSourceProvider,
@@ -97,7 +97,7 @@ class ConfigHandler(FileSystemEventHandler):
         ]
         if filepath not in monitor_files:
             return
-        logging.info("%s file has be changed, the kubspider will reboot", event.src_path)
+        logging.info("%s file has be changed, the kubespider will reboot", event.src_path)
 
         # wait some file handling process finish, to avoid config getting empty
         time.sleep(3)

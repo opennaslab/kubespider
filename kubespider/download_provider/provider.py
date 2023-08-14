@@ -1,16 +1,17 @@
 import abc
 
 from utils.config_reader import AbsConfigReader
+from api.values import Task
+
 
 class DownloadProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
+        self.provider_name = name
         self.config_reader = config_reader
 
-    @abc.abstractmethod
     def get_provider_name(self) -> str:
-        # name of download provider defined in config
-        pass
+        return self.provider_name
 
     @abc.abstractmethod
     def get_provider_type(self) -> str:
@@ -26,26 +27,26 @@ class DownloadProvider(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def get_defective_task(self) -> dict:
+    def get_defective_task(self) -> list[Task]:
         # This will be call every 1m, should return the list downloads
         # with none process or failed tasks, and then remove the download tasks
-        # The return is a list of map, the map should be {'path': 'download', 'url': 'url', 'linkType': 'link_type'}
+        # The return is a list of Task(url, path, link_type)
         pass
 
     @abc.abstractmethod
-    def send_torrent_task(self, torrent_file_path, download_path, extra_param=None) -> TypeError:
+    def send_torrent_task(self, task: Task) -> TypeError:
         pass
 
     @abc.abstractmethod
-    def send_magnet_task(self, url: str, path: str, extra_param=None) -> TypeError:
+    def send_magnet_task(self, task: Task) -> TypeError:
         pass
 
     @abc.abstractmethod
-    def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
+    def send_general_task(self, task: Task) -> TypeError:
         pass
 
     @abc.abstractmethod
-    def remove_tasks(self, para=None):
+    def remove_tasks(self, tasks: list[Task]):
         pass
 
     @abc.abstractmethod

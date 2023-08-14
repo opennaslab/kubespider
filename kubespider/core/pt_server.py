@@ -9,12 +9,13 @@ from core import download_trigger
 from pt_provider import provider
 from utils.config_reader import YamlFileConfigReader
 from api.values import Config, FILE_TYPE_TO_PATH
-from api.types import FILE_TYPE_PT
+from api.types import FILE_TYPE_PT, LINK_TYPE_TORRENT
+from api.values import Resource, Downloader
 
 
 class PTServer:
     def __init__(self, pt_providers: list) -> None:
-        self.pt_providers = pt_providers
+        self.pt_providers: list[provider.PTProvider] = pt_providers
         self.state_config = YamlFileConfigReader(Config.STATE.config_path())
 
     def run(self):
@@ -42,7 +43,8 @@ class PTServer:
                 for link in links:
                     link_size = float(link['size'])
                     if link['torrent'] in provider_state['torrent_list']:
-                        logging.info("PT provider(%s) already download torrent:%s, stkip it", provider_name, link['torrent'])
+                        logging.info("PT provider(%s) already download torrent:%s, skip it", provider_name,
+                                     link['torrent'])
                         continue
 
                     if link['free']:
@@ -50,7 +52,8 @@ class PTServer:
                             self.trigger_download_tasks(link['torrent'], iter_provider)
                             provider_state['download_sum_size'] += link_size
                             provider_state['torrent_list'].append(link['torrent'])
-                            logging.info('Add one task(%fGB), now is %fGB', link_size, provider_state['download_sum_size'])
+                            logging.info('Add one task(%fGB), now is %fGB', link_size,
+                                         provider_state['download_sum_size'])
                     else:
                         if provider_state['costs_sum_size'] <= 0.0:
                             continue
@@ -66,27 +69,28 @@ class PTServer:
 
             time.sleep(3600)
 
-    def trigger_download_tasks(self, pt_source: str, pt_provider: provider.PTProvider):
+    @staticmethod
+    def trigger_download_tasks(pt_source: str, pt_provider: provider.PTProvider):
         logging.info("Start downloading: %s", pt_source)
-        provider_name = pt_provider.get_download_provider()
-        download_provider = download_trigger.kubespider_downloader.filter_downloader_by_name(provider_name)
-        if download_provider is None:
-            logging.error('Downloader not found: %s', provider_name)
-            return
-
-        download_path = os.path.join(FILE_TYPE_TO_PATH[FILE_TYPE_PT], provider_name)
-        err = download_trigger.kubespider_downloader.handle_torrent_download(pt_source, download_path, [download_provider])
+        download_provider_name = pt_provider.get_download_provider()
+        download_path = os.path.join(FILE_TYPE_TO_PATH[FILE_TYPE_PT], download_provider_name)
+        err = download_trigger.kubespider_downloader.download_file(Resource(
+            url=pt_source,
+            path=download_path,
+            link_type=LINK_TYPE_TORRENT,
+            file_type=FILE_TYPE_PT
+        ), Downloader(
+            download_provider_names=[download_provider_name]
+        ))
         if err is not None:
             logging.error('Download error: %s', err)
 
-    def trigger_remove_tasks(self, pt_provider: provider.PTProvider):
-        provider_name = pt_provider.get_download_provider()
-        download_provider = download_trigger.kubespider_downloader.filter_downloader_by_name(provider_name)
-        if download_provider is None:
-            logging.error('Downloader not found: %s', provider_name)
-            return
-
-        download_trigger.kubespider_downloader.handle_download_remove([download_provider])
+    @staticmethod
+    def trigger_remove_tasks(pt_provider: provider.PTProvider):
+        download_provider_name = pt_provider.get_download_provider()
+        download_trigger.kubespider_downloader.handle_download_remove(Downloader(
+            downloader=[download_provider_name]
+        ))
 
     def save_state(self, provider_name: str, provider_state: dict):
         all_pt_state = self.state_config.read().get('pt_state', {})

@@ -3,6 +3,7 @@
 # encoding:utf-8
 import logging
 from api import types
+from api.values import Event, Resource
 from utils.config_reader import AbsConfigReader
 from utils import helper
 from source_provider import provider
@@ -37,8 +38,8 @@ class BilibiliVloggerSubscribeSourceProvider(provider.SourceProvider):
             return downloader_names
         return [downloader_names]
 
-    def get_download_param(self) -> list:
-        return self.config_reader.read().get('download_param', [])
+    def get_download_param(self) -> dict:
+        return self.config_reader.read().get('download_param', {})
 
     def get_link_type(self) -> str:
         return self.link_type
@@ -49,10 +50,10 @@ class BilibiliVloggerSubscribeSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self) -> bool:
         return False
 
-    def should_handle(self, data_source_url: str) -> bool:
+    def should_handle(self, event: Event) -> bool:
         return False
 
-    def get_links(self, data_source_url: str) -> list:
+    def get_links(self, event: Event) -> list[Resource]:
         vloggers = self.config_reader.read().get('vlogger', None)
         if vloggers is None:
             return None
@@ -73,12 +74,18 @@ class BilibiliVloggerSubscribeSourceProvider(provider.SourceProvider):
                     file_type = types.FILE_TYPE_VIDEO_MIXED
                     logging.info("BilibiliVloggerSubscribeSourceProvider get links %s", link)
                     ret.append({'path': path, 'link': link, 'file_type': file_type})
+                    ret.append(Resource(
+                        url=link,
+                        path=path,
+                        file_type=file_type,
+                        link_type=self.get_link_type(),
+                    ))
             except Exception as err:
                 logging.error("BilibiliVloggerSubscribeSourceProvider get links error:%s", err)
                 return None
         return ret
 
-    def update_config(self, req_para: str) -> None:
+    def update_config(self, event: Event) -> None:
         pass
 
     def load_config(self) -> None:

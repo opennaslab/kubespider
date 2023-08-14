@@ -88,8 +88,8 @@ def download_torrent_file(url: str, controller: requests.Session) -> str:
     try:
         resp = controller.get(url, timeout=30).content
         file = get_tmp_file_name(url) + '.torrent'
-        with open(file, 'wb') as file_wirte:
-            file_wirte.write(resp)
+        with open(file, 'wb') as file_write:
+            file_write.write(resp)
         return file
     except Exception as err:
         logging.error("Download torrent file error:%s", err)

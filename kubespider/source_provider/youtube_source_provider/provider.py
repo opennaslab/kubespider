@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 
 from source_provider import provider
 from api import types
+from api.values import Event, Resource
 from utils.config_reader import AbsConfigReader
 
 
@@ -30,8 +31,8 @@ class YouTubeSourceProvider(provider.SourceProvider):
     def get_download_provider_type(self) -> str:
         return "ytdlp_download_provider"
 
-    def get_download_param(self) -> list:
-        return self.config_reader.read().get('download_param')
+    def get_download_param(self) -> dict:
+        return self.config_reader.read().get('download_param', {})
 
     def get_prefer_download_provider(self) -> list:
         downloader_names = self.config_reader.read().get('downloader', None)
@@ -50,17 +51,22 @@ class YouTubeSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self) -> bool:
         return self.webhook_enable
 
-    def should_handle(self, data_source_url: str) -> bool:
-        parse_url = urlparse(data_source_url)
+    def should_handle(self, event: Event) -> bool:
+        parse_url = urlparse(event.source)
         if parse_url.hostname == 'www.youtube.com':
-            logging.info('%s belongs to youtube_source_provider', data_source_url)
+            logging.info('%s belongs to youtube_source_provider', event.source)
             return True
         return False
 
-    def get_links(self, data_source_url: str) -> dict:
-        return [{'path': '', 'link': data_source_url, 'file_type': types.FILE_TYPE_VIDEO_MIXED}]
+    def get_links(self, event: Event) -> list[Resource]:
+        return [Resource(
+            url=event.source,
+            path='',
+            file_type=types.FILE_TYPE_VIDEO_MIXED,
+            link_type=self.get_link_type(),
+        )]
 
-    def update_config(self, req_para: str) -> None:
+    def update_config(self, event: Event) -> None:
         pass
 
     def load_config(self) -> None:

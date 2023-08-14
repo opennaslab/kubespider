@@ -2,12 +2,11 @@ import logging
 import json
 from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
-from download_provider import provider
+from download_provider.provider import DownloadProvider
+from api.values import Task
 
 
-class YougetDownloadProvider(
-    provider.DownloadProvider  # pylint length
-):
+class YougetDownloadProvider(DownloadProvider):
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(name, config_reader)
         self.provider_name = name
@@ -15,9 +14,6 @@ class YougetDownloadProvider(
         self.http_endpoint_host = ''
         self.http_endpoint_port = 0
         self.request_handler = get_request_controller(use_proxy=False)
-
-    def get_provider_name(self) -> str:
-        return self.provider_name
 
     def get_provider_type(self) -> str:
         return self.provider_type
@@ -28,22 +24,22 @@ class YougetDownloadProvider(
     def provide_priority(self) -> int:
         return self.config_reader.read()['priority']
 
-    def get_defective_task(self) -> dict:
-        # These tasks is special, other download software could not handle
-        return {}
+    def get_defective_task(self) -> list[Task]:
+        # These tasks are special, other download software could not handle
+        return []
 
-    def send_torrent_task(self, torrent_file_path: str, download_path: str, extra_param=None) -> TypeError:
+    def send_torrent_task(self, task: Task) -> TypeError:
         return TypeError("youget doesn't support torrent task")
 
-    def send_magnet_task(self, url: str, path: str, extra_param=None) -> TypeError:
+    def send_magnet_task(self, task: Task) -> TypeError:
         return TypeError("youget doesn't support magnet task")
 
-    def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
+    def send_general_task(self, task: Task) -> TypeError:
         headers = {'Content-Type': 'application/json'}
-        data = {'dataSource': url, 'path': path}
+        data = {'dataSource': task.url, 'path': task.path}
         logging.info('Send general task:%s', json.dumps(data))
 
-        if not url.startswith('https://www.bilibili.com'):
+        if not task.url.startswith('https://www.bilibili.com'):
             return TypeError('you-get only support specific resource')
 
         # This downloading tasks is special, other download software could not handle
@@ -58,7 +54,7 @@ class YougetDownloadProvider(
             return None
         return None
 
-    def remove_tasks(self, para=None):
+    def remove_tasks(self, tasks: list[Task]):
         # TODO: Implement it
         pass
 

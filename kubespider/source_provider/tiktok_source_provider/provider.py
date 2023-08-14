@@ -4,6 +4,7 @@ from urllib.parse import urlparse
 import logging
 
 from api import types
+from api.values import Event, Resource
 from source_provider import provider
 from utils.config_reader import AbsConfigReader
 
@@ -37,7 +38,7 @@ class TiktokSourceProvider(provider.SourceProvider):
             return downloader_names
         return [downloader_names]
 
-    def get_download_param(self) -> list:
+    def get_download_param(self) -> dict:
         return self.config_reader.read().get('download_param')
 
     def get_link_type(self) -> str:
@@ -49,20 +50,25 @@ class TiktokSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self) -> bool:
         return True
 
-    def should_handle(self, data_source_url: str) -> bool:
+    def should_handle(self, event: Event) -> bool:
         # regex get the real url, example: https://v.douyin.com/JJY5q5Y/
         link = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+',
-                          data_source_url)[0]
+                          event.source)[0]
         parse_url = urlparse(link)
         if parse_url.hostname == 'v.douyin.com':
             logging.info('%s belongs to tiktok_source_provider', link)
             return True
         return False
 
-    def get_links(self, data_source_url: str) -> dict:
-        return [{'path': '', 'link': data_source_url, 'file_type': types.FILE_TYPE_VIDEO_MIXED}]
+    def get_links(self, event: Event) -> list[Resource]:
+        return [Resource(
+            url=event.source,
+            path='',
+            file_type=types.FILE_TYPE_VIDEO_MIXED,
+            link_type=self.get_link_type(),
+        )]
 
-    def update_config(self, req_para: str) -> None:
+    def update_config(self, event: Event) -> None:
         pass
 
     def load_config(self) -> None:

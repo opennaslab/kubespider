@@ -29,6 +29,7 @@ def run() -> None:
     while True:
         time.sleep(30)
 
+
 def run_with_config_handler():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s-%(levelname)s: %(message)s')
     config_handler.prepare_config()

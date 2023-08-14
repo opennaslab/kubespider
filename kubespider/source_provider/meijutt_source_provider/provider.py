@@ -6,6 +6,7 @@ import logging
 from bs4 import BeautifulSoup
 
 from api import types
+from api.values import Event, Resource
 from source_provider import provider
 from utils import helper
 from utils.config_reader import AbsConfigReader
@@ -44,7 +45,7 @@ class MeijuttSourceProvider(provider.SourceProvider):
             return downloader_names
         return [downloader_names]
 
-    def get_download_param(self) -> list:
+    def get_download_param(self) -> dict:
         return self.config_reader.read().get('download_param')
 
     def get_link_type(self) -> str:
@@ -56,14 +57,14 @@ class MeijuttSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self) -> bool:
         return True
 
-    def should_handle(self, data_source_url: str) -> bool:
-        parse_url = urlparse(data_source_url)
+    def should_handle(self, event: Event) -> bool:
+        parse_url = urlparse(event.source)
         if parse_url.hostname == 'www.meijutt.tv' and 'content' in parse_url.path:
-            logging.info('%s belongs to MeijuttSourceProvider', data_source_url)
+            logging.info('%s belongs to MeijuttSourceProvider', event.source)
             return True
         return False
 
-    def get_links(self, data_source_url: str) -> list:
+    def get_links(self, event: Event) -> list[Resource]:
         ret = []
         for tv_link in self.tv_links:
             try:
@@ -82,18 +83,23 @@ class MeijuttSourceProvider(provider.SourceProvider):
                 if link_type != self.link_type:
                     continue
                 logging.info('meijutt find %s', helper.format_long_string(url))
-                ret.append({'path': tv_link['tv_name'], 'link': url, 'file_type': types.FILE_TYPE_VIDEO_TV})
+                ret.append(Resource(
+                    url=url,
+                    path=tv_link['tv_name'],
+                    file_type=types.FILE_TYPE_VIDEO_TV,
+                    link_type=link_type,
+                ))
         return ret
 
-    def update_config(self, req_para: str) -> None:
+    def update_config(self, event: Event) -> None:
         cfg = self.config_reader.read()
         tv_links = cfg['tv_links']
         urls = [i['link'] for i in tv_links]
-        if req_para not in urls:
-            tv_title = self.get_tv_title(req_para)
+        if event.source not in urls:
+            tv_title = self.get_tv_title(event)
             if tv_title == "":
                 return
-            tv_info = {'tv_name': tv_title, 'link': req_para}
+            tv_info = {'tv_name': tv_title, 'link': event.source}
             tv_links.append(tv_info)
         cfg['tv_links'] = tv_links
         self.config_reader.save(cfg)
@@ -104,19 +110,19 @@ class MeijuttSourceProvider(provider.SourceProvider):
         logging.info('meijutt tv link is:%s', ','.join(tv_links))
         self.tv_links = cfg['tv_links']
 
-    def get_tv_title(self, req_para: str) -> str:
+    def get_tv_title(self, event: Event) -> str:
         # example link: https://www.meijutt.tv/content/meiju28277.html
         try:
-            req = self.request_handler.get(req_para, timeout=30)
+            req = self.request_handler.get(event.source, timeout=30)
         except Exception as err:
             logging.info('meijutt_source_provider get tv title error:%s', err)
             return ""
         dom = BeautifulSoup(req.content, 'html.parser')
         div = dom.find_all('div', ['class', 'info-title'])
         if len(div) == 0:
-            logging.info('meijutt_source_provider get tv title empty:%s', req_para)
+            logging.info('meijutt_source_provider get tv title empty:%s', event.source)
             return ""
         h1_title = div[0].find_all('h1')
         tv_title = h1_title[0].text.strip()
-        logging.info('meijutt_source_provider get tv title:%s,%s', tv_title, req_para)
+        logging.info('meijutt_source_provider get tv title:%s,%s', tv_title, event.source)
         return tv_title

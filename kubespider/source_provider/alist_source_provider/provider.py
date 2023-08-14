@@ -4,6 +4,7 @@ from urllib.parse import urljoin, quote
 
 from source_provider import provider
 from api import types
+from api.values import Event, Resource
 from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller, retry
 
@@ -25,7 +26,7 @@ class AlistSourceProvider(provider.SourceProvider):
         host = conf.get("host", "")
         enable = conf.get('enable', True)
         downloader_names = conf.get('downloader', None)
-        download_param = conf.get('download_param', [])
+        download_param = conf.get('download_param', {})
         return watch_dirs, host, enable, downloader_names, download_param
 
     def get_provider_name(self) -> str:
@@ -47,7 +48,7 @@ class AlistSourceProvider(provider.SourceProvider):
             return self.downloader_names
         return [self.downloader_names]
 
-    def get_download_param(self) -> list:
+    def get_download_param(self) -> dict:
         return self.download_param
 
     def get_link_type(self) -> str:
@@ -59,16 +60,16 @@ class AlistSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self) -> bool:
         return self.webhook_enable
 
-    def should_handle(self, data_source_url: str) -> bool:
+    def should_handle(self, event: Event) -> bool:
         pass
 
-    def get_links(self, data_source_url: str) -> list:
+    def get_links(self, event: Event) -> list[Resource]:
         files = []
         for path in self.watch_dirs:
             files += self.get_all_files(path)
         return files
 
-    def update_config(self, req_para: str) -> None:
+    def update_config(self, event: Event) -> None:
         pass
 
     def load_config(self) -> None:
@@ -107,7 +108,7 @@ class AlistSourceProvider(provider.SourceProvider):
                     yield item
             page += 1
 
-    def get_all_files(self, path) -> list:
+    def get_all_files(self, path) -> list[Resource]:
         files = []
         for item in self.list_dir(path):
             if item.get("is_dir") is True:
@@ -117,5 +118,11 @@ class AlistSourceProvider(provider.SourceProvider):
                 item["file_type"] = types.FILE_TYPE_COMMON
                 uri = f'{os.path.join("/d", os.path.join(item.get("path"), item.get("name")))}'
                 item["link"] = urljoin(self.host, quote(uri) + f'?modified={item.get("modified")}')
-                files.append(item)
+                files.append(Resource(
+                    url=item.pop("link"),
+                    path=item.pop("path"),
+                    link_type=self.get_link_type(),
+                    file_type=item.pop("file_type"),
+                    **item
+                ))
         return files
