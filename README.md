@@ -180,40 +180,44 @@ If you want to participate more in the community, welcome to join our [Telegram 
 
 ## ❤️ Sponsor  
 Thanks to the following companies for sponsoring development tools, the ranking is not in any particular order:
-<table style="background-color: white">
+<table>
   <thead>
     <tr>
-      <th align="center" style="height: 80px;">
+      <th align="center" height="60px">
         <a href="https://www.jetbrains.com/">
-          <img align="center" src="./docs/images/sponsor/jetbrains.png" height="50px"><br>
+          <img align="center" src="./docs/images/sponsor/jetbrains.png" height="40px"><br>
         </a>
       </th>
-      <th align="center" style="height: 80px;">
+      <th align="center" height="60px">
         <a href="https://www.synology.cn/">
-          <img align="center" src="./docs/images/sponsor/synology.png" height="50px"><br>
+          <img align="center" src="./docs/images/sponsor/synology.png" height="40px"><br>
         </a>
       </th>
-      <th align="center" style="height: 80px;">
+      <th align="center" height="60px">
         <a href="https://www.terra-master.com/">
-          <img align="center" src="./docs/images/sponsor/terramaster.svg" height="50px"><br>
+          <img align="center" src="./docs/images/sponsor/terramaster.svg" height="40px"><br>
         </a>
       </th>
-      <th align="center" style="height: 80px;">
+      <th align="center" height="60px">
         <a href="https://www.qnap.com.cn/">
-          <img align="center" src="./docs/images/sponsor/qnap.svg" height="50px"><br>
+          <img align="center" src="./docs/images/sponsor/qnap.svg" height="40px"><br>
         </a>
       </th>
-      <th align="center" style="height: 80px;">
+      <th align="center" height="60px">
         <a href="https://www.asustor.com/">
-          <img align="center" src="./docs/images/sponsor/asustor.png" height="50px"><br>
+          <img align="center" src="./docs/images/sponsor/asustor.png" height="40px"><br>
         </a>
       </th>
-      <th align="center" style="height: 80px;">
+      <th align="center" height="60px">
         <a href="https://www.ugnas.com/">
-          <img align="center" src="./docs/images/sponsor/ugnas.png" height="50px"><br>
+          <img align="center" src="./docs/images/sponsor/ugnas.png" height="40px"><br>
         </a>
       </th>
-    </tr>
+      <th align="center" height="60px">
+        <a href="https://www.jonsbo.com/">
+          <img align="center" src="./docs/images/sponsor/jonsbo.png" height="40px"><br>
+        </a>
+      </th>
   </thead>
 </table>
 
