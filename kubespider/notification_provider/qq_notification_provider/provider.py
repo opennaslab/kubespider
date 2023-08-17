@@ -11,15 +11,15 @@ class QQNotificationProvider(provider.NotificationProvider):
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(name, config_reader)
         self.name = name
-        self.enable, self.host, self.accessToken, self.target_qq = self._init_conf(config_reader)
+        self.enable, self.host, self.access_token, self.target_qq = self._init_conf(config_reader)
         self.request_handler = get_request_controller()
     
     @staticmethod
     def _init_conf(config_reader: AbsConfigReader):
         conf = config_reader.read()
-        enable, host, accessToken, target_qq = conf.get("enable", False), conf.get("host"), conf.get("accessToken"), conf.get("target_qq")
+        enable, host, access_token, target_qq = conf.get("enable", False), conf.get("host"), conf.get("accessToken"), conf.get("target_qq")
         target_qq = int(target_qq)
-        return enable, host, accessToken, target_qq
+        return enable, host, access_token, target_qq
     
     def get_provider_name(self) -> str:
         return self.name
@@ -38,7 +38,7 @@ class QQNotificationProvider(provider.NotificationProvider):
             'Content-Type': 'application/json'
         }
         if self.accessToken != "":
-            headers['Authorization'] = f'Bearer {self.accessToken}'
+            headers['Authorization'] = f'Bearer {self.access_token}'
         resp = self.request_handler.post(url, json=data, timeout=5, headers=headers)
         if resp.status_code != 0:
             self.handle_status_code(resp)
