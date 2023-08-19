@@ -89,7 +89,11 @@ aria2:
 
 首先配置浏览器设置，安装第五章节安装好浏览器插件后，点击插件，在第二个选项中输入`Kubespider`的地址也就是nas的IP地址以及端口号，默认为3080，点击确认，如果一切正常则会提示`OK`
 
-以 Ubuntu 为例，打开[下载页面](https://ubuntu.com/download/desktop/thank-you?version=22.04.3&architecture=amd64)，在 `download now` 右键选择 `Send to Kubespider`，如果一切正常则浏览器插件图标会提示`OK`字段，现在查看Aria2插件，即可看见触发下载的任务
+以 大型文件Ubuntu镜像 为例，打开[下载页面](https://ubuntu.com/download/desktop/thank-you?version=22.04.3&architecture=amd64)，在 `download now` 右键选择 `Send to Kubespider`:
+
+<img src="./images/kubespider-chrome-ext-usage.png" height="300px">
+
+如果一切正常则浏览器插件图标会提示`OK`字段，现在查看Aria2插件，即可看见触发下载的任务，此操作即可让NAS后台下载大型文件：
 
 <image src="./images/download.png" alt="演示动画" height="300px">
 
@@ -97,4 +101,4 @@ aria2:
 
 <image src="./images/ubuntu.png" alt="演示动画" height="300px">
 
-这里只给最简单下载演示，更多下载场景，请看项目 [README](/)。
+这里只给最简单下载演示，更多下载场景，请看项目 [README](https://github.com/opennaslab/kubespider/blob/main/README-CN.md#-%E7%89%B9%E6%80%A7%E5%88%97%E8%A1%A8)。
