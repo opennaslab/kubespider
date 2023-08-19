@@ -41,6 +41,8 @@ class SourceProviderManager:
                 err = kubespider_period_server.run_single_provider(match_provider)
             else:
                 links = match_provider.get_links(event)
+                if links is None or len(links) == 0:
+                    return TypeError(f'No links found for {event.source}')
                 for link in links:
                     link.path = os.path.join(helper.convert_file_type_to_path(link.file_type), link.path)
                     event.put_extra_params(match_provider.get_download_param())
