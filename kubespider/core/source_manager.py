@@ -3,7 +3,7 @@ from api.values import Resource, Event, Downloader
 from utils import helper
 from source_provider.provider import SourceProvider
 from core.period_server import kubespider_period_server
-from core.download_trigger import kubespider_downloader
+from core import download_trigger
 
 
 class SourceProviderManager:
@@ -26,7 +26,7 @@ class SourceProviderManager:
         if match_provider is None:
             controller = helper.get_request_controller(event.extra_param('cookies'))
             link_type = helper.get_link_type(event.source, controller)
-            err = kubespider_downloader.download_file(Resource(
+            err = download_trigger.kubespider_downloader.download_file(Resource(
                 url=event.source,
                 path=event.path,
                 file_type=types.FILE_TYPE_COMMON,
@@ -41,7 +41,7 @@ class SourceProviderManager:
                 links = match_provider.get_links(event)
                 for link in links:
                     event.put_extra_params(match_provider.get_download_param())
-                    err = kubespider_downloader.download_file(link, Downloader(
+                    err = download_trigger.kubespider_downloader.download_file(link, Downloader(
                         match_provider.get_download_provider_type(),
                         match_provider.get_prefer_download_provider(),
                     ))
@@ -50,4 +50,4 @@ class SourceProviderManager:
         return err
 
 
-source_provider_manager = SourceProviderManager([])
+source_provider_manager: SourceProviderManager = SourceProviderManager(None)

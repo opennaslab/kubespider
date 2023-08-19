@@ -11,19 +11,21 @@ from core import notification_server
 from core import source_manager
 from source_provider.provider import SourceProvider
 from download_provider.provider import DownloadProvider
+from pt_provider.provider import PTProvider
+from notification_provider.provider import NotificationProvider
 
 
 class Kubespider:
 
     def __init__(self) -> None:
-        self.source_providers = []
-        self.download_providers = []
-        self.pt_providers = []
-        self.notifications_providers = []
+        self.source_providers: list[SourceProvider] = []
+        self.download_providers: list[DownloadProvider] = []
+        self.pt_providers: list[PTProvider] = []
+        self.notifications_providers: list[NotificationProvider] = []
         self.enabled_source_providers: list[SourceProvider] = []
         self.enabled_download_providers: list[DownloadProvider] = []
-        self.enabled_pt_providers = []
-        self.enabled_notifications_providers = []
+        self.enabled_pt_providers: list[PTProvider] = []
+        self.enabled_notifications_providers: list[NotificationProvider] = []
 
     def config(self) -> None:
         self.source_providers = config_handler.init_source_config()

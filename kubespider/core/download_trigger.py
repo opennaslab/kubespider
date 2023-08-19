@@ -75,19 +75,16 @@ class KubespiderDownloader:
         return download_providers
 
     def download_file(self, resource: Resource, downloader: Downloader = None) -> TypeError:
-
+        downloader_list = self.download_providers
         if downloader is not None:
             # If downloader is specified, only use this downloader
             downloader_list = self.filter_bind_downloader(downloader)
-        else:
-            downloader_list = self.download_providers
 
-        link_type = resource.link_type
-
-        logging.info('download link type %s, with provider size %s', link_type, len(downloader_list))
-        if len(downloader_list) == 0:
+        if downloader_list is None or len(downloader_list) == 0:
             logging.error('Downloader not found, check your configuration!!!')
             return TypeError('Downloader not found, check your configuration!!!')
+        link_type = resource.link_type
+        logging.info('download link type %s, with provider size %s', link_type, len(downloader_list))
 
         if link_type == types.LINK_TYPE_TORRENT:
             return self.handle_torrent_download(resource, downloader_list)

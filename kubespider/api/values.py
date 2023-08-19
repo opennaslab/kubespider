@@ -38,7 +38,8 @@ class Config(str, Enum):
 class Extra:
 
     def __init__(self, **kwargs) -> None:
-        self.extra = {}.update(kwargs)
+        self.extra = {}
+        self.extra.update(kwargs)
 
     def extra_param(self, key: str, default_value=None):
         return self.extra.get(key, default_value)

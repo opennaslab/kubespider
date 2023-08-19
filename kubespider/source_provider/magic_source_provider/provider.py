@@ -20,9 +20,9 @@ class MagicSourceProvider(provider.SourceProvider):
         self.provider_type = 'magic_source_provider'
         self.provider_name = name
         cfg = config_reader.read()
-        self.handle_host = cfg['handle_host']
-        self.link_selector = cfg['link_selector']
-        self.title_selector = cfg['title_selector']
+        self.handle_host = cfg.get('handle_host')
+        self.link_selector = cfg.get('link_selector')
+        self.title_selector = cfg.get('title_selector')
         # optional config
         self.link_type = cfg.get('link_type', 'magnet')
         self.file_type = cfg.get('file_type', 'video_mixed')
