@@ -131,6 +131,7 @@ As mentioned before, the source provider is used to adapt to different websites,
 | general rss source provider | Yes | Automatically download rss source | [link](./docs/zh/user_guide/general_rss_source_provider/README.md) |
 | Magic source provider | Yes | Trigger download resource via xpath configuration | [link](./docs/zh/user_guide/magic_source_provider/README.md) |
 | Douyin source provider | Yes | Trigger download Douyin video with watermark | [link](./docs/zh/user_guide/tiktok_source_provider/README.md) |
+| alist source provider | Yes | Automatically download newly added or updated files from the cloud storage | [link](./docs/zh/user_guide/alist_source_provider/README.md) |
 
 ### Download provider(Configured as needed)  
 In order to make full use of the existing download software in the open-source community(For example, YouTube has dedicated download software), the following software is currently supported:

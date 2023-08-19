@@ -9,7 +9,7 @@ from utils import global_config
 from core import notification_server
 from core import period_server
 from core.kubespider_controller import kubespider_controller
-from core.source_manager import source_provider_manager
+from core import source_manager
 
 kubespider_server = Flask(__name__)
 
@@ -74,12 +74,12 @@ def list_pt_provider_handler():
 @auth_required
 def download_handler():
     data: dict = json.loads(request.data.decode("utf-8"))
-    source = data.pop('source')
+    source = data.pop('dataSource')
     path = data.pop('path', '')
     logging.info('Get webhook trigger:%s', source)
     event = Event(source, path, **data)
 
-    err = source_provider_manager.download_with_source_provider(event)
+    err = source_manager.source_provider_manager.download_with_source_provider(event)
 
     if err is None:
         notification_server.kubespider_notification_server.send_message(
