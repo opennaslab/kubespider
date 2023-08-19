@@ -12,8 +12,9 @@ disable=
     R0902, # Too many instance attributes
     R1714, # onsider merging these comparisons with 'in'
     R0903, # Too few public methods
-    R0913, #Too many arguments
-    R0911, #Too many return statements
+    R0913, # Too many arguments
+    R0911, # Too many return statements
+    C0303, # Trailing whitespace
 
 [SIMILARITIES]
 # Minimum lines number of a similarity.
