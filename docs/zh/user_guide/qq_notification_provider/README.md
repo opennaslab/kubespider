@@ -1,8 +1,10 @@
 # [QQ(go-cqhttp)](https://github.com/Mrs4s/go-cqhttp)
 
 > 目前仅支持go-cqhttp的HTTP接口
+> 由于QQ近日对账号登陆功能的风控，不建议使用重要的QQ账号或新账号进行登陆
 
-go-cqhttp是一个自建的QQ机器人服务，其工作方式如Telegram类似，提供了消息推送接口
+go-cqhttp是一个自建的QQ机器人服务，其工作方式如Telegram类似，提供了消息推送接口，效果图
+![效果图](images/screenshot.png)
 
 ### 创建CQHTTP机器人
 

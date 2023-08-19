@@ -37,7 +37,7 @@ class QQNotificationProvider(provider.NotificationProvider):
         headers = {
             'Content-Type': 'application/json'
         }
-        if self.accessToken != "":
+        if self.access_token != "":
             headers['Authorization'] = f'Bearer {self.access_token}'
         resp = self.request_handler.post(url, json=data, timeout=5, headers=headers)
         if resp.status_code != 0:
