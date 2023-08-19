@@ -1,3 +1,5 @@
+import os
+
 from api import types
 from api.values import Resource, Event, Downloader
 from utils import helper
@@ -40,6 +42,7 @@ class SourceProviderManager:
             else:
                 links = match_provider.get_links(event)
                 for link in links:
+                    link.path = os.path.join(helper.convert_file_type_to_path(link.file_type), link.path)
                     event.put_extra_params(match_provider.get_download_param())
                     err = download_trigger.kubespider_downloader.download_file(link, Downloader(
                         match_provider.get_download_provider_type(),

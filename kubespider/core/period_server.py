@@ -1,6 +1,7 @@
 import time
 import logging
 import queue
+import os
 
 from api import types
 from api.values import Config, Downloader
@@ -61,7 +62,7 @@ class PeriodServer:
                 source.link_type = link_type
             source.put_extra_params(provider.get_download_param())
             logging.info('Find new resource:%s/%s', provider_name, helper.format_long_string(source.url))
-            source.path = helper.convert_file_type_to_path(source.file_type) + '/' + source.path
+            source.path = os.path.join(helper.convert_file_type_to_path(source.file_type), source.path)
             err = download_trigger.kubespider_downloader.download_file(source, Downloader(
                 provider.get_download_provider_type(),
                 provider.get_prefer_download_provider(),

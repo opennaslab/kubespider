@@ -24,8 +24,8 @@ class MagicSourceProvider(provider.SourceProvider):
         self.link_selector = cfg.get('link_selector')
         self.title_selector = cfg.get('title_selector')
         # optional config
-        self.link_type = cfg.get('link_type', 'magnet')
-        self.file_type = cfg.get('file_type', 'video_mixed')
+        self.link_type = cfg.get('link_type', types.LINK_TYPE_MAGNET)
+        self.file_type = cfg.get('file_type', types.FILE_TYPE_VIDEO_MIXED)
         self.charset = cfg.get('charset', 'utf-8')
         self.cookie = cfg.get('cookie', None)
         self.pre_download = bool(cfg.get('pre_download', False))
