@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 
 from source_provider import provider
 from api import types
+from api.values import Event, Resource
 from utils.config_reader import AbsConfigReader
 
 
@@ -38,8 +39,8 @@ class BilibiliSourceProvider(provider.SourceProvider):
             return downloader_names
         return [downloader_names]
 
-    def get_download_param(self) -> list:
-        return self.config_reader.read().get('download_param', [])
+    def get_download_param(self) -> dict:
+        return self.config_reader.read().get('download_param', {})
 
     def get_link_type(self) -> str:
         return self.link_type
@@ -50,17 +51,25 @@ class BilibiliSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self) -> bool:
         return self.webhook_enable
 
-    def should_handle(self, data_source_url: str) -> bool:
-        parse_url = urlparse(data_source_url)
+    def should_handle(self, event: Event) -> bool:
+        parse_url = urlparse(event.source)
         if parse_url.hostname == 'www.bilibili.com':
-            logging.info('%s belongs to BilibiliSourceProvider', data_source_url)
+            logging.info('%s belongs to BilibiliSourceProvider', event.source)
             return True
         return False
 
-    def get_links(self, data_source_url: str) -> dict:
-        return [{'path': '', 'link': data_source_url, 'file_type': types.FILE_TYPE_VIDEO_MIXED}]
+    def get_links(self, event: Event) -> list[Resource]:
+        # merge event extra and source provider download param
+        event.put_extra_params(self.get_download_param())
 
-    def update_config(self, req_para: str) -> None:
+        return [Resource(
+            url=event.source,
+            path='',
+            link_type=self.get_link_type(),
+            file_type=types.FILE_TYPE_VIDEO_MIXED,
+        )]
+
+    def update_config(self, event: Event) -> None:
         pass
 
     def load_config(self) -> None:

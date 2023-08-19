@@ -33,3 +33,71 @@ class Config(str, Enum):
 
     def config_path(self) -> str:
         return os.path.join(CFG_BASE_PATH, self)
+
+
+class Extra:
+
+    def __init__(self, **kwargs) -> None:
+        self.extra = {}.update(kwargs)
+
+    def extra_param(self, key: str, default_value=None):
+        return self.extra.get(key, default_value)
+
+    def extra_params(self) -> dict:
+        return self.extra
+
+    def put_extra_params(self, extra: dict) -> None:
+        if extra is None:
+            return
+        self.extra.update(extra)
+
+
+class Event(Extra):
+    """
+    Download event, used to notify kubespider to download the resource
+    """
+
+    def __init__(self, source: str, path: str = None, **kwargs):
+        super().__init__(**kwargs)
+        self.source = source
+        self.path = path
+
+
+class Downloader(Extra):
+    """
+    Downloader, used to bind downloader to source provider
+    """
+
+    def __init__(self, download_provider_type: str = None, download_provider_names: list[str] = None, **kwargs):
+        super().__init__(**kwargs)
+        self.download_provider_type = download_provider_type
+        self.download_provider_names = download_provider_names
+
+
+class Resource(Extra):
+    """
+    Resource, used to describe the resource to be downloaded, result of the source provider
+    """
+
+    def __init__(self, url: str, path: str,
+                 link_type: str = None, file_type: str = None, uid: str = None,
+                 **kwargs):
+        super().__init__(**kwargs)
+        self.url = url
+        self.path = path
+        self.link_type = link_type
+        self.file_type = file_type
+        self.uid = uid if uid is not None else url
+
+
+class Task(Extra):
+    """
+    Task, used to describe the task to be downloaded, input of the download provider
+    """
+
+    def __init__(self, url: str, path: str, link_type: str = None, **kwargs) -> None:
+        super().__init__(**kwargs)
+        self.url = url
+        self.path = path
+        self.link_type = link_type
+        self.uid = None

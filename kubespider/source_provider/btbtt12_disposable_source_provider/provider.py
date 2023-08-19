@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 
 from source_provider import provider
 from api import types
+from api.values import Resource, Event
 from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
 
@@ -41,8 +42,8 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
             return downloader_names
         return [downloader_names]
 
-    def get_download_param(self) -> list:
-        return self.config_reader.read().get('download_param')
+    def get_download_param(self) -> dict:
+        return self.config_reader.read().get('download_param', {})
 
     def get_link_type(self) -> str:
         return self.link_type
@@ -53,26 +54,30 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self) -> bool:
         return self.webhook_enable
 
-    def should_handle(self, data_source_url: str) -> bool:
-        parse_url = urlparse(data_source_url)
+    def should_handle(self, event: Event) -> bool:
+        parse_url = urlparse(event.source)
         if parse_url.hostname == 'www.btbtt12.com' and 'attach-dialog-fid' in parse_url.path:
-            logging.info('%s belongs to Btbtt12DisposableSourceProvider', data_source_url)
+            logging.info('%s belongs to Btbtt12DisposableSourceProvider', event.source)
             return True
         return False
 
-    def get_links(self, data_source_url: str) -> dict:
-        parse_url = urlparse(data_source_url)
+    def get_links(self, event: Event) -> list[Resource]:
+        parse_url = urlparse(event.source)
         rep_path = str.split(parse_url.path, '-')
         rep_path[1] = 'download'
         rep_path = '-'.join(rep_path)
         ret = parse_url.scheme + '://' + parse_url.netloc + rep_path
-        logging.info('btbtt12_disposable_source_provider parse %s as %s', data_source_url, ret)
-        file_type, title = self.get_file_type_and_title(data_source_url)
+        logging.info('btbtt12_disposable_source_provider parse %s as %s', event.source, ret)
+        file_type, title = self.get_file_type_and_title(event.source)
         if file_type == "" or title == "":
             return []
-        return [{'path': title, 'link': ret, 'file_type': file_type}]
+        return [Resource(
+            url=ret,
+            path=title,
+            file_type=file_type,
+        )]
 
-    def update_config(self, req_para: str) -> None:
+    def update_config(self, event: Event) -> None:
         pass
 
     def load_config(self) -> None:
@@ -98,7 +103,7 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
         title = titles[0].text.strip().replace('.torrent', '')
 
         if ahrefs[0].text.strip() == '剧集' or \
-            ahrefs[0].text.strip() == '高清剧集' or \
+                ahrefs[0].text.strip() == '高清剧集' or \
                 ahrefs[0].text.strip() == '动漫':
             return types.FILE_TYPE_VIDEO_TV, title
 

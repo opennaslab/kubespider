@@ -11,12 +11,16 @@ import re
 import logging
 import feedparser
 from api import types
+from api.values import Event, Resource
 from source_provider import provider
 from utils.config_reader import AbsConfigReader
+
+
 class GeneralRssSourceProvider(provider.SourceProvider):
     """
     Description: general rss source provider
     """
+
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         """
         Description: init class of GeneralRssSourceProvider
@@ -49,13 +53,13 @@ class GeneralRssSourceProvider(provider.SourceProvider):
     def get_link_type(self) -> str:
         return self.link_type
 
-    def get_download_param(self) -> None:
-        return self.config_reader.read().get('download_param')
+    def get_download_param(self) -> dict:
+        return self.config_reader.read().get('download_param', {})
 
-    def get_download_provider_type(self) -> None:
+    def get_download_provider_type(self) -> str:
         pass
 
-    def get_prefer_download_provider(self) -> None:
+    def get_prefer_download_provider(self) -> list:
         downloader_names = self.config_reader.read().get('downloader', None)
         if downloader_names is None:
             return None
@@ -72,7 +76,7 @@ class GeneralRssSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self) -> bool:
         return self.webhook_enable
 
-    def should_handle(self, data_source_url: str) -> None:
+    def should_handle(self, event: Event) -> bool:
         pass
 
     def get_rss_link(self) -> str:
@@ -81,13 +85,14 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         """
         return self.rss_link
 
-    def get_links(self, data_source_url: str) -> list:
+    def get_links(self, event: Event) -> list[Resource]:
         """
         Description: get rss resource link for download
         Args:
-            dataSourceUrl:
-        Returns:
+            event: download event
+        Returns: resource list
         """
+
         links = []
         rss_oschina = feedparser.parse(self.rss_link)
         if not rss_oschina.get('entries'):
@@ -108,15 +113,16 @@ class GeneralRssSourceProvider(provider.SourceProvider):
                     link_type = types.LINK_TYPE_MAGNET
                 elif url.endswith("torrent"):
                     link_type = types.LINK_TYPE_TORRENT
-                links.append({
-                    "link": url,
-                    "file_type": self.file_type,
-                    "path": path,
-                    "link_type": link_type
-                })
+
+                links.append(Resource(
+                    url=url,
+                    file_type=self.file_type,
+                    path=path,
+                    link_type=link_type,
+                ))
         return links
 
-    def get_link_download_path(self, title)->str:
+    def get_link_download_path(self, title) -> str:
         """
         get resource download path from the title
         default: rss_name
@@ -126,14 +132,14 @@ class GeneralRssSourceProvider(provider.SourceProvider):
             paths = []
             if len(titles) > 0:
                 if isinstance(titles[0], (list, tuple)):
-                    paths = list(titles[0]) # force tuple to list
+                    paths = list(titles[0])  # force tuple to list
                 else:
                     paths.append(titles[0])
                 # TODO: "/" to "\/" ?
                 return r"/".join(paths)
         return self.rss_name
 
-    def update_config(self, req_para: str) -> None:
+    def update_config(self, event: Event) -> None:
         pass
 
     def load_config(self) -> None:

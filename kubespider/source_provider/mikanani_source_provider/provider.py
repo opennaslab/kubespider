@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 
 from source_provider import provider
 from api import types
+from api.values import Event, Resource
 from utils import helper
 from utils.config_reader import AbsConfigReader
 
@@ -45,8 +46,8 @@ class MikananiSourceProvider(provider.SourceProvider):
             return downloader_names
         return [downloader_names]
 
-    def get_download_param(self) -> list:
-        return self.config_reader.read().get('download_param')
+    def get_download_param(self) -> dict:
+        return self.config_reader.read().get('download_param', {})
 
     def get_link_type(self) -> str:
         return self.link_type
@@ -57,10 +58,10 @@ class MikananiSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self) -> bool:
         return self.webhook_enable
 
-    def should_handle(self, data_source_url: str) -> bool:
+    def should_handle(self, event: Event) -> bool:
         return False
 
-    def get_links(self, data_source_url: str) -> list:
+    def get_links(self, event: Event) -> list[Resource]:
         try:
             req = helper.get_request_controller()
             links_data = req.get(self.rss_link, timeout=30).content
@@ -74,7 +75,7 @@ class MikananiSourceProvider(provider.SourceProvider):
         pattern = self.load_filter_config()
         return self.get_links_from_xml(tmp_xml, pattern)
 
-    def get_links_from_xml(self, tmp_xml, pattern: str) -> list:
+    def get_links_from_xml(self, tmp_xml, pattern: str) -> list[Resource]:
         if pattern is not None:
             reg = re.compile(pattern)
         else:
@@ -90,7 +91,12 @@ class MikananiSourceProvider(provider.SourceProvider):
                 logging.info('mikanani find %s', helper.format_long_string(anime_name))
                 url = i.find('./enclosure').attrib['url']
                 if path is not None and item_title is not None:
-                    ret.append({'path': path, 'link': url, 'file_type': types.FILE_TYPE_VIDEO_TV})
+                    ret.append(Resource(
+                        url=url,
+                        path=path,
+                        file_type=types.FILE_TYPE_VIDEO_TV,
+                        link_type=self.get_link_type(),
+                    ))
                 else:
                     logging.warning("Skip %s, %s", anime_name, item_title)
             return ret
@@ -117,7 +123,7 @@ class MikananiSourceProvider(provider.SourceProvider):
         logging.warning("Episode %s will not be downloaded, filtered by %s", title, pattern)
         return None
 
-    def update_config(self, req_para: str) -> None:
+    def update_config(self, event: Event) -> None:
         pass
 
     def load_config(self) -> None:

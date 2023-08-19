@@ -4,13 +4,13 @@ import time
 from utils import helper, global_config
 from utils.helper import retry
 from api import types
-import download_provider.provider as dp
-import source_provider.provider as sp
+from api.values import Resource, Task, Downloader
+from download_provider.provider import DownloadProvider
 
 
 class KubespiderDownloader:
-    def __init__(self, download_providers: list[dp.DownloadProvider]):
-        self.download_providers: list[dp.DownloadProvider] = download_providers
+    def __init__(self, download_providers: list[DownloadProvider]):
+        self.download_providers: list[DownloadProvider] = download_providers
 
     def period_run(self):
         while True:
@@ -18,14 +18,14 @@ class KubespiderDownloader:
             # Therefore, specifying a time here would be futile.
             time.sleep(180)
             if global_config.auto_change_download_provider():
-                self.handle_defective_downloade()
+                self.handle_defective_download()
 
-    def handle_defective_downloade(self):
+    def handle_defective_download(self):
         provider_len = len(self.download_providers)
         if provider_len <= 1:
             return
 
-        # Start from the last one, the task in laster downloder will never be removed
+        # Start from the last one, the task in latest downloader will never be removed
         for index in range(provider_len - 2, -1, -1):
             # load config
             provider_now = self.download_providers[index]
@@ -42,119 +42,146 @@ class KubespiderDownloader:
             tasks = provider_now.get_defective_task()
             logging.info("Find defective tasks:%d/%s", len(tasks), provider_now.get_provider_name())
             for task in tasks:
-                self.download_file(task['url'], task['path'], task['linkType'],
-                                   download_provoder=provider_next)
+                self.download_file(Resource(
+                    url=task.url,
+                    path=task.path,
+                    link_type=task.link_type,
+                ), Downloader(
+                    provider_next.get_provider_type(),
+                    [provider_next.get_provider_name()],
+                ))
 
-    def filter_downloader_by_source(self, source_provider: sp.SourceProvider = None) -> list:
-        if source_provider is None:
-            return self.download_providers
-        name_list = source_provider.get_prefer_download_provider()
-        provider_type = source_provider.get_download_provider_type()
-        if name_list is not None:
-            provider = list(filter(lambda p: p.get_provider_name() in name_list, self.download_providers))
+    def filter_downloader_by_name(self, names: list[str], download_providers: list = None) -> list[DownloadProvider]:
+        download_providers = download_providers or self.download_providers
+        return list(filter(lambda p: p.get_provider_name() in names, download_providers))
+
+    def filter_downloader_by_type(self, provider_type: str, download_providers: list = None) -> list[DownloadProvider]:
+        download_providers = download_providers or self.download_providers
+        return list(filter(lambda p: p.get_provider_type() == provider_type, download_providers))
+
+    def filter_bind_downloader(self, bind_downloader: Downloader) -> list[DownloadProvider]:
+        download_providers = self.download_providers
+        if bind_downloader is None:
+            return download_providers
+        download_provider_type = bind_downloader.download_provider_type
+        download_provider_names = bind_downloader.download_provider_names
+        logging.info('filter downloader type:%s, names:%s', download_provider_type, download_provider_names)
+        if download_provider_type is not None:
+            # Filter by provider type
+            download_providers = self.filter_downloader_by_type(download_provider_type)
+        if download_provider_names is not None:
+            # Filter by provider name
+            download_providers = self.filter_downloader_by_name(download_provider_names, download_providers)
+        return download_providers
+
+    def download_file(self, resource: Resource, downloader: Downloader = None) -> TypeError:
+
+        if downloader is not None:
+            # If downloader is specified, only use this downloader
+            downloader_list = self.filter_bind_downloader(downloader)
         else:
-            provider = self.download_providers
-        if provider_type is not None:
-            provider = list(filter(lambda p: p.get_provider_type() == provider_type, provider))
-        name = list(map(lambda p: p.get_provider_name(), provider))
-        logging.info('filtering downloader by name %s type %s, result %s', str(name_list), str(provider_type),
-                     str(name))
-        return provider
+            downloader_list = self.download_providers
 
-    def filter_downloader_by_name(self, name: str) -> dp.DownloadProvider:
-        provider = list(filter(lambda p: p.get_provider_name() == name, self.download_providers))
-        if len(provider) == 0:
-            logging.warning('Downloader %s not found', name)
-            return None
-        return provider[0]
-
-    def download_file(self, url, path, link_type, \
-                      source_provider: sp.SourceProvider = None, \
-                      download_provoder: dp.DownloadProvider = None) -> TypeError:
-        downloader_list = []
-        if download_provoder is not None:
-            downloader_list = [download_provoder]
-        else:
-            downloader_list = self.filter_downloader_by_source(source_provider)
-        extra_param = None
-        if source_provider is not None:
-            extra_param = source_provider.get_download_param()
+        link_type = resource.link_type
 
         logging.info('download link type %s, with provider size %s', link_type, len(downloader_list))
         if len(downloader_list) == 0:
-            logging.error('Downloader for %s not found, check your configuration!!!',
-                          source_provider.get_provider_name())
+            logging.error('Downloader not found, check your configuration!!!')
+            return TypeError('Downloader not found, check your configuration!!!')
+
         if link_type == types.LINK_TYPE_TORRENT:
-            return self.handle_torrent_download(url, path, downloader_list, extra_param)
+            return self.handle_torrent_download(resource, downloader_list)
 
         if link_type == types.LINK_TYPE_MAGNET:
-            return self.handle_magnet_download(url, path, downloader_list, extra_param)
+            return self.handle_magnet_download(resource, downloader_list)
 
         if link_type == types.LINK_TYPE_GENERAL:
-            return self.handle_general_download(url, path, downloader_list, extra_param)
+            return self.handle_general_download(resource, downloader_list)
 
         logging.warning("Unknown link type:%s", link_type)
 
         return None
 
     @retry(delay=0.3)
-    def handle_torrent_download(self, url: str, path: str, downloader_list: list, extra_param=None) -> TypeError:
-        tmp_file = None
-
-        if url.startswith('http'):
-            tmp_file = helper.get_tmp_file_name(url)
-            req = helper.get_request_controller()
-            try:
-                torrent_data = req.get(url, timeout=10).content
-            except Exception as err:
-                logging.info('Download torrent error:%s', err)
-                return err
-            with open(tmp_file, 'wb') as torrent_file:
-                torrent_file.write(torrent_data)
+    def handle_torrent_download(self, resource: Resource, downloader_list: list[DownloadProvider]) -> TypeError:
+        if resource.url.startswith('http'):
+            # download torrent file
+            req = helper.get_request_controller(resource.extra_param('cookies'))
+            tmp_file = helper.download_torrent_file(resource.url, req)
         else:
-            tmp_file = url
+            tmp_file = resource.url
+
+        if tmp_file is None:
+            return TypeError('Download torrent file failed')
 
         err = None
         for provider in downloader_list:
             logging.info('Download torrent file with downloader(%s)', provider.get_provider_name())
             provider.load_config()
-            err = provider.send_torrent_task(tmp_file, path, extra_param)
+            err = provider.send_torrent_task(Task(
+                url=tmp_file,
+                path=resource.path,
+                link_type=types.LINK_TYPE_TORRENT,
+                **resource.extra_params()
+            ))
             if err is not None:
                 logging.warning('Download torrent file error:%s', err)
                 continue
+            # use the first successful downloader
             break
         return err
 
     @retry(delay=0.3)
-    def handle_magnet_download(self, url, path, downloader_list=None, extra_param=None) -> TypeError:
+    def handle_magnet_download(self, resource: Resource, downloader_list: list[DownloadProvider]) -> TypeError:
         err = None
         for provider in downloader_list:
-            logging.info('Download mangent file with downloader(%s)', provider.get_provider_name())
+            logging.info('Download magent file with downloader(%s)', provider.get_provider_name())
             provider.load_config()
-            err = provider.send_magnet_task(url, path, extra_param)
+            err = provider.send_magnet_task(Task(
+                url=resource.url,
+                path=resource.path,
+                link_type=types.LINK_TYPE_MAGNET,
+                **resource.extra_params()
+            ))
             if err is not None:
                 logging.warning('Download torrent file error:%s', err)
                 continue
+            # use the first successful downloader
             break
         return err
 
     @retry(delay=0.3)
-    def handle_general_download(self, url, path, downloader_list=None, extra_param=None) -> TypeError:
+    def handle_general_download(self, resource: Resource, downloader_list: list[DownloadProvider]) -> TypeError:
         err = None
         for provider in downloader_list:
             logging.info('Download general file with downloader(%s)', provider.get_provider_name())
             provider.load_config()
-            err = provider.send_general_task(url, path, extra_param)
+            err = provider.send_general_task(Task(
+                url=resource.url,
+                path=resource.path,
+                link_type=types.LINK_TYPE_GENERAL,
+                **resource.extra_params()
+            ))
             if err is not None:
                 logging.warning('Download torrent file error:%s', err)
                 continue
+            # use the first successful downloader
             break
         return err
 
-    def handle_download_remove(self, downloader_list=None, extra_param=None):
+    def handle_download_remove(self, downloader: Downloader):
+        downloader_list = None
+
+        if downloader is not None:
+            downloader_list = self.filter_bind_downloader(downloader)
+
+        # If downloader_list is None, do nothing
+        if downloader_list is None or len(downloader_list) == 0:
+            return
+
         for provider in downloader_list:
             provider.load_config()
-            provider.remove_tasks(extra_param)
+            provider.remove_tasks([])
 
 
-kubespider_downloader = KubespiderDownloader(None)
+kubespider_downloader: KubespiderDownloader = KubespiderDownloader(None)

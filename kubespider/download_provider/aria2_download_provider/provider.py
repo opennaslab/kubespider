@@ -4,11 +4,12 @@ import os
 import aria2p
 
 from utils.config_reader import AbsConfigReader
-from download_provider import provider
+from download_provider.provider import DownloadProvider
 from api import types
+from api.values import Task
 
 
-class Aria2DownloadProvider(provider.DownloadProvider):
+class Aria2DownloadProvider(DownloadProvider):
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(name, config_reader)
         self.provider_name = name
@@ -16,11 +17,8 @@ class Aria2DownloadProvider(provider.DownloadProvider):
         self.rpc_endpoint_host = ''
         self.rpc_endpoint_port = 0
         self.download_base_path = ''
-        self.aria2 = None
+        self.aria2: aria2p.API = None
         self.secret = ''
-
-    def get_provider_name(self) -> str:
-        return self.provider_name
 
     def get_provider_type(self) -> str:
         return self.provider_type
@@ -31,7 +29,7 @@ class Aria2DownloadProvider(provider.DownloadProvider):
     def provide_priority(self) -> int:
         return self.config_reader.read()['priority']
 
-    def get_defective_task(self) -> dict:
+    def get_defective_task(self) -> list[Task]:
         defective_tasks = []
         downloads = self.aria2.get_downloads()
         for single_download in downloads:
@@ -40,62 +38,64 @@ class Aria2DownloadProvider(provider.DownloadProvider):
                 continue
             # in general, we only return the bt pending tasks
             if single_download.progress <= 0.0 and single_download.is_torrent:
-                file_type = types.LINK_TYPE_MAGNET
-                url = 'magnet:?xt=urn:btih:'+single_download.info_hash
-
                 # now remove the tasks
                 self.aria2.remove([single_download], force=True)
-
-                pending_task = {
-                    'path': str(single_download.dir).removeprefix(self.download_base_path),
-                    'url': url,
-                    'linkType': file_type
-                }
+                pending_task = Task(
+                    url='magnet:?xt=urn:btih:' + single_download.info_hash,
+                    file_type=types.LINK_TYPE_MAGNET,
+                    path=str(single_download.dir).removeprefix(self.download_base_path)
+                )
                 defective_tasks.append(pending_task)
 
         return defective_tasks
 
-    def send_torrent_task(self, torrent_file_path: str, download_path: str, extra_param=None) -> TypeError:
-        logging.info('Start torrent download:%s', torrent_file_path)
-        download_path = os.path.join(self.download_base_path, download_path)
+    def send_torrent_task(self, task: Task) -> TypeError:
+        logging.info('Start torrent download:%s', task.url)
+        download_path = os.path.join(self.download_base_path, task.path)
         try:
-            ret = self.aria2.add_torrent(torrent_file_path, options={'dir': download_path})
+            ret = self.aria2.add_torrent(task.url, options={'dir': download_path})
             logging.info('Create download task result:%s', ret)
+            task.task_id = ret.gid
             return None
         except Exception as err:
             logging.warning('Please ensure your aria2 server is ok:%s', err)
             return err
         return None
 
-    def send_magnet_task(self, url: str, path: str, extra_param=None) -> TypeError:
-        logging.info('Start magnet download:%s', url)
-        download_path = os.path.join(self.download_base_path, path)
+    def send_magnet_task(self, task: Task) -> TypeError:
+        logging.info('Start magnet download:%s', task.url)
+        download_path = os.path.join(self.download_base_path, task.path)
         try:
-            ret = self.aria2.add_magnet(url, options={'dir': download_path})
+            ret = self.aria2.add_magnet(task.url, options={'dir': download_path})
             logging.info('Create download task result:%s', ret)
+            task.task_id = ret.gid
             return None
         except Exception as err:
             logging.warning('Please ensure your aria2 server is ok:%s', err)
             return err
 
-    def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
-        logging.info('Start general file download:%s', url)
+    def send_general_task(self, task: Task) -> TypeError:
+        logging.info('Start general file download:%s', task.url)
 
-        if not url.startswith('http'):
-            return TypeError("Aria2 do not support:"+url)
+        if not task.url.startswith('http'):
+            return TypeError("Aria2 do not support:" + task.url)
 
-        download_path = os.path.join(self.download_base_path, path)
+        download_path = os.path.join(self.download_base_path, task.path)
         try:
-            ret = self.aria2.add(url, options={'dir': download_path})
+            ret = self.aria2.add(task.url, options={'dir': download_path})
+            task.task_id = ret[0].gid
             logging.info('Create download task result:%s', ret)
             return None
         except Exception as err:
             logging.warning('Please ensure your aria2-type download server is ok:%s', err)
             return err
 
-    def remove_tasks(self, para=None):
-        # TODO: Implement it
-        pass
+    def remove_tasks(self, tasks: list[Task]):
+        try:
+            downloads = self.aria2.get_downloads()
+            self.aria2.remove(downloads, force=True)
+        except Exception as err:
+            logging.warning('Aria2 remove tasks error:%s', err)
 
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()

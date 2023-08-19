@@ -9,8 +9,8 @@ import libtorrent as lb
 
 from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
-
 from download_provider import provider
+from api.values import Task
 
 
 class XunleiDownloadProvider(provider.DownloadProvider):
@@ -23,9 +23,6 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         self.js_ctx = execjs.compile('')
         self.request_handler = get_request_controller(use_proxy=False)
 
-    def get_provider_name(self) -> str:
-        return self.provider_name
-
     def get_provider_type(self) -> str:
         return self.provider_type
 
@@ -35,36 +32,36 @@ class XunleiDownloadProvider(provider.DownloadProvider):
     def provide_priority(self) -> int:
         return self.config_reader.read()['priority']
 
-    def get_defective_task(self) -> dict:
+    def get_defective_task(self) -> list[Task]:
         # if xunlei doesn't work, it means other tools couldn't, so just ignore it.
         return []
 
-    def send_torrent_task(self, torrent_file_path: str, download_path: str, extra_param=None) -> TypeError:
-        logging.info('Start torrent download:%s', torrent_file_path)
+    def send_torrent_task(self, task: Task) -> TypeError:
+        logging.info('Start torrent download:%s', task.url)
         token = self.get_pan_token()
         if token == "":
             return None
-        magnet_url = self.convert_torrent_to_magnet(torrent_file_path)
+        magnet_url = self.convert_torrent_to_magnet(task.path)
         file_info = self.list_files(token, magnet_url)
-        return self.send_task(token, file_info, magnet_url, download_path)
+        return self.send_task(token, file_info, magnet_url, task.path)
 
-    def send_magnet_task(self, url: str, path: str, extra_param=None) -> TypeError:
-        logging.info('Start magnet download:%s', url)
+    def send_magnet_task(self, task: Task) -> TypeError:
+        logging.info('Start magnet download:%s', task.url)
         token = self.get_pan_token()
         if token == "":
             return None
-        file_info = self.list_files(token, url)
-        return self.send_task(token, file_info, url, path)
+        file_info = self.list_files(token, task.url)
+        return self.send_task(token, file_info, task.url, task.path)
 
-    def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
-        logging.info('Start general file download:%s', url)
+    def send_general_task(self, task: Task) -> TypeError:
+        logging.info('Start general file download:%s', task.url)
         token = self.get_pan_token()
         if token == "":
             return None
-        file_info = self.list_files(token, url)
-        return self.send_task(token, file_info, url, path)
+        file_info = self.list_files(token, task.url)
+        return self.send_task(token, file_info, task.url, task.path)
 
-    def remove_tasks(self, para=None):
+    def remove_tasks(self, tasks: list[Task]):
         # TODO: Implement it
         pass
 

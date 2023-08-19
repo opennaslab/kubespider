@@ -6,6 +6,7 @@ from lxml import etree
 
 from source_provider import provider
 from api import types
+from api.values import Event, Resource
 from utils import helper
 from utils.config_reader import AbsConfigReader
 
@@ -49,7 +50,7 @@ class MagicSourceProvider(provider.SourceProvider):
             return downloader_names
         return [downloader_names]
 
-    def get_download_param(self) -> list:
+    def get_download_param(self) -> dict:
         return self.config_reader.read().get('download_param')
 
     def get_link_type(self) -> str:
@@ -61,17 +62,18 @@ class MagicSourceProvider(provider.SourceProvider):
     def is_webhook_enable(self) -> bool:
         return True
 
-    def should_handle(self, data_source_url: str) -> bool:
+    def should_handle(self, event: Event) -> bool:
+        data_source_url = event.source
         if urlparse(data_source_url).hostname in self.handle_host:
             logging.info('%s belongs to %s', data_source_url, self.provider_name)
             return True
         return False
 
-    def get_links(self, data_source_url: str) -> dict:
+    def get_links(self, event: Event) -> list[Resource]:
         ret = []
         try:
-            controller = helper.get_request_controller(self.cookie)
-            resp = controller.get(data_source_url, timeout=30).content
+            controller = helper.get_request_controller(event.extra_param('cookie', self.cookie))
+            resp = controller.get(event.source, timeout=30).content
         except Exception as err:
             logging.warning('MagicSourceProvider get links error:%s', err)
             return ret
@@ -82,7 +84,7 @@ class MagicSourceProvider(provider.SourceProvider):
         links = []
         # $URL is a builtin value, used to represent the original url
         if '$URL' == self.link_selector:
-            links = [data_source_url]
+            links = [event.source]
         else:
             # Some website's link is not always at the same place.
             # So if not, you can define multiple selectors
@@ -92,14 +94,15 @@ class MagicSourceProvider(provider.SourceProvider):
             else:
                 links = [i.strip() for i in dom.xpath(self.link_selector)]
 
-        links = self.filter_links(data_source_url, links)
+        links = self.filter_links(event, links)
 
         if self.link_type == types.LINK_TYPE_TORRENT:
-            links = self.pre_download_file(links)
+            links = self.pre_download_file(event, links)
 
         if len(links) < 1:
-            logging.info("MagicSourceProvider get no links for %s", data_source_url)
+            logging.info("MagicSourceProvider get no links for %s", event.source)
             return ret
+
         titles = dom.xpath(self.title_selector)
         if len(titles) < 1:
             path = ''
@@ -108,19 +111,23 @@ class MagicSourceProvider(provider.SourceProvider):
 
         for link in links:
             logging.info('MagicSourceProvider find %s', helper.format_long_string(link))
-            ret.append({'path': path, 'link': link, 'file_type': self.file_type})
-
+            ret.append(Resource(
+                url=link,
+                path=path,
+                file_type=self.file_type,
+                link_type=self.link_type,
+            ))
         return ret
 
-    def update_config(self, req_para: str) -> None:
+    def update_config(self, event: Event) -> None:
         pass
 
     def load_config(self) -> None:
         pass
 
-    def pre_download_file(self, links: list) -> list:
+    def pre_download_file(self, event: Event, links: list) -> list:
         ret = []
-        controller = helper.get_request_controller(self.cookie)
+        controller = helper.get_request_controller(event.extra_param('cookie', self.cookie))
         for link in links:
             file = helper.download_torrent_file(link, controller)
             if file is not None:
@@ -128,21 +135,20 @@ class MagicSourceProvider(provider.SourceProvider):
 
         return ret
 
-    def filter_links(self, data_source_url: str, links: list) -> list:
+    def filter_links(self, event: Event, links: list) -> list:
         ret = []
-
-        controller = helper.get_request_controller(self.cookie)
+        controller = helper.get_request_controller(event.extra_param('cookie', self.cookie))
         for link in links:
-            #For this situation(the href is "text.torrent"), we need to construct the link
+            # For this situation(the href is "text.torrent"), we need to construct the link
             link_current = link
-            if not link.startswith('magnet:') and \
-                not link.startswith('http'):
-                url_data = urlparse(data_source_url)
+            if not link.startswith('magnet:') and not link.startswith('http'):
+                url_data = urlparse(event.source)
                 link_current = os.path.join(url_data.scheme + "://" + url_data.netloc, link_current)
 
             link_type = helper.get_link_type(link_current, controller)
             if link_type != self.link_type:
-                logging.info('MagicSourceProvider skip %s, the link type does not match', helper.format_long_string(link_current))
+                logging.info('MagicSourceProvider skip %s, the link type does not match',
+                             helper.format_long_string(link_current))
                 continue
             ret.append(link_current)
 

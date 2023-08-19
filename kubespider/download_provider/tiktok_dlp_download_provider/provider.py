@@ -3,8 +3,8 @@ import json
 
 from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
-
 from download_provider import provider
+from api.values import Task
 
 
 class TiktokDownloadProvider(provider.DownloadProvider):
@@ -17,9 +17,6 @@ class TiktokDownloadProvider(provider.DownloadProvider):
         self.cookie = ''
         self.reqeust_handler = get_request_controller(use_proxy=False)
 
-    def get_provider_name(self) -> str:
-        return self.provider_name
-
     def get_provider_type(self) -> str:
         return self.provider_type
 
@@ -29,19 +26,19 @@ class TiktokDownloadProvider(provider.DownloadProvider):
     def provide_priority(self) -> int:
         return self.config_reader.read()['priority']
 
-    def get_defective_task(self) -> dict:
+    def get_defective_task(self) -> list[Task]:
         # These tasks are special, other download software could not handle
-        return {}
+        return []
 
-    def send_torrent_task(self, torrent_file_path: str, download_path: str, extra_param=None) -> TypeError:
+    def send_torrent_task(self, task: Task) -> TypeError:
         return TypeError("tiktok doesn't support torrent task")
 
-    def send_magnet_task(self, url: str, path: str, extra_param=None) -> TypeError:
+    def send_magnet_task(self, task: Task) -> TypeError:
         return TypeError("tiktok doesn't support magnet task")
 
-    def send_general_task(self, url: str, path: str, extra_param=None) -> TypeError:
+    def send_general_task(self, task: Task) -> TypeError:
         headers = {'Content-Type': 'application/json'}
-        data = {'dataSource': url, 'path': path, 'cookie': self.cookie}
+        data = {'dataSource': task.url, 'path': task.path, 'cookie': self.cookie}
         logging.info('Send general task:%s', json.dumps(data))
         try:
             path = self.http_endpoint_host + ":" + str(self.http_endpoint_port) + '/api/v1/download'
@@ -54,7 +51,7 @@ class TiktokDownloadProvider(provider.DownloadProvider):
 
         return None
 
-    def remove_tasks(self, para=None):
+    def remove_tasks(self, tasks: list[Task]):
         pass
 
     def load_config(self) -> TypeError:
