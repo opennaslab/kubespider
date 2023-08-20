@@ -72,7 +72,7 @@ class MagicSourceProvider(provider.SourceProvider):
     def get_links(self, event: Event) -> list[Resource]:
         ret = []
         try:
-            controller = helper.get_request_controller(event.extra_param('cookie', self.cookie))
+            controller = helper.get_request_controller(event.extra_param('cookies', self.cookie))
             resp = controller.get(event.source, timeout=30).content
         except Exception as err:
             logging.warning('MagicSourceProvider get links error:%s', err)
@@ -127,7 +127,7 @@ class MagicSourceProvider(provider.SourceProvider):
 
     def pre_download_file(self, event: Event, links: list) -> list:
         ret = []
-        controller = helper.get_request_controller(event.extra_param('cookie', self.cookie))
+        controller = helper.get_request_controller(event.extra_param('cookies', self.cookie))
         for link in links:
             file = helper.download_torrent_file(link, controller)
             if file is not None:
@@ -137,7 +137,7 @@ class MagicSourceProvider(provider.SourceProvider):
 
     def filter_links(self, event: Event, links: list) -> list:
         ret = []
-        controller = helper.get_request_controller(event.extra_param('cookie', self.cookie))
+        controller = helper.get_request_controller(event.extra_param('cookies', self.cookie))
         for link in links:
             # For this situation(the href is "text.torrent"), we need to construct the link
             link_current = link

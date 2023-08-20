@@ -4,7 +4,7 @@ from api import types
 from api.values import Resource, Event, Downloader
 from utils import helper
 from source_provider.provider import SourceProvider
-from core.period_server import kubespider_period_server
+from core import period_server
 from core import download_trigger
 
 
@@ -38,7 +38,7 @@ class SourceProviderManager:
         else:
             if match_provider.get_provider_listen_type() == types.SOURCE_PROVIDER_PERIOD_TYPE:
                 match_provider.update_config(event)
-                err = kubespider_period_server.run_single_provider(match_provider)
+                err = period_server.kubespider_period_server.run_single_provider(match_provider)
             else:
                 links = match_provider.get_links(event)
                 if links is None or len(links) == 0:
