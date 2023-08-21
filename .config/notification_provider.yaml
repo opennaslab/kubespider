@@ -12,3 +12,9 @@ telegram:
   bot_token: your bot token
   channel_name: your channel name
   channel_chat_id:
+qq:
+  type: qq_notification_provider
+  enable: false
+  host: http://127.0.0.1:5700
+  accessToken: 
+  target_qq: 12345678
