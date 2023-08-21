@@ -149,6 +149,7 @@ In order to make full use of the existing notification software in the open-sour
 | :-------------------- | ------: | ------------: |
 |      Pushdeer         |   Yes   | [link](./docs/zh/user_guide/pushdeer_notification_provider/README.md) |
 |      Telegram         |   Yes   | [link](./docs/zh/user_guide/telegram_notification_provider/README.md) |
+|      QQ               |   Yes   | [link](./docs/zh/user_guide/qq_notification_provider/README.md) |
 
 ### Basic feature  
 Currently, the following file types are supported to trigger downloading:
