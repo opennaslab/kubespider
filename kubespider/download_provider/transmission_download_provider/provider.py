@@ -68,7 +68,8 @@ class TransmissionProvider(DownloadProvider):
         try:
             torrents = self.client.get_torrents()
             task_ids = list(map(lambda torrent: torrent.id, torrents))
-            self.client.remove_torrent(ids=task_ids, delete_data=True)
+            if len(torrents) > 0:
+                self.client.remove_torrent(ids=task_ids, delete_data=True)
         except Exception as err:
             logging.error('Transmission remove all tasks err:%s', err)
 

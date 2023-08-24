@@ -50,9 +50,9 @@ class NexuPHPPTProvider(provider.PTProvider):
                 if len(links) > 0:
                     return links
                 logging.info("Find no links, wait 5min and try again")
+                time.sleep(300)
             except Exception as err:
                 logging.info("Query links error:%s", err)
-            finally:
                 time.sleep(300)
 
     def go_attendance(self) -> None:
