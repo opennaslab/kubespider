@@ -153,6 +153,7 @@ Kubespider结合chrome插件，能获得更好的体验。
 | Pushdeer  |   是    | [link](./docs/zh/user_guide/pushdeer_notification_provider/README.md) |
 | Telegram  |   是    | [link](./docs/zh/user_guide/telegram_notification_provider/README.md) |
 | QQ        |   是    | [link](./docs/zh/user_guide/qq_notification_provider/README.md) |
+| Bark      |   是    | [link](./docs/zh/user_guide/bark_notification_provider/README.md) |
 
 ### 基本特性
 目前支持如下文件触发下载：
