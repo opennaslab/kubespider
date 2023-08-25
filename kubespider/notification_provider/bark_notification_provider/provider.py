@@ -42,7 +42,6 @@ class BarkNotificationProvider(provider.NotificationProvider):
             return False
         return True
 
-
     def format_message(self, title, **kwargs) -> str:
         message = []
         for key, value in kwargs.items():
