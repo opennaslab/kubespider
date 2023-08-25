@@ -16,13 +16,13 @@ class BarkNotificationProvider(provider.NotificationProvider):
     def _init_conf(config_reader: AbsConfigReader):
         conf = config_reader.read()
         return conf.get("enable", True), conf.get("host"), conf.get("device_token")
-    
+
     def get_provider_name(self) -> str:
         return self.name
-    
+
     def provider_enabled(self) -> bool:
         return self.enable
-    
+
     def push(self, title, **kwargs) -> bool:
         message = self.format_message(title, **kwargs)
         url = urljoin(self.host, "/push")
