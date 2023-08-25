@@ -42,6 +42,7 @@ import pt_provider.nexusphp_pt_provider.provider as nexusphp_pt_provider
 import notification_provider.pushdeer_notification_provider.provider as pushdeer_notification_provider
 import notification_provider.telegram_notification_provider.provider as telegram_notification_provider
 import notification_provider.qq_notification_provider.provider as qq_notification_provider
+import notification_provider.bark_notification_provider.provider as bark_notification_provider
 
 # Source provider init related
 source_provider_init_func = {
@@ -77,6 +78,7 @@ notification_provider_init_func = {
     'pushdeer_notification_provider': pushdeer_notification_provider.PushDeerNotificationProvider,
     'telegram_notification_provider': telegram_notification_provider.TelegramNotificationProvider,
     'qq_notification_provider': qq_notification_provider.QQNotificationProvider,
+    'bark_notification_provider': bark_notification_provider.BarkNotificationProvider,
 }
 
 
