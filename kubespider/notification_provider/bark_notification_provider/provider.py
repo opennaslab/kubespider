@@ -24,7 +24,7 @@ class BarkNotificationProvider(provider.NotificationProvider):
         return self.enable
     
     def push(self, title, **kwargs) -> bool:
-        message = self.format_message(**kwargs)
+        message = self.format_message(title, **kwargs)
         url = urljoin(self.host, "/push")
         headers = {
             'Content-Type': 'application/json; charset=utf-8'
@@ -43,7 +43,7 @@ class BarkNotificationProvider(provider.NotificationProvider):
         return True
 
 
-    def format_message(self, **kwargs) -> str:
+    def format_message(self, title, **kwargs) -> str:
         message = []
         for key, value in kwargs.items():
             message.append(f"{key}: {value}")
