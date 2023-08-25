@@ -97,7 +97,7 @@ docker restart kubespider
 
 ## 友情提示
 
-使用iOS的用户，可以使用快捷指令，参考：[kubespider](https://www.icloud.com/shortcuts/c773b469c21640908e33eda8617b5f63)
+使用iOS的用户，可以使用快捷指令，参考：[kubespider](https://www.icloud.com/shortcuts/86a4dfb7b66046c8a8015637cfbd50c5)
 
 添加后，直接分享到快捷指令，即可下载。
 

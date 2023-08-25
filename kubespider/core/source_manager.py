@@ -28,9 +28,10 @@ class SourceProviderManager:
         if match_provider is None:
             controller = helper.get_request_controller(event.extra_param('cookies'))
             link_type = helper.get_link_type(event.source, controller)
+            path = os.path.join(helper.convert_file_type_to_path(types.FILE_TYPE_COMMON), event.path)
             err = download_trigger.kubespider_downloader.download_file(Resource(
                 url=event.source,
-                path=event.path,
+                path=path,
                 file_type=types.FILE_TYPE_COMMON,
                 link_type=link_type,
                 **event.extra_params()
