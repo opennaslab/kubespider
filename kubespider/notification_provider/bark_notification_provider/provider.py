@@ -34,6 +34,7 @@ class BarkNotificationProvider(provider.NotificationProvider):
             "body": message,
             "title": "Webhook: start download",
             "group": "kubespider",
+            "icon": "https://ghproxy.com/https://raw.githubusercontent.com/opennaslab/kubespider/main/docs/images/logo.png",
             "device_key": self.device_token
         }
         response = self.request_handler.post(url, json=data, timeout=5, headers=headers).json()
