@@ -20,6 +20,6 @@ qq:
   target_qq: 12345678
 bark:
   type: bark_notification_provider
-  enable: true
+  enable: false
   host: https://api.day.app
   device_token: 12345678
