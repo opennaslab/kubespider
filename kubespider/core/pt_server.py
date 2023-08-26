@@ -95,7 +95,7 @@ class PTServer:
     def trigger_remove_tasks(pt_provider: provider.PTProvider):
         download_provider_name = pt_provider.get_download_provider()
         download_trigger.kubespider_downloader.handle_download_remove(Downloader(
-            downloader=[download_provider_name]
+            download_provider_names=[download_provider_name]
         ))
 
     def save_state(self, provider_name: str, provider_state: dict):
