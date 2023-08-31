@@ -25,3 +25,11 @@ docker logs aria2-pro
 **解决方案**：
 
 此情况下，我们需要修改 `kubespider/aria2/aria2.conf` 文件，将 `file-allocation`（文件预分配方式） 的值修改为 `none`（无），即 `file-allocation=none`，随后执行命令 `docker restart aria2-pro` 重启相关服务即可。更多介绍，见[相关 Issue](https://github.com/aria2/aria2/issues/1032)。
+
+## Unraid 使用 docker 配合 aria2 提示 Please ensure your aria2 server is ok:HTTPConnectionPool(host='127.0.0.1', port=6800): Max retries exceeded with url: /jsonrp
+
+**解决方案**
+
+把 kubespider 的 网络权限修改为 'host'
+
+参考 [请问有Unraid docker的配置教程么 · Issue #259 · opennaslab/kubespider](https://github.com/opennaslab/kubespider/issues/259)
