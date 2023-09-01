@@ -16,7 +16,7 @@
 直接在部署机器上执行
 
 ```bash
-docker run -itd --name kubespider  -v {config_path}/.config:/root/.config -p 3080:3080 cesign/kubespider:latest
+docker run -itd --name kubespider  -v {config_path}/.config:/app/.config -p 3080:3080 cesign/kubespider:latest
 ```
 
 即可，注意替换命令中`{config_path}`为部署机器上真实存在的配置目录。
