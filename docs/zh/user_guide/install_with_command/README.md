@@ -8,7 +8,7 @@
 
 |参数|类型|含义|备注|
 |:---:|:---:|:---:|:---:|
-|`-v /root/.config`|VOLUMN|存放项目配置||
+|`-v /app/.config`|VOLUMN|存放项目配置||
 |`-p 3080`|port|[Web Api](../api_docs/README.md)以及浏览器插件的监听端口|可在全局配置中修改|
 
 ## 直接使用 docker 部署
