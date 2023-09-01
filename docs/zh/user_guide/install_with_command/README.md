@@ -8,7 +8,7 @@
 
 |参数|类型|含义|备注|
 |:---:|:---:|:---:|:---:|
-|`-v /root/.config`|VOLUMN|存放项目配置||
+|`-v /app/.config`|VOLUMN|存放项目配置||
 |`-p 3080`|port|[Web Api](../api_docs/README.md)以及浏览器插件的监听端口|可在全局配置中修改|
 
 ## 直接使用 docker 部署
@@ -16,7 +16,7 @@
 直接在部署机器上执行
 
 ```bash
-docker run -itd --name kubespider  -v {config_path}/.config:/root/.config -p 3080:3080 cesign/kubespider:latest
+docker run -itd --name kubespider  -v {config_path}/.config:/app/.config -p 3080:3080 cesign/kubespider:latest
 ```
 
 即可，注意替换命令中`{config_path}`为部署机器上真实存在的配置目录。
