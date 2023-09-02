@@ -95,19 +95,17 @@ Kubespider结合chrome插件，能获得更好的体验。
 
 1. 按照如下步骤下载代码
 
-    ```
-    wget https://github.com/opennaslab/kubespider/archive/refs/heads/main.zip
-    unzip main.zip
-    ```
+    通过浏览器打开 `https://github.com/opennaslab/kubespider/archive/refs/heads/main.zip`，并将  `kubespider-main.zip` 解压。
+    ![img](./images/download-code.png)
 
-1. 打开Chrome，按如下步骤安装Kubespider Chrome插件并且设置(其中地址为`http://<server_ip>:3080`)
+2. 打开Chrome，按如下步骤安装Kubespider Chrome插件并且设置(其中地址为`http://<server_ip>:3080`)
 
     ![img](../../../images/kubespider-chrome-ext-install.gif)
 
-2. 例如，我想要下载一个torrent的大文件，直接右键，发送给Kubespider即可([示例网站](https://ubuntu.com/download/alternative-downloads))
+3. 例如，我想要下载一个torrent的大文件，直接右键，发送给Kubespider即可([示例网站](https://ubuntu.com/download/alternative-downloads))
     ![img](../../../images/kubespider-chrome-ext-usage.png)
 
-3. 使用aria2 Chrome插件查看下载任务，你可以看见下载任务已开始
+4. 使用aria2 Chrome插件查看下载任务，你可以看见下载任务已开始
     
     ![img](../../../images/kubespider-chrome-ext-aria2.png)
 
