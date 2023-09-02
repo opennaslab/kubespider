@@ -80,8 +80,34 @@ aria2:
 ### 安装浏览器插件
 为了方便下载浏览器中的资源，我们提供了一个浏览器插件，目前仅支持chromium内核的浏览器
 
-- 安装Aria2插件，参考：[link](https://github.com/opennaslab/kubespider/blob/main/README-CN.md#2%E8%BF%9E%E6%8E%A5aria2)
-- 安装Kubespider Chrome插件，参考：[link](https://github.com/opennaslab/kubespider/blob/main/README-CN.md#3%E5%AE%89%E8%A3%85chrome%E6%8F%92%E4%BB%B6)
+#### 安装Aria2插件
+
+为了便于查看下载任务，需要下载Chrome插件AriNg:
+- 如果你能访问外网，在chrome商店下载[AriaNg](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn)。
+- 如果不能，在Crx4Chrome下载[AriaNg](https://www.crx4chrome.com/crx/85196/)。  
+
+然后连接，插件配置如下(显示在脚本`install_kubespider.sh`执行输出最后)：
+![img](../../../images/aria2-for-chrome-config-zh.jpg)
+
+#### 安装Kubespider Chrome插件
+
+Kubespider结合chrome插件，能获得更好的体验。
+
+1. 按照如下步骤下载代码
+
+    通过浏览器打开 `https://github.com/opennaslab/kubespider/archive/refs/heads/main.zip`，并将  `kubespider-main.zip` 解压。
+    ![img](./images/download-code.png)
+
+2. 打开Chrome，按如下步骤安装Kubespider Chrome插件并且设置(其中地址为`http://<server_ip>:3080`)
+
+    ![img](../../../images/kubespider-chrome-ext-install.gif)
+
+3. 例如，我想要下载一个torrent的大文件，直接右键，发送给Kubespider即可([示例网站](https://ubuntu.com/download/alternative-downloads))
+    ![img](../../../images/kubespider-chrome-ext-usage.png)
+
+4. 使用aria2 Chrome插件查看下载任务，你可以看见下载任务已开始
+    
+    ![img](../../../images/kubespider-chrome-ext-aria2.png)
 
 ### 浏览器一键下载演示
 
