@@ -87,7 +87,7 @@ aria2:
 - 如果不能，在Crx4Chrome下载[AriaNg](https://www.crx4chrome.com/crx/85196/)。  
 
 然后连接，插件配置如下(显示在脚本`install_kubespider.sh`执行输出最后)：
-![img](../../images/aria2-for-chrome-config-zh.jpg)
+![img](../../../images/aria2-for-chrome-config-zh.jpg)
 
 #### 安装Kubespider Chrome插件
 
@@ -102,14 +102,14 @@ Kubespider结合chrome插件，能获得更好的体验。
 
 1. 打开Chrome，按如下步骤安装Kubespider Chrome插件并且设置(其中地址为`http://<server_ip>:3080`)
 
-    ![img](../../images/kubespider-chrome-ext-install.gif)
+    ![img](../../../images/kubespider-chrome-ext-install.gif)
 
-1. 例如，我想要下载一个torrent的大文件，直接右键，发送给Kubespider即可([示例网站](https://ubuntu.com/download/alternative-downloads))
-    ![img](../../images/kubespider-chrome-ext-usage.png)
+2. 例如，我想要下载一个torrent的大文件，直接右键，发送给Kubespider即可([示例网站](https://ubuntu.com/download/alternative-downloads))
+    ![img](../../../images/kubespider-chrome-ext-usage.png)
 
-1. 使用aria2 Chrome插件查看下载任务，你可以看见下载任务已开始
+3. 使用aria2 Chrome插件查看下载任务，你可以看见下载任务已开始
     
-    ![img](../../images/kubespider-chrome-ext-aria2.png)
+    ![img](../../../images/kubespider-chrome-ext-aria2.png)
 
 ### 浏览器一键下载演示
 
