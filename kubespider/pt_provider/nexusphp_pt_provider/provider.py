@@ -22,7 +22,7 @@ class NexuPHPPTProvider(provider.PTProvider):
         self.main_url = config_reader.read().get('main_link', '')
         self.rss_url = config_reader.read().get('rss_link', '')
         self.download_provider = config_reader.read().get('downloader', '')
-        self.keeping_time = config_reader.read().get('keep_time', 120)
+        self.keeping_time = config_reader.read().get('keeping_time', 120)
         self.max_sum_size = config_reader.read().get('max_sum_size', 200.0)
         self.cost_sum_size = config_reader.read().get('cost_sum_size', 20.0)
         self.cookie = config_reader.read().get('cookie', '')
