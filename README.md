@@ -106,6 +106,7 @@ Then with aria2 chrome plugin, you can see the download task starts:
 * Install Kubespider on Synology, see [link](./docs/zh/user_guide/synology_installation/README.md).
 * Install Kubespider on TerraMaster, see [link](./docs/zh/user_guide/terramaster_installation/README.md).
 * Install Kubespider on Asustor, see [link](./docs/zh/user_guide/asustor_installation/README.md).
+* Install Kubespider on UGreen NAS, see [link](./docs/zh/user_guide/ugreen_installation/README.md).
 
 ## 📝 Configuration
 The global configuration file is located at `.config/kubespider.yaml`, which is installed under `${HOME}/kubespider/.config/kubespider.yaml` by default. The description of each configuration item is as follows:
