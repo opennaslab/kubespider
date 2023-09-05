@@ -130,7 +130,7 @@ Kubespider结合chrome插件，能获得更好的体验。
 | meijutt资源提供器 | 是 | 自动追美剧 | [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
 | YouTube资源提供器 | 是 | 触发下载YouTube视频 | [link](./docs/zh/user_guide/youtube_source_provider/README.md) |
 | Bilibili资源提供器 | 是 | 触发下载Bilibili视频 | [link](./docs/zh/user_guide/bilibili_source_provider/README.md) |
-| Bilibili博主追更资源提供器 | 是 | 自动下载B站博主更新得视频 | [link](./docs/zh/user_guide/bilibili_vlogger_subscribe_source_provider/README.md) |
+| Bilibili博主追更资源提供器 | 是 | 自动下载B站博主更新的视频 | [link](./docs/zh/user_guide/bilibili_vlogger_subscribe_source_provider/README.md) |
 | 通用rss资源提供器 | 是 | 自动下载rss订阅资源 | [link](./docs/zh/user_guide/general_rss_source_provider/README.md) |
 | 魔法资源提供器 | 是 | 触发下载通过xpath配置的内容资源 | [link](./docs/zh/user_guide/magic_source_provider/README.md) |
 | 抖音资源提供器 | 是 | 触发下载带水印的抖音视频 | [link](./docs/zh/user_guide/tiktok_source_provider/README.md) |
