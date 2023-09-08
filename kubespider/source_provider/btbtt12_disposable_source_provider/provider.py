@@ -75,6 +75,7 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
             url=ret,
             path=title,
             file_type=file_type,
+            link_type=self.get_link_type(),
         )]
 
     def update_config(self, event: Event) -> None:
