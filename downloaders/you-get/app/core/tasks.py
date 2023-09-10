@@ -8,6 +8,8 @@ import _thread
 from core import values
 
 
+BILIBILI_COOKIE_PATH = "/app/config/bilibili_cookie.txt"
+
 class DownloadTask:
     def __init__(self, args: list, count: int) -> None:
         self.download_args = args
@@ -83,6 +85,7 @@ class YouGetTasks:
         if url.startswith('https://www.bilibili.com'):
             if values.config_map['bilibili'] != "":
                 return ['-c', values.config_map['bilibili']]
+            return ['-c', BILIBILI_COOKIE_PATH]
         return None
 
     def get_highest_quality(self, args: list) -> str:
