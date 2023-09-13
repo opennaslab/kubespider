@@ -86,7 +86,11 @@ class MikananiSourceProvider(provider.SourceProvider):
             ret = []
             for i in items:
                 anime_name = i.find('./guid').text
-                path = self.get_anime_path(i)
+                path = None
+                try_count = 0
+                while path is None and try_count < 6:
+                    path = self.get_anime_path(i)
+                    try_count += 1
                 item_title = self.get_anime_title(i, reg)
                 logging.info('mikanani find %s', helper.format_long_string(anime_name))
                 url = i.find('./enclosure').attrib['url']
@@ -105,7 +109,7 @@ class MikananiSourceProvider(provider.SourceProvider):
             return []
 
     def load_filter_config(self) -> str:
-        return self.config_reader.read().get('filter')
+        return self.config_reader.read().get('filter', None)
 
     def get_anime_path(self, element) -> str:
         # get the path of anime source, or None for invalid item
@@ -138,12 +142,12 @@ class MikananiSourceProvider(provider.SourceProvider):
             data = req.get(link, timeout=30).content
         except Exception as err:
             logging.info('mikanani get anime title error:%s', err)
-            return ""
+            return None
         dom = BeautifulSoup(data, 'html.parser')
         titles = dom.find_all('a', ['class', 'w-other-c'])
         if len(titles) == 0:
             logging.error('mikanani get anime title empty:%s', link)
-            return ""
+            return None
         title = titles[0].text.strip()
         logging.info('mikanani get anime title:%s', title)
         return title

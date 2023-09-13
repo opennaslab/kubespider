@@ -61,6 +61,10 @@ def get_link_type(url: str, controller: requests.Session) -> str:
         return types.LINK_TYPE_MAGNET
     if urlparse(url).path.endswith('torrent'):
         return types.LINK_TYPE_TORRENT
+    if not url.startswith('http'):
+        # such as ed2k://xxx, we treat it as general
+        # whether it could be downloaded depeneds on the download softwear
+        return types.LINK_TYPE_GENERAL
     # rfc6266: guess link type
     try:
         resp = controller.head(url, timeout=30, allow_redirects=True)
