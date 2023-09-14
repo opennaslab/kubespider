@@ -49,32 +49,31 @@ class Aria2DownloadProvider(DownloadProvider):
 
         return defective_tasks
 
-    def send_torrent_task(self, task: Task) -> TypeError:
+    def send_torrent_task(self, task: Task) -> [Task, Exception]:
         logging.info('Start torrent download:%s', task.url)
         download_path = os.path.join(self.download_base_path, task.path)
         try:
             ret = self.aria2.add_torrent(task.url, options={'dir': download_path})
             logging.info('Create download task result:%s', ret)
-            task.task_id = ret.gid
-            return None
+            task.download_task_id = ret.gid
+            return task
         except Exception as err:
             logging.warning('Please ensure your aria2 server is ok:%s', err)
             return err
-        return None
 
-    def send_magnet_task(self, task: Task) -> TypeError:
+    def send_magnet_task(self, task: Task) -> [Task, Exception]:
         logging.info('Start magnet download:%s', task.url)
         download_path = os.path.join(self.download_base_path, task.path)
         try:
             ret = self.aria2.add_magnet(task.url, options={'dir': download_path})
             logging.info('Create download task result:%s', ret)
-            task.task_id = ret.gid
-            return None
+            task.download_task_id = ret.gid
+            return task
         except Exception as err:
             logging.warning('Please ensure your aria2 server is ok:%s', err)
             return err
 
-    def send_general_task(self, task: Task) -> TypeError:
+    def send_general_task(self, task: Task) -> [Task, Exception]:
         logging.info('Start general file download:%s', task.url)
 
         if not task.url.startswith('http'):
@@ -83,19 +82,41 @@ class Aria2DownloadProvider(DownloadProvider):
         download_path = os.path.join(self.download_base_path, task.path)
         try:
             ret = self.aria2.add(task.url, options={'dir': download_path})
-            task.task_id = ret[0].gid
+            task.download_task_id = ret[0].gid
             logging.info('Create download task result:%s', ret)
-            return None
+            return task
         except Exception as err:
             logging.warning('Please ensure your aria2-type download server is ok:%s', err)
             return err
 
-    def remove_tasks(self, tasks: list[Task]):
+    def remove_all_tasks(self) -> bool:
         try:
             downloads = self.aria2.get_downloads()
             self.aria2.remove(downloads, force=True)
+            logging.info('Aria2 remove all tasks success')
+            return True
         except Exception as err:
-            logging.warning('Aria2 remove tasks error:%s', err)
+            logging.error('Aria2 remove tasks error:%s', err)
+            return False
+
+    def remove_tasks(self, tasks: list[Task]) -> list[Task]:
+        task_map = {task.download_task_id: task for task in tasks if task.download_task_id}
+        try:
+            download_tasks = self.aria2.get_downloads(list(task_map.keys()))
+            result = self.aria2.remove(download_tasks, force=True)
+            removed_task_names = []
+            removed_tasks = []
+            for index, success in enumerate(result):
+                if success:
+                    task_name = download_tasks[index].name
+                    task_gid = download_tasks[index].gid
+                    removed_task_names.append(task_name)
+                    removed_tasks.append(task_map.get(task_gid))
+            logging.info('Aria2 remove tasks:%s', ",".join(removed_task_names))
+            return removed_tasks
+        except Exception as err:
+            logging.error('Aria2 remove tasks error:%s', err)
+            return []
 
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()

@@ -28,35 +28,39 @@ class YougetDownloadProvider(DownloadProvider):
         # These tasks are special, other download software could not handle
         return []
 
-    def send_torrent_task(self, task: Task) -> TypeError:
+    def send_torrent_task(self, task: Task) -> [Task, Exception]:
         return TypeError("youget doesn't support torrent task")
 
-    def send_magnet_task(self, task: Task) -> TypeError:
+    def send_magnet_task(self, task: Task) -> [Task, Exception]:
         return TypeError("youget doesn't support magnet task")
 
-    def send_general_task(self, task: Task) -> TypeError:
-        headers = {'Content-Type': 'application/json'}
-        data = {'dataSource': task.url, 'path': task.path}
-        logging.info('Send general task:%s', json.dumps(data))
-
-        if not task.url.startswith('https://www.bilibili.com'):
-            return TypeError('you-get only support specific resource')
-
+    def send_general_task(self, task: Task) -> [Task, Exception]:
         # This downloading tasks is special, other download software could not handle
         # So just return None
         try:
+            headers = {'Content-Type': 'application/json'}
+            data = {'dataSource': task.url, 'path': task.path}
+            logging.info('Send general task:%s', json.dumps(data))
+            if not task.url.startswith('https://www.bilibili.com'):
+                raise TypeError('you-get only support specific resource')
             path = self.http_endpoint_host + ":" + str(self.http_endpoint_port) + '/api/v1/download'
             req = self.request_handler.post(path, headers=headers, data=json.dumps(data), timeout=30)
             if req.status_code != 200:
-                logging.error("Send general task error:%s", req.status_code)
+                raise Exception(f"status code {req.status_code}")
+            return task
         except Exception as err:
             logging.error("Send general task error:%s", err)
-            return None
-        return None
+            return err
 
-    def remove_tasks(self, tasks: list[Task]):
+    def remove_tasks(self, tasks: list[Task]) -> list[Task]:
         # TODO: Implement it
-        pass
+        logging.warning("YouGet not support remove tasks")
+        return []
+
+    def remove_all_tasks(self) -> bool:
+        # TODO: Implement it
+        logging.warning("YouGet not support remove all tasks")
+        return False
 
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()

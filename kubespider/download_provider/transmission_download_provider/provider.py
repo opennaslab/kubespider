@@ -38,38 +38,56 @@ class TransmissionProvider(DownloadProvider):
         # 6: "seeding"
         return []
 
-    def send_torrent_task(self, task: Task) -> TypeError:
+    def get_all_task(self) -> list:
+        torrents = self.client.get_torrents()
+        return torrents
+
+    def send_torrent_task(self, task: Task) -> [Task, Exception]:
         logging.info('Start torrent download:%s, path:%s', task.url, task.path)
         download_path = os.path.join(self.download_base_path, task.path)
         try:
-            with open(task.url, 'rb') as torrent_file:
-                self.client.add_torrent(torrent=torrent_file.read(), download_dir=download_path)
+            torrent = self.client.add_torrent(torrent=task.torrent_content, download_dir=download_path)
+            task.download_task_id = torrent.id
+            return task
         except Exception as err:
             logging.error('Transmission torrent download err:%s', err)
             return err
-        return None
 
-    def send_magnet_task(self, task: Task) -> TypeError:
+    def send_magnet_task(self, task: Task) -> [Task, Exception]:
         logging.info('Start magnet download:%s, path:%s', task.url, task.path)
         download_path = os.path.join(self.download_base_path, task.path)
         try:
-            self.client.add_torrent(torrent=task.url, download_dir=download_path)
+            torrent = self.client.add_torrent(torrent=task.url, download_dir=download_path)
+            task.download_task_id = torrent.id
+            return task
         except Exception as err:
             logging.error('Transmission magnet download err:%s', err)
             return err
-        return None
 
-    def send_general_task(self, task: Task) -> TypeError:
+    def send_general_task(self, task: Task) -> [Task, Exception]:
         logging.warning('Transmission not support general task download! Please use aria2 or else download provider')
         return TypeError('Transmission not support general task download')
 
-    def remove_tasks(self, tasks: list[Task]):
-        logging.info('Start to remove all tasks...')
+    def remove_all_tasks(self) -> bool:
         try:
             torrents = self.client.get_torrents()
-            task_ids = list(map(lambda torrent: torrent.id, torrents))
             if len(torrents) > 0:
+                task_ids = list(map(lambda torrent: torrent.id, torrents))
                 self.client.remove_torrent(ids=task_ids, delete_data=True)
+            logging.info('Transmission removed all tasks...')
+            return True
+        except Exception as err:
+            logging.error('Transmission remove all tasks err:%s', err)
+            return False
+
+    def remove_tasks(self, tasks: list[Task]) -> list[Task]:
+        try:
+            task_map = {int(task.download_task_id): task for task in tasks if task.download_task_id}
+            task_ids = list(task_map.keys())
+            if len(task_ids) > 0:
+                self.client.remove_torrent(ids=task_ids, delete_data=True)
+            logging.info('Transmission removed tasks:%s', ",".join(tasks))
+            return tasks
         except Exception as err:
             logging.error('Transmission remove all tasks err:%s', err)
 

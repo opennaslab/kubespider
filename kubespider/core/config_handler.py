@@ -6,18 +6,25 @@
 @file: config_handler.py
 @time: 2023/5/18 21:14
 """
-
+import json
 import logging
 import os
 import time
 from multiprocessing import Process
 import shutil
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from watchdog.events import FileSystemEventHandler, FileModifiedEvent
 
-from api.values import Config
+from api.values import Config, CFG_BASE_PATH
 from api import values
 from utils.config_reader import YamlFileSectionConfigReader, YamlFileConfigReader
 from utils import helper
+from database.models import db
+from database.models import SourceProviders as SourceProvidersConfig
+from database.models import DownloadProviders as DownloadProvidersConfig
+from database.models import NotificationProviders as NotificationProvidersConfig
 
 import source_provider.mikanani_source_provider.provider as mikanani_source_provider
 import source_provider.btbtt12_disposable_source_provider.provider as btbtt12_disposable_source_provider
@@ -71,7 +78,7 @@ downloader_provider_init_func = {
 
 # PT provider init related
 pt_provider_init_func = {
-    'nexusphp_pt_provider': nexusphp_pt_provider.NexuPHPPTProvider,
+    'nexusphp_pt_provider': nexusphp_pt_provider.NexusPHPPTProvider,
 }
 
 notification_provider_init_func = {
@@ -200,6 +207,7 @@ def prepare_config() -> None:
         if not os.path.exists(conf.config_path()):
             miss_cfg.append(conf)
     if len(miss_cfg) == 0:
+        load_config_2_sqlite()
         return
 
     logging.info("Config files(%s) miss, try to init them", ','.join(miss_cfg))
@@ -220,3 +228,50 @@ def prepare_config() -> None:
                 shutil.copy(template_cfg, target_cfg)
         except Exception as err:
             raise Exception(str('failed to copy %s to %s:%s', template_cfg, target_cfg)) from err
+    load_config_2_sqlite()
+
+
+def load_config_2_sqlite():
+    logging.info("start init kubespider.db")
+    db_uri = f"sqlite:///{os.path.join(CFG_BASE_PATH, 'kubespider.db')}"
+    engine = create_engine(db_uri)
+    db.metadata.create_all(engine)
+    session = sessionmaker(bind=engine)()
+    for name, conf in YamlFileConfigReader(values.Config.NOTIFICATION_PROVIDER.config_path()).read().items():
+        instance = session.query(NotificationProvidersConfig).filter_by(name=name).first()
+        if not instance:
+            instance = NotificationProvidersConfig()
+        instance.name = name
+        instance.type = conf.pop("type", None)
+        instance.enable = conf.pop("enable", False)
+        instance.config = json.dumps(conf, ensure_ascii=False)
+        session.add(instance)
+    for name, conf in YamlFileConfigReader(values.Config.SOURCE_PROVIDER.config_path()).read().items():
+        instance = session.query(SourceProvidersConfig).filter_by(name=name).first()
+        if not instance:
+            instance = SourceProvidersConfig()
+        instance.name = name
+        instance.type = conf.pop("type", None)
+        instance.enable = conf.pop("enable", False)
+        instance.config = json.dumps(conf, ensure_ascii=False)
+        session.add(instance)
+    for name, conf in YamlFileConfigReader(values.Config.PT_PROVIDER.config_path()).read().items():
+        instance = session.query(SourceProvidersConfig).filter_by(name=name).first()
+        if not instance:
+            instance = SourceProvidersConfig()
+        instance.name = name
+        instance.type = conf.pop("type", None)
+        instance.enable = conf.pop("enable", False)
+        instance.config = json.dumps(conf, ensure_ascii=False)
+        session.add(instance)
+    for name, conf in YamlFileConfigReader(values.Config.DOWNLOAD_PROVIDER.config_path()).read().items():
+        instance = session.query(DownloadProvidersConfig).filter_by(name=name).first()
+        if not instance:
+            instance = DownloadProvidersConfig()
+        instance.name = name
+        instance.type = conf.pop("type", None)
+        instance.enable = conf.pop("enable", False)
+        instance.priority = conf.pop("priority", False)
+        instance.config = json.dumps(conf, ensure_ascii=False)
+        session.add(instance)
+    session.commit()

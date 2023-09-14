@@ -60,7 +60,7 @@ class QbittorrentDownloadProvider(DownloadProvider):
                     continue
         return defective_tasks
 
-    def send_torrent_task(self, task: Task) -> TypeError:
+    def send_torrent_task(self, task: Task) -> [Task, Exception]:
         download_path = os.path.join(self.download_base_path, task.path)
         logging.info('Start torrent download:%s, path:%s', task.url, download_path)
         tags = task.extra_param('tags', self.download_tags)
@@ -70,13 +70,12 @@ class QbittorrentDownloadProvider(DownloadProvider):
             ret = self.client.torrents_add(torrent_files=task.url, save_path=download_path, category=category,
                                            tags=tags)
             logging.info('Create download task results:%s', ret)
-            return None
+            return task
         except Exception as err:
-            logging.warning('Please ensure your qbittorrent server or your config are ok:%s', err)
+            logging.error('Please ensure your qbittorrent server or your config are ok:%s', err)
             return err
-        return None
 
-    def send_magnet_task(self, task: Task) -> TypeError:
+    def send_magnet_task(self, task: Task) -> [Task, Exception]:
         logging.info('Start magent download:%s, path:%s', task.url, task.path)
         download_path = os.path.join(self.download_base_path, task.path)
         tags = task.extra_param('tags', self.download_tags)
@@ -85,21 +84,31 @@ class QbittorrentDownloadProvider(DownloadProvider):
             logging.info('Create download task category:%s, tags:%s', category, tags)
             ret = self.client.torrents_add(urls=task.url, save_path=download_path, category=category, tags=tags)
             logging.info('Create download task results:%s', ret)
-            return None
+            return task
         except Exception as err:
-            logging.warning('Please ensure your qbittorrent server or your config are ok:%s', err)
+            logging.error('Please ensure your qbittorrent server or your config are ok:%s', err)
             return err
-        return None
 
-    def send_general_task(self, task: Task) -> TypeError:
+    def send_general_task(self, task: Task) -> [Task, Exception]:
         logging.warning('qbittorrent not support general task download! Please use aria2 or else download provider')
         return TypeError('qbittorrent not support general task download')
 
-    def remove_tasks(self, tasks: list[Task]):
+    def remove_tasks(self, tasks: list[Task]) -> list[Task]:
         try:
-            self.client.torrents_delete(torrent_hashes='all', delete_files=True)
+            task_map = {task.download_task_id: task for task in tasks if task.download_task_id}
+            self.client.torrents_delete(torrent_hashes=list(task_map.keys()), delete_files=True)
+            return tasks
         except Exception as err:
             logging.warning('qbittorrent remove all tasks error:%s', err)
+            return []
+
+    def remove_all_tasks(self) -> bool:
+        try:
+            self.client.torrents_delete(torrent_hashes='all', delete_files=True)
+            return True
+        except Exception as err:
+            logging.warning('qbittorrent remove all tasks error:%s', err)
+            return False
 
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()

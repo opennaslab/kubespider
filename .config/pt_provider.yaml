@@ -4,7 +4,10 @@ hdvideo:
   enable: false
   attendance: true
   main_link: https://hdvideo.one
-  rss_link: xxx
+  language: traditional_chinese
+  rss_subscribe_link: xxx
+  html_links:
+    - xxx
   cookie: xxx
   # I suggest you to use transmission type, and also,
   # do not use this downloader to download the resource you needed.,
@@ -14,14 +17,18 @@ hdvideo:
   keeping_time: 120
   # size in GB
   max_sum_size: 200
-  # the sized needed to be download, size in GB
-  cost_sum_size: 0
+  # max seeding count
+  max_seeding: 20
 mteam:
   type: nexusphp_pt_provider
   enable: false
   attendance: false
   main_link: https://kp.m-team.cc
-  rss_link: xxx
+  language: traditional_chinese
+  rss_subscribe_link:
+  html_links:
+    - https://kp.m-team.cc/adult.php?incldead=1&spstate=2&inclbookmarked=0&search=&search_area=0&search_mode=0
+    - https://kp.m-team.cc/torrents.php?incldead=1&spstate=2&inclbookmarked=0&search=&search_area=0&search_mode=0
   cookie: xxx
   # I suggest you to use transmission type, and also,
   # do not use this downloader to download the resource you needed.,
@@ -31,5 +38,5 @@ mteam:
   keeping_time: 120
   # size in GB
   max_sum_size: 200
-  # the sized needed to be download, size in GB
-  cost_sum_size: 0
+  # max seeding count
+  max_seeding: 20

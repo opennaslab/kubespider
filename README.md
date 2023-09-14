@@ -10,7 +10,6 @@
 [![GitHub stars](https://img.shields.io/github/stars/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/stargazers)
 [![GitHub license](https://img.shields.io/github/license/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/blob/master/LICENSE)
 
-
 English | [简体中文](./README-CN.md)  
 
 [Installation](#-installation) | [Configuration](#-feature-list) | [Developer Group](https://t.me/opennaslab)

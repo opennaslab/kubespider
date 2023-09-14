@@ -38,34 +38,49 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         # if xunlei doesn't work, it means other tools couldn't, so just ignore it.
         return []
 
-    def send_torrent_task(self, task: Task) -> TypeError:
+    def send_torrent_task(self, task: Task) -> [Task, Exception]:
         logging.info('Start torrent download:%s', task.url)
         token = self.get_pan_token()
         if token == "":
-            return None
+            return ValueError("token is missing")
         magnet_url = self.convert_torrent_to_magnet(task.path)
         file_info = self.list_files(token, magnet_url)
-        return self.send_task(token, file_info, magnet_url, task.path)
+        result = self.send_task(token, file_info, magnet_url, task.path)
+        if isinstance(result, Exception):
+            return result
+        return task
 
-    def send_magnet_task(self, task: Task) -> TypeError:
+    def send_magnet_task(self, task: Task) -> [Task, Exception]:
         logging.info('Start magnet download:%s', task.url)
         token = self.get_pan_token()
         if token == "":
-            return None
+            return ValueError("token is missing")
         file_info = self.list_files(token, task.url)
-        return self.send_task(token, file_info, task.url, task.path)
+        result = self.send_task(token, file_info, task.url, task.path)
+        if isinstance(result, Exception):
+            return result
+        return task
 
-    def send_general_task(self, task: Task) -> TypeError:
+    def send_general_task(self, task: Task) -> [Task, Exception]:
         logging.info('Start general file download:%s', task.url)
         token = self.get_pan_token()
         if token == "":
-            return None
+            return ValueError("token is missing")
         file_info = self.list_files(token, task.url)
-        return self.send_task(token, file_info, task.url, task.path)
+        result = self.send_task(token, file_info, task.url, task.path)
+        if isinstance(result, Exception):
+            return result
+        return task
 
-    def remove_tasks(self, tasks: list[Task]):
+    def remove_tasks(self, tasks: list[Task]) -> list[Task]:
         # TODO: Implement it
-        pass
+        logging.warning("Xunlei not support remove tasks")
+        return []
+
+    def remove_all_tasks(self) -> bool:
+        # TODO: Implement it
+        logging.warning("Xunlei not support remove all tasks")
+        return False
 
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()
@@ -87,7 +102,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
             logging.error("List files error:%s", err)
             return None
 
-    def send_task(self, token: str, file_info: dict, url: str, path: str) -> TypeError:
+    def send_task(self, token: str, file_info: dict, url: str, path: str) -> Exception:
         try:
             path_id = self.get_path_id(token, path)
             if path_id is None:
@@ -115,8 +130,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
                                             timeout=30)
             if req.status_code != 200:
                 logging.error("Create tasks error:%s", req.text)
-                return ValueError("Create task error")
-            return None
+                raise ValueError(f"Create task error, {req.text}")
         except Exception as err:
             logging.error('Send download task error:%s', err)
             return err

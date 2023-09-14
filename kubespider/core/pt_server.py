@@ -5,11 +5,15 @@ import os
 import _thread
 
 import logging
-
-from core import download_trigger
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.session import Session
+from core import download_trigger, notification_server
+from database.models import DownloadTasks, db, SourceProviders
 from pt_provider import provider
+from pt_provider.provider import Torrent
 from utils.config_reader import YamlFileConfigReader
-from api.values import Config, FILE_TYPE_TO_PATH
+from api.values import Config, FILE_TYPE_TO_PATH, Task, CFG_BASE_PATH
 from api.types import FILE_TYPE_PT, LINK_TYPE_TORRENT
 from api.values import Resource, Downloader
 
@@ -18,55 +22,48 @@ class PTServer:
     def __init__(self, pt_providers: list) -> None:
         self.pt_providers: list[provider.PTProvider] = pt_providers
         self.state_config = YamlFileConfigReader(Config.STATE.config_path())
+        self.session = self.get_db_session()
+
+    @staticmethod
+    def get_db_session() -> Session:
+        db_uri = f"sqlite:///{os.path.join(CFG_BASE_PATH, 'kubespider.db')}"
+        engine = create_engine(db_uri)
+        session = sessionmaker(bind=engine)()
+        return session
 
     def run_single_pt(self, current_provider: provider.PTProvider):
         while True:
             provider_name = current_provider.get_provider_name()
-            provider_state = self.load_state(provider_name)
-            keeping_time = current_provider.get_keeping_time()
-            cost_sum_size = current_provider.get_cost_sum_size()
+            provider_ins = self.session.query(SourceProviders).filter_by(name=provider_name).first()
+            download_tasks = self.session.query(DownloadTasks).filter_by(
+                source_provider_id=provider_ins.id, is_deleted=False).all()
+            download_sum_size = sum([task.file_size for task in download_tasks])
             max_sum_size = current_provider.get_max_sum_size()
 
-            logging.info("PT provider(%s) downloading size is:%f/%s, cost downloading size:%f/%f",
-                         provider_name, provider_state['download_sum_size'],
-                         max_sum_size, provider_state['costs_sum_size'], cost_sum_size)
+            logging.info("PT provider(%s) downloading size is:%f/%s",
+                         provider_name, download_sum_size, max_sum_size)
 
-            current_time = int(time.time())
-            if current_time - provider_state['last_start_time'] > keeping_time:
-                logging.info("PT provider(%s) time reached, remove all downlaod tasks, current time is %d, last start time is %d", provider_name, current_time, provider_state['last_start_time'])
-                self.trigger_remove_tasks(current_provider)
-                provider_state['last_start_time'] = current_time
-                provider_state['download_sum_size'] = 0.0
-                provider_state['costs_sum_size'] = 0.0
+            pt_user = current_provider.get_pt_user()
+            passkey = pt_user.passkey
+            current_provider.go_attendance(pt_user)
 
-            current_provider.go_attendance()
-            links = current_provider.get_links()
-            for link in links:
-                link_size = float(link['size'])
-                if link['torrent'] in provider_state['torrent_list']:
-                    logging.info("PT provider(%s) already download torrent:%s, skip it", provider_name,
-                                 link['torrent'])
-                    continue
-
-                if link['free']:
-                    if link_size + provider_state['download_sum_size'] < max_sum_size:
-                        self.trigger_download_tasks(link['torrent'], current_provider)
-                        provider_state['download_sum_size'] += link_size
-                        provider_state['torrent_list'].append(link['torrent'])
-                        logging.info('Add one task(%fGB), now is %fGB', link_size,
-                                     provider_state['download_sum_size'])
-                else:
-                    if provider_state['costs_sum_size'] <= 0.0:
-                        continue
-
-                    # In order to meet the download requirements, we need to make the threshold higher
-                    if link_size + provider_state['costs_sum_size'] < cost_sum_size + 5.0:
-                        self.trigger_download_tasks(link['torrent'], current_provider)
-                        provider_state['costs_sum_size'] += link_size
-                        provider_state['torrent_list'].append(link['torrent'])
-                        logging.info('Add one task(%fGB), now is %fGB', link_size, provider_state['costs_sum_size'])
-
-            self.save_state(provider_name, provider_state)
+            notification_server.kubespider_notification_server.send_message(
+                title=f"[{provider_name}] pt user", **pt_user.data
+            )
+            if current_provider.need_delete_torrents(max_sum_size=max_sum_size, download_sum_size=download_sum_size):
+                delete_torrents = current_provider.filter_torrents_for_deletion(
+                    pt_user, max_sum_size, download_sum_size)
+                self.trigger_remove_tasks(current_provider, delete_torrents)
+            download_torrents = current_provider.filter_torrents_for_download(pt_user)
+            logging.info("Filter %d tasks for download", len(download_torrents))
+            for torrent in download_torrents:
+                if torrent.size + download_sum_size < max_sum_size:
+                    torrent.torrent_content = current_provider.download_torrent_file(pt_user, torrent)
+                    error = self.trigger_download_tasks(current_provider, torrent)
+                    if not error:
+                        download_sum_size += torrent.size
+                        logging.info('Add one task(%fGB), now is %fGB', torrent.size,
+                                     download_sum_size)
             time.sleep(3600)
 
     def run(self):
@@ -76,27 +73,26 @@ class PTServer:
             time.sleep(3600)
 
     @staticmethod
-    def trigger_download_tasks(pt_source: str, pt_provider: provider.PTProvider):
-        logging.info("Start downloading: %s", pt_source)
+    def trigger_download_tasks(pt_provider: provider.PTProvider, torrent: Torrent) -> Exception:
+        logging.info("Start downloading: %s", torrent)
         download_provider_name = pt_provider.get_download_provider()
         download_path = os.path.join(FILE_TYPE_TO_PATH[FILE_TYPE_PT], download_provider_name)
-        err = download_trigger.kubespider_downloader.download_file(Resource(
-            url=pt_source,
-            path=download_path,
-            link_type=LINK_TYPE_TORRENT,
-            file_type=FILE_TYPE_PT
-        ), Downloader(
-            download_provider_names=[download_provider_name]
-        ))
-        if err is not None:
+        resource = torrent.to_download_resource(torrent_content=torrent.torrent_content, download_path=download_path)
+        err = download_trigger.kubespider_downloader.download_file(
+            resource, Downloader(download_provider_names=[download_provider_name])
+        )
+        if isinstance(err, Exception):
             logging.error('Download error: %s', err)
+        return err
 
     @staticmethod
-    def trigger_remove_tasks(pt_provider: provider.PTProvider):
+    def trigger_remove_tasks(pt_provider: provider.PTProvider, torrents: list) -> list:
+        tasks = [t.to_download_task() for t in torrents]
         download_provider_name = pt_provider.get_download_provider()
-        download_trigger.kubespider_downloader.handle_download_remove(Downloader(
-            download_provider_names=[download_provider_name]
-        ))
+        return download_trigger.kubespider_downloader.handle_download_remove(
+            Downloader(download_provider_names=[download_provider_name]),
+            tasks
+        )
 
     def save_state(self, provider_name: str, provider_state: dict):
         all_pt_state = self.state_config.read().get('pt_state', {})
@@ -120,6 +116,10 @@ class PTServer:
         if len(state) == 0:
             return empty_state
         return state
+
+    def __del__(self):
+        if isinstance(self.session, Session):
+            self.session.close()
 
 
 kubespider_pt_server: PTServer = None

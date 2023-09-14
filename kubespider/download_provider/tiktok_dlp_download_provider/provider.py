@@ -30,29 +30,35 @@ class TiktokDownloadProvider(provider.DownloadProvider):
         # These tasks are special, other download software could not handle
         return []
 
-    def send_torrent_task(self, task: Task) -> TypeError:
+    def send_torrent_task(self, task: Task) -> [Task, Exception]:
         return TypeError("tiktok doesn't support torrent task")
 
-    def send_magnet_task(self, task: Task) -> TypeError:
+    def send_magnet_task(self, task: Task) -> [Task, Exception]:
         return TypeError("tiktok doesn't support magnet task")
 
-    def send_general_task(self, task: Task) -> TypeError:
-        headers = {'Content-Type': 'application/json'}
-        data = {'dataSource': task.url, 'path': task.path, 'cookie': self.cookie}
-        logging.info('Send general task:%s', json.dumps(data))
+    def send_general_task(self, task: Task) -> [Task, Exception]:
         try:
+            headers = {'Content-Type': 'application/json'}
+            data = {'dataSource': task.url, 'path': task.path, 'cookie': self.cookie}
+            logging.info('Send general task:%s', json.dumps(data))
             path = self.http_endpoint_host + ":" + str(self.http_endpoint_port) + '/api/v1/download'
             req = self.reqeust_handler.post(path, headers=headers, data=json.dumps(data), timeout=30)
             if req.status_code != 200:
-                logging.error("Send general task error:%s", req.status_code)
+                raise ValueError(f"status code {req.status_code}")
+            return task
         except Exception as err:
             logging.error("Send general task error:%s", err)
-            return TypeError("Send general task error")
+            return err
 
-        return None
+    def remove_tasks(self, tasks: list[Task]) -> list[Task]:
+        # TODO: Implement it
+        logging.warning("Tiktok not support remove tasks")
+        return []
 
-    def remove_tasks(self, tasks: list[Task]):
-        pass
+    def remove_all_tasks(self) -> bool:
+        # TODO: Implement it
+        logging.warning("Tiktok not support remove all tasks")
+        return False
 
     def load_config(self) -> TypeError:
         cfg = self.config_reader.read()

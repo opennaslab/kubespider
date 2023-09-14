@@ -34,19 +34,23 @@ class DownloadProvider(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def send_torrent_task(self, task: Task) -> TypeError:
+    def send_torrent_task(self, task: Task) -> [Task, Exception]:
         pass
 
     @abc.abstractmethod
-    def send_magnet_task(self, task: Task) -> TypeError:
+    def send_magnet_task(self, task: Task) -> [Task, Exception]:
         pass
 
     @abc.abstractmethod
-    def send_general_task(self, task: Task) -> TypeError:
+    def send_general_task(self, task: Task) -> [Task, Exception]:
         pass
 
     @abc.abstractmethod
-    def remove_tasks(self, tasks: list[Task]):
+    def remove_tasks(self, tasks: list[Task]) -> list[Task]:
+        pass
+
+    @abc.abstractmethod
+    def remove_all_tasks(self) -> bool:
         pass
 
     @abc.abstractmethod

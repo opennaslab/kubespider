@@ -1,9 +1,11 @@
 # Used to define the general values used in the project
-
+import hashlib
+import io
 import os
 from enum import Enum
 
 from api import types
+from utils.helper import get_unique_hash
 
 FILE_TYPE_TO_PATH = {
     types.FILE_TYPE_COMMON: "Common",
@@ -83,12 +85,14 @@ class Resource(Extra):
     def __init__(self, url: str, path: str,
                  link_type: str = None, file_type: str = None, uid: str = None,
                  **kwargs):
-        super().__init__(**kwargs)
         self.url = url
+        self.torrent_content = kwargs.pop("torrent_content", None)
+        assert any([self.url, self.torrent_content])
         self.path = path
         self.link_type = link_type
         self.file_type = file_type
         self.uid = uid if uid is not None else url
+        super().__init__(**kwargs)
 
 
 class Task(Extra):
@@ -97,8 +101,30 @@ class Task(Extra):
     """
 
     def __init__(self, url: str, path: str, link_type: str = None, **kwargs) -> None:
-        super().__init__(**kwargs)
         self.url = url
         self.path = path
         self.link_type = link_type
-        self.uid = None
+        self._uid = kwargs.pop("uid", None)
+        self.download_task_id = kwargs.pop("download_task_id", None)
+        self.title = kwargs.pop("title", None)
+        self.desc = kwargs.pop("desc", None)
+        self.file_size = kwargs.pop("file_size", None)
+        self.file_type = kwargs.pop("file_type", None)
+        self.download_path = kwargs.pop("download_path", None)
+        self.torrent_content = kwargs.pop("torrent_content", None)  # type:io.BytesIO
+        self.download_provider_name = kwargs.pop("download_provider_name", None)
+        self.resource_provider_name = kwargs.pop("resource_provider_name", None)
+        super().__init__(**kwargs)
+
+    @property
+    def uid(self):
+        if self._uid:
+            pass
+        elif self.url:
+            self._uid = hashlib.md5(self.url.encode('utf-8')).hexdigest()
+        elif self.torrent_content:
+            self._uid = hashlib.md5(self.torrent_content.read()).hexdigest()
+        return self._uid
+
+    def __repr__(self):
+        return f"<Task {self.uid}>"
