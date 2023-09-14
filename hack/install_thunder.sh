@@ -26,8 +26,8 @@ util::set_registry_for_image
 # 5.Install thunder 
 docker run -d --name=thunder --hostname=thunder \
     --net=host \
-    -v ${HOME}/kubespider/thunder:/xunlei/data \
-    -v ${HOME}/kubespider/nas:/xunlei/downloads \
+    -v ${KUBESPIDER_HOME}/kubespider/thunder:/xunlei/data \
+    -v ${KUBESPIDER_HOME}/kubespider/nas:/xunlei/downloads \
     --restart=unless-stopped --privileged \
     ${image_registry}/xunlei:latest
 
