@@ -72,7 +72,11 @@ mteam_magic_source_provider:
   file_type: {config needed}
   handle_host:
   - kp.m-team.cc
-  link_selector: //*[@id="outer"]/table[1]/tr[5]/td[2]/a[1]/@href
+  link_selector:
+  - //*[@id="outer"]/table[1]/tr[5]/td[2]/a[1]/@href
+  - //*[@id="outer"]/table[1]/tr[7]/td[2]/a[1]/@href
+  - //*[@id="outer"]/table[1]/tr[6]/td[2]/a[1]/@href
+  - //*[@id="outer"]/table[1]/tr[8]/td[2]/a[1]/@href
   link_type: torrent
   title_selector: //*[@id="top"]/text()
   type: magic_source_provider
@@ -91,7 +95,10 @@ hdvideo_magic_source_provider:
   file_type: {config needed}
   handle_host:
   - hdvideo.one
-  link_selector: //*[@id="outer"]/table[2]/tr[5]/td[2]/a[1]/@href
+  link_selector:
+  - //*[@id="outer"]/table[2]/tr[5]/td[2]/a[1]/@href
+  - //*[@id="outer"]/table[1]/tr[4]/td[2]/a[1]/@href
+  - //*[@id="outer"]/table[1]/tr[5]/td[2]/a[1]/@href
   link_type: torrent
   title_selector: //*[@id="top"]/text()
   type: magic_source_provider
