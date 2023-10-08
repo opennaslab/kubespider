@@ -4,8 +4,10 @@ import logging
 import time
 import json
 
+import hashlib
+import base64
 import execjs
-import libtorrent as lb
+import bencodepy
 
 from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
@@ -120,8 +122,15 @@ class XunleiDownloadProvider(provider.DownloadProvider):
             return err
 
     def convert_torrent_to_magnet(self, torrent_file_path: str) -> str:
-        info = lb.torrent_info(torrent_file_path)
-        return 'magnet:?xt=urn:btih:' + str(info.info_hash()) + '&dn=' + info.name()
+        # https://github.com/DanySK/torrent2magnet/blob/develop/torrent2magnet.py
+        metadata = bencodepy.decode_from_file(torrent_file_path)
+        subj = metadata[b'info']
+        hashcontents = bencodepy.encode(subj)
+        digest = hashlib.sha1(hashcontents).digest()
+        b32hash = base64.b32encode(digest).decode()
+        return 'magnet:?'\
+                 + 'xt=urn:btih:' + b32hash\
+                 + '&dn=' + metadata[b'info'][b'name'].decode()
 
     def create_sub_path(self, token: str, dir_name: str, parent_id: str) -> TypeError:
         try:
