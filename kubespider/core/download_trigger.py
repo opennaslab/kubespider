@@ -160,7 +160,7 @@ class KubespiderDownloader:
                 **resource.extra_params()
             ))
             if err is not None:
-                logging.warning('Download torrent file error:%s', err)
+                logging.warning('Download general file error:%s', err)
                 continue
             # use the first successful downloader
             break

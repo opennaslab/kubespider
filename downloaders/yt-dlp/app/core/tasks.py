@@ -7,6 +7,8 @@ import _thread
 from yt_dlp import YoutubeDL
 
 
+COOKIE_FILE_PATH = '/app/config/cookies.txt'
+
 class DownloadTask:
     def __init__(self, para: dict, count: int) -> None:
         self.para = para
@@ -37,6 +39,7 @@ class YtDlpTasks:
             download_opts = {
                 'outtmpl': os.path.join(task.para['path'], '%(title)s.%(ext)s'),
                 'noplaylist': True,
+                'cookiefile': COOKIE_FILE_PATH,
             }
 
             if bool(task.para['autoFormatConvert']):

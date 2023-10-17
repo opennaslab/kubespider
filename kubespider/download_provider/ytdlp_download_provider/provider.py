@@ -1,5 +1,6 @@
 import logging
 import json
+from urllib.parse import urlparse
 
 from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
@@ -18,6 +19,7 @@ class YTDlpDownloadProvider(DownloadProvider):
         self.target_format = 'mp4'
         self.download_proxy = ''
         self.request_handler = get_request_controller(use_proxy=False)
+        self.handle_host = ['www.youtube.com']
 
     def get_provider_type(self) -> str:
         return self.provider_type
@@ -48,15 +50,15 @@ class YTDlpDownloadProvider(DownloadProvider):
             'downloadProxy': self.download_proxy
         }
         logging.info('Send general task:%s', json.dumps(data))
-
-        if not task.url.startswith('https://www.youtube.com/'):
-            return TypeError('yt-dlp only support specific resource')
-
+        if urlparse(task.url).hostname not in self.handle_host:
+            return TypeError("yt-dlp doesn't support this host")
         # This downloading tasks is special, other download software could not handle
         # So just return None
         try:
-            path = self.http_endpoint_host + ":" + str(self.http_endpoint_port) + '/api/v1/download'
-            req = self.request_handler.post(path, headers=headers, data=json.dumps(data), timeout=30)
+            path = self.http_endpoint_host + ":" + \
+                str(self.http_endpoint_port) + '/api/v1/download'
+            req = self.request_handler.post(
+                path, headers=headers, data=json.dumps(data), timeout=30)
             if req.status_code != 200:
                 logging.error("Send general task error:%s", req.status_code)
         except Exception as err:
@@ -75,3 +77,4 @@ class YTDlpDownloadProvider(DownloadProvider):
         self.auto_convert = cfg.get('auto_format_convet', False)
         self.target_format = cfg.get('target_format', 'mp4')
         self.download_proxy = cfg.get('download_proxy', '')
+        self.handle_host = cfg.get('handle_host', ['www.youtube.com'])
