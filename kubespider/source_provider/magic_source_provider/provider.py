@@ -103,11 +103,14 @@ class MagicSourceProvider(provider.SourceProvider):
             logging.info("MagicSourceProvider get no links for %s", event.source)
             return ret
 
-        titles = dom.xpath(self.title_selector)
-        if len(titles) < 1:
-            path = ''
+        if self.title_selector:
+            titles = dom.xpath(self.title_selector)
+            if len(titles) < 1:
+                path = ''
+            else:
+                path = titles[0].strip()
         else:
-            path = titles[0].strip()
+            path = ''
 
         for link in links:
             logging.info('MagicSourceProvider find %s', helper.format_long_string(link))
