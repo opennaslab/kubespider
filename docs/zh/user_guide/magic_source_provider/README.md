@@ -105,3 +105,17 @@ hdvideo_magic_source_provider:
 ```
 * `downloader`: 建议使用 transmission 下载软件.  
 ![hdvideo](./images/hdvideo-show.png)
+
+### 支持yt-dlp下载
+以 ted（www.ted.com）为例，添加source_provider配置，并指明downloader为yt-dlp，即可使用yt-dlp下载。
+
+```yaml
+ytdlp_magic_source_provider:
+  enable: true
+  type: magic_source_provider
+  handle_host:
+    - www.ted.com
+  downloader: yt-dlp
+  link_selector: $URL
+  link_type: general
+```
