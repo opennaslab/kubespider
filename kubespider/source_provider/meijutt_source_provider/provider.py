@@ -59,8 +59,9 @@ class MeijuttSourceProvider(provider.SourceProvider):
 
     def should_handle(self, event: Event) -> bool:
         parse_url = urlparse(event.source)
+        # Issue: #357, the hostname may be None
         # The url is easy to change because of DNS, so we use the prefix to judge
-        if "www.meijutt" in parse_url.hostname and 'content' in parse_url.path:
+        if parse_url.hostname and "www.meijutt" in parse_url.hostname and 'content' in parse_url.path:
             logging.info('%s belongs to MeijuttSourceProvider', event.source)
             return True
         return False

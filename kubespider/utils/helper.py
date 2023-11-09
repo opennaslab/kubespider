@@ -82,6 +82,9 @@ def get_link_type(url: str, controller: requests.Session) -> str:
 
 def parse_cookie_string(cookie: str) -> dict:
     cookie_dict = {}
+    # fix: cookie may be None or empty
+    if cookie is None or not cookie:
+        return cookie_dict
     for item in cookie.split(';'):
         # fix: cookie value may contain '='
         key, value = item.strip().split('=', 1)
