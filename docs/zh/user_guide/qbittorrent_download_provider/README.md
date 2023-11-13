@@ -79,6 +79,7 @@ qbittorrent:
   tags:
     - kubespider
   category: kubespider
+  use_auto_torrent_management: false
 ```
 
 其中:
@@ -95,6 +96,7 @@ qbittorrent:
 * `priority`: 下载提供器优先级，数字越小，优先级越高，下载资源时按优先级尝试，无法下载或下载失败时切换下载器。
 * `tags`: 触发下载时使用的tag，可用于资源分类，不需要时可留空或不设置。
 * `category`: 触发下载时使用的category，可用于资源分类，不需要时可留空或不设置。
+* `use_auto_torrent_management`: 必须配置category选项，触发下载时，使用category作为保存目录
 
 #### 3.1 来自订阅源的配置
 

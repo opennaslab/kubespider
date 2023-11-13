@@ -31,6 +31,7 @@ qbittorrent:
   username: admin
   password: adminadmin
   verify_webui_certificate: false
+  use_auto_torrent_management: false
   priority: 3
   tags:
     - kubespider

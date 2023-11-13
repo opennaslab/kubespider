@@ -24,6 +24,7 @@ class QbittorrentDownloadProvider(DownloadProvider):
         self.verify_webui_certificate = False
         self.download_tags = ['']
         self.download_category = ''
+        self.use_auto_torrent_management = False
 
     def get_provider_type(self) -> str:
         return self.provider_type
@@ -65,10 +66,13 @@ class QbittorrentDownloadProvider(DownloadProvider):
         logging.info('Start torrent download:%s, path:%s', task.url, download_path)
         tags = task.extra_param('tags', self.download_tags)
         category = task.extra_param('category', self.download_category)
+        use_auto_torrent_management = task.extra_param('use_auto_torrent_management', self.use_auto_torrent_management)
+        if not category:
+            use_auto_torrent_management = False
         try:
             logging.info('Create download task category:%s, tags:%s', category, tags)
             ret = self.client.torrents_add(torrent_files=task.url, save_path=download_path, category=category,
-                                           tags=tags)
+                                           tags=tags, use_auto_torrent_management=use_auto_torrent_management)
             logging.info('Create download task results:%s', ret)
             return None
         except Exception as err:
@@ -81,9 +85,12 @@ class QbittorrentDownloadProvider(DownloadProvider):
         download_path = os.path.join(self.download_base_path, task.path)
         tags = task.extra_param('tags', self.download_tags)
         category = task.extra_param('category', self.download_category)
+        use_auto_torrent_management = task.extra_param('use_auto_torrent_management', self.use_auto_torrent_management)
+        if not category:
+            use_auto_torrent_management = False
         try:
             logging.info('Create download task category:%s, tags:%s', category, tags)
-            ret = self.client.torrents_add(urls=task.url, save_path=download_path, category=category, tags=tags)
+            ret = self.client.torrents_add(urls=task.url, save_path=download_path, category=category, tags=tags, use_auto_torrent_management=use_auto_torrent_management)
             logging.info('Create download task results:%s', ret)
             return None
         except Exception as err:
@@ -111,6 +118,7 @@ class QbittorrentDownloadProvider(DownloadProvider):
         self.verify_webui_certificate = cfg['verify_webui_certificate']
         self.download_tags = cfg.get('tags', [])
         self.download_category = cfg.get('category')
+        self.use_auto_torrent_management = cfg['use_auto_torrent_management']
         self.client = qbittorrentapi.Client(
             self.http_endpoint_host,
             self.http_endpoint_port,
