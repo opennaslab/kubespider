@@ -8,6 +8,12 @@ yt-dlp:
   target_format: mp4
   download_proxy: http://192.168.1.8:1087
   priority: 0
+  handle_host:
+    - www.youtube.com
+    - youtube.com
+    - www.ted.com
+    - youtu.be
+    - m.youtube.com
 youget:
   type: youget_download_provider
   enable: false

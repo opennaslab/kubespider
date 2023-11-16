@@ -77,4 +77,4 @@ class YTDlpDownloadProvider(DownloadProvider):
         self.auto_convert = cfg.get('auto_format_convet', False)
         self.target_format = cfg.get('target_format', 'mp4')
         self.download_proxy = cfg.get('download_proxy', '')
-        self.handle_host = cfg.get('handle_host', ['www.youtube.com'])
+        self.handle_host = cfg.get('handle_host', ['www.youtube.com', 'youtube.com', 'm.youtube.com', 'youtu.be'])
