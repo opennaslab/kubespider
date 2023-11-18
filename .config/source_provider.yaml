@@ -5,6 +5,11 @@ mikanani_source_provider:
   # 将以下rss链接更换为自己的mikan订阅链接
   # 格式为 https://mikanani.me/RSS/MyBangumi?token=***mytoken***
   rss_link: https://mikanani.me/Home/Classic
+ani_source_provider:
+  type: ani_source_provider
+  enable: true
+  rss_link: https://api.ani.rip/ani-download.xml
+  classification_on_directory: true
 btbtt12_disposable_source_provider:
   type: btbtt12_disposable_source_provider
   enable: true
