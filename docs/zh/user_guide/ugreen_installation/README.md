@@ -31,29 +31,58 @@
 
 ### 导入镜像
 
-按照如下步骤导入镜像 `cesign/kubespider:latest` 和 `cesign/aria2-pro:latest`。
+由于绿联系统的特殊性，在UGOS上部署Kubespider无法通过`hack/install_kubespider.sh`脚本一键完成，所以你需要单独导入所有的套件镜像并分别运行。
+
+按照如下步骤导入镜像
 
 <image src="./images/import-image.png" alt="导入镜像">
 
+部署Kubespider的完整版你总共需要这些镜像：
+
+```
+cesign/kubespider
+superng6/aria2           # 重要，基于p3terx/aria2-pro的衍生镜像在UGOS系统中有兼容性问题，无法正常运行，会不断自动退出
+
+// 可选
+linuxserver/qbittorrent  # 或者增强版superng6/qbittorrentee
+cesign/ytdlp-downloader
+cesign/tiktok-dlp
+diygod/rsshub
+linuxserver/transmission
+```
+
 ### 安装 Aria2
+
 
 按照如下步骤创建 aria 容器：
 
-<image src="./images/aria-1.png" alt="aria-1">
+<image src="./images/aria-new-1.png" alt="aria-1">
 
-<image src="./images/aria-2.png" alt="aria-2">
+<image src="./images/aria-new-2.png" alt="aria-2">
 
-注意修改网络名称为 `host`
+将BT下载器放在bridge会因NAT导致公网受限，如果下载器需要进行BT下载（如qbittorrent和aria2），请务必将他们部署在`host`网络。
 <image src="./images/aria-3.png" alt="aria-3">
 
 文件夹修改为之前创建的目录，类型改为读写
 <image src="./images/aria-4.png" alt="aria-4">
 
-绿联NAS 6800 端口已使用，修改为 6801
+绿联NAS 6800 端口已使用，如果网络选择`host`则在这里的端口设置仅有“为APP提供快捷方式”的作用，请在环境变量中将`PORT`修改为其他端口，此处以6801为例
 <image src="./images/aria-5.png" alt="aria-5">
 
-修改环境变量 `RPC_PORT` 和 `RPC_SECRET`
-<image src="./images/aria-6.png" alt="aria-5">
+修改环境变量：
+
+- PORT        `6801`
+- SECRET      `kubespider`
+- WEBUI       `false`，如果想要自带Web UI的镜像可以选择`superng6/aria2:webui-latest`分支，并配置`WEBUI_PORT`
+- PUID        root登录SSH后台后，通过命令`id <user>`查询“网络服务”账号的UID
+- PGID        root登录SSH后台后，通过命令`id <user>`查询“网络服务”账号的GID
+- BTPORT      尽量随机选择大于10000的端口
+
+<image src="./images/aria-new-5.png" alt="aria-5">
+
+<image src="./images/aria-new-6.png" alt="aria-5">
+
+<image src="./images/aria-new-7.png" alt="aria-5">
 
 
 ### 安装 Kubespider
