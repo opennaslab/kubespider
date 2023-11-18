@@ -97,6 +97,7 @@ jobs:
         file: Dockerfile
         platforms: |
           linux/amd64
+          linux/arm64
         push: true
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest
 
@@ -107,6 +108,7 @@ jobs:
         file: ./downloaders/you-get/Dockerfile
         platforms: |
           linux/amd64
+          linux/arm64
         push: true
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/youget-downloader:latest
 
@@ -117,6 +119,7 @@ jobs:
         file: ./downloaders/yt-dlp/Dockerfile
         platforms: |
           linux/amd64
+          linux/arm64
         push: true
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/ytdlp-downloader:latest
 
@@ -127,5 +130,6 @@ jobs:
         file: ./downloaders/tiktok-dlp/Dockerfile
         platforms: |
           linux/amd64
+          linux/arm64
         push: true
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/tiktok-dlp:latest
