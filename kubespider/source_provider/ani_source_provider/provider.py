@@ -6,7 +6,6 @@ import traceback
 
 import xml.etree.ElementTree as ET
 import re
-from typing import Union
 from typing import Tuple
 
 from source_provider import provider
@@ -128,16 +127,16 @@ class AniSourceProvider(provider.SourceProvider):
             return None, None, None
 
     def load_filter_config(self) -> str:
-        filter = self.config_reader.read().get('blacklist', None)
-        if filter is None or filter == "":
+        filter_ = self.config_reader.read().get('blacklist', None)
+
+        if filter_ is None or filter_ == "":
             return []
-        elif isinstance(filter, list):
-            return [str(item) for item in filter]
-        elif isinstance(filter, str):
-            return [filter]
-        else:
-            logging.warning('Invalid blacklist value: %s, fallback to Empty', filter)
-            return []
+        if isinstance(filter_, list):
+            return [str(item) for item in filter_]
+        if isinstance(filter_, str):
+            return [filter_]
+        logging.warning('Invalid blacklist value: %s, fallback to Empty', filter_)
+        return []
 
     def check_blacklist(self, text: str, blacklist: list) -> bool:
         for item in blacklist:
@@ -154,4 +153,3 @@ class AniSourceProvider(provider.SourceProvider):
         logging.info('ANi rss link is: %s', cfg['rss_link'])
         self.rss_link = cfg['rss_link']
         self.classification_on_directory = cfg.get('classification_on_directory', True)
-

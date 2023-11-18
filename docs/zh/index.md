@@ -99,8 +99,8 @@ Kubespider结合chrome插件，能获得更好的体验。
 
 全局配置文件在`.config/kubespider.yaml`，安装后位于`${HOME}/kubespider/.config/kubespider.yaml`，各配置项解释如下：
 
-| 配置项       | 是否必配 | 功能                                                                    |
-|:-------------|---------:|------------------------------------------------------------------------:|
+| 配置项       | 是否必配 |                                                                    功能 |
+| :----------- | -------: | ----------------------------------------------------------------------: |
 | `proxy`      |       否 |                                   请求代理，如`http://192.168.1.5:1087` |
 | `auth_token` |       否 | 认证token，用于下载触发请求认证，如果需要公网访问可以配置，以增加安全性 |
 
@@ -110,8 +110,8 @@ Kubespider结合chrome插件，能获得更好的体验。
 
 如前面所述，资源提供器用于对接各种资源网站，条件触发下载相关资源：
 
-| 资源提供器          | 是否支持 | 用途                            | 配置手册                                                          |
-|:--------------------|---------:|--------------------------------:|------------------------------------------------------------------:|
+| 资源提供器          | 是否支持 |                            用途 |                                                          配置手册 |
+| :------------------ | -------: | ------------------------------: | ----------------------------------------------------------------: |
 | mikanani资源提供器  |       是 |                  全自动动漫追番 |           [link](./user_guide/mikanani_source_provider/README.md) |
 | btbtt12资源提供器   |       是 |  实现链接触发下载，简化下载流程 | [link](./user_guide/btbtt12_disposable_source_provider/README.md) |
 | meijutt资源提供器   |       是 |                      自动追美剧 |            [link](./user_guide/meijutt_source_provider/README.md) |
@@ -119,14 +119,14 @@ Kubespider结合chrome插件，能获得更好的体验。
 | Bilibili资源提供器  |       是 |            触发下载Bilibili视频 |           [link](./user_guide/bilibili_source_provider/README.md) |
 | 通用rss资源提供器   |       是 |             自动下载rss订阅资源 |        [link](./user_guide/general_rss_source_provider/README.md) |
 | 通用xpath资源提供器 |       是 | 触发下载通过xpath配置的内容资源 |              [link](./user_guide/magic_source_provider/README.md) |
-| ANi资源提供器 |       是 | 自动下载ANi项目番剧资源 |              [link](./user_guide/ani_source_provider/README.md) |
+| ANi资源提供器       |       是 |         自动下载ANi项目番剧资源 |                [link](./user_guide/ani_source_provider/README.md) |
 
 ### 下载提供器(按需配置)
 
 为了充分利用开源社区已有的下载软件(如YouTube有专门的下载软件)，目前支持如下下载软件：
 
-| 下载软件     | 是否支持 | 配置手册                                                      |
-|:-------------|---------:|--------------------------------------------------------------:|
+| 下载软件     | 是否支持 |                                                      配置手册 |
+| :----------- | -------: | ------------------------------------------------------------: |
 | aria2        |       是 |        [link](./user_guide/aria2_download_provider/README.md) |
 | 迅雷         |       是 |         [link](./user_guide/thunder_install_config/README.md) |
 | qBittorrent  |       是 |  [link](./user_guide/qbittorrent_download_provider/README.md) |
@@ -139,7 +139,7 @@ Kubespider结合chrome插件，能获得更好的体验。
 目前支持如下文件触发下载：
 
 | 下载类型             | 是否支持 |
-|:---------------------|---------:|
+| :------------------- | -------: |
 | magnet               |       是 |
 | torrent              |       是 |
 | 通用文件(jpg, mp4等) |       是 |
