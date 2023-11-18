@@ -99,7 +99,7 @@ class AniSourceProvider(provider.SourceProvider):
                 if item_title is not None:
                     logging.info('Found Anime "%s" Episode %s with info %s', item_title, item_episode, extra)
                     if not self.check_blacklist(xml_title, blacklist):
-                        path_ = path + ('/{}'.format(item_title) if self.classification_on_directory else '')
+                        path_ = path + (f'/{item_title}' if self.classification_on_directory else '')
                         ret.append(Resource(
                             url=url,
                             path=path_,
