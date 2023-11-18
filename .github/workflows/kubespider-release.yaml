@@ -62,6 +62,7 @@ jobs:
         file: Dockerfile
         platforms: |
           linux/amd64
+          linux/arm64
         push: true
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:${{  github.ref_name }}
 

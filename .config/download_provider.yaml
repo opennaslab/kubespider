@@ -7,6 +7,8 @@ yt-dlp:
   auto_format_convet: false
   target_format: mp4
   download_proxy: http://192.168.1.8:1087
+  # By default, yt-dlp supports downloading resources from various websites.
+  # Therefore, we set it with the highest priority.
   priority: 0
   handle_host:
     - www.youtube.com
