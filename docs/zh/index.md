@@ -119,7 +119,7 @@ Kubespider结合chrome插件，能获得更好的体验。
 | Bilibili资源提供器  |       是 |            触发下载Bilibili视频 |           [link](./user_guide/bilibili_source_provider/README.md) |
 | 通用rss资源提供器   |       是 |             自动下载rss订阅资源 |        [link](./user_guide/general_rss_source_provider/README.md) |
 | 通用xpath资源提供器 |       是 | 触发下载通过xpath配置的内容资源 |              [link](./user_guide/magic_source_provider/README.md) |
-| ANi资源提供器 |       是 | 全自动番剧放送同步 |              [link](./user_guide/ani_source_provider/README.md) |
+| ANi资源提供器 |       是 | 自动下载ANi项目番剧资源 |              [link](./user_guide/ani_source_provider/README.md) |
 
 ### 下载提供器(按需配置)
 
