@@ -133,7 +133,7 @@ As mentioned before, the source provider is used to adapt to different websites,
 | Magic source provider                      |     Yes |                          Trigger download resource via xpath configuration |                      [link](./docs/zh/user_guide/magic_source_provider/README.md) |
 | Douyin source provider                     |     Yes |                               Trigger download Douyin video with watermark |                     [link](./docs/zh/user_guide/tiktok_source_provider/README.md) |
 | alist source provider                      |     Yes | Automatically download newly added or updated files from the cloud storage |                      [link](./docs/zh/user_guide/alist_source_provider/README.md) |
-| ANi source provider                        |     Yes |                                    Fully automated anime download from ANi |                            [link](../zh/user_guide/ani_source_provider/README.md) |
+| ANi source provider                        |     Yes |                                    Fully automated anime download from ANi |                        [link](./docs/zh/user_guide/ani_source_provider/README.md) |
 
 
 ### Download provider(Configured as needed)  
