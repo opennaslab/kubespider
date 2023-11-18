@@ -20,6 +20,9 @@ RUN set -ex \
         tzdata \
         shadow \
         ffmpeg \
+        gcc \
+        libc-dev \
+        libffi-dev \
     && mkdir -p /app/downloads \
     && mkdir -p /app/config \
     && python3 -m pip install --upgrade pip \
