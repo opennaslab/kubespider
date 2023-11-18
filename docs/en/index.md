@@ -95,8 +95,8 @@ Then with aria2 chrome plugin, you can see the download task starts:
 
 The global configuration file is located at `.config/kubespider.yaml`, which is installed under `${HOME}/kubespider/.config/kubespider.yaml`. The description of each configuration item is as follows:
 
-| Configuration Item | Required | Function                                                                                                                                                          |
-|:-------------------|---------:|------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| Configuration Item | Required |                                                                                                                                                          Function |
+| :----------------- | -------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | `proxy`            |       No |                                                                                                              The request proxy, such as `http://192.168.1.5:1087` |
 | `auth_token`       |       No | Authentication token, used for authentication when triggering download requests. If public network access is required, it can be configured to increase security. |
 
@@ -106,8 +106,8 @@ The global configuration file is located at `.config/kubespider.yaml`, which is 
 
 As mentioned before, the source provider is used to adapt to different websites, and download related resources based on the conditions:
 
-| Source Provider             | Support | Purpose                                           | Configuration                                                         |
-|:----------------------------|--------:|--------------------------------------------------:|----------------------------------------------------------------------:|
+| Source Provider             | Support |                                           Purpose |                                                         Configuration |
+| :-------------------------- | ------: | ------------------------------------------------: | --------------------------------------------------------------------: |
 | mikanani source provider    |     Yes |              Automatically download updated anime |           [link](../zh/user_guide/mikanani_source_provider/README.md) |
 | btbtt12 source provider     |     Yes |      Trigger download resource in btbtt12 website | [link](../zh/user_guide/btbtt12_disposable_source_provider/README.md) |
 | meijutt source provider     |     Yes |                        Download updated TV series |            [link](../zh/user_guide/meijutt_source_provider/README.md) |
@@ -115,13 +115,14 @@ As mentioned before, the source provider is used to adapt to different websites,
 | Bilibili source provider    |     Yes |                   Trigger download bilibili video |           [link](../zh/user_guide/bilibili_source_provider/README.md) |
 | general rss source provider |     Yes |                 Automatically download rss source |        [link](../zh/user_guide/general_rss_source_provider/README.md) |
 | Magic source provider       |     Yes | Trigger download resource via xpath configuration |              [link](../zh/user_guide/magic_source_provider/README.md) |
+| ANi source provider         |     Yes |           Fully automated anime download from ANi |                [link](../zh/user_guide/ani_source_provider/README.md) |
 
 ### Download provider(Configured as needed)
 
 In order to make full use of the existing download software in the open-source community(For example, YouTube has dedicated download software), the following software is currently supported:
 
-| Download Software | Support | Configuration                                                     |
-|:------------------|--------:|------------------------------------------------------------------:|
+| Download Software | Support |                                                     Configuration |
+| :---------------- | ------: | ----------------------------------------------------------------: |
 | aria2             |     Yes |        [link](../zh/user_guide/aria2_download_provider/README.md) |
 | xunlei            |     Yes |         [link](../zh/user_guide/thunder_install_config/README.md) |
 | qBittorrent       |     Yes |  [link](../zh/user_guide/qbittorrent_download_provider/README.md) |
@@ -134,7 +135,7 @@ In order to make full use of the existing download software in the open-source c
 Currently, the following file types are supported to trigger downloading:
 
 | Download Types          | Support |
-|:------------------------|--------:|
+| :---------------------- | ------: |
 | magnet                  |     Yes |
 | torrent                 |     Yes |
 | general(jpg, mp4, etc.) |     Yes |
