@@ -113,56 +113,58 @@ Kubespider结合chrome插件，能获得更好的体验。
 
 ## 📝 配置
 全局配置文件在`.config/kubespider.yaml`，安装后默认位于`${HOME}/kubespider/.config/kubespider.yaml`，各配置项解释如下：  
-|  配置项  | 是否必配 |                   功能 |
-| :-------- | -----: | -------------------: |
-| `proxy` |      否 | 请求代理，如`http://192.168.1.5:1087` |
-| `auth_token` | 否 | 认证token，用于下载触发请求认证，如果需要公网访问可以配置，以增加安全性 |
-| `auto_change_download_provider` | 否 | 控制是否为失败和长时阻塞任务切换下载提供器 |
-| `server_port` | 否 | 提供API服务的端口 |
+| 配置项                          | 是否必配 |                                                                    功能 |
+| :------------------------------ | -------: | ----------------------------------------------------------------------: |
+| `proxy`                         |       否 |                                   请求代理，如`http://192.168.1.5:1087` |
+| `auth_token`                    |       否 | 认证token，用于下载触发请求认证，如果需要公网访问可以配置，以增加安全性 |
+| `auto_change_download_provider` |       否 |                              控制是否为失败和长时阻塞任务切换下载提供器 |
+| `server_port`                   |       否 |                                                       提供API服务的端口 |
 
 ## 🔧 特性列表
 ### 资源提供器(按需配置)
 如前面所述，资源提供器用于对接各种资源网站，条件触发下载相关资源：
-| 资源提供器 | 是否支持 | 用途 | 配置手册 |
-| :-------- | -----: | ---: | ------: |
-| mikanani资源提供器  | 是     | 全自动动漫追番 | [link](./docs/zh/user_guide/mikanani_source_provider/README.md) |
-| btbtt12资源提供器 | 是 | 实现链接触发下载，简化下载流程 | [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) |
-| meijutt资源提供器 | 是 | 自动追美剧 | [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
-| YouTube资源提供器 | 是 | 触发下载YouTube视频 | [link](./docs/zh/user_guide/youtube_source_provider/README.md) |
-| Bilibili资源提供器 | 是 | 触发下载Bilibili视频 | [link](./docs/zh/user_guide/bilibili_source_provider/README.md) |
-| Bilibili博主追更资源提供器 | 是 | 自动下载B站博主更新的视频 | [link](./docs/zh/user_guide/bilibili_vlogger_subscribe_source_provider/README.md) |
-| 通用rss资源提供器 | 是 | 自动下载rss订阅资源 | [link](./docs/zh/user_guide/general_rss_source_provider/README.md) |
-| 魔法资源提供器 | 是 | 触发下载通过xpath配置的内容资源 | [link](./docs/zh/user_guide/magic_source_provider/README.md) |
-| 抖音资源提供器 | 是 | 触发下载带水印的抖音视频 | [link](./docs/zh/user_guide/tiktok_source_provider/README.md) |
-| alist资源提供器 | 是 | 自动下载网盘中新增或更新文件 | [link](./docs/zh/user_guide/alist_source_provider/README.md) |
+| 资源提供器                 | 是否支持 |                            用途 |                                                                          配置手册 |
+| :------------------------- | -------: | ------------------------------: | --------------------------------------------------------------------------------: |
+| mikanani资源提供器         |       是 |                  全自动动漫追番 |                   [link](./docs/zh/user_guide/mikanani_source_provider/README.md) |
+| btbtt12资源提供器          |       是 |  实现链接触发下载，简化下载流程 |         [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) |
+| meijutt资源提供器          |       是 |                      自动追美剧 |                    [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
+| YouTube资源提供器          |       是 |             触发下载YouTube视频 |                    [link](./docs/zh/user_guide/youtube_source_provider/README.md) |
+| Bilibili资源提供器         |       是 |            触发下载Bilibili视频 |                   [link](./docs/zh/user_guide/bilibili_source_provider/README.md) |
+| Bilibili博主追更资源提供器 |       是 |       自动下载B站博主更新的视频 | [link](./docs/zh/user_guide/bilibili_vlogger_subscribe_source_provider/README.md) |
+| 通用rss资源提供器          |       是 |             自动下载rss订阅资源 |                [link](./docs/zh/user_guide/general_rss_source_provider/README.md) |
+| 魔法资源提供器             |       是 | 触发下载通过xpath配置的内容资源 |                      [link](./docs/zh/user_guide/magic_source_provider/README.md) |
+| 抖音资源提供器             |       是 |        触发下载带水印的抖音视频 |                     [link](./docs/zh/user_guide/tiktok_source_provider/README.md) |
+| alist资源提供器            |       是 |    自动下载网盘中新增或更新文件 |                      [link](./docs/zh/user_guide/alist_source_provider/README.md) |
+| ANi资源提供器              |       是 |         自动下载ANi项目番剧资源 |                                [link](./user_guide/ani_source_provider/README.md) |
+
 
 ### 下载提供器(按需配置)
 为了充分利用开源社区已有的下载软件(如YouTube有专门的下载软件)，目前支持如下下载软件：
-| 下载软件 | 是否支持 | 配置手册 |
-| :---- | ------: | -----: |
-| aria2 |    是   | [link](./docs/zh/user_guide/aria2_download_provider/README.md) |
-| 迅雷   |   是    | [link](./docs/zh/user_guide/thunder_install_config/README.md) |
-| qBittorrent | 是| [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) |
-| you-get  | 是     | [link](./docs/zh/user_guide/youget_download_provider/README.md)      |
-| yt-dlp   | 是   | [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
-| transmission | 是   | [link](./docs/zh/user_guide/transmission_download_provider/README.md) |
+| 下载软件     | 是否支持 |                                                              配置手册 |
+| :----------- | -------: | --------------------------------------------------------------------: |
+| aria2        |       是 |        [link](./docs/zh/user_guide/aria2_download_provider/README.md) |
+| 迅雷         |       是 |         [link](./docs/zh/user_guide/thunder_install_config/README.md) |
+| qBittorrent  |       是 |  [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) |
+| you-get      |       是 |       [link](./docs/zh/user_guide/youget_download_provider/README.md) |
+| yt-dlp       |       是 |        [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
+| transmission |       是 | [link](./docs/zh/user_guide/transmission_download_provider/README.md) |
 
 ### 消息通知提供器(按需配置)
 为了充分利用开源社区已有的消息通知软件，目前支持如下消息通知软件：
-| 通知软件   | 是否支持 | 配置手册 |
-| :-------- | ------: | -----: |
-| Pushdeer  |   是    | [link](./docs/zh/user_guide/pushdeer_notification_provider/README.md) |
-| Telegram  |   是    | [link](./docs/zh/user_guide/telegram_notification_provider/README.md) |
-| QQ        |   是    | [link](./docs/zh/user_guide/qq_notification_provider/README.md) |
-| Bark      |   是    | [link](./docs/zh/user_guide/bark_notification_provider/README.md) |
+| 通知软件 | 是否支持 |                                                              配置手册 |
+| :------- | -------: | --------------------------------------------------------------------: |
+| Pushdeer |       是 | [link](./docs/zh/user_guide/pushdeer_notification_provider/README.md) |
+| Telegram |       是 | [link](./docs/zh/user_guide/telegram_notification_provider/README.md) |
+| QQ       |       是 |       [link](./docs/zh/user_guide/qq_notification_provider/README.md) |
+| Bark     |       是 |     [link](./docs/zh/user_guide/bark_notification_provider/README.md) |
 
 ### 基本特性
 目前支持如下文件触发下载：
-| 下载类型 | 是否支持 |
-| :-----  | ------: |
-| magnet  |   是    |
-| torrent |   是    |
-| 通用文件(jpg, mp4等) |   是    |
+| 下载类型             | 是否支持 |
+| :------------------- | -------: |
+| magnet               |       是 |
+| torrent              |       是 |
+| 通用文件(jpg, mp4等) |       是 |
 
 触发下载使用方法请查看 [link](./docs/zh/user_guide/trigger_download/README.md)。
 

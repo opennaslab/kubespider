@@ -111,56 +111,58 @@ Then with aria2 chrome plugin, you can see the download task starts:
 ## 📝 Configuration
 The global configuration file is located at `.config/kubespider.yaml`, which is installed under `${HOME}/kubespider/.config/kubespider.yaml` by default. The description of each configuration item is as follows:
 
-|  Configuration Item  | Required |                   Function |
-| :-------- | -----: | -------------------: |
-| `proxy` |      No | The request proxy, such as `http://192.168.1.5:1087` |
-| `auth_token`| No | Authentication token, used for authentication when triggering download requests. If public network access is required, it can be configured to increase security. |
-| `auto_change_download_provider` | No | Swith to control whether to change download provoider for failed/long-time-pending download tasks automatically. |
-| `server_port` | No | The port used to provider API service |
+| Configuration Item              | Required |                                                                                                                                                          Function |
+| :------------------------------ | -------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| `proxy`                         |       No |                                                                                                              The request proxy, such as `http://192.168.1.5:1087` |
+| `auth_token`                    |       No | Authentication token, used for authentication when triggering download requests. If public network access is required, it can be configured to increase security. |
+| `auto_change_download_provider` |       No |                                                  Swith to control whether to change download provoider for failed/long-time-pending download tasks automatically. |
+| `server_port`                   |       No |                                                                                                                             The port used to provider API service |
 
 ## 🔧 Feature list
 ### Source provider(Configured as needed)  
 As mentioned before, the source provider is used to adapt to different websites, and download related resources based on the conditions:
-| Source Provider | Support | Purpose | Configuration |
-| :-------- | -----: | ---: | ------: |
-| mikanani source provider  | Yes     | Automatically download updated anime | [link](./docs/zh/user_guide/mikanani_source_provider/README.md) |
-| btbtt12 source provider | Yes | Trigger download resource in btbtt12 website | [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) |
-| meijutt source provider | Yes | Download updated TV series | [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
-| YouTube source provider | Yes | Trigger download YouTube video | [link](./docs/zh/user_guide/youtube_source_provider/README.md) |
-| Bilibili source provider | Yes | Trigger download bilibili video | [link](./docs/zh/user_guide/bilibili_source_provider/README.md) |
-| Bilibili vlogger subscribe source provider | Yes | Automatically download updated Bilibili vlogger's video | [link](./docs/zh/user_guide/bilibili_vlogger_subscribe_source_provider/README.md) |
-| general rss source provider | Yes | Automatically download rss source | [link](./docs/zh/user_guide/general_rss_source_provider/README.md) |
-| Magic source provider | Yes | Trigger download resource via xpath configuration | [link](./docs/zh/user_guide/magic_source_provider/README.md) |
-| Douyin source provider | Yes | Trigger download Douyin video with watermark | [link](./docs/zh/user_guide/tiktok_source_provider/README.md) |
-| alist source provider | Yes | Automatically download newly added or updated files from the cloud storage | [link](./docs/zh/user_guide/alist_source_provider/README.md) |
+| Source Provider                            | Support |                                                                    Purpose |                                                                     Configuration |
+| :----------------------------------------- | ------: | -------------------------------------------------------------------------: | --------------------------------------------------------------------------------: |
+| mikanani source provider                   |     Yes |                                       Automatically download updated anime |                   [link](./docs/zh/user_guide/mikanani_source_provider/README.md) |
+| btbtt12 source provider                    |     Yes |                               Trigger download resource in btbtt12 website |         [link](./docs/zh/user_guide/btbtt12_disposable_source_provider/README.md) |
+| meijutt source provider                    |     Yes |                                                 Download updated TV series |                    [link](./docs/zh/user_guide/meijutt_source_provider/README.md) |
+| YouTube source provider                    |     Yes |                                             Trigger download YouTube video |                    [link](./docs/zh/user_guide/youtube_source_provider/README.md) |
+| Bilibili source provider                   |     Yes |                                            Trigger download bilibili video |                   [link](./docs/zh/user_guide/bilibili_source_provider/README.md) |
+| Bilibili vlogger subscribe source provider |     Yes |                    Automatically download updated Bilibili vlogger's video | [link](./docs/zh/user_guide/bilibili_vlogger_subscribe_source_provider/README.md) |
+| general rss source provider                |     Yes |                                          Automatically download rss source |                [link](./docs/zh/user_guide/general_rss_source_provider/README.md) |
+| Magic source provider                      |     Yes |                          Trigger download resource via xpath configuration |                      [link](./docs/zh/user_guide/magic_source_provider/README.md) |
+| Douyin source provider                     |     Yes |                               Trigger download Douyin video with watermark |                     [link](./docs/zh/user_guide/tiktok_source_provider/README.md) |
+| alist source provider                      |     Yes | Automatically download newly added or updated files from the cloud storage |                      [link](./docs/zh/user_guide/alist_source_provider/README.md) |
+| ANi source provider                        |     Yes |                                    Fully automated anime download from ANi |                            [link](../zh/user_guide/ani_source_provider/README.md) |
+
 
 ### Download provider(Configured as needed)  
 In order to make full use of the existing download software in the open-source community(For example, YouTube has dedicated download software), the following software is currently supported:
-| Download Software | Support | Configuration |
-| :---------------- | ------: | ------------: |
-| aria2             | Yes     | [link](./docs/zh/user_guide/aria2_download_provider/README.md) |
-| xunlei            | Yes     | [link](./docs/zh/user_guide/thunder_install_config/README.md) |
-| qBittorrent       | Yes     | [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) | 
-| you-get           | Yes     | [link](./docs/zh/user_guide/youget_download_provider/README.md)    |
-| yt-dlp            | Yes     | [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
-| transmission      | Yes     | [link](./docs/zh/user_guide/transmission_download_provider/README.md) |
+| Download Software | Support |                                                         Configuration |
+| :---------------- | ------: | --------------------------------------------------------------------: |
+| aria2             |     Yes |        [link](./docs/zh/user_guide/aria2_download_provider/README.md) |
+| xunlei            |     Yes |         [link](./docs/zh/user_guide/thunder_install_config/README.md) |
+| qBittorrent       |     Yes |  [link](./docs/zh/user_guide/qbittorrent_download_provider/README.md) |
+| you-get           |     Yes |       [link](./docs/zh/user_guide/youget_download_provider/README.md) |
+| yt-dlp            |     Yes |        [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
+| transmission      |     Yes | [link](./docs/zh/user_guide/transmission_download_provider/README.md) |
 
 ### Notification provider(Configured as needed)  
 In order to make full use of the existing notification software in the open-source community, the following software is currently supported:
-| Notification Software | Support | Configuration |
-| :-------------------- | ------: | ------------: |
-|      Pushdeer         |   Yes   | [link](./docs/zh/user_guide/pushdeer_notification_provider/README.md) |
-|      Telegram         |   Yes   | [link](./docs/zh/user_guide/telegram_notification_provider/README.md) |
-|      QQ               |   Yes   | [link](./docs/zh/user_guide/qq_notification_provider/README.md) |
-|      Bark             |   Yes   | [link](./docs/zh/user_guide/bark_notification_provider/README.md) |
+| Notification Software | Support |                                                         Configuration |
+| :-------------------- | ------: | --------------------------------------------------------------------: |
+| Pushdeer              |     Yes | [link](./docs/zh/user_guide/pushdeer_notification_provider/README.md) |
+| Telegram              |     Yes | [link](./docs/zh/user_guide/telegram_notification_provider/README.md) |
+| QQ                    |     Yes |       [link](./docs/zh/user_guide/qq_notification_provider/README.md) |
+| Bark                  |     Yes |     [link](./docs/zh/user_guide/bark_notification_provider/README.md) |
 
 ### Basic feature  
 Currently, the following file types are supported to trigger downloading:
-| Download Types | Support |
-| :------------- | ------: |
-| magnet         | Yes     | 
-| torrent        | Yes     |
-| general(jpg, mp4, etc.) | Yes |
+| Download Types          | Support |
+| :---------------------- | ------: |
+| magnet                  |     Yes |
+| torrent                 |     Yes |
+| general(jpg, mp4, etc.) |     Yes |
 
 Please refer to [link](./docs/zh/user_guide/trigger_download/README.md) for how to trigger the download.
 

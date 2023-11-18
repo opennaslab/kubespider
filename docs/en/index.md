@@ -115,7 +115,7 @@ As mentioned before, the source provider is used to adapt to different websites,
 | Bilibili source provider    |     Yes |                   Trigger download bilibili video |           [link](../zh/user_guide/bilibili_source_provider/README.md) |
 | general rss source provider |     Yes |                 Automatically download rss source |        [link](../zh/user_guide/general_rss_source_provider/README.md) |
 | Magic source provider       |     Yes | Trigger download resource via xpath configuration |              [link](../zh/user_guide/magic_source_provider/README.md) |
-| ANi source provider         |     Yes |   Fully Automated Anime Broadcast Synchronization |                [link](../zh/user_guide/ani_source_provider/README.md) |
+| ANi source provider         |     Yes |           Fully automated anime download from ANi |                [link](../zh/user_guide/ani_source_provider/README.md) |
 
 ### Download provider(Configured as needed)
 
