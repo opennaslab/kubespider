@@ -1,0 +1,20 @@
+provider_name: AlistProvider
+provider_type: SourceProvider
+version: 0.1.0
+language: python
+desc: this is a alist source provider
+logo:
+author:
+instance_params:
+  - name: name
+    value_type: str
+    desc: instance`s name
+    nullable: false
+  - name: host
+    value_type: string
+    desc: alist`s host
+    nullable: false
+  - name: watch_dirs
+    value_type: string
+    desc: File directory that needs to be monitored
+    nullable: false
