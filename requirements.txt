@@ -21,3 +21,5 @@ mkdocs-redirects==1.2.1
 mkdocs-mermaid2-plugin==1.0.8
 pymdown-extensions==10.1
 mkdocs-static-i18n==0.56
+SQLAlchemy~=2.0.20
+transitions~=0.9.0

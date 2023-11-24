@@ -1,7 +1,0 @@
-section_one:
-  version: 1
-
-section_two:
-  version: 1
-
-outer_key: outer_value

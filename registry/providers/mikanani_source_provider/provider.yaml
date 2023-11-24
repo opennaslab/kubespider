@@ -1,0 +1,24 @@
+provider_name: MikananiProvider
+provider_type: SourceProvider
+version: 0.1.0
+language: python
+desc:
+logo:
+author:
+instance_params:
+  - name: name
+    value_type: str
+    desc: instance`s name
+    nullable: false
+  - name: rss_link
+    value_type: str
+    desc: mikanani`s rss scribe link
+    nullable: false
+  - name: pattern
+    value_type: str
+    desc: pattern
+    nullable: true
+  - name: auto_download
+    value_type: bool
+    desc: auto_download
+    nullable: true
