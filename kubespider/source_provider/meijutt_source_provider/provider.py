@@ -78,13 +78,15 @@ class MeijuttSourceProvider(provider.SourceProvider):
             div_list = dom.find_all('div', ['class', 'tabs-list'])
 
             # filter link type
+            if len(div_list) == 0:
+                continue
             for div in div_list:
                 links=div.find_all('input', ['class', 'down_url'])
                 url = links[0].get('value')
                 link_type = helper.get_link_type(url, self.request_handler)
                 if link_type == self.link_type:
                     break
-   
+
             links = div.find_all('input', ['class', 'down_url'])
             for link in links:
                 url = link.get('value')
