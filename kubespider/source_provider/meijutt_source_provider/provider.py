@@ -75,10 +75,22 @@ class MeijuttSourceProvider(provider.SourceProvider):
                 logging.info('meijutt_source_provider get links error:%s', err)
                 continue
             dom = BeautifulSoup(resp, 'html.parser')
-            div = dom.find_all('div', ['class', 'tabs-list current-tab'])
-            if len(div) == 0:
+            div_list = dom.find_all('div', ['class', 'tabs-list'])
+
+            # filter link type
+            links=[]
+            if len(div_list) == 0:
                 continue
-            links = div[0].find_all('input', ['class', 'down_url'])
+            for div in div_list:
+                links_temp=div.find_all('input', ['class', 'down_url'])
+                url = links_temp[0].get('value')
+                link_type = helper.get_link_type(url, self.request_handler)
+                if link_type == self.link_type:
+                    links = div.find_all('input', ['class', 'down_url'])
+                    break
+
+            if len(links) == 0:
+                continue
             for link in links:
                 url = link.get('value')
                 link_type = helper.get_link_type(url, self.request_handler)
