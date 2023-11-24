@@ -78,7 +78,7 @@ class MeijuttSourceProvider(provider.SourceProvider):
             div_list = dom.find_all('div', ['class', 'tabs-list'])
 
             # filter link type
-            links=list()
+            links=[]
             if len(div_list) == 0:
                 continue
             for div in div_list:
