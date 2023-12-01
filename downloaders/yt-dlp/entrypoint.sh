@@ -9,14 +9,12 @@ umask ${UMASK}
 
 case "$1" in
   server)
-    exec python3 /app/app/app.py
+    exec su-exec ytdlp:ytdlp python3 /app/app/app.py
     ;;
   dev_server)
-    exec watchmedo auto-restart --directory=./app/ --pattern=*.py --recursive -- python3 /app/app/app.py
+    exec su-exec ytdlp:ytdlp watchmedo auto-restart --directory=./app/ --pattern=*.py --recursive -- python3 /app/app/app.py
     ;;
   *)
-    exec "$@"
+    exec su-exec ytdlp:ytdlp "$@"
     ;;
 esac
-
-su-exec ytdlp:ytdlp $@
