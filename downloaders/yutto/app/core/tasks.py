@@ -1,8 +1,6 @@
 import queue
 import time
-import json
 import subprocess
-import shlex
 import logging
 import _thread
 
