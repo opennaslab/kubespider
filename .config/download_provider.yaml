@@ -22,6 +22,12 @@ youget:
   http_endpoint_host: http://127.0.0.1
   http_endpoint_port: 3081
   priority: 1
+yutto:
+  type: yutto_download_provider
+  enable: true
+  http_endpoint_host: http://127.0.0.1
+  http_endpoint_port: 3084
+  priority: 1
 aria2:
   type: aria2_download_provider
   enable: true
