@@ -20,12 +20,19 @@ RUN set -ex \
         tzdata \
         shadow \
         ffmpeg \
+    && apk add --no-cache --virtual=build-dependencies \
+        build-base \
+        gcc \
+        g++ \
+        make \
+        musl-dev \
     && mkdir -p /app/downloads \
     && mkdir -p /app/config \
     && python3 -m pip install --upgrade pip \
     && pip install -r requirements.txt \
     && addgroup -S yutto -g 911 \
     && adduser -S yutto -G yutto -h /app -u 911 -s /bin/bash yutto \
+    && apk del --purge build-dependencies \
     && rm -rf \
         /app/.cache \
         /tmp/*
