@@ -28,7 +28,7 @@ class BilibiliVloggerSubscribeSourceProvider(provider.SourceProvider):
         return self.provider_listen_type
 
     def get_download_provider_type(self) -> str:
-        return "youget_download_provider"
+        return "yutto_download_provider"
 
     def get_prefer_download_provider(self) -> list:
         downloader_names = self.config_reader.read().get('downloader', None)

@@ -148,6 +148,5 @@ jobs:
         file: ./downloaders/yutto/Dockerfile
         platforms: |
           linux/amd64
-          linux/arm64
         push: true
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/yutto-downloader:latest

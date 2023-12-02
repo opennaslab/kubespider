@@ -37,6 +37,7 @@ import download_provider.youget_download_provider.provider as youget_download_pr
 import download_provider.ytdlp_download_provider.provider as ytdlp_download_provider
 import download_provider.transmission_download_provider.provider as transmission_download_provider
 import download_provider.tiktok_dlp_download_provider.provider as tiktok_dlp_download_provider
+import download_provider.yutto_download_provider.provider as yutto_download_provider
 
 import pt_provider.nexusphp_pt_provider.provider as nexusphp_pt_provider
 
@@ -69,6 +70,7 @@ downloader_provider_init_func = {
     'ytdlp_download_provider': ytdlp_download_provider.YTDlpDownloadProvider,
     'transmission_download_provider': transmission_download_provider.TransmissionProvider,
     'tiktok_download_provider': tiktok_dlp_download_provider.TiktokDownloadProvider,
+    'yutto_download_provider': yutto_download_provider.YuttoDownloadProvider,
 }
 
 # PT provider init related
