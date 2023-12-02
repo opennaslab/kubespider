@@ -55,10 +55,10 @@ class YouGetTasks:
                 # Wait for the process to finish and get the return code
                 return_code = process.wait()
                 if return_code == 0:
-                   logging.info("Download success for:%s", download_args[0])
+                    logging.info("Download success for:%s", download_args[0])
                 else:
-                   logging.warning("Download failed for:%s", download_args[0])
-                   self.reput_task(original_args, fail_count)
+                    logging.warning("Download failed for:%s", download_args[0])
+                    self.reput_task(original_args, fail_count)
             except Exception as err:
                 logging.error("Download failed for:%s, %s", download_args[0], str(err))
                 self.reput_task(original_args, fail_count)
