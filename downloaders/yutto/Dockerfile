@@ -25,6 +25,10 @@ RUN set -ex \
         gcc \
         g++ \
         make \
+        libffi-dev \
+        libc-dev \
+        linux-headers \
+        postgresql-dev \
     && mkdir -p /app/downloads \
     && mkdir -p /app/config \
     && python3 -m pip install --upgrade pip \
