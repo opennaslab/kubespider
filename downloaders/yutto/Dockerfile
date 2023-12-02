@@ -25,7 +25,6 @@ RUN set -ex \
         gcc \
         g++ \
         make \
-        musl-dev \
     && mkdir -p /app/downloads \
     && mkdir -p /app/config \
     && python3 -m pip install --upgrade pip \
