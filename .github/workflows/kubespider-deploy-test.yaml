@@ -42,6 +42,11 @@ jobs:
         docker buildx build --platform linux/arm64 -t cesign/tiktok-dlp:latest -f Dockerfile --load ./
         docker buildx build --platform linux/amd64 -t cesign/tiktok-dlp:latest -f Dockerfile --load ./
         cd ../../
+
+        cd downloaders/yutto
+        docker buildx build --platform linux/arm64 -t cesign/yutto-downloader:latest -f Dockerfile --load ./
+        docker buildx build --platform linux/amd64 -t cesign/yutto-downloader:latest -f Dockerfile --load ./
+        cd ../../
     - name: Deploy test
       run: |
         set -x
@@ -77,6 +82,10 @@ jobs:
 
         cd downloaders/tiktok-dlp
         docker buildx build --platform linux/amd64 -t cesign/tiktok-dlp:latest -f Dockerfile --load ./
+        cd ../../
+
+        cd downloaders/yutto
+        docker buildx build --platform linux/amd64 -t cesign/yutto-downloader:latest -f Dockerfile --load ./
         cd ../../
     - name: China mainland deploy test
       run: |
