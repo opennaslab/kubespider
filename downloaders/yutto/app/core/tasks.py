@@ -44,6 +44,10 @@ class YouGetTasks:
             if config_args is not None:
                 download_args.extend(config_args)
 
+            download_args.extend(['--no-color'])
+            download_args.extend(['--no-progress'])
+
+            # TODO: Configure the following two parameters through the configuration file
             download_args.extend(['--no-danmaku'])
             download_args.extend(['--no-subtitle'])
 
