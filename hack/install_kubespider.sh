@@ -32,24 +32,26 @@ else
 fi
 
 # 6.Deploy aria2
-docker run -d \
-    --name aria2-pro \
-    --restart unless-stopped \
-    --log-opt max-size=1m \
-    -p 6800:6800 \
-    -p 6888:6888 \
-    -e PUID=$UID \
-    -e PGID=$GID \
-    -e RPC_SECRET=kubespider \
-    -e RPC_PORT=6800 \
-    -e LISTEN_PORT=6888 \
-    -v ${KUBESPIDER_HOME}/kubespider/aria2/:/config \
-    -v ${KUBESPIDER_HOME}/kubespider/nas/:/downloads/ \
-    ${image_registry}/aria2-pro:latest
+if [[ $(docker ps | grep aria2-pro) == "" ]]; then
+    docker run -d \
+        --name aria2-pro \
+        --restart unless-stopped \
+        --log-opt max-size=1m \
+        -p 6800:6800 \
+        -p 6888:6888 \
+        -e PUID=$UID \
+        -e PGID=$GID \
+        -e RPC_SECRET=kubespider \
+        -e RPC_PORT=6800 \
+        -e LISTEN_PORT=6888 \
+        -v ${KUBESPIDER_HOME}/kubespider/aria2/:/config \
+        -v ${KUBESPIDER_HOME}/kubespider/nas/:/downloads/ \
+        ${image_registry}/aria2-pro:latest
+fi
 
 # 7.Deploy kubespider
 export KUBESPIDER_DEFAULT_VERSION="latest"
-if [[ ${KUBESPIDER_VERSION} == "" ]]; then
+if [[ -z "${KUBESPIDER_VERSION}" ]]; then
     export KUBESPIDER_VERSION=${KUBESPIDER_DEFAULT_VERSION}
 fi
 docker run -itd --name kubespider \
