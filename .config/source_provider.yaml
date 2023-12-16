@@ -20,7 +20,7 @@ meijutt_source_provider:
 bilibili_source_provider:
   type: bilibili_source_provider
   enable: true
-  downloader: youget
+  downloader: yutto
 youtube_source_provider:
   type: youtube_source_provider
   enable: true
@@ -62,7 +62,7 @@ douyin_source_provider:
 bilibili_vlogger_subscribe_source_provider:
   enable: false
   type: bilibili_vlogger_subscribe_source_provider
-  downloader: youget
+  downloader: yutto
   vlogger:
     - 367877
 alist_source_provider:

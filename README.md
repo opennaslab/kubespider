@@ -11,13 +11,13 @@
 [![GitHub license](https://img.shields.io/github/license/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/blob/master/LICENSE)
 
 
-English | [简体中文](./README-CN.md)  
+English | [简体中文](./README-CN.md)
 
 [Installation](#-installation) | [Configuration](#-feature-list) | [Developer Group](https://t.me/opennaslab)
 
-We are a community of individuals who share a passion for life and have come together based on shared interests and needs. In our free time, we collaborated to develop Kubespider.  
+We are a community of individuals who share a passion for life and have come together based on shared interests and needs. In our free time, we collaborated to develop Kubespider.
 
-Kubespider is developed to utilize an idle server in a local area network as a NAS, enabling automatic downloads of TV series, triggering downloads from a local laptop, and adapting to various websites such as YouTube and BiliBili, as well as different types of resources such as TV series, movies, music and more.  
+Kubespider is developed to utilize an idle server in a local area network as a NAS, enabling automatic downloads of TV series, triggering downloads from a local laptop, and adapting to various websites such as YouTube and BiliBili, as well as different types of resources such as TV series, movies, music and more.
 
 After being exposed to Terraform and its great versatility, we were inspired to create Kubespider as a general download orchestration system that is compatible with various resource platforms and download software. Kubespider supports multiple download methods, including request trigger, cycle trigger, and update trigger, making it the most comprehensive and unified solution for resource downloads.
 
@@ -78,21 +78,22 @@ Aria2 default secret is:kubespider
 * Configuration files are located in `${HOME}/kubespider/.config` by default.
 
 #### 2.Connect to aria2
-For checking the download tasks on your server conveniently, go to the chrome store to download [AriaNg plugin](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn).  
+For checking the download tasks on your server conveniently, go to the chrome store to download [AriaNg plugin](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn).
 Then connect, the plugin configuration is as follows(shown at the end of the script `install_kubespider.sh` execution output):
 ![img](./docs/images/aria2-for-chrome-config-en.jpg)
 
 Of course, it is not necessary, you can also use the desktop program to connect: [AriaNg](https://github.com/mayswind/AriaNg-Native/releases/)
 
 #### 3.Install Chrome plugin
-With Kubespider Chrome plugin, you can get a better experience.  
-After step 1 has been done, open chrome, then install Kubespider plugin, and configure it as follows(The server address is `http://<server_ip>:3080`):  
+With Kubespider Chrome plugin, you can get a better experience.
+
+After step 1 has been done, open chrome, then install Kubespider plugin, and configure it as follows(The server address is `http://<server_ip>:3080`):
 ![img](./docs/images/kubespider-chrome-ext-install.gif)
 
 For example, if I want to download a torrent-related file, I can right click and send the download task to Kubespider([demo website](https://ubuntu.com/download/alternative-downloads)):
 ![img](./docs/images/kubespider-chrome-ext-usage.png)
 
-Then with aria2 chrome plugin, you can see the download task starts:  
+Then with aria2 chrome plugin, you can see the download task starts:
 ![img](./docs/images/kubespider-chrome-ext-aria2.png)
 
 #### 4.More (Optional)
@@ -119,7 +120,7 @@ The global configuration file is located at `.config/kubespider.yaml`, which is 
 | `server_port`                   |       No |                                                                                                                             The port used to provider API service |
 
 ## 🔧 Feature list
-### Source provider(Configured as needed)  
+### Source provider(Configured as needed)
 As mentioned before, the source provider is used to adapt to different websites, and download related resources based on the conditions:
 | Source Provider                            | Support |                                                                    Purpose |                                                                     Configuration |
 | :----------------------------------------- | ------: | -------------------------------------------------------------------------: | --------------------------------------------------------------------------------: |
@@ -136,7 +137,7 @@ As mentioned before, the source provider is used to adapt to different websites,
 | ANi source provider                        |     Yes |                                    Fully automated anime download from ANi |                        [link](./docs/zh/user_guide/ani_source_provider/README.md) |
 
 
-### Download provider(Configured as needed)  
+### Download provider(Configured as needed)
 In order to make full use of the existing download software in the open-source community(For example, YouTube has dedicated download software), the following software is currently supported:
 | Download Software | Support |                                                         Configuration |
 | :---------------- | ------: | --------------------------------------------------------------------: |
@@ -146,8 +147,10 @@ In order to make full use of the existing download software in the open-source c
 | you-get           |     Yes |       [link](./docs/zh/user_guide/youget_download_provider/README.md) |
 | yt-dlp            |     Yes |        [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
 | transmission      |     Yes | [link](./docs/zh/user_guide/transmission_download_provider/README.md) |
+| yutto             |       Yes |        [link](./docs/zh/user_guide/yutto_download_provider/README.md) |
 
-### Notification provider(Configured as needed)  
+
+### Notification provider(Configured as needed)
 In order to make full use of the existing notification software in the open-source community, the following software is currently supported:
 | Notification Software | Support |                                                         Configuration |
 | :-------------------- | ------: | --------------------------------------------------------------------: |
@@ -156,7 +159,7 @@ In order to make full use of the existing notification software in the open-sour
 | QQ                    |     Yes |       [link](./docs/zh/user_guide/qq_notification_provider/README.md) |
 | Bark                  |     Yes |     [link](./docs/zh/user_guide/bark_notification_provider/README.md) |
 
-### Basic feature  
+### Basic feature
 Currently, the following file types are supported to trigger downloading:
 | Download Types          | Support |
 | :---------------------- | ------: |
@@ -184,7 +187,7 @@ If you are interested in participating in joint development, welcome to STAR/FOR
 If you want to participate more in the community, welcome to join our [Telegram developer group](https://t.me/opennaslab).
 
 
-## ❤️ Sponsor  
+## ❤️ Sponsor
 Thanks to the following companies for sponsoring development tools, the ranking is not in any particular order:
 <table>
   <thead>
