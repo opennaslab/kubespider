@@ -31,6 +31,8 @@ util::set_registry_for_image
 docker run -d \
     --name yutto \
     --network=host \
+    -e PUID=$UID \
+    -e PGID=$GID \
     -e BILIBILI_SESSDATA=${BILIBILI_SESSDATA} \
     -v ${KUBESPIDER_HOME}/kubespider/yutto:/app/config \
     -v ${KUBESPIDER_HOME}/kubespider/nas/:/app/downloads \
