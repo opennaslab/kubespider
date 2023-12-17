@@ -32,8 +32,8 @@ docker run -d \
     --name yutto \
     --network=host \
     -e BILIBILI_SESSDATA=${BILIBILI_SESSDATA} \
-    -v ${HOME}/kubespider/yutto:/app/config \
-    -v ${HOME}/kubespider/nas/:/app/downloads \
+    -v ${KUBESPIDER_HOME}/kubespider/yutto:/app/config \
+    -v ${KUBESPIDER_HOME}/kubespider/nas/:/app/downloads \
     --restart unless-stopped \
     cesign/yutto-downloader:latest
 
