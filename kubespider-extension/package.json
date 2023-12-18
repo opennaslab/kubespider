@@ -17,7 +17,7 @@
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.18",
     "@thedutchcoder/postcss-rem-to-px": "^0.0.2",
-    "@types/chrome": "^0.0.239",
+    "@types/chrome": "^0.0.254",
     "@types/node": "^20.4.0",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
