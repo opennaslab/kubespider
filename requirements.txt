@@ -9,7 +9,7 @@ flask==2.3.3
 pyyaml==6.0.1
 feedparser==6.0.10
 transmission-rpc==4.3.0
-coverage==7.3.0
+coverage==7.3.3
 lxml==4.9.3
 waitress==2.1.2
 watchdog==3.0.0
