@@ -201,6 +201,7 @@ Thanks to the following companies for sponsoring development tools, the ranking 
 ## 📃 Disclaimer
 
 All downloading and use of the software are deemed to have carefully read and fully agreed to the following terms:
+
 * The software is only for personal learning and communication, and it is strictly prohibited for commercial and bad purposes.
 * If any commercial behavior and bad use are found, the software author has the right to revoke the right to use.
 * The risk of using this software will be entirely borne by him, and the software author will not bear any responsibility.
