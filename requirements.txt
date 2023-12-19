@@ -15,7 +15,7 @@ waitress==2.1.2
 watchdog==3.0.0
 mkdocs==1.5.2
 mkdocs-awesome-pages-plugin==2.9.2
-mkdocs-material==9.2.5
+mkdocs-material==9.5.2
 mkdocs-material-extensions==1.1.1
 mkdocs-redirects==1.2.1
 mkdocs-mermaid2-plugin==1.0.8
