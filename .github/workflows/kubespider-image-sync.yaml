@@ -28,7 +28,7 @@ on:
 
 jobs:
   sync-to-dockerhub:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         arch: [ linux/amd64, linux/arm64 ]
@@ -63,7 +63,7 @@ jobs:
           docker buildx imagetools create --tag cesign/xunlei:${{ github.event.inputs.thunder-version }} cnk3x/xunlei:${{ github.event.inputs.thunder-version }}
 
   sync-to-aliyun:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: true
     steps:
