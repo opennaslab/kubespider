@@ -133,6 +133,7 @@ Kubespider结合chrome插件，能获得更好的体验。
 | you-get      |       是 |       [link](./user_guide/youget_download_provider/README.md) |
 | yt-dlp       |       是 |        [link](./user_guide/ytdlp_download_provider/README.md) |
 | transmission |       是 | [link](./user_guide/transmission_download_provider/README.md) |
+| yutto        |       是 |        [link](./user_guide/yutto_download_provider/README.md) |
 
 ### 基本特性
 

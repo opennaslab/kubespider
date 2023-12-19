@@ -129,6 +129,7 @@ In order to make full use of the existing download software in the open-source c
 | you-get           |     Yes |       [link](../zh/user_guide/youget_download_provider/README.md) |
 | yt-dlp            |     Yes |        [link](../zh/user_guide/ytdlp_download_provider/README.md) |
 | transmission      |     Yes | [link](../zh/user_guide/transmission_download_provider/README.md) |
+| yutto             |     Yes |        [link](../zh/user_guide/yutto_download_provider/README.md) |
 
 ### Basic feature
 
