@@ -17,6 +17,7 @@ After being exposed to Terraform and its great versatility, we were inspired to 
 ## ⛵ System architecture
 
 To realize a general download orchestration system, it is necessary to adapt various resource websites and download software, so these two parts are abstracted from the core functions: ![image](../images/kubespider-architecture.png)
+
 * `kubespider-core`: The core module of Kubespider accepts the trigger download request, calls the resource provider for resolution (it will eventually be resolved into a standard mode, such as the user enters the bilibili blogger address, and the corresponding resource provider outputs the mp4 file address download list), and finally calls the download provider to implement Download; this module will also periodically call providers (such as TV series provider) to download additional resources.
 * `source-provider`：The provider of each resource website accepts input of general resource addresses, and outputs standard resource address URLs, such as the personal homepage of a YouTuber, and outputs all mp4 download addresses of the blogger’s videos. The configuration file is in `.config/source_provider.yaml`.
 * `download-provider`：The provider of each download software receives the request task from `kubespider-core`, and calls the corresponding service to realize the download. The configuration file is in `.config/download_provider.yaml`.
