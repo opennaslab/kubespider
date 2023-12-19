@@ -28,7 +28,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Kubespider - build and push
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v5
       with:
         context: .
         file: Dockerfile
@@ -39,7 +39,7 @@ jobs:
         tags: cesign/kubespider:latest
 
     - name: youget-downloader - build and push
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v5
       with:
         context: ./downloaders/you-get/
         file: ./downloaders/you-get/Dockerfile
@@ -50,7 +50,7 @@ jobs:
         tags: cesign/youget-downloader:latest
 
     - name: ytdlp-downloader - build and push
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v5
       with:
         context: ./downloaders/yt-dlp/
         file: ./downloaders/yt-dlp/Dockerfile
@@ -61,7 +61,7 @@ jobs:
         tags: cesign/ytdlp-downloader:latest
 
     - name: tiktokdlp-downloader - build and push
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v5
       with:
         context: ./downloaders/tiktok-dlp/
         file: ./downloaders/tiktok-dlp/Dockerfile
@@ -72,7 +72,7 @@ jobs:
         tags: cesign/tiktok-dlp:latest
 
     - name: yutto-downloader - build and push
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v5
       with:
         context: ./downloaders/yutto/
         file: ./downloaders/yutto/Dockerfile
@@ -102,7 +102,7 @@ jobs:
         password: ${{ secrets.ACR_PASSWORD }}
 
     - name: Kubespider - build and push
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v5
       with:
         context: .
         file: Dockerfile
@@ -112,7 +112,7 @@ jobs:
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest
 
     - name: youget-downloader - build and push
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v5
       with:
         context: ./downloaders/you-get/
         file: ./downloaders/you-get/Dockerfile
@@ -122,7 +122,7 @@ jobs:
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/youget-downloader:latest
 
     - name: ytdlp-downloader - build and push
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v5
       with:
         context: ./downloaders/yt-dlp/
         file: ./downloaders/yt-dlp/Dockerfile
@@ -132,7 +132,7 @@ jobs:
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/ytdlp-downloader:latest
 
     - name: tiktokdlp-downloader - build and push
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v5
       with:
         context: ./downloaders/tiktok-dlp/
         file: ./downloaders/tiktok-dlp/Dockerfile
@@ -142,7 +142,7 @@ jobs:
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/tiktok-dlp:latest
 
     - name: yutto-downloader - build and push
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v5
       with:
         context: ./downloaders/yutto/
         file: ./downloaders/yutto/Dockerfile
