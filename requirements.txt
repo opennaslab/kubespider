@@ -5,7 +5,7 @@ setuptools==68.1.2
 pyexecjs==1.5.1
 bencodepy==0.9.5
 qbittorrent-api==2023.7.52
-flask==2.3.3
+flask==3.0.0
 pyyaml==6.0.1
 feedparser==6.0.10
 transmission-rpc==4.3.0
