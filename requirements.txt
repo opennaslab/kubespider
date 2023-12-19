@@ -4,7 +4,7 @@ requests==2.31.0
 setuptools==68.1.2
 pyexecjs==1.5.1
 bencodepy==0.9.5
-qbittorrent-api==2023.7.52
+qbittorrent-api==2023.11.57
 flask==2.3.3
 pyyaml==6.0.1
 feedparser==6.0.10
