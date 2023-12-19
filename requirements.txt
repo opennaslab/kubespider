@@ -1,7 +1,7 @@
 aria2p==0.11.3
 beautifulsoup4==4.12.2
 requests==2.31.0
-setuptools==68.1.2
+setuptools==69.0.2
 pyexecjs==1.5.1
 bencodepy==0.9.5
 qbittorrent-api==2023.7.52
