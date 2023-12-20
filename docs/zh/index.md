@@ -6,7 +6,7 @@
 
 ## 💥 一款全局资源编排下载系统
 
-![Python](https://img.shields.io/badge/python-3.10-blue) [![GitHub release](https://img.shields.io/github/v/release/opennaslab/kubespider.svg)](https://github.com/opennaslab/kubespider/releases) [![Total Downloads](https://img.shields.io/docker/pulls/cesign/kubespider.svg)](https://hub.docker.com/repository/docker/cesign/kubespider/general) [![GitHub stars](https://img.shields.io/github/stars/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/stargazers) [![GitHub license](https://img.shields.io/github/license/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/blob/master/LICENSE)
+![Python](https://img.shields.io/badge/python-3.11-blue) [![GitHub release](https://img.shields.io/github/v/release/opennaslab/kubespider.svg)](https://github.com/opennaslab/kubespider/releases) [![Total Downloads](https://img.shields.io/docker/pulls/cesign/kubespider.svg)](https://hub.docker.com/repository/docker/cesign/kubespider/general) [![GitHub stars](https://img.shields.io/github/stars/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/stargazers) [![GitHub license](https://img.shields.io/github/license/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/blob/master/LICENSE)
 
 我们是一群热爱生活的人，因兴趣和共同需求聚集在一起，利用空闲时间共同开发了 Kubespider。
 
@@ -17,6 +17,7 @@
 ## ⛵ 系统架构
 
 为了实现一个通用的下载编排系统，需要适配各种资源网站和下载软件，所以将这两部分从核心功能中抽象出来： ![image](../images/kubespider-architecture.png)
+
 * `kubespider-core`：Kubespider核心模块，接受触发下载请求，调用资源提供器provider解析（最终会解析为标准模式，如用户输入bilibili博主地址，对应资源提供器输出mp4文件地址下载列表），最后调用下载提供器provider实现下载；此模块同时也会周期调用providers(如追剧provider)，下载增加的资源。
 * `source-provider`：各资源网站的提供器，接受通用资源地址输入，输出为标准资源地址url，如输入为某个bilibili博主的个人主页，输出为博主视频的所有mp4下载地址。配置文件在`.config/source_provider.yaml`。
 * `download-provider`：各下载软件的提供器，接收`kubespider-core`的请求Task，调用对应的服务实现下载。配置文件在`.config/download_provider.yaml`。
@@ -133,6 +134,7 @@ Kubespider结合chrome插件，能获得更好的体验。
 | you-get      |       是 |       [link](./user_guide/youget_download_provider/README.md) |
 | yt-dlp       |       是 |        [link](./user_guide/ytdlp_download_provider/README.md) |
 | transmission |       是 | [link](./user_guide/transmission_download_provider/README.md) |
+| yutto        |       是 |        [link](./user_guide/yutto_download_provider/README.md) |
 
 ### 基本特性
 
@@ -204,6 +206,7 @@ Kubespider结合chrome插件，能获得更好的体验。
 ## 📃 免责声明
 
 一切下载及使用软件时均被视为已经仔细阅读并完全同意以下条款：
+
 * 软件仅供个人学习与交流使用，严禁用于商业以及不良用途。
 * 如有发现任何商业行为以及不良用途，软件作者有权撤销使用权。
 * 使用本软件所存在的风险将完全由其本人承担，软件作者不承担任何责任。
