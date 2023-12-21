@@ -10,13 +10,13 @@
 [![GitHub stars](https://img.shields.io/github/stars/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/stargazers)
 [![GitHub license](https://img.shields.io/github/license/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/blob/master/LICENSE)
 
-[English](./README.md) | 简体中文  
+[English](./README.md) | 简体中文
 
 [安装](#-安装) | [配置](#-特性列表) | [开发者群](https://t.me/opennaslab)
 
-我们是一群热爱生活的人，因兴趣和共同需求聚集在一起，利用空闲时间共同开发了 Kubespider。  
+我们是一群热爱生活的人，因兴趣和共同需求聚集在一起，利用空闲时间共同开发了 Kubespider。
 
-开发Kubespider的出发点是：局域网有一台空闲的服务器，想把它作为NAS，实现自动追剧下载，本地笔记本电脑触发下载，同时适配各种网站资源（Youtube、Bilibili等）和资源类型（电视剧、电影、音乐等）。  
+开发Kubespider的出发点是：局域网有一台空闲的服务器，想把它作为NAS，实现自动追剧下载，本地笔记本电脑触发下载，同时适配各种网站资源（Youtube、Bilibili等）和资源类型（电视剧、电影、音乐等）。
 
 之前接触到Terraform，惊讶于其通用性。Kubespider受到Terraform启发，旨在构建一个通用的下载编排系统，兼容各种资源平台和下载软件，兼容多种下载方式（请求触发，周期触发，更新触发），做资源下载最完美的统一解决方案。
 
@@ -80,7 +80,7 @@ Aria2 default secret is:kubespider
 * 配置文件默认在 `${HOME}/kubespider/.config`。
 
 #### 2.连接aria2
-为了便于查看下载任务，需要下载Chrome插件AriNg:(1)如果你能访问外网，在chrome商店下载[AriaNg](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn)；(2)如果不能，在Crx4Chrome下载[AriaNg](https://www.crx4chrome.com/crx/85196/)。  
+为了便于查看下载任务，需要下载Chrome插件AriNg:(1)如果你能访问外网，在chrome商店下载[AriaNg](https://chrome.google.com/webstore/detail/aria2-for-chrome/mpkodccbngfoacfalldjimigbofkhgjn)；(2)如果不能，在Crx4Chrome下载[AriaNg](https://www.crx4chrome.com/crx/85196/)。
 
 然后连接，插件配置如下(显示在脚本`install_kubespider.sh`执行输出最后)：
 ![img](./docs/images/aria2-for-chrome-config-zh.jpg)
@@ -88,14 +88,15 @@ Aria2 default secret is:kubespider
 当然，非必需的，你也可以使用桌面程序连接：[AriaNg](https://github.com/mayswind/AriaNg-Native/releases/)
 
 #### 3.安装Chrome插件
-Kubespider结合chrome插件，能获得更好的体验。  
-在步骤1下载代码后，打开Chrome，按如下步骤安装Kubespider Chrome插件并且设置(其中地址为`http://<server_ip>:3080`):  
+Kubespider结合chrome插件，能获得更好的体验。
+
+在步骤1下载代码后，打开Chrome，按如下步骤安装Kubespider Chrome插件并且设置(其中地址为`http://<server_ip>:3080`):
 ![img](./docs/images/kubespider-chrome-ext-install.gif)
 
 例如，我想要下载一个torrent的大文件，直接右键，发送给Kubespider即可([示例网站](https://ubuntu.com/download/alternative-downloads)):
 ![img](./docs/images/kubespider-chrome-ext-usage.png)
 
-然后，使用aria2 Chrome插件查看下载任务，你可以看见下载任务已开始：  
+然后，使用aria2 Chrome插件查看下载任务，你可以看见下载任务已开始：
 ![img](./docs/images/kubespider-chrome-ext-aria2.png)
 
 #### 4.更多（可选）
@@ -112,7 +113,7 @@ Kubespider结合chrome插件，能获得更好的体验。
 * 在绿联NAS上安装Kubespider, 请参考 [link](./docs/zh/user_guide/ugreen_installation/README.md)。
 
 ## 📝 配置
-全局配置文件在`.config/kubespider.yaml`，安装后默认位于`${HOME}/kubespider/.config/kubespider.yaml`，各配置项解释如下：  
+全局配置文件在`.config/kubespider.yaml`，安装后默认位于`${HOME}/kubespider/.config/kubespider.yaml`，各配置项解释如下：
 | 配置项                          | 是否必配 |                                                                    功能 |
 | :------------------------------ | -------: | ----------------------------------------------------------------------: |
 | `proxy`                         |       否 |                                   请求代理，如`http://192.168.1.5:1087` |
@@ -148,6 +149,7 @@ Kubespider结合chrome插件，能获得更好的体验。
 | you-get      |       是 |       [link](./docs/zh/user_guide/youget_download_provider/README.md) |
 | yt-dlp       |       是 |        [link](./docs/zh/user_guide/ytdlp_download_provider/README.md) |
 | transmission |       是 | [link](./docs/zh/user_guide/transmission_download_provider/README.md) |
+| yutto        |       是 |        [link](./docs/zh/user_guide/yutto_download_provider/README.md) |
 
 ### 消息通知提供器(按需配置)
 为了充分利用开源社区已有的消息通知软件，目前支持如下消息通知软件：
@@ -186,7 +188,7 @@ Kubespider结合chrome插件，能获得更好的体验。
 
 如果你想更多的参与社区，欢迎加入我们的 [Telegram开发者群](https://t.me/opennaslab).
 
-## ❤️ 赞助  
+## ❤️ 赞助
 感谢以下公司赞助开发工具，排名不分先后：
 <table>
   <thead>

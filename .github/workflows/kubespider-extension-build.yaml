@@ -1,0 +1,50 @@
+# Copyright 2023 Kubespider
+# SPDX-License-Identifier: Apache-2.0
+name: Build Kubespider Extension
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "kubespider-extension/**"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "21"
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: kubespider-extension/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('kubespider-extension/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: |
+          npm install
+        working-directory: ./kubespider-extension
+      - name: Build
+        run: |
+          npm run build
+        working-directory: ./kubespider-extension
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "bot: build kubespider extension"
+          title: "bot: build kubespider extension"
+          body: "bot: build kubespider extension"
+          branch: "bot/build-kubespider-extension"
+          branch-suffix: short-commit-hash
+          delete-branch: true

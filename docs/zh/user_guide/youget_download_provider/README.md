@@ -2,8 +2,8 @@
 ## 简介
 [You-Get](https://github.com/soimort/you-get) 是一个开源的命令行工具，用于从互联网上下载视频、音频和其他类型的媒体资源。它支持多种视频和音频网站，包括YouTube、Vimeo、Twitch、SoundCloud等。用户可以通过简单的命令行输入来下载他们想要的各种媒体文件。You-Get还支持多线程下载，因此可以更快地下载大型文件。
 
-## 最终效果
-效果如图，结合You-Gey，Kubespider会调用You-Get，下载Bilibili视频：
+## 最终效果（现在You-Get缺乏维护，请使用yutto或者yt-dlp）
+效果如图，结合You-Get，Kubespider会调用You-Get，下载Bilibili视频：
 ![img](images/youget_final_show.gif)
 
 ## 安装
@@ -16,7 +16,7 @@ bash hack/install_youget.sh
 ```
 
 ### 2.确认安装
-运行如下命令，确认迅雷已经安装成功：
+运行如下命令，确认You-Get已经安装成功：
 ```sh
 docker ps | grep youget
 ```
@@ -30,25 +30,31 @@ docker ps | grep youget
 为了下载高清视频，有时候需要设置认证cookie，各资源网站的cookie设置如下：
 
 #### Bilibili下载设置
-1.打开chrome的隐身模式  
+1.打开chrome的隐身模式
+
 <img src='images/bilibili_config_step1.png' style="width: 600px;">
 
-2.登陆bilibili  
+2.登陆bilibili
+
 <img src='images/bilibili_config_step2.png' style="width: 600px;">
 
-3.F12选择network，查看cookie信息  
-<img src='images/bilibili_config_step3.png' style="width: 600px;">  
+3.F12选择network，查看cookie信息
+
+<img src='images/bilibili_config_step3.png' style="width: 600px;">
 找到关键信息并复制：`SESSDATA=xxx; bili_jct=xxx;`
 找到并复制后关闭窗口。
 
-4.在chrome市场安装插件`Get cookies.txt LOCALLY`  
-<img src='images/bilibili_config_step4.png' style="width: 600px;">  
-下载地址：[link](https://chrome.google.com/webstore/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc?hl=en)  
+4.在chrome市场安装插件`Get cookies.txt LOCALLY`
 
-5.复制bilibili完整cookie(非隐身模式)  
+<img src='images/bilibili_config_step4.png' style="width: 600px;">
+
+下载地址：[link](https://chrome.google.com/webstore/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc?hl=en)
+
+5.复制bilibili完整cookie(非隐身模式)
+
 <img src='images/bilibili_config_step5.png' style="width: 600px;">
 
-6.将复制内容拷贝到`${HOME}/kubespider/youget/bilibili_cookie.txt`  
+6.将复制内容拷贝到`${HOME}/kubespider/youget/bilibili_cookie.txt`
 ```txt
 # Netscape HTTP Cookie File
 # http://curl.haxx.se/rfc/cookie_spec.html
@@ -76,7 +82,7 @@ youget:
 其中：
 
 * 名称，可自定义（不可重复），可以在 `source_provider.yaml` 中按名称指定下载器。
-* `type`: 表示此下载器的类型，需为 `youget_download_provider`。
+* `type`: 表示此下载器的类型，需为 `yutto_download_provider`。
 * `enable`: 设置是否使用此provider。
 * `http_endpoint_host`: you-get下载软件IP地址。
 * `http_endpoint`: you-get下载软件IP端口。

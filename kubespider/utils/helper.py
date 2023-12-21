@@ -1,4 +1,6 @@
 import functools
+import inspect
+import re
 import uuid
 import hashlib
 import logging
@@ -9,9 +11,9 @@ from urllib.parse import urlparse
 
 import requests
 
-from api import types
-from api import values
-from utils import global_config
+from utils import values
+from utils.global_config import Config
+from utils.types import LinkType, ProviderType
 
 
 def get_tmp_file_name(url):
@@ -39,7 +41,7 @@ def format_long_string(longstr: str) -> str:
 
 
 def get_request_controller(cookie: str = None, use_proxy=True) -> requests.Session:
-    proxy_addr = global_config.get_proxy()
+    proxy_addr = Config.PROXY
     session = requests.Session()
     proxies = {"http": proxy_addr, "https": proxy_addr} if all([proxy_addr, use_proxy]) else {}
     headers = {
@@ -58,13 +60,13 @@ def get_request_controller(cookie: str = None, use_proxy=True) -> requests.Sessi
 
 def get_link_type(url: str, controller: requests.Session) -> str:
     if url.startswith('magnet:'):
-        return types.LINK_TYPE_MAGNET
+        return LinkType.magnet
     if urlparse(url).path.endswith('torrent'):
-        return types.LINK_TYPE_TORRENT
+        return LinkType.torrent
     if not url.startswith('http'):
         # such as ed2k://xxx, we treat it as general
         # whether it could be downloaded depeneds on the download softwear
-        return types.LINK_TYPE_GENERAL
+        return LinkType.general
     # rfc6266: guess link type
     try:
         resp = controller.head(url, timeout=30, allow_redirects=True)
@@ -72,12 +74,12 @@ def get_link_type(url: str, controller: requests.Session) -> str:
             content_disposition = resp.headers.get('content-disposition')
             _, params = cgi.parse_header(content_disposition)
             if params['filename'] and params['filename'].endswith('torrent'):
-                return types.LINK_TYPE_TORRENT
+                return LinkType.torrent
     except Exception as err:
         logging.warning('Rfc6266 get link type error:%s', err)
 
     # TODO: implement other type, like music mv or short video
-    return types.LINK_TYPE_GENERAL
+    return LinkType.general
 
 
 def parse_cookie_string(cookie: str) -> dict:
@@ -135,3 +137,27 @@ def retry(attempt_times=3, delay=1, exception=Exception):
         return retry_handle
 
     return decorator
+
+
+def extract_doc(obj):
+    return inspect.getdoc(obj)
+
+
+def parse_func_doc(func):
+    doc = extract_doc(func)
+    if not doc:
+        return {}
+    data = re.findall(r':param[ ]*([^\W]*)[ ]*:[ ]*([^\n]*)', doc)
+    return {item[0]: item[1] for item in data if all(item)}
+
+
+def get_provider_conf_base_path(provider_type):
+    if provider_type == ProviderType.download_provider:
+        base_path = values.Config.DOWNLOAD_PROVIDERS_CONF.config_path()
+    elif provider_type == ProviderType.notification_provider:
+        base_path = values.Config.NOTIFICATION_PROVIDERS_CONF.config_path()
+    elif provider_type == ProviderType.source_provider:
+        base_path = values.Config.SOURCE_PROVIDERS_CONF.config_path()
+    else:
+        raise Exception(f"Unknown Provider Type: {provider_type}")
+    return base_path

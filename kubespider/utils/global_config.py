@@ -1,29 +1,26 @@
+import logging
+from utils import values
 from utils.config_reader import YamlFileConfigReader
-from api import values
+from utils.values import CFG_BASE_PATH
+
 
 def get_global_config() -> YamlFileConfigReader:
     return YamlFileConfigReader(values.Config.KUBESPIDER_CONFIG.config_path())
 
-def get_auth_token() -> str:
-    cfg = get_global_config().read()
-    if cfg is not None:
-        return cfg.get('auth_token', None)
-    return None
 
-def get_proxy() -> str:
-    cfg = get_global_config().read()
-    if cfg is not None:
-        return cfg.get('proxy', None)
-    return None
+cfg = get_global_config().read()
 
-def get_server_port() -> int:
-    cfg = get_global_config().read()
-    if cfg is not None:
-        return cfg.get('server_port', 3080)
-    return 3080
 
-def auto_change_download_provider() -> bool:
-    cfg = get_global_config().read()
-    if cfg is not None:
-        return bool(cfg.get('auto_change_download_provider', False))
-    return False
+class Config(object):
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{CFG_BASE_PATH}kubespider.db"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+    SECRET_KEY = "iECgbYWReMNxkRprrzMo5KAQYnb2UeZ3bwvReTSt+VSESW0OB8zbglT+6rEcDW9X"
+    SESSION_USE_SIGNER = True
+    SESSION_PERMANENT = False
+    PERMANENT_SESSION_LIFETIME = 86400 * 2
+    LOG_LEVEL = logging.INFO
+    AUTH_TOKEN = cfg.get('auth_token', None)
+    PROXY = cfg.get('proxy', "")
+    SERVER_PORT = cfg.get('server_port', 3080)
+    DOWNLOAD_BASE_PATH = cfg.get("download", {}).get("base_path", "/downloads")

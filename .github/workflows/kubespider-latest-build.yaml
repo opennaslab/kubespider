@@ -71,6 +71,17 @@ jobs:
         push: true
         tags: cesign/tiktok-dlp:latest
 
+    - name: yutto-downloader - build and push
+      uses: docker/build-push-action@v3
+      with:
+        context: ./downloaders/yutto/
+        file: ./downloaders/yutto/Dockerfile
+        platforms: |
+          linux/amd64
+          linux/arm64
+        push: true
+        tags: cesign/yutto-downloader:latest
+
   acr-build:
     runs-on: ubuntu-latest
 
@@ -129,3 +140,13 @@ jobs:
           linux/amd64
         push: true
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/tiktok-dlp:latest
+
+    - name: yutto-downloader - build and push
+      uses: docker/build-push-action@v3
+      with:
+        context: ./downloaders/yutto/
+        file: ./downloaders/yutto/Dockerfile
+        platforms: |
+          linux/amd64
+        push: true
+        tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/yutto-downloader:latest

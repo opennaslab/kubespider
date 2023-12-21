@@ -6,7 +6,7 @@
 
 ## 💥 A global resource download orchestration system
 
-![Python](https://img.shields.io/badge/python-3.10-blue) [![GitHub release](https://img.shields.io/github/v/release/opennaslab/kubespider.svg)](https://github.com/opennaslab/kubespider/releases) [![Total Downloads](https://img.shields.io/docker/pulls/cesign/kubespider.svg)](https://hub.docker.com/repository/docker/cesign/kubespider/general) [![GitHub stars](https://img.shields.io/github/stars/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/stargazers) [![GitHub license](https://img.shields.io/github/license/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/blob/master/LICENSE)
+![Python](https://img.shields.io/badge/python-3.11-blue) [![GitHub release](https://img.shields.io/github/v/release/opennaslab/kubespider.svg)](https://github.com/opennaslab/kubespider/releases) [![Total Downloads](https://img.shields.io/docker/pulls/cesign/kubespider.svg)](https://hub.docker.com/repository/docker/cesign/kubespider/general) [![GitHub stars](https://img.shields.io/github/stars/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/stargazers) [![GitHub license](https://img.shields.io/github/license/opennaslab/kubespider?style=plastic)](https://github.com/opennaslab/kubespider/blob/master/LICENSE)
 
 We are a community of individuals who share a passion for life and have come together based on shared interests and needs. In our free time, we collaborated to develop Kubespider.
 
@@ -17,6 +17,7 @@ After being exposed to Terraform and its great versatility, we were inspired to 
 ## ⛵ System architecture
 
 To realize a general download orchestration system, it is necessary to adapt various resource websites and download software, so these two parts are abstracted from the core functions: ![image](../images/kubespider-architecture.png)
+
 * `kubespider-core`: The core module of Kubespider accepts the trigger download request, calls the resource provider for resolution (it will eventually be resolved into a standard mode, such as the user enters the bilibili blogger address, and the corresponding resource provider outputs the mp4 file address download list), and finally calls the download provider to implement Download; this module will also periodically call providers (such as TV series provider) to download additional resources.
 * `source-provider`：The provider of each resource website accepts input of general resource addresses, and outputs standard resource address URLs, such as the personal homepage of a YouTuber, and outputs all mp4 download addresses of the blogger’s videos. The configuration file is in `.config/source_provider.yaml`.
 * `download-provider`：The provider of each download software receives the request task from `kubespider-core`, and calls the corresponding service to realize the download. The configuration file is in `.config/download_provider.yaml`.
@@ -129,6 +130,7 @@ In order to make full use of the existing download software in the open-source c
 | you-get           |     Yes |       [link](../zh/user_guide/youget_download_provider/README.md) |
 | yt-dlp            |     Yes |        [link](../zh/user_guide/ytdlp_download_provider/README.md) |
 | transmission      |     Yes | [link](../zh/user_guide/transmission_download_provider/README.md) |
+| yutto             |     Yes |        [link](../zh/user_guide/yutto_download_provider/README.md) |
 
 ### Basic feature
 
@@ -199,6 +201,7 @@ Thanks to the following companies for sponsoring development tools, the ranking 
 ## 📃 Disclaimer
 
 All downloading and use of the software are deemed to have carefully read and fully agreed to the following terms:
+
 * The software is only for personal learning and communication, and it is strictly prohibited for commercial and bad purposes.
 * If any commercial behavior and bad use are found, the software author has the right to revoke the right to use.
 * The risk of using this software will be entirely borne by him, and the software author will not bear any responsibility.

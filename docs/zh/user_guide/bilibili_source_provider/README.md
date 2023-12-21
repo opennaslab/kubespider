@@ -1,7 +1,7 @@
 # Bilibili资源提供器配置
 ## 简介
 哔哩哔哩（Bilibili）是一家中国的在线视频分享和弹幕评论平台，于2009年创建。它最初定位为ACG（动画、漫画、游戏）文化社区，但现在已扩展到包括音乐、舞蹈、科技、生活等各种领域。用户可以在B站上观看和上传视频，并与其他用户互动交流。B站以其丰富的内容、独特的弹幕系统和活跃的用户群体而闻名。
-官方地址：[bilibili.com](https://bilibili.com/)  
+官方地址：[bilibili.com](https://bilibili.com/)
 本资源提供器旨在实现**链接触发下载**，简化下载流程。
 
 ## 最终效果
@@ -19,7 +19,7 @@
 bilibili_source_provider:
   type: bilibili_source_provider
   enable: true
-  downloader: youget
+  downloader: yutto
 ```
 
 * `type`：订阅源类型，需为`bilibili_source_provider`。

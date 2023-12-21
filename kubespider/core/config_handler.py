@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 @author: ijwstl
 @software: PyCharm
@@ -14,74 +13,8 @@ from multiprocessing import Process
 import shutil
 from watchdog.events import FileSystemEventHandler, FileModifiedEvent
 
-from api.values import Config
-from api import values
-from utils.config_reader import YamlFileSectionConfigReader, YamlFileConfigReader
-from utils import helper
-
-import source_provider.mikanani_source_provider.provider as mikanani_source_provider
-import source_provider.btbtt12_disposable_source_provider.provider as btbtt12_disposable_source_provider
-import source_provider.meijutt_source_provider.provider as meijutt_source_provider
-import source_provider.bilibili_source_provider.provider as bilibili_source_provider
-import source_provider.youtube_source_provider.provider as youtube_source_provider
-import source_provider.general_rss_source_provider.provider as general_rss_source_provider
-import source_provider.magic_source_provider.provider as magic_source_provider
-import source_provider.tiktok_source_provider.provider as tiktok_source_provider
-import source_provider.bilibili_vlogger_subscribe_source_provider.provider as bilibili_vlogger_subscribe_source_provider
-import source_provider.alist_source_provider.provider as alist_source_provider
-import source_provider.ani_source_provider.provider as ani_source_provider
-import download_provider.aria2_download_provider.provider as aria2_download_provider
-import download_provider.xunlei_download_provider.provider as xunlei_download_provider
-import download_provider.qbittorrent_download_provider.provider as qbittorrent_download_provider
-import download_provider.youget_download_provider.provider as youget_download_provider
-import download_provider.ytdlp_download_provider.provider as ytdlp_download_provider
-import download_provider.transmission_download_provider.provider as transmission_download_provider
-import download_provider.tiktok_dlp_download_provider.provider as tiktok_dlp_download_provider
-
-import pt_provider.nexusphp_pt_provider.provider as nexusphp_pt_provider
-
-import notification_provider.pushdeer_notification_provider.provider as pushdeer_notification_provider
-import notification_provider.telegram_notification_provider.provider as telegram_notification_provider
-import notification_provider.qq_notification_provider.provider as qq_notification_provider
-import notification_provider.bark_notification_provider.provider as bark_notification_provider
-
-# Source provider init related
-source_provider_init_func = {
-    'bilibili_source_provider': bilibili_source_provider.BilibiliSourceProvider,
-    'btbtt12_disposable_source_provider': btbtt12_disposable_source_provider.Btbtt12DisposableSourceProvider,
-    'meijutt_source_provider': meijutt_source_provider.MeijuttSourceProvider,
-    'mikanani_source_provider': mikanani_source_provider.MikananiSourceProvider,
-    'youtube_source_provider': youtube_source_provider.YouTubeSourceProvider,
-    'general_rss_source_provider': general_rss_source_provider.GeneralRssSourceProvider,
-    'magic_source_provider': magic_source_provider.MagicSourceProvider,
-    'tiktok_source_provider': tiktok_source_provider.TiktokSourceProvider,
-    'bilibili_vlogger_subscribe_source_provider': bilibili_vlogger_subscribe_source_provider.BilibiliVloggerSubscribeSourceProvider,
-    'alist_source_provider': alist_source_provider.AlistSourceProvider,
-    'ani_source_provider': ani_source_provider.AniSourceProvider,
-}
-
-# Download provider init related
-downloader_provider_init_func = {
-    'aria2_download_provider': aria2_download_provider.Aria2DownloadProvider,
-    'qbittorrent_download_provider': qbittorrent_download_provider.QbittorrentDownloadProvider,
-    'xunlei_download_provider': xunlei_download_provider.XunleiDownloadProvider,
-    'youget_download_provider': youget_download_provider.YougetDownloadProvider,
-    'ytdlp_download_provider': ytdlp_download_provider.YTDlpDownloadProvider,
-    'transmission_download_provider': transmission_download_provider.TransmissionProvider,
-    'tiktok_download_provider': tiktok_dlp_download_provider.TiktokDownloadProvider,
-}
-
-# PT provider init related
-pt_provider_init_func = {
-    'nexusphp_pt_provider': nexusphp_pt_provider.NexuPHPPTProvider,
-}
-
-notification_provider_init_func = {
-    'pushdeer_notification_provider': pushdeer_notification_provider.PushDeerNotificationProvider,
-    'telegram_notification_provider': telegram_notification_provider.TelegramNotificationProvider,
-    'qq_notification_provider': qq_notification_provider.QQNotificationProvider,
-    'bark_notification_provider': bark_notification_provider.BarkNotificationProvider,
-}
+from utils import helper, values
+from utils.values import Config
 
 
 class ConfigHandler(FileSystemEventHandler):
@@ -95,11 +28,7 @@ class ConfigHandler(FileSystemEventHandler):
         filepath = os.path.basename(event.src_path)
 
         monitor_files = [
-            str(Config.DOWNLOAD_PROVIDER),
             str(Config.KUBESPIDER_CONFIG),
-            str(Config.PT_PROVIDER),
-            str(Config.SOURCE_PROVIDER),
-            str(Config.NOTIFICATION_PROVIDER),
         ]
         if filepath not in monitor_files:
             return
@@ -117,86 +46,15 @@ class ConfigHandler(FileSystemEventHandler):
         self.p_run = new_p_run
 
 
-def get_source_provider(provider_name: str, config: dict):
-    provider_type = config['type']
-    try:
-        return source_provider_init_func[provider_type](provider_name, YamlFileSectionConfigReader(
-            Config.SOURCE_PROVIDER.config_path(), provider_name))
-    except Exception as exc:
-        raise Exception(str('unknown source provider type %s', provider_type)) from exc
-
-
-def get_download_provider(provider_name: str, config: dict):
-    provider_type = config['type']
-    try:
-        return downloader_provider_init_func[provider_type](provider_name, YamlFileSectionConfigReader(
-            Config.DOWNLOAD_PROVIDER.config_path(), provider_name))
-    except Exception as exc:
-        raise Exception(str('unknown download provider type %s', provider_type)) from exc
-
-
-def get_pt_provider(provider_name: str, config: dict):
-    provider_type = config['type']
-    try:
-        return pt_provider_init_func[provider_type](provider_name,
-                                                    YamlFileSectionConfigReader(Config.PT_PROVIDER.config_path(),
-                                                                                provider_name))
-    except Exception as exc:
-        raise Exception(str('unknown pt provider type %s', provider_type)) from exc
-
-
-def get_notification_provider(provider_name: str, config: dict):
-    provider_type = config['type']
-    try:
-        return notification_provider_init_func[provider_type](
-            provider_name,
-            YamlFileSectionConfigReader(Config.NOTIFICATION_PROVIDER.config_path(), provider_name)
-        )
-    except Exception as exc:
-        raise Exception(str('unknown notification provider type %s', provider_type)) from exc
-
-
-def init_source_config():
-    init_source_providers = []
-    source_config = YamlFileConfigReader(values.Config.SOURCE_PROVIDER.config_path()).read()
-    for name in source_config:
-        init_source_providers.append(get_source_provider(name, source_config[name]))
-    return init_source_providers
-
-
-def init_download_config():
-    init_download_providers = []
-    download_config = YamlFileConfigReader(values.Config.DOWNLOAD_PROVIDER.config_path()).read()
-    for name in download_config:
-        init_download_providers.append(get_download_provider(name, download_config[name]))
-    return init_download_providers
-
-
-def init_pt_config():
-    init_pt_providers = []
-    pt_config = YamlFileConfigReader(values.Config.PT_PROVIDER.config_path()).read()
-    for name in pt_config:
-        init_pt_providers.append(get_pt_provider(name, pt_config[name]))
-    return init_pt_providers
-
-
-def init_notification_config():
-    init_notification_providers = []
-    notification_config = YamlFileConfigReader(values.Config.NOTIFICATION_PROVIDER.config_path()).read()
-    for name, conf in notification_config.items():
-        init_notification_providers.append(get_notification_provider(name, conf))
-    return init_notification_providers
-
-
 def prepare_config() -> None:
     miss_cfg = []
     confs = [
-        values.Config.SOURCE_PROVIDER,
-        values.Config.DOWNLOAD_PROVIDER,
-        values.Config.PT_PROVIDER,
         values.Config.KUBESPIDER_CONFIG,
         values.Config.DEPENDENCIES_CONFIG,
-        values.Config.NOTIFICATION_PROVIDER
+        values.Config.SOURCE_PROVIDERS_BIN,
+        values.Config.SOURCE_PROVIDERS_CONF,
+        values.Config.DOWNLOAD_PROVIDERS_CONF,
+        values.Config.NOTIFICATION_PROVIDERS_CONF,
     ]
     for conf in confs:
         if not os.path.exists(conf.config_path()):
@@ -221,4 +79,6 @@ def prepare_config() -> None:
             else:
                 shutil.copy(template_cfg, target_cfg)
         except Exception as err:
+            print(err)
             raise Exception(str('failed to copy %s to %s:%s', template_cfg, target_cfg)) from err
+
