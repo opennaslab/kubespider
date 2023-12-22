@@ -1,3 +1,4 @@
+import fcntl
 import inspect
 import json
 import logging
@@ -13,13 +14,13 @@ from utils.values import SourceProviderApi
 
 
 class SdkSourceProvider(SourceProvider):
-    def __init__(self, name: str, bin_path: str, **kwargs) -> None:
+    def __init__(self, name: str, bin_path: str, pid=None, **params) -> None:
         self.name = name
         self.bin_path = bin_path
-        self.params = kwargs
+        self.params = params
         self.is_active = False
-        self.c_pid = None
-        self.uri = None
+        self.pid = pid
+        self.host = None
         self.apis = []
         self.process = self.run_binary()
 
@@ -43,7 +44,7 @@ class SdkSourceProvider(SourceProvider):
 
     def active(self, **kwargs):
         try:
-            self.uri = kwargs.get("uri")
+            self.host = kwargs.get("host")
             self.apis = kwargs.get("api")
             self.is_active = True
             logging.info(f"[SdkSourceProvider:%s] active success.", self.name)
@@ -54,16 +55,23 @@ class SdkSourceProvider(SourceProvider):
     def prepare_command(self):
         command = [
             self.bin_path,
-            f"--ks_host=http://127.0.0.1:{Config.SERVER_PORT}/api/v2/provider/source/instance/reply",
-            f"--ks_proxy={Config.PROXY}",
-            f"--ks_uid={1}"
+            f"--ks_host=http://127.0.0.1:{Config.SERVER_PORT}",
+            f"--ks_proxy={Config.PROXY or ''}",
+            f"--ks_pid={self.pid}"
         ]
         for key, value in self.params.items():
+            if isinstance(value, bool) or value is None:
+                value = "true" if value else ""
             command.append(f"--{key}={value}")
         return command
 
     def run_binary(self):
-        return subprocess.Popen(self.prepare_command(), stdout=open('output.log', 'w'), stderr=open('error.log', 'w'))
+        process = subprocess.Popen(self.prepare_command(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        for pipe in [process.stdout, process.stderr]:
+            fd = pipe.fileno()
+            flags = fcntl.fcntl(fd, fcntl.F_GETFL)
+            fcntl.fcntl(fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)
+        return process
 
     def kill(self):
         if self.process:
@@ -71,42 +79,44 @@ class SdkSourceProvider(SourceProvider):
 
     def is_alive(self):
         try:
-            if self.process.poll() is not None:
+            resp = requests.post(self.host, json={"api": SourceProviderApi.health}).json()
+            if resp.get("code") == 200:
                 return True
+            return False
         except Exception as err:
             logging.error("[SdkSourceProvider:%s] has gone, error:%s", err)
             return False
 
-    def search(self, sync=False, **kwargs) -> list:
+    def search(self, sync=False, **kwargs) -> dict:
         if SourceProviderApi.search not in self.apis:
             func_name = inspect.currentframe().f_code.co_name
             raise UnSupportedMethod(self, func_name)
         else:
-            resp = requests.post(self.uri, json={
+            resp = requests.post(self.host, json={
                 "api": SourceProviderApi.search,
                 "sync": sync,
                 "data": kwargs
             })
             return resp.json()
 
-    def schedule(self, sync=False, **kwargs) -> bool:
+    def schedule(self, sync=False, **kwargs) -> dict:
         if SourceProviderApi.schedule not in self.apis:
             func_name = inspect.currentframe().f_code.co_name
             raise UnSupportedMethod(self, func_name)
         else:
-            resp = requests.post(self.uri, json={
+            resp = requests.post(self.host, json={
                 "api": SourceProviderApi.schedule,
                 "sync": sync,
                 "data": kwargs
             })
             return resp.json()
 
-    def handler(self, sync=True, **kwargs) -> list:
+    def handler(self, sync=True, **kwargs) -> dict:
         if SourceProviderApi.handler not in self.apis:
             func_name = inspect.currentframe().f_code.co_name
             raise UnSupportedMethod(self, func_name)
         else:
-            resp = requests.post(self.uri, json={
+            resp = requests.post(self.host, json={
                 "api": SourceProviderApi.handler,
                 "sync": sync,
                 "data": kwargs
@@ -118,7 +128,7 @@ class SdkSourceProvider(SourceProvider):
             func_name = inspect.currentframe().f_code.co_name
             raise UnSupportedMethod(self, func_name)
         else:
-            resp = requests.post(self.uri, json={
+            resp = requests.post(self.host, json={
                 "api": SourceProviderApi.document,
                 "sync": sync,
                 "data": kwargs

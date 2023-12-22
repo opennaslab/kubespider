@@ -233,6 +233,7 @@ class SourceProviderApi:
     schedule = "schedule"
     handler = "handler"
     document = "document"
+    health = "health"
 
     @classmethod
     def get_apis(cls):

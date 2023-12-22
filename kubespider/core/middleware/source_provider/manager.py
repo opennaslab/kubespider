@@ -1,4 +1,7 @@
+import _thread
 import logging
+import time
+
 from flask import Flask
 
 from core.middleware.manager import AbsManager
@@ -16,7 +19,10 @@ class SourceManager(AbsManager):
             if ins_conf.get("enable"):
                 conf = ins_conf["conf"]
                 init_params = {item.get("name"): item.get("value") for item in conf.get("instance_params")}
-                instance[ins_conf["id"]] = SdkSourceProvider(bin_path=conf.get("bin"), **init_params)
+                instance[ins_conf["id"]] = SdkSourceProvider(
+                    bin_path=conf.get("bin"),
+                    pid=ins_conf["id"],
+                    **init_params)
                 logging.info(f"[SourceManager] {ins_conf.get('instance_name')} enabled, waiting for active ...")
         self.instance = instance
         logging.info("[SourceManager] instance reload success ...")
@@ -43,23 +49,43 @@ class SourceManager(AbsManager):
         with app.app_context():
             app.extensions["source_manager"] = self
             self.reload_instance()
+            _thread.start_new_thread(self.output_skd_provider_log, ())
 
     def active_provider_instance(self, **kwargs):
-        uid = kwargs.get("uid")
-        instance = self.instance.get(int(uid))
+        pid = kwargs.get("pid")
+        instance = self.instance.get(pid)
         if not instance:
             return False
         return instance.active(**kwargs)
 
-    def search(self, keyword, sync=True):
+    def search(self, keyword, sync=False, **kwargs):
         result = []
-        for key,instance in self.instance.items():
-            # if SourceProviderApi.search in instance.apis:
+        for key, instance in self.instance.items():
+            if SourceProviderApi.search in instance.apis:
+                try:
+                    resp = instance.search(sync, keyword=keyword, **kwargs)
+                    result += resp.get("data", [])
+                except Exception as err:
+                    logging.error(f"[SourceProvider {instance.name}] search failed: %s", err)
+        return result
+
+    def schedule(self, sync=False, **kwargs):
+        result = []
+        for key, instance in self.instance.items():
             if SourceProviderApi.schedule in instance.apis:
                 try:
-                    # resp = instance.search(sync,keyword=keyword)
-                    resp = instance.schedule(sync)
-                    result += resp.get("data",[])
+                    resp = instance.search(sync, **kwargs)
+                    result += resp.get("data", [])
                 except Exception as err:
-                    logging.error(f"[SourceProvider {instance.name}] search failed: %s",err)
+                    logging.error(f"[SourceProvider {instance.name}] schedule failed: %s", err)
         return result
+
+    def output_skd_provider_log(self):
+        while True:
+            for key, instance in self.instance.items():
+                if isinstance(instance, SdkSourceProvider):
+                    sub_process = instance.process
+                    lines = sub_process.stdout.readlines() + sub_process.stderr.readlines()
+                    for line in [l.strip() for l in lines]:
+                        logging.info("[%s] %s", instance.name, line)
+            time.sleep(0.5)

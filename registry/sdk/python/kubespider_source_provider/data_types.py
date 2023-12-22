@@ -36,7 +36,12 @@ class HttpApi:
     schedule = "schedule"
     handler = "handler"
     document = "document"
+    health = "health"
 
-    @staticmethod
-    def get_paths():
-        return ["search", "schedule", "handler", "document"]
+    @classmethod
+    def get_apis(cls):
+        return [cls.search, cls.schedule, cls.handler, cls.document, cls.health]
+
+    @classmethod
+    def async_api_support(cls):
+        return [cls.search, cls.schedule]
