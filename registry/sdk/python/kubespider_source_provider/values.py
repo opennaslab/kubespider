@@ -7,7 +7,7 @@ class Resource:
         self._uuid = kwargs.get("uuid")
         self.url = kwargs.get("url")
         self.path = kwargs.get("path")
-        self.name = kwargs.get("name")
+        self.title = kwargs.get("title")
         self.file_type = kwargs.get("file_type")
         self.link_type = kwargs.get("link_type")
         self.content = kwargs.get("content")
@@ -39,7 +39,7 @@ class Resource:
             "uuid": self.uuid,
             "url": self.url,
             "path": self.path,
-            "name": self.name,
+            "title": self.title,
             "file_type": self.file_type,
             "link_type": self.link_type,
             "auto_download": self.auto_download,

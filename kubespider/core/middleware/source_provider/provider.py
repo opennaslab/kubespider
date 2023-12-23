@@ -1,8 +1,4 @@
 import abc
-import datetime
-import inspect
-import subprocess
-import time
 
 
 class SourceProvider(metaclass=abc.ABCMeta):
@@ -11,23 +7,23 @@ class SourceProvider(metaclass=abc.ABCMeta):
         self.name = name
         self.is_active = False
 
-    def is_alive(self):
-        pass
-
     @staticmethod
     def spec():
         pass
 
-    @abc.abstractmethod
-    def search(self, keyword: str, sync=False, **kwargs) -> list:
+    def is_alive(self):
         pass
 
     @abc.abstractmethod
-    def schedule(self, sync=False, **kwargs) -> bool:
+    def search(self, keyword: str, sync=False, **kwargs) -> dict:
         pass
 
     @abc.abstractmethod
-    def handler(self, sync=True, **kwargs) -> list:
+    def schedule(self, sync=False, **kwargs) -> dict:
+        pass
+
+    @abc.abstractmethod
+    def handler(self, sync=True, **kwargs) -> dict:
         pass
 
     @abc.abstractmethod

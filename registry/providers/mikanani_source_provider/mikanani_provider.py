@@ -60,6 +60,7 @@ class MikananiSourceProvider:
                     ret.append(Resource(
                         url=url,
                         path=path,
+                        title=item_title,
                         file_type=FileType.tv,
                         link_type=self.link_type,
                         auto_download=self.auto_download
