@@ -21,7 +21,7 @@ def create_app():
 
     @app.before_request
     def get_auth():
-        if Config.AUTH_TOKEN is None:
+        if not Config.AUTH_TOKEN:
             g.auth = True
         else:
             if request.headers is None:

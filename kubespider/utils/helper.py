@@ -12,7 +12,7 @@ from urllib.parse import urlparse
 import requests
 
 from utils import values
-from utils.global_config import Config
+from utils.global_config import PathConfig, Config
 from utils.types import LinkType, ProviderType
 
 
@@ -153,11 +153,11 @@ def parse_func_doc(func):
 
 def get_provider_conf_base_path(provider_type):
     if provider_type == ProviderType.download_provider:
-        base_path = values.Config.DOWNLOAD_PROVIDERS_CONF.config_path()
+        base_path = PathConfig.DOWNLOAD_PROVIDERS_CONF.config_path()
     elif provider_type == ProviderType.notification_provider:
-        base_path = values.Config.NOTIFICATION_PROVIDERS_CONF.config_path()
+        base_path = PathConfig.NOTIFICATION_PROVIDERS_CONF.config_path()
     elif provider_type == ProviderType.source_provider:
-        base_path = values.Config.SOURCE_PROVIDERS_CONF.config_path()
+        base_path = PathConfig.SOURCE_PROVIDERS_CONF.config_path()
     else:
         raise Exception(f"Unknown Provider Type: {provider_type}")
     return base_path

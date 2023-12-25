@@ -4,7 +4,8 @@ from flask import jsonify, request, current_app
 
 from core.api.response import success, server_error, param_error
 from core.api.v2.source_provider import source_provider_blu
-from utils.values import ProviderApiSaveParams, Config
+from utils.values import ProviderApiSaveParams
+from utils.global_config import PathConfig
 
 
 @source_provider_blu.route("/spec", methods=["GET"])
@@ -21,7 +22,7 @@ def upload_source_provider():
     file = request.files['file']
     if file.filename == '' or not file:
         return param_error(msg="No selected file")
-    file.save(os.path.join(Config.SOURCE_PROVIDERS_BIN.config_path(), file.filename))
+    file.save(os.path.join(PathConfig.SOURCE_PROVIDERS_BIN.config_path(), file.filename))
     return success(msg="File uploaded successfully")
 
 

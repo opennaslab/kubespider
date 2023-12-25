@@ -8,8 +8,7 @@ import requests
 
 from core.exceptions import UnSupportedMethod
 from core.middleware.source_provider.provider import SourceProvider
-from utils import values
-from utils.global_config import Config
+from utils.global_config import Config, PathConfig
 from utils.values import SourceProviderApi
 
 
@@ -26,7 +25,7 @@ class SdkSourceProvider(SourceProvider):
 
     @staticmethod
     def spec():
-        binary_path = values.Config.SOURCE_PROVIDERS_BIN.config_path()
+        binary_path = PathConfig.SOURCE_PROVIDERS_BIN.config_path()
         binaries = [os.path.join(binary_path, b) for b in os.listdir(binary_path)]
         specs = []
         for binary in binaries:

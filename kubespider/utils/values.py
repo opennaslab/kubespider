@@ -1,10 +1,9 @@
 # Used to define the general values used in the project
 import hashlib
 import os
-from enum import Enum
 from io import BytesIO
 
-from utils.config_reader import YamlFileConfigReader
+from utils.global_config import cfg
 from utils.types import FileType, DownloadStates
 
 FILE_TYPE_TO_PATH = {
@@ -16,25 +15,6 @@ FILE_TYPE_TO_PATH = {
     FileType.picture: "Picture",
     FileType.pt: "PT"
 }
-
-CFG_BASE_PATH = os.path.join(os.getenv('HOME'), '.config/')
-CFG_TEMPLATE_PATH = os.path.join(os.getenv('HOME'), '.config_template/')
-
-
-class Config(str, Enum):
-    KUBESPIDER_CONFIG = 'kubespider.yaml'
-    DEPENDENCIES_CONFIG = 'dependencies/'
-    SOURCE_PROVIDERS_BIN = 'providers/source_bin'
-    SOURCE_PROVIDERS_CONF = 'providers/source'
-    DOWNLOAD_PROVIDERS_CONF = 'providers/download'
-    NOTIFICATION_PROVIDERS_CONF = 'providers/notification'
-
-    def __str__(self) -> str:
-        return str(self.value)
-
-    def config_path(self) -> str:
-        return os.path.join(CFG_BASE_PATH, self)
-
 
 class CallMode:
     def __init__(self, **kwargs):
@@ -163,8 +143,7 @@ class DownloadTask:
 
     @staticmethod
     def _get_download_path(path):
-        cfg = YamlFileConfigReader(Config.KUBESPIDER_CONFIG.config_path()).read()
-        download_base_path = cfg.get("download", {}).get("base_path", "/downloads")
+        download_base_path = cfg.download.base_path
         if path:
             if path.startswith('/'):
                 return path
