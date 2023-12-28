@@ -1,11 +1,10 @@
-import logging
 import os
 import os.path as osp
 from enum import Enum
 
 import yaml
 
-from utils.config_reader import YamlFileConfigReader
+from utils.config_reader import YamlFileConfigReader, StructConfig
 
 CFG_BASE_PATH = os.getenv('KUBESPIDER_HOME', '/data/kubespider')
 
@@ -42,12 +41,14 @@ class PathConfig(str, Enum):
 
 def get_global_config() -> YamlFileConfigReader:
     if not osp.exists(PathConfig.KUBESPIDER_CONFIG.config_path()):
+        os.makedirs(CFG_BASE_PATH, exist_ok=True)
+        os.makedirs(PathConfig.SOURCE_PROVIDERS_BIN.config_path(), exist_ok=True)
         data = yaml.safe_load(default_yaml)
         with open(PathConfig.KUBESPIDER_CONFIG.config_path(), 'w') as file:
             yaml.safe_dump(data, file)
     return YamlFileConfigReader(PathConfig.KUBESPIDER_CONFIG.config_path())
 
-cfg = get_global_config().read()
+cfg: StructConfig = get_global_config().read()
 
 class Config(object):
     SQLALCHEMY_DATABASE_URI = f"sqlite:///{osp.join(CFG_BASE_PATH, 'kubespider.db')}"
@@ -65,10 +66,3 @@ class Config(object):
     SECRET_KEY = cfg.webapi.secret_key
     
     DOWNLOAD_BASE_PATH = cfg.download.base_path
-
-def initdirs():
-    """
-    Initialize the necessary folders
-    """
-    os.makedirs(CFG_BASE_PATH, exist_ok=True)
-    os.makedirs(PathConfig.SOURCE_PROVIDERS_BIN.config_path(), exist_ok=True)
