@@ -35,6 +35,8 @@ jobs:
           linux/arm64
         push: true
         tags: cesign/kubespider:${{  github.ref_name }}
+        build-args: |
+          GIT_COMMIT=${GITHUB_SHA}
 
   acr-release-assests:
     name: Release Kubespider
@@ -64,3 +66,5 @@ jobs:
           linux/amd64
         push: true
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:${{  github.ref_name }}
+        build-args: |
+          GIT_COMMIT=${GITHUB_SHA}

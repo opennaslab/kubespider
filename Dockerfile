@@ -4,6 +4,10 @@ FROM python:3.11-alpine
 
 RUN touch /.dockerenv
 
+# add git commit info
+ARG GIT_COMMIT
+ENV GIT_COMMIT=$GIT_COMMIT
+
 WORKDIR /app
 COPY ./kubespider ./kubespider
 COPY ./.config ./.config_template
