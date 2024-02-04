@@ -50,7 +50,7 @@ if [[ $(docker ps | grep aria2-pro) == "" ]]; then
 fi
 
 # 7.Deploy kubespider
-export KUBESPIDER_DEFAULT_VERSION="latest"
+export KUBESPIDER_DEFAULT_VERSION="v0.6.0"
 if [[ -z "${KUBESPIDER_VERSION}" ]]; then
     export KUBESPIDER_VERSION=${KUBESPIDER_DEFAULT_VERSION}
 fi
