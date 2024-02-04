@@ -25,8 +25,8 @@ jobs:
     - name: Build images
       run: |
         set -x
-        docker buildx build --platform linux/arm64 --build-arg GIT_COMMIT=${GITHUB_SHA} -t cesign/kubespider:latest -f Dockerfile --load ./
-        docker buildx build --platform linux/amd64 --build-arg GIT_COMMIT=${GITHUB_SHA} -t cesign/kubespider:latest -f Dockerfile --load ./
+        docker buildx build --platform linux/arm64 -t cesign/kubespider:latest -f Dockerfile --load ./
+        docker buildx build --platform linux/amd64 -t cesign/kubespider:latest -f Dockerfile --load ./
 
         cd downloaders/you-get
         docker buildx build --platform linux/arm64 -t cesign/youget-downloader:latest -f Dockerfile --load ./
@@ -70,7 +70,7 @@ jobs:
     - name: Build images
       run: |
         set -x
-        docker buildx build --platform linux/amd64 --build-arg GIT_COMMIT=${GITHUB_SHA} -t registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest -f Dockerfile --load ./
+        docker buildx build --platform linux/amd64 -t registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest -f Dockerfile --load ./
 
         cd downloaders/you-get
         docker buildx build --platform linux/amd64 -t cesign/youget-downloader:latest -f Dockerfile --load ./

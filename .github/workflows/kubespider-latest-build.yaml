@@ -37,8 +37,6 @@ jobs:
           linux/arm64
         push: true
         tags: cesign/kubespider:latest
-        build-args: |
-          GIT_COMMIT=${GITHUB_SHA}
 
     - name: youget-downloader - build and push
       uses: docker/build-push-action@v3
@@ -112,8 +110,6 @@ jobs:
           linux/amd64
         push: true
         tags: registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest
-        build-args: |
-          GIT_COMMIT=${GITHUB_SHA}
 
     - name: youget-downloader - build and push
       uses: docker/build-push-action@v3
