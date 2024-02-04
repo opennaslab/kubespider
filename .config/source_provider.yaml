@@ -63,6 +63,7 @@ bilibili_vlogger_subscribe_source_provider:
   enable: false
   type: bilibili_vlogger_subscribe_source_provider
   downloader: yutto
+  sessdata:
   vlogger:
     - 367877
 alist_source_provider:
