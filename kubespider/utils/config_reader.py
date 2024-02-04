@@ -100,7 +100,7 @@ class YamlFileSectionConfigReader(YamlFileConfigReader):
         self.section = section
 
     def read(self) -> dict:
-        return super().read()[self.section]
+        return super().read().get(self.section, {})
 
     def save(self, new_data: dict):
         super().parcial_update(lambda data: data.update({self.section: new_data}))

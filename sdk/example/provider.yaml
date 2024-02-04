@@ -1,0 +1,15 @@
+name: example
+version: 1.0.0
+author: Elastic
+type: parser
+description: Example provider
+language: python
+logo: https://raw.githubusercontent.com/elastic/beats/master/libbeat/docs/images/beats_logo.png
+arguments:
+  - name: config
+    type: text
+    description: Configuration options
+    placeholder: input your configuration
+    required: true
+    default: default
+binary: https://raw.githubusercontent.com/elastic/beats/master/libbeat/docs/images/beats

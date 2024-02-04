@@ -43,9 +43,10 @@ def run() -> None:
     while True:
         time.sleep(30)
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s-%(levelname)s: %(message)s')
+
 
 def run_with_config_handler():
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s-%(levelname)s: %(message)s')
     config_handler.prepare_config()
     logging.info('File handler start running...')
     event_handler = config_handler.ConfigHandler(run)

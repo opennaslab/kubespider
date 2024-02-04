@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import time
+import socket
 import uuid
 from urllib.parse import urlparse
 
@@ -42,7 +43,8 @@ def format_long_string(longstr: str) -> str:
 def get_request_controller(cookie: str = None, use_proxy=True) -> requests.Session:
     proxy_addr = global_config.get_proxy()
     session = requests.Session()
-    proxies = {"http": proxy_addr, "https": proxy_addr} if all([proxy_addr, use_proxy]) else {}
+    proxies = {"http": proxy_addr, "https": proxy_addr} if all(
+        [proxy_addr, use_proxy]) else {}
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE"
     }
@@ -110,6 +112,13 @@ def is_running_in_docker() -> bool:
     return os.path.exists('/.dockerenv')
 
 
+def get_free_port() -> int:
+    # get a free port for server
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(('localhost', 0))
+        return s.getsockname()[1]
+
+
 def retry(attempt_times=3, delay=1, exception=Exception):
     """
     try serval times to invoke the target method.
@@ -128,7 +137,8 @@ def retry(attempt_times=3, delay=1, exception=Exception):
                 try:
                     return function(*args, **kwargs)
                 except exception as err:
-                    logging.error('Error happened, func: %s, err: %s, retrying...', function.__name__, err)
+                    logging.error(
+                        'Error happened, func: %s, err: %s, retrying...', function.__name__, err)
                     time.sleep(delay)
                     total_attempt_times += 1
             return None
