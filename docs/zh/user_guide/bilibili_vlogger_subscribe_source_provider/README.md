@@ -26,6 +26,8 @@ bilibili_vlogger_subscribe_source_provider:
 * `enable`：是否开启此provider，因为此provider无需口令等用户信息，所以默认开启。
 * `downloader`：指定使用的下载器，内容需要精确地跟 `downloader_provider.yaml` 中声明的名称一样；下载优先级将由数组顺序决定。
 * `vlogger`：需要下载的博主ID，通过博主主页url获取，如下为367877：
+* `sessdata`：B站账号的cookie值, SESSDATA字段
+
   ![img](./images/vlogger_id.png)
   如果你想设置多个博主，可以如下配置：
   ```yaml
@@ -33,6 +35,7 @@ bilibili_vlogger_subscribe_source_provider:
   type: bilibili_vlogger_subscribe_source_provider
   enable: false
   downloader: yutto
+  sessdata: 你的B站账号cookie值
   vlogger:
     - 367877
     - 367878
