@@ -1,6 +1,6 @@
 # mikanani资源提供器配置
 ## 简介
-蜜柑计划是新一代的动漫下载站，专业提供动漫、动漫下載、新番下载、动画下载等服务。官方地址：[mikanani.me](https://mikanani.me/)  
+蜜柑计划是新一代的动漫下载站，专业提供动漫、动漫下載、新番下载、动画下载等服务。官方地址：[mikanani.tv](https://mikanani.tv/)  
 本资源提供器旨在实现**全自动追番**，当你订阅的动漫有更新时，自动下载，你能随时方便的观看。
 
 ## 前提
@@ -13,8 +13,8 @@ mikanani_source_provider:
   type: mikanani_source_provider
   enable: false
   # 将以下rss链接更换为自己的mikan订阅链接
-  # 格式为 https://mikanani.me/RSS/MyBangumi?token=***mytoken***
-  rss_link: https://mikanani.me/Home/Classic
+  # 格式为 https://mikanani.tv/RSS/MyBangumi?token=***mytoken***
+  rss_link: https://mikanani.tv/Home/Classic
   downloader:
     - qbittorrent
   download_param:
