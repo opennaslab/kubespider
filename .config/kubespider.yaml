@@ -8,4 +8,7 @@ server_port: 3080
 auto_change_download_provider: false
 # The auth_token will be used auth the webhook api
 auth_token:
-### beta prameters end
+# get bot message, save video of link of message
+telegram_bot_token:
+# limit only this username send message to bot will be handled
+telegram_user_name:

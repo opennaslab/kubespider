@@ -1,4 +1,5 @@
 import functools
+import re
 import uuid
 import hashlib
 import logging
@@ -135,3 +136,17 @@ def retry(attempt_times=3, delay=1, exception=Exception):
         return retry_handle
 
     return decorator
+
+
+def extract_urls(text):
+    urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
+    return urls
+
+
+def convert_short_urls(urls):
+    original_urls = []
+    for url in urls:
+        response = requests.get(url)
+        original_urls.append(response.url)
+    return original_urls
+
