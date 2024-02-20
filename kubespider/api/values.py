@@ -4,6 +4,7 @@ import os
 from enum import Enum
 
 from api import types
+from utils.helper import get_unique_hash
 
 FILE_TYPE_TO_PATH = {
     types.FILE_TYPE_COMMON: "Common",
@@ -88,7 +89,7 @@ class Resource(Extra):
         self.path = path
         self.link_type = link_type
         self.file_type = file_type
-        self.uid = uid if uid is not None else url
+        self.uid = uid if uid else get_unique_hash(url)
 
 
 class Task(Extra):
