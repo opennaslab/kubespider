@@ -56,7 +56,7 @@ class PeriodServer:
 
         err = None
         for source in links:
-            if helper.get_unique_hash(source.url) in state:
+            if source.uid in state:
                 continue
             if source.link_type is None:
                 source.link_type = link_type
@@ -75,7 +75,7 @@ class PeriodServer:
                 )
                 break
             #  add resource to state
-            state.append(helper.get_unique_hash(source.url))
+            state.append(source.uid)
 
             notification_server.kubespider_notification_server.send_message(
                 title=f"[{provider_name}] start download", url=source.url, path=source.path,
