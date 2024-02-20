@@ -1,11 +1,11 @@
+import cgi
 import functools
-import re
-import uuid
 import hashlib
 import logging
-import cgi
 import os
+import re
 import time
+import uuid
 from urllib.parse import urlparse
 
 import requests
@@ -146,7 +146,6 @@ def extract_urls(text):
 def convert_short_urls(urls):
     original_urls = []
     for url in urls:
-        response = requests.get(url)
+        response = requests.get(url, timeout=5)
         original_urls.append(response.url)
     return original_urls
-

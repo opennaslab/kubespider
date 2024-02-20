@@ -1,6 +1,7 @@
 import _thread
 import logging
 import time
+from urllib.parse import urlparse
 
 import telepot
 from telepot.loop import MessageLoop
@@ -8,8 +9,6 @@ from telepot.loop import MessageLoop
 import utils.helper
 from api.values import Event
 from core import source_manager, notification_server
-from urllib.parse import urlparse
-
 from utils import global_config
 
 
@@ -61,4 +60,3 @@ if __name__ == "__main__":
 
     while True:
         time.sleep(30)
-
