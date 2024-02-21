@@ -19,15 +19,15 @@ def download_handler(msg):
     if valid_username is not None:
         chat = msg.get('chat', None)
         username = chat.get('username', None)
+        logging.info('Get telegram trigger from usre:%s', username)
         if valid_username != username:
             return
 
     to_handle_text = msg.get("text", None)
     urls = utils.helper.extract_urls(to_handle_text)
-    original_urls = utils.helper.convert_short_urls(urls)
 
-    if len(original_urls) > 0:
-        for url in original_urls:
+    if len(urls) > 0:
+        for url in urls:
             parsed_url = urlparse(url)
             clean_url = parsed_url.scheme + "://" + parsed_url.netloc + parsed_url.path
             source = clean_url
@@ -47,6 +47,9 @@ def download_handler(msg):
 
 
 def telegram_server(bot_token):
+    proxy_addr = global_config.get_proxy()
+    if proxy_addr is not None:
+        telepot.api.set_proxy(proxy_addr)
     bot = telepot.Bot(bot_token)
     MessageLoop(bot, download_handler).run_as_thread()
 
