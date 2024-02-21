@@ -11,4 +11,4 @@ auth_token:
 # get bot message, save video of link of message
 telegram_bot_token:
 # limit only this username send message to bot will be handled
-telegram_user_name:
+telegram_username:
