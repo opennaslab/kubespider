@@ -11,15 +11,15 @@ on:
         required: true
         type: string
       start:
-        description: 'The start tag/commit flag'
+        description: "The start tag/commit flag"
         required: true
         type: string
       end:
-        description: 'The end tag/commit flag'
+        description: "The end tag/commit flag"
         required: true
         type: string
       exclude_contributor:
-        description: 'The contributor to ignore, use space to split'
+        description: "The contributor to ignore, use space to split"
         required: false
         type: string
 
@@ -28,8 +28,7 @@ jobs:
     #TODO: integration with chatgpt, to generate release notes automatically
     uses: jwcesign/get-contributors/.github/workflows/get-contributors.yaml@main
     with:
-        repo: ${{ github.event.inputs.repo }}
-        start: ${{ github.event.inputs.start }}
-        end: ${{ github.event.inputs.end }}
-        exclude_contributor: ${{ github.event.inputs.exclude_contributor }}
-    
+      repo: ${{ github.event.inputs.repo }}
+      start: ${{ github.event.inputs.start }}
+      end: ${{ github.event.inputs.end }}
+      exclude_contributor: ${{ github.event.inputs.exclude_contributor }}

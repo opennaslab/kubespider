@@ -5,7 +5,11 @@ name: Kubespider deploy test
 
 on:
   pull_request:
-    branches: [ 'main', 'release-*' ]
+    branches: ["main", "release-*", "nightly"]
+    paths:
+      - "downloaders/**"
+      - "hack/**"
+      - "Dockerfile"
 
 jobs:
   test:
@@ -14,44 +18,44 @@ jobs:
       fail-fast: true
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set Up QEMU
-      uses: docker/setup-qemu-action@v2
+      - name: Set Up QEMU
+        uses: docker/setup-qemu-action@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-    - name: Build images
-      run: |
-        set -x
-        docker buildx build --platform linux/arm64 --build-arg GIT_COMMIT=${GITHUB_SHA} -t cesign/kubespider:latest -f Dockerfile --load ./
-        docker buildx build --platform linux/amd64 --build-arg GIT_COMMIT=${GITHUB_SHA} -t cesign/kubespider:latest -f Dockerfile --load ./
+      - name: Build images
+        run: |
+          set -x
+          docker buildx build --platform linux/arm64 --build-arg GIT_COMMIT=${GITHUB_SHA} -t cesign/kubespider:latest -f Dockerfile --load ./
+          docker buildx build --platform linux/amd64 --build-arg GIT_COMMIT=${GITHUB_SHA} -t cesign/kubespider:latest -f Dockerfile --load ./
 
-        cd downloaders/you-get
-        docker buildx build --platform linux/arm64 -t cesign/youget-downloader:latest -f Dockerfile --load ./
-        docker buildx build --platform linux/amd64 -t cesign/youget-downloader:latest -f Dockerfile --load ./
-        cd ../../
+          cd downloaders/you-get
+          docker buildx build --platform linux/arm64 -t cesign/youget-downloader:latest -f Dockerfile --load ./
+          docker buildx build --platform linux/amd64 -t cesign/youget-downloader:latest -f Dockerfile --load ./
+          cd ../../
 
-        cd downloaders/yt-dlp
-        docker buildx build --platform linux/arm64 -t cesign/ytdlp-downloader:latest -f Dockerfile --load ./
-        docker buildx build --platform linux/amd64 -t cesign/ytdlp-downloader:latest -f Dockerfile --load ./
-        cd ../../
+          cd downloaders/yt-dlp
+          docker buildx build --platform linux/arm64 -t cesign/ytdlp-downloader:latest -f Dockerfile --load ./
+          docker buildx build --platform linux/amd64 -t cesign/ytdlp-downloader:latest -f Dockerfile --load ./
+          cd ../../
 
-        cd downloaders/tiktok-dlp
-        docker buildx build --platform linux/arm64 -t cesign/tiktok-dlp:latest -f Dockerfile --load ./
-        docker buildx build --platform linux/amd64 -t cesign/tiktok-dlp:latest -f Dockerfile --load ./
-        cd ../../
+          cd downloaders/tiktok-dlp
+          docker buildx build --platform linux/arm64 -t cesign/tiktok-dlp:latest -f Dockerfile --load ./
+          docker buildx build --platform linux/amd64 -t cesign/tiktok-dlp:latest -f Dockerfile --load ./
+          cd ../../
 
-        cd downloaders/yutto
-        docker buildx build --platform linux/arm64 -t cesign/yutto-downloader:latest -f Dockerfile --load ./
-        docker buildx build --platform linux/amd64 -t cesign/yutto-downloader:latest -f Dockerfile --load ./
-        cd ../../
-    - name: Deploy test
-      run: |
-        set -x
+          cd downloaders/yutto
+          docker buildx build --platform linux/arm64 -t cesign/yutto-downloader:latest -f Dockerfile --load ./
+          docker buildx build --platform linux/amd64 -t cesign/yutto-downloader:latest -f Dockerfile --load ./
+          cd ../../
+      - name: Deploy test
+        run: |
+          set -x
 
-        hack/test/deploy_test.sh
+          hack/test/deploy_test.sh
 
   china-mainland-test:
     runs-on: ubuntu-20.04
@@ -59,37 +63,37 @@ jobs:
       fail-fast: true
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set Up QEMU
-      uses: docker/setup-qemu-action@v2
+      - name: Set Up QEMU
+        uses: docker/setup-qemu-action@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-    - name: Build images
-      run: |
-        set -x
-        docker buildx build --platform linux/amd64 --build-arg GIT_COMMIT=${GITHUB_SHA} -t registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest -f Dockerfile --load ./
+      - name: Build images
+        run: |
+          set -x
+          docker buildx build --platform linux/amd64 --build-arg GIT_COMMIT=${GITHUB_SHA} -t registry.cn-hangzhou.aliyuncs.com/jwcesign/kubespider:latest -f Dockerfile --load ./
 
-        cd downloaders/you-get
-        docker buildx build --platform linux/amd64 -t cesign/youget-downloader:latest -f Dockerfile --load ./
-        cd ../../
+          cd downloaders/you-get
+          docker buildx build --platform linux/amd64 -t cesign/youget-downloader:latest -f Dockerfile --load ./
+          cd ../../
 
-        cd downloaders/yt-dlp
-        docker buildx build --platform linux/amd64 -t cesign/ytdlp-downloader:latest -f Dockerfile --load ./
-        cd ../../
+          cd downloaders/yt-dlp
+          docker buildx build --platform linux/amd64 -t cesign/ytdlp-downloader:latest -f Dockerfile --load ./
+          cd ../../
 
-        cd downloaders/tiktok-dlp
-        docker buildx build --platform linux/amd64 -t cesign/tiktok-dlp:latest -f Dockerfile --load ./
-        cd ../../
+          cd downloaders/tiktok-dlp
+          docker buildx build --platform linux/amd64 -t cesign/tiktok-dlp:latest -f Dockerfile --load ./
+          cd ../../
 
-        cd downloaders/yutto
-        docker buildx build --platform linux/amd64 -t cesign/yutto-downloader:latest -f Dockerfile --load ./
-        cd ../../
-    - name: China mainland deploy test
-      run: |
-        set -x
+          cd downloaders/yutto
+          docker buildx build --platform linux/amd64 -t cesign/yutto-downloader:latest -f Dockerfile --load ./
+          cd ../../
+      - name: China mainland deploy test
+        run: |
+          set -x
 
-        export CHINA_MAINLAND=TRUE
-        hack/test/deploy_test.sh
+          export CHINA_MAINLAND=TRUE
+          hack/test/deploy_test.sh

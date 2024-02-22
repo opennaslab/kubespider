@@ -5,8 +5,8 @@ name: Kubespider style check
 
 on:
   pull_request:
-    branches: [ 'main', 'release-*' ]
-  
+    branches: ["main", "release-*", "nightly"]
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -15,47 +15,47 @@ jobs:
         python-version: ["3.10"]
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pylint
-        pip install typing-extensions
-        pip install -r requirements.txt
-
-        cd downloaders
-        for downloader in $(ls)
-        do
-          cd ${downloader}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint
+          pip install typing-extensions
           pip install -r requirements.txt
-          cd ..
-        done
 
-    - name: Analysing the code with pylint
-      run: |
-        ROOT=$(pwd)
-        pylint $(git ls-files '*.py' | grep -v "downloaders/") --max-line-length=240
-        skip_downloaders=(tiktok-dlp)
-        cd downloaders
-        for downloader in $(ls)
-        do
-          if [[ ${skip_downloaders[@]} =~ ${downloader} ]]; then
-            continue
-          fi
-          cd ${downloader}
-          pylint $(git ls-files '*.py') --max-line-length=240 --rcfile=${ROOT}/.pylintrc
-          cd ..
-        done
+          cd downloaders
+          for downloader in $(ls)
+          do
+            cd ${downloader}
+            pip install -r requirements.txt
+            cd ..
+          done
 
-    - name: MD link check
-      uses: gaurav-nelson/github-action-markdown-link-check@v1
-      with:
-        use-quiet-mode: 'yes'
-        config-file: '.mdlintrc'
-        folder-path: './'
+      - name: Analysing the code with pylint
+        run: |
+          ROOT=$(pwd)
+          pylint $(git ls-files '*.py' | grep -v "downloaders/") --max-line-length=240
+          skip_downloaders=(tiktok-dlp)
+          cd downloaders
+          for downloader in $(ls)
+          do
+            if [[ ${skip_downloaders[@]} =~ ${downloader} ]]; then
+              continue
+            fi
+            cd ${downloader}
+            pylint $(git ls-files '*.py') --max-line-length=240 --rcfile=${ROOT}/.pylintrc
+            cd ..
+          done
+
+      - name: MD link check
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: "yes"
+          config-file: ".mdlintrc"
+          folder-path: "./"

@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        arch: [ linux/amd64, linux/arm64 ]
+        arch: [linux/amd64, linux/arm64]
       fail-fast: true
 
     steps:
@@ -92,7 +92,7 @@ jobs:
           docker tag johngong/baidunetdisk:${{ github.event.inputs.baidu-disk-version }} registry.cn-hangzhou.aliyuncs.com/jwcesign/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
           docker tag linuxserver/plex:${{ github.event.inputs.plex-version }} registry.cn-hangzhou.aliyuncs.com/jwcesign/plex:${{ github.event.inputs.plex-version }}
           docker tag cnk3x/xunlei:${{ github.event.inputs.thunder-version }} registry.cn-hangzhou.aliyuncs.com/jwcesign/xunlei:${{ github.event.inputs.thunder-version }}
-          
+
           docker push registry.cn-hangzhou.aliyuncs.com/jwcesign/aria2-pro:${{ github.event.inputs.aria2-pro-version }}
           docker push registry.cn-hangzhou.aliyuncs.com/jwcesign/baidunetdisk:${{ github.event.inputs.baidu-disk-version }}
           docker push registry.cn-hangzhou.aliyuncs.com/jwcesign/plex:${{ github.event.inputs.plex-version }}
