@@ -1,7 +1,6 @@
 import _thread
 import logging
 import time
-from urllib.parse import urlparse
 
 import telepot
 from telepot.loop import MessageLoop
@@ -28,9 +27,7 @@ def download_handler(msg):
 
     if len(urls) > 0:
         for url in urls:
-            parsed_url = urlparse(url)
-            clean_url = parsed_url.scheme + "://" + parsed_url.netloc + parsed_url.path
-            source = clean_url
+            source = url
             path = ""
             logging.info('Get telegram trigger:%s', source)
             event = Event(source, path)
