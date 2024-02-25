@@ -50,10 +50,7 @@ if [[ $(docker ps | grep aria2-pro) == "" ]]; then
 fi
 
 # 7.Deploy kubespider
-export KUBESPIDER_DEFAULT_VERSION="latest"
-if [[ -z "${KUBESPIDER_VERSION}" ]]; then
-    export KUBESPIDER_VERSION=${KUBESPIDER_DEFAULT_VERSION}
-fi
+export KUBESPIDER_VERSION=${KUBESPIDER_VERSION:-$(util::get_latest_release_version)}
 docker run -itd --name kubespider \
     --log-opt max-size=5m \
     -v ${KUBESPIDER_HOME}/kubespider/.config:/app/.config \
