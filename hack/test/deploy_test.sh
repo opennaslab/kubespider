@@ -18,6 +18,7 @@ function handle_trap() {
 trap handle_trap ERR EXIT
 
 #1. Test deploy Kubespider
+export KUBESPIDER_VERSION=latest
 ./hack/install_kubespider.sh
 sleep 10
 docker ps | grep -e kubespider -e aria2-pro
