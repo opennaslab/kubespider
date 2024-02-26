@@ -9,6 +9,8 @@ from core import pt_server
 from core import config_handler
 from core import notification_server
 from core import source_manager
+from core import plugin_manager
+from core import plugin_binding
 from source_provider.provider import SourceProvider
 from download_provider.provider import DownloadProvider
 from pt_provider.provider import PTProvider
@@ -82,6 +84,10 @@ class Kubespider:
         notification_server.kubespider_notification_server = notification_server.NotificationServer(
             self.enabled_notifications_providers
         )
+        # plugin manager
+        plugin_manager.kubespider_plugin_manager = plugin_manager.PluginManager()
+        # plugin binding
+        plugin_binding.kubespider_plugin_binding = plugin_binding.PluginBinding()
 
     def run_pt_server(self) -> None:
         logging.info('PT Server start running...')
@@ -103,12 +109,18 @@ class Kubespider:
         logging.info('Notification Server Queue handler start running...')
         notification_server.kubespider_notification_server.run_consumer()
 
+    def run_plugin_manager(self) -> None:
+        logging.info('Plugin Manager start running...')
+        plugin_manager.kubespider_plugin_manager.load_local()
+        plugin_binding.kubespider_plugin_binding.load_store()
+
     def run(self) -> None:
         _thread.start_new_thread(self.run_period_job_producer, ())
         _thread.start_new_thread(self.run_period_job_consumer, ())
         _thread.start_new_thread(self.run_download_trigger_job, ())
         _thread.start_new_thread(self.run_pt_server, ())
         _thread.start_new_thread(self.run_notification_consumer, ())
+        _thread.start_new_thread(self.run_plugin_manager, ())
 
 
 kubespider_controller = Kubespider()

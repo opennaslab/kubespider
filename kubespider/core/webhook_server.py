@@ -10,6 +10,8 @@ from core import notification_server
 from core import period_server
 from core.kubespider_controller import kubespider_controller
 from core import source_manager
+from core import plugin_manager
+from core import plugin_binding
 
 kubespider_server = Flask(__name__)
 
@@ -98,6 +100,58 @@ def refresh_handler():
     period_server.kubespider_period_server.trigger_run()
     return send_ok_response()
 
+@kubespider_server.route('/api/v1/plugin', methods=['GET'])
+@auth_required
+def list_plugin_handler():
+    plugins = plugin_manager.kubespider_plugin_manager.list_plugin()
+    return send_json_response([plugin.to_dict() for plugin in plugins])
+
+@kubespider_server.route('/api/v1/plugin', methods=['PUT'])
+@auth_required
+def register_plugin_handler():
+    data: dict = json.loads(request.data.decode("utf-8"))
+    if 'definition' not in data:
+        raise Exception("definition is required")
+    plugin_manager.kubespider_plugin_manager.register(data['definition'])
+    return send_ok_response()
+
+@kubespider_server.route('/api/v1/plugin/<plugin_name>', methods=['POST'])
+@auth_required
+def operator_plugin_handler(plugin_name):
+
+    data: dict = json.loads(request.data.decode("utf-8"))
+    if 'enable' in data:
+        if data['enable']:
+            plugin_manager.kubespider_plugin_manager.enable(plugin_name)
+        else:
+            plugin_manager.kubespider_plugin_manager.disable(plugin_name)
+    return send_ok_response()
+
+@kubespider_server.route('/api/v1/binding', methods=['GET'])
+@auth_required
+def list_binding_handler():
+    data = plugin_binding.kubespider_plugin_binding.list_config()
+    return send_json_response([config.to_dict() for config in data])
+
+@kubespider_server.route('/api/v1/binding', methods=['PUT'])
+@auth_required
+def create_binding_handler():
+    data: dict = json.loads(request.data.decode("utf-8"))
+    plugin_binding.kubespider_plugin_binding.add(data)
+    return send_ok_response()
+
+@kubespider_server.route('/api/v1/binding/<name>', methods=['POST'])
+@auth_required
+def update_binding_handler(name: str):
+    data: dict = json.loads(request.data.decode("utf-8"))
+    plugin_binding.kubespider_plugin_binding.update(name, data)
+    return send_ok_response()
+
+@kubespider_server.route('/api/v1/binding/<name>', methods=['DELETE'])
+@auth_required
+def remove_binding_handler(name: str):
+    plugin_binding.kubespider_plugin_binding.remove(name)
+    return send_ok_response()
 
 def send_ok_response():
     resp = jsonify('OK')
@@ -105,6 +159,11 @@ def send_ok_response():
     resp.content_type = 'application/text'
     return resp
 
+def send_json_response(data):
+    resp = jsonify(data)
+    resp.status_code = 200
+    resp.content_type = 'application/json'
+    return resp
 
 def send_bad_response(err):
     resp = jsonify(str(err))
