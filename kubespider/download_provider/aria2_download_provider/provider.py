@@ -1,12 +1,11 @@
 import logging
 import os
-
 import aria2p
 
-from utils.config_reader import AbsConfigReader
 from download_provider.provider import DownloadProvider
-from api import types
-from api.values import Task
+from utils.config_reader import AbsConfigReader
+from utils import types
+from utils.values import Task
 
 
 class Aria2DownloadProvider(DownloadProvider):

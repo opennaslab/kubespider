@@ -6,8 +6,8 @@ from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
 from source_provider import provider
-from api import types
-from api.values import Resource, Event
+from utils import types
+from utils.values import Resource, Event
 from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
 

@@ -1,14 +1,13 @@
 # This works for: https://www.meijutt.tv/
 # Function: download tv video once it's updated
 # encoding:utf-8
-from urllib.parse import urlparse
 import logging
-from bs4 import BeautifulSoup
 
-from api import types
-from api.values import Event, Resource
+from urllib.parse import urlparse
+from bs4 import BeautifulSoup
 from source_provider import provider
-from utils import helper
+from utils.values import Event, Resource
+from utils import helper, types
 from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
 

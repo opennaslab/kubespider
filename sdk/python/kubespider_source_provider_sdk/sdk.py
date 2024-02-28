@@ -1,16 +1,17 @@
+import copy
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 import argparse
 import logging
 import traceback
 
-from kubespider_source_provider_sdk.values import ProviderType
+from .values import ProviderType
 
 
 class SDKHTTPRequestHandler(BaseHTTPRequestHandler):
-
     PROVIDER = None
     API = {}
+    ARGUMENTS_CONTEXT = {}
 
     # pylint: disable=redefined-builtin
     def log_message(self, format: str, *args) -> None:
@@ -24,13 +25,13 @@ class SDKHTTPRequestHandler(BaseHTTPRequestHandler):
         })
 
     def do_POST(self) -> None:
-        # Get the content length
-        content_length = int(self.headers["Content-Length"])
-        # Read the data from the request
-        data = self.rfile.read(content_length).decode("utf-8")
-        # Parse the data as a JSON object
-        data = json.loads(data)
         try:
+            # Get the content length
+            content_length = int(self.headers["Content-Length"])
+            # Read the data from the request
+            data = self.rfile.read(content_length).decode("utf-8")
+            # Parse the data as a JSON object
+            data = json.loads(data)
             # Call the API
             response = self.__call_api(data)
             # Send the response
@@ -60,8 +61,9 @@ class SDKHTTPRequestHandler(BaseHTTPRequestHandler):
             raise Exception(f"API <{api}> not found")
 
         logging.info('Calling API <%s>', api)
-
-        return self.API[api](**data)
+        arg_context = copy.deepcopy(self.ARGUMENTS_CONTEXT)
+        arg_context.update(data)
+        return self.API[api](**arg_context)
 
     def __send_response(self, response: dict) -> None:
         self.send_response(200)
@@ -81,6 +83,7 @@ class SDK:
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s-%(levelname)s: [' + params['name'] + '] %(message)s')
         logging.info('Running the provider on port <%s>', params['port'])
+        SDKHTTPRequestHandler.ARGUMENTS_CONTEXT = params
         self.__http_server = HTTPServer(
             ("", params['port']), SDKHTTPRequestHandler)
         self.__http_server.serve_forever()
@@ -96,6 +99,12 @@ class SDK:
             type=str,
             required=True,
             help="The name of the provider"
+        )
+        parser.add_argument(
+            "--proxy",
+            type=str,
+            required=False,
+            help="Proxy address"
         )
         parser.add_argument(
             "--port",

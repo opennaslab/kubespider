@@ -9,9 +9,8 @@ import re
 from typing import Tuple
 
 from source_provider import provider
-from api import types
-from api.values import Event, Resource
-from utils import helper
+from utils.values import Event, Resource
+from utils import helper, types
 from utils.config_reader import AbsConfigReader
 
 class AniSourceProvider(provider.SourceProvider):

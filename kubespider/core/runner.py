@@ -7,18 +7,17 @@ import time
 import waitress
 from watchdog.observers import Observer
 
-from api import values
+from api import create_app
 from core import config_handler
-from core import webhook_server
 from core.kubespider_controller import kubespider_controller
 from core.telegram_server import telegram_server
-from utils import global_config
+from utils import global_config, values
 
 
 def run_webhook_server() -> None:
     webhook_server_port = global_config.get_server_port()
     logging.info('Webhook Server start running...')
-    waitress.serve(webhook_server.kubespider_server, host='0.0.0.0', port=webhook_server_port)
+    waitress.serve(create_app(), host='0.0.0.0', port=webhook_server_port)
 
 
 def run_telegram_hook_server() -> None:
@@ -42,6 +41,7 @@ def run() -> None:
 
     while True:
         time.sleep(30)
+
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s-%(levelname)s: %(message)s')
 

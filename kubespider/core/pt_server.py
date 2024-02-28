@@ -9,9 +9,9 @@ import logging
 from core import download_trigger
 from pt_provider import provider
 from utils.config_reader import YamlFileConfigReader
-from api.values import Config, FILE_TYPE_TO_PATH
-from api.types import FILE_TYPE_PT, LINK_TYPE_TORRENT
-from api.values import Resource, Downloader
+from utils.values import Config, FILE_TYPE_TO_PATH
+from utils.types import FILE_TYPE_PT, LINK_TYPE_TORRENT
+from utils.values import Resource, Downloader
 
 
 class PTServer:
