@@ -1,10 +1,9 @@
 # Used to define the general values used in the project
-
+import hashlib
 import os
 from enum import Enum
 
-from api import types
-from utils.helper import get_unique_hash
+from utils import types
 
 FILE_TYPE_TO_PATH = {
     types.FILE_TYPE_COMMON: "Common",
@@ -89,7 +88,7 @@ class Resource(Extra):
         self.path = path
         self.link_type = link_type
         self.file_type = file_type
-        self.uid = uid if uid else get_unique_hash(url)
+        self.uid = uid if uid else hashlib.md5(url.encode('utf-8')).hexdigest()
 
 
 class Task(Extra):

@@ -1,10 +1,9 @@
 import logging
 import time
 
-from utils import helper, global_config
+from utils import helper, global_config, types
 from utils.helper import retry
-from api import types
-from api.values import Resource, Task, Downloader
+from utils.values import Resource, Task, Downloader
 from download_provider.provider import DownloadProvider
 
 

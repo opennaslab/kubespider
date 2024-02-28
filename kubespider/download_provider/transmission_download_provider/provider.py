@@ -3,10 +3,10 @@ import os
 
 from urllib.parse import urlparse
 from transmission_rpc import Client
+from download_provider.provider import DownloadProvider
 
 from utils.config_reader import AbsConfigReader
-from download_provider.provider import DownloadProvider
-from api.values import Task
+from utils.values import Task
 
 
 class TransmissionProvider(DownloadProvider):

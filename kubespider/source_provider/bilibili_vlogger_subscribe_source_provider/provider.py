@@ -7,10 +7,9 @@ from hashlib import md5
 import urllib.parse
 import time
 
-from api import types
-from api.values import Event, Resource
+from utils.values import Event, Resource
 from utils.config_reader import AbsConfigReader
-from utils import helper
+from utils import helper, types
 from source_provider import provider
 
 mixinKeyEncTab = [

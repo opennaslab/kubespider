@@ -3,8 +3,8 @@ import os
 from urllib.parse import urljoin, quote
 
 from source_provider import provider
-from api import types
-from api.values import Event, Resource
+from utils import types
+from utils.values import Event, Resource
 from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller, retry, get_unique_hash
 

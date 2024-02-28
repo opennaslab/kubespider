@@ -5,7 +5,7 @@ import logging
 
 from notification_provider import provider
 from utils.config_reader import YamlFileConfigReader
-from api.values import Config
+from utils.values import Config
 
 
 class NotificationServer:

@@ -9,10 +9,10 @@ import base64
 import execjs
 import bencodepy
 
+from download_provider import provider
 from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
-from download_provider import provider
-from api.values import Task
+from utils.values import Task
 
 
 class XunleiDownloadProvider(provider.DownloadProvider):
