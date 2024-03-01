@@ -14,10 +14,9 @@ from multiprocessing import Process
 import shutil
 from watchdog.events import FileSystemEventHandler, FileModifiedEvent
 
-from api.values import Config
-from api import values
+from utils.values import Config
 from utils.config_reader import YamlFileSectionConfigReader, YamlFileConfigReader
-from utils import helper
+from utils import helper, values
 
 import source_provider.mikanani_source_provider.provider as mikanani_source_provider
 import source_provider.btbtt12_disposable_source_provider.provider as btbtt12_disposable_source_provider

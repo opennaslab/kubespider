@@ -1,8 +1,7 @@
 import os
 
-from api import types
-from api.values import Resource, Event, Downloader
-from utils import helper
+from utils.values import Resource, Event, Downloader
+from utils import helper, types
 from source_provider.provider import SourceProvider
 from core import period_server
 from core import download_trigger

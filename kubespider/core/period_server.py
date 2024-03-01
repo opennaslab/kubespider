@@ -3,9 +3,8 @@ import logging
 import queue
 import os
 
-from api import types
-from api.values import Config, Downloader
-from utils import helper
+from utils.values import Config, Downloader
+from utils import helper, types
 from utils.config_reader import YamlFileConfigReader
 from source_provider.provider import SourceProvider
 from core import download_trigger, notification_server

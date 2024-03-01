@@ -1,4 +1,4 @@
-from api.values import CFG_BASE_PATH, Extra
+from utils.values import CFG_BASE_PATH, Extra
 from utils.config_reader import YamlFileConfigReader, YamlFileSectionConfigReader
 from core import plugin_manager
 

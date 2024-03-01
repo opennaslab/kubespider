@@ -11,9 +11,7 @@ from urllib.parse import urlparse
 
 import requests
 
-from api import types
-from api import values
-from utils import global_config
+from utils import global_config, types, values
 
 
 def get_tmp_file_name(url):

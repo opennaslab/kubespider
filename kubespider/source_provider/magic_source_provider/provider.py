@@ -5,9 +5,8 @@ from urllib.parse import urlparse
 from lxml import etree
 
 from source_provider import provider
-from api import types
-from api.values import Event, Resource
-from utils import helper
+from utils.values import Event, Resource
+from utils import helper, types
 from utils.config_reader import AbsConfigReader
 
 

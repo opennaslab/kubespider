@@ -1,11 +1,11 @@
 # encoding:utf-8
 import re
-from urllib.parse import urlparse
 import logging
 
-from api import types
-from api.values import Event, Resource
+from urllib.parse import urlparse
 from source_provider import provider
+from utils import types
+from utils.values import Event, Resource
 from utils.config_reader import AbsConfigReader
 
 

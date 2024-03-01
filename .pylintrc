@@ -3,6 +3,8 @@ disable=
     C0114, # missing-module-docstring
     C0115, # missing-class-docstring
     C0116, # missing-class-docstring
+    C0413, # wrong-import-position
+    C0415, # import-outside-toplevel
     W0703, # broad-except
     W0511, # fixme, like TODO
     R1732, # consider-using-with

@@ -1,7 +1,7 @@
 import abc
 
 from utils.config_reader import AbsConfigReader
-from api.values import Task
+from utils.values import Task
 
 
 class DownloadProvider(metaclass=abc.ABCMeta):

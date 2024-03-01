@@ -6,7 +6,7 @@ import logging
 import signal
 import shutil
 
-from api.values import CFG_BASE_PATH, Resource
+from utils.values import CFG_BASE_PATH, Resource
 from utils.config_reader import YamlFileConfigReader, YamlFileSectionConfigReader
 from utils import helper
 

@@ -12,6 +12,10 @@ def check_python_version():
         raise Exception(msg)
 
 
+def migrate():
+    pass
+
+
 def print_logo():
     print(r'''
  _          _                     _     _

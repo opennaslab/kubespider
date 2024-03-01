@@ -1,6 +1,6 @@
 import abc
 
-from api.values import Resource, Event
+from utils.values import Resource, Event
 from utils.config_reader import AbsConfigReader
 
 

@@ -10,9 +10,10 @@
 import re
 import logging
 import feedparser
-from api import types
-from api.values import Event, Resource
+
 from source_provider import provider
+from utils import types
+from utils.values import Event, Resource
 from utils.config_reader import AbsConfigReader
 
 

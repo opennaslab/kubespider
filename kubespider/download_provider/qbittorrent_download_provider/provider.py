@@ -1,13 +1,12 @@
 import logging
 import os
-
 import qbittorrentapi
-from qbittorrentapi.definitions import TorrentStates
 
-from utils.config_reader import AbsConfigReader
+from qbittorrentapi.definitions import TorrentStates
 from download_provider.provider import DownloadProvider
-from api import types
-from api.values import Task
+from utils.config_reader import AbsConfigReader
+from utils import types
+from utils.values import Task
 
 
 class QbittorrentDownloadProvider(DownloadProvider):
@@ -90,7 +89,8 @@ class QbittorrentDownloadProvider(DownloadProvider):
             use_auto_torrent_management = False
         try:
             logging.info('Create download task category:%s, tags:%s', category, tags)
-            ret = self.client.torrents_add(urls=task.url, save_path=download_path, category=category, tags=tags, use_auto_torrent_management=use_auto_torrent_management)
+            ret = self.client.torrents_add(urls=task.url, save_path=download_path, category=category, tags=tags,
+                                           use_auto_torrent_management=use_auto_torrent_management)
             logging.info('Create download task results:%s', ret)
             return None
         except Exception as err:
