@@ -1,5 +1,4 @@
 import logging
-import os
 
 from utils.config_reader import YamlFileConfigReader
 from utils import values
@@ -49,10 +48,6 @@ def get_telegram_username() -> [str, None]:
 
 
 class APPConfig:
-    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(values.CFG_BASE_PATH, 'kubespider.db')}"
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-
     SESSION_USE_SIGNER = True
     SESSION_PERMANENT = False
     PERMANENT_SESSION_LIFETIME = 86400 * 2
@@ -65,5 +60,3 @@ class APPConfig:
     SECRET_KEY = cfg.get("secret_key")
 
     DOWNLOAD_BASE_PATH = cfg.get("download_base_path", "")
-
-    SCHEDULER_API_ENABLED = True
