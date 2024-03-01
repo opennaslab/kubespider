@@ -18,9 +18,10 @@ PLUGIN_STATE_PATH = PLUGIN_BASE_PATH + "state.yaml"
 
 class PluginConfigDefinition:
 
-    def __init__(self, name: str, field_type: str, description: str, placeholder: str, required: bool, default: any):
+    # pylint: disable=redefined-builtin
+    def __init__(self, name: str, type: str, description: str, placeholder: str, required: bool, default: any):
         self.name = name
-        self.type = field_type
+        self.type = type
         self.description = description
         self.placeholder = placeholder
         self.required = required
