@@ -86,12 +86,18 @@ class PluginBinding:
             raise Exception('config not found')
         instance = self.config_instances[name]
         exists = instance.config.extra_params()
-        new_data = {}
-        new_data.update(exists)
-        new_data.update(config_data)
+        extra_params = {}
+        extra_params.update(exists)
+        extra_params.update(config_data)
+
+        # We only need extra para, ignore the necessary para, or function Config(xxx) will fail
+        extra_params.pop('name')
+        extra_params.pop('type')
+        extra_params.pop('plugin_name')
+
         self.__validate(Config(name, instance.config.type,
-                               instance.config.plugin_name, **new_data))
-        instance.config.put_extra_params(new_data)
+                               instance.config.plugin_name, **extra_params))
+        instance.config.put_extra_params(extra_params)
         instance.save()
 
     def __validate(self, config: Config):
