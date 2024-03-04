@@ -10,6 +10,22 @@ cat <<"EOF"
                            |_|  
 EOF
 
-python3 setup.py sdist
-rm -rf ./kubespider_source_provider_sdk.egg-info
-pip install ./dist/kubespider-source-provider-sdk-0.1.0.tar.gz
+PWD=$(cd "$(dirname "$0")";pwd)
+APP_PATH=$(dirname $PWD)
+SDK_PATH=$APP_PATH/python
+PROVIDER_PATH=$APP_PATH/provider
+echo "SDK_PATH: $SDK_PATH"
+echo "PROVIDER_PATH: $PROVIDER_PATH"
+
+# build & install sdk
+cd $SDK_PATH
+python setup.py sdist
+pip install dist/*.tar.gz
+# build provider
+cd $PROVIDER_PATH
+if [ -f requirements.txt ]; then
+    pip install -r requirements.txt
+fi
+pyinstaller -F provider.py --distpath=bin --collect-all=kubespider_source_provider_sdk --clean
+rm -rf build
+rm -rf rm provider.spec

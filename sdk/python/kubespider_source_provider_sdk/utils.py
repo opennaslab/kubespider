@@ -1,5 +1,8 @@
+import cgi
 import hashlib
-
+import logging
+import uuid
+from urllib.parse import urlparse
 import requests
 
 
@@ -35,3 +38,52 @@ def parse_cookie_string(cookie: str) -> dict:
 
 def get_unique_hash(data):
     return hashlib.md5(data.encode('utf-8')).hexdigest()
+
+
+def get_link_type(url: str, controller: requests.Session) -> str:
+    if url.startswith('magnet:'):
+        return "magnet"
+    if urlparse(url).path.endswith('torrent'):
+        return "torrent"
+    if not url.startswith('http'):
+        # such as ed2k://xxx, we treat it as general
+        # whether it could be downloaded depeneds on the download softwear
+        return "general"
+    # rfc6266: guess link type
+    try:
+        resp = controller.head(url, timeout=30, allow_redirects=True)
+        if resp.status_code == 200 and resp.headers.get('content-disposition'):
+            content_disposition = resp.headers.get('content-disposition')
+            _, params = cgi.parse_header(content_disposition)
+            if params['filename'] and params['filename'].endswith('torrent'):
+                return "torrent"
+    except Exception as err:
+        logging.warning('Rfc6266 get link type error:%s', err)
+
+    # TODO: implement other type, like music mv or short video
+    return "general"
+
+
+def download_torrent_file(url: str, controller: requests.Session) -> str:
+    try:
+        resp = controller.get(url, timeout=30).content
+        file = get_tmp_file_name(url) + '.torrent'
+        with open(file, 'wb') as file_write:
+            file_write.write(resp)
+        return file
+    except Exception as err:
+        logging.error("Download torrent file error:%s", err)
+        return None
+
+
+def get_tmp_file_name(url):
+    file_name = get_unique_hash(url)
+    if file_name is None or file_name == '':
+        file_name = uuid.uuid4().hex
+    return '/tmp/' + file_name
+
+
+def format_long_string(longstr: str) -> str:
+    if len(longstr) > 40:
+        return longstr[:40] + '...'
+    return longstr
