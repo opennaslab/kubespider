@@ -9,6 +9,8 @@ import shutil
 from utils.values import CFG_BASE_PATH, Resource
 from utils.config_reader import YamlFileConfigReader, YamlFileSectionConfigReader
 from utils import helper
+from core import plugin_binding
+
 
 PLUGIN_BASE_PATH = CFG_BASE_PATH + "plugins/"
 PLUGIN_DEFINITION_PATH = PLUGIN_BASE_PATH + "definitions/"
@@ -246,6 +248,10 @@ class PluginManager:
         self.definitions[definition.name] = definition
 
     def unregister(self, plugin_name: str):
+        configs = plugin_binding.kubespider_plugin_binding.list_config()
+        for config in configs:
+            if config.plugin_name == plugin_name:
+                raise Exception(f'Plugin {plugin_name} is used by {config.name} currently, please delete it first...')
         definition = self.definitions.get(plugin_name)
         if not definition:
             raise Exception(f"Plugin not found: {plugin_name}")
@@ -259,7 +265,8 @@ class PluginManager:
         if not definition:
             raise Exception(f"Plugin not found: {plugin_name}")
         if self.instances.get(plugin_name):
-            raise Exception(f"Plugin already enabled: {plugin_name}")
+            # Just ignore re-enable plugin operation
+            return
         instance = PluginInstance(
             definition, YamlFileSectionConfigReader(PLUGIN_STATE_PATH, plugin_name))
         instance.enable()
