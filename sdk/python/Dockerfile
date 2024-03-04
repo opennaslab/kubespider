@@ -1,7 +1,8 @@
-FROM minidocks/pyinstaller:latest
+FROM python:3.11-alpine
 
-WORKDIR /app
+RUN apk add binutils
+WORKDIR /app/python
+COPY . ./
+RUN pip install -r requirements.txt
 
-COPY ./* ./
-
-RUN ./install.sh
+CMD ./install.sh

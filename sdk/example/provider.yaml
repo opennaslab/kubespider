@@ -1,15 +1,43 @@
-name: example
+name: magic_source
 version: 1.0.0
-author: Elastic
+author: qingchoulove
 type: parser
-description: Example provider
+description: This is a magic source parser
 language: python
-logo: https://raw.githubusercontent.com/elastic/beats/master/libbeat/docs/images/beats_logo.png
+logo: https://via.placeholder.com/200
 arguments:
-  - name: config
+  - name: handle_host
     type: text
     description: Configuration options
     placeholder: input your configuration
     required: true
-    default: default
-binary: https://raw.githubusercontent.com/elastic/beats/master/libbeat/docs/images/beats
+  - name: link_selector
+    type: text
+    description: Configuration options
+    placeholder: input your configuration
+    required: true
+  - name: title_selector
+    type: text
+    description: Configuration options
+    placeholder: input your configuration
+    required: true
+  - name: link_type
+    type: text
+    description: Configuration options
+    placeholder: input your configuration
+    required: true
+    default: "magnet"
+  - name: file_type
+    type: text
+    description: Configuration options
+    placeholder: input your configuration
+    required: true
+    default: "video_mixed"
+  - name: pre_download
+    type: text
+    description: Configuration options
+    placeholder: input your configuration
+    required: true
+    default: "true"
+
+binary: https://raw.githubusercontent.com/qingchoulove/ks_provider_example/main/example_provider
