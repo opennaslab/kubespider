@@ -249,13 +249,8 @@ class PluginManager:
         definition = self.definitions.get(plugin_name)
         if not definition:
             raise Exception(f"Plugin not found: {plugin_name}")
-        reader = YamlFileConfigReader(PLUGIN_STATE_PATH)
-        self.state = reader.read()
+        self.disable(plugin_name)
         del self.definitions[plugin_name]
-        del self.instances[plugin_name]
-        if self.state.get(plugin_name):
-            del self.state[plugin_name]
-            reader.save(self.state)
         os.remove(PLUGIN_DEFINITION_PATH + plugin_name + ".yaml")
         os.remove(PLUGIN_BINARY_PATH + plugin_name)
 
@@ -263,6 +258,8 @@ class PluginManager:
         definition = self.definitions.get(plugin_name)
         if not definition:
             raise Exception(f"Plugin not found: {plugin_name}")
+        if self.instances.get(plugin_name):
+            raise Exception(f"Plugin already enabled: {plugin_name}")
         instance = PluginInstance(
             definition, YamlFileSectionConfigReader(PLUGIN_STATE_PATH, plugin_name))
         instance.enable()
