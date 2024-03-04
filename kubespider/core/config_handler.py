@@ -40,11 +40,6 @@ import download_provider.yutto_download_provider.provider as yutto_download_prov
 
 import pt_provider.nexusphp_pt_provider.provider as nexusphp_pt_provider
 
-import notification_provider.pushdeer_notification_provider.provider as pushdeer_notification_provider
-import notification_provider.telegram_notification_provider.provider as telegram_notification_provider
-import notification_provider.qq_notification_provider.provider as qq_notification_provider
-import notification_provider.bark_notification_provider.provider as bark_notification_provider
-
 # Source provider init related
 source_provider_init_func = {
     'bilibili_source_provider': bilibili_source_provider.BilibiliSourceProvider,
@@ -75,13 +70,6 @@ downloader_provider_init_func = {
 # PT provider init related
 pt_provider_init_func = {
     'nexusphp_pt_provider': nexusphp_pt_provider.NexuPHPPTProvider,
-}
-
-notification_provider_init_func = {
-    'pushdeer_notification_provider': pushdeer_notification_provider.PushDeerNotificationProvider,
-    'telegram_notification_provider': telegram_notification_provider.TelegramNotificationProvider,
-    'qq_notification_provider': qq_notification_provider.QQNotificationProvider,
-    'bark_notification_provider': bark_notification_provider.BarkNotificationProvider,
 }
 
 
@@ -146,17 +134,6 @@ def get_pt_provider(provider_name: str, config: dict):
         raise Exception(str('unknown pt provider type %s', provider_type)) from exc
 
 
-def get_notification_provider(provider_name: str, config: dict):
-    provider_type = config['type']
-    try:
-        return notification_provider_init_func[provider_type](
-            provider_name,
-            YamlFileSectionConfigReader(Config.NOTIFICATION_PROVIDER.config_path(), provider_name)
-        )
-    except Exception as exc:
-        raise Exception(str('unknown notification provider type %s', provider_type)) from exc
-
-
 def init_source_config():
     init_source_providers = []
     source_config = YamlFileConfigReader(values.Config.SOURCE_PROVIDER.config_path()).read()
@@ -179,14 +156,6 @@ def init_pt_config():
     for name in pt_config:
         init_pt_providers.append(get_pt_provider(name, pt_config[name]))
     return init_pt_providers
-
-
-def init_notification_config():
-    init_notification_providers = []
-    notification_config = YamlFileConfigReader(values.Config.NOTIFICATION_PROVIDER.config_path()).read()
-    for name, conf in notification_config.items():
-        init_notification_providers.append(get_notification_provider(name, conf))
-    return init_notification_providers
 
 
 def prepare_config() -> None:

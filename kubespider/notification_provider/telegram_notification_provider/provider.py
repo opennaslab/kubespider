@@ -1,37 +1,38 @@
 import logging
+import os
 import time
 from urllib.parse import urljoin
 
 from notification_provider import provider
-from utils.config_reader import AbsConfigReader
+from utils.config_reader import YamlFileConfigReader
 from utils.helper import get_request_controller, retry
+from utils.values import Config
 
 
 class TelegramNotificationProvider(provider.NotificationProvider):
-    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
-        self.config_reader = config_reader
-        self.name = name
+    """Telegram channel notification tool"""
+    LOGO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logo.png")
+
+    def __init__(self, channel_name: str, bot_token: str, channel_chat_id: str = None) -> None:
+        """
+        :param channel_name: channel name
+        :param bot_token: bot token
+        :param channel_chat_id: channel id
+        """
         self.request_handler = get_request_controller()
-        self.type, self.enable, self.host, self.token, self.channel_name, self.chat_id = \
-            self._init_conf(config_reader)
-        if not self.chat_id and self.enable:
-            self.chat_id = self.get_channel_chat_id(self.channel_name)
-            if self.chat_id:
-                self.save_conf(channel_chat_id=self.chat_id)
+        self.host = "https://api.telegram.org"
+        self.token = bot_token
+        self.channel_name = channel_name
+        self.channel_chat_id = channel_chat_id
 
-    @staticmethod
-    def _init_conf(config_reader: AbsConfigReader) -> tuple:
-        conf = config_reader.read()
-        return conf.get("type"), conf.get("enable", False), conf.get("host"), conf.get("bot_token"), conf.get(
-            "channel_name"), conf.get("channel_chat_id")
-
-    def get_provider_name(self) -> str:
-        return self.name
-
-    def provider_enabled(self) -> bool:
-        return self.enable
+    @property
+    def chat_id(self):
+        if self.channel_chat_id:
+            return self.channel_chat_id
+        return self.get_channel_chat_id(self.channel_name)
 
     def get_channel_chat_id(self, channel_name) -> str:
+        channel_chat_id = ""
         url = urljoin(self.host, f"/bot{self.token}/getUpdates")
         resp = self.request_handler.get(url, timeout=5).json()
         for res in resp.get("result", [])[::-1]:
@@ -39,9 +40,12 @@ class TelegramNotificationProvider(provider.NotificationProvider):
                 if isinstance(value, dict):
                     chat = value.get("chat", {})
                     if chat.get("type") == "channel" and chat.get("title") == channel_name:
-                        return chat.get("id")
+                        channel_chat_id = chat.get("id")
         logging.error("[Telegram] chat_id not found, response: %s", resp)
-        return ""
+        print(channel_chat_id)
+        if channel_chat_id:
+            self.save_conf(channel_chat_id=channel_chat_id)
+        return channel_chat_id
 
     @retry()
     def push(self, title, **kwargs) -> bool:
@@ -74,4 +78,5 @@ class TelegramNotificationProvider(provider.NotificationProvider):
 
     def save_conf(self, **kwargs) -> None:
         logging.info("[Telegram] update telegram conf: %s", kwargs)
-        self.config_reader.parcial_update(lambda notification_conf: notification_conf["telegram"].update(kwargs))
+        config_reader = YamlFileConfigReader(Config.NOTIFICATION_PROVIDER.config_path())
+        config_reader.parcial_update(lambda notification_conf: notification_conf[self.NAME].update(kwargs))

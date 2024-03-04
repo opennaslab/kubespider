@@ -1,6 +1,7 @@
 from flask import Blueprint, g, abort
 
 notification_blu = Blueprint('notification', __name__)
+# pylint: disable=cyclic-import
 from .views import *
 
 

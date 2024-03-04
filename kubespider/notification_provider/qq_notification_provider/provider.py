@@ -1,31 +1,23 @@
 import logging
 from urllib.parse import urljoin
 from requests import Response
-
-from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
 from notification_provider import provider
 
+
 class QQNotificationProvider(provider.NotificationProvider):
+    """QQ notification"""
 
-    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
-        super().__init__(name, config_reader)
-        self.name = name
-        self.enable, self.host, self.access_token, self.target_qq = self._init_conf(config_reader)
+    def __init__(self, host: str, access_token: str, target_qq: str) -> None:
+        """
+        :param host: host
+        :param access_token: access_token
+        :param target_qq: target_qq
+        """
+        self.host = host
+        self.access_token = access_token
+        self.target_qq = int(target_qq)
         self.request_handler = get_request_controller()
-
-    @staticmethod
-    def _init_conf(config_reader: AbsConfigReader):
-        conf = config_reader.read()
-        enable, host, access_token, target_qq = conf.get("enable", False), conf.get("host"), conf.get("accessToken"), conf.get("target_qq")
-        target_qq = int(target_qq)
-        return enable, host, access_token, target_qq
-
-    def get_provider_name(self) -> str:
-        return self.name
-
-    def provider_enabled(self) -> bool:
-        return self.enable
 
     def push(self, title: str, **kwargs) -> bool:
         message = self.format_message(title, **kwargs)

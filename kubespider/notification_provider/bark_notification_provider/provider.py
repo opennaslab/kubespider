@@ -2,26 +2,20 @@ from urllib.parse import urljoin
 import logging
 
 from notification_provider import provider
-from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
 
+
 class BarkNotificationProvider(provider.NotificationProvider):
-    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
-        super().__init__(name, config_reader)
-        self.name = name
-        self.enable, self.host, self.device_token = self._init_conf(config_reader)
+    """bark notification"""
+
+    def __init__(self, host: str, device_token: str) -> None:
+        """
+        :param host: bark`s host
+        :param device_token: bark`s device token
+        """
+        self.host = host
+        self.device_token = device_token
         self.request_handler = get_request_controller()
-
-    @staticmethod
-    def _init_conf(config_reader: AbsConfigReader):
-        conf = config_reader.read()
-        return conf.get("enable", True), conf.get("host"), conf.get("device_token")
-
-    def get_provider_name(self) -> str:
-        return self.name
-
-    def provider_enabled(self) -> bool:
-        return self.enable
 
     def push(self, title, **kwargs) -> bool:
         message = self.format_message(title, **kwargs)
