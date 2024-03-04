@@ -1,30 +1,24 @@
 import json
+import os
 from urllib.parse import urljoin
 import logging
 
 from notification_provider import provider
-from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
 
 
-class PushDeerNotificationProvider(provider.NotificationProvider):
+class PushdeerNotificationProvider(provider.NotificationProvider):
+    """An open-source notification tool pushDeer"""
+    LOGO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logo.png")
 
-    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
-        self.name = name
-        self.enable, self.host, self.push_keys, self.type = \
-            self._init_conf(config_reader)
+    def __init__(self, host: str, push_keys: list[str]) -> None:
+        """
+        :param host: pushdeer`s host
+        :param push_keys: pushdeer`s push key
+        """
+        self.host = host
+        self.push_keys = push_keys
         self.request_handler = get_request_controller()
-
-    @staticmethod
-    def _init_conf(config_reader):
-        conf = config_reader.read()
-        return conf.get("enable", True), conf.get("host"), conf.get("push_keys", []), conf.get("type", [])
-
-    def get_provider_name(self) -> str:
-        return self.name
-
-    def provider_enabled(self) -> bool:
-        return self.enable
 
     def push(self, title, **kwargs) -> bool:
         try:

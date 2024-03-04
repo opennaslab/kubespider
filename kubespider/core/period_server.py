@@ -7,7 +7,7 @@ from utils.values import Config, Downloader
 from utils import helper, types
 from utils.config_reader import YamlFileConfigReader
 from source_provider.provider import SourceProvider
-from core import download_trigger, notification_server
+from core import download_trigger, notification_manager
 
 
 class PeriodServer:
@@ -68,7 +68,7 @@ class PeriodServer:
             ))
 
             if err is not None:
-                notification_server.kubespider_notification_server.send_message(
+                notification_manager.kubespider_notification_server.send_message(
                     title=f"[{provider_name}] download failed", url=source.url, path=source.path,
                     link_type=source.link_type, file_type=source.file_type, **source.extra_params()
                 )
@@ -76,7 +76,7 @@ class PeriodServer:
             #  add resource to state
             state.append(source.uid)
 
-            notification_server.kubespider_notification_server.send_message(
+            notification_manager.kubespider_notification_server.send_message(
                 title=f"[{provider_name}] start download", url=source.url, path=source.path,
                 link_type=source.link_type, file_type=source.file_type, **source.extra_params()
             )

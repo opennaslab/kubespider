@@ -117,7 +117,7 @@ class PluginInstance:
         _thread.start_new_thread(self.__run_plugin, ())
         self.__update_state("port", plugin_port)
         # wait for the plugin to start
-        for _ in range(5):
+        for _ in range(10):
             if self.__helath():
                 logging.info('Plugin started: %s', self.definition.name)
                 return

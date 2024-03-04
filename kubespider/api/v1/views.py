@@ -2,7 +2,7 @@ import logging
 import json
 
 from flask import jsonify, request
-from core import notification_server
+from core import notification_manager
 from core import period_server
 from core.kubespider_controller import kubespider_controller
 from core import source_manager
@@ -57,11 +57,11 @@ def download_handler():
     err = source_manager.source_provider_manager.download_with_source_provider(event)
 
     if err is None:
-        notification_server.kubespider_notification_server.send_message(
+        notification_manager.kubespider_notification_server.send_message(
             title="[webhook] start download", source=source, path=path
         )
         return send_ok_response()
-    notification_server.kubespider_notification_server.send_message(
+    notification_manager.kubespider_notification_server.send_message(
         title="[webhook] download failed", source=source, path=path
     )
     return send_bad_response(err)

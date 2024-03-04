@@ -7,7 +7,7 @@ from core import download_trigger
 from core import period_server
 from core import pt_server
 from core import config_handler
-from core import notification_server
+from core import notification_manager
 from core import source_manager
 from core import plugin_manager
 from core import plugin_binding
@@ -33,7 +33,6 @@ class Kubespider:
         self.source_providers = config_handler.init_source_config()
         self.download_providers = config_handler.init_download_config()
         self.pt_providers = config_handler.init_pt_config()
-        self.notifications_providers = config_handler.init_notification_config()
 
         for provider in self.source_providers:
             provider_name = provider.get_provider_name()
@@ -63,15 +62,6 @@ class Kubespider:
             except KeyError:
                 logging.warning('PT Provider:%s not exists, treat as disabled', provider_name)
 
-        for provider in self.notifications_providers:
-            provider_name = provider.get_provider_name()
-            try:
-                if provider.provider_enabled():
-                    logging.info('Notification Provider:%s enabled...', provider_name)
-                    self.enabled_notifications_providers.append(provider)
-            except KeyError:
-                logging.warning('Notification Provider:%s not exists, treat as disabled', provider_name)
-
         # download provider aggregate
         download_trigger.kubespider_downloader = download_trigger.KubespiderDownloader(self.enabled_download_providers)
         # source provider aggregate
@@ -81,9 +71,7 @@ class Kubespider:
 
         pt_server.kubespider_pt_server = pt_server.PTServer(self.enabled_pt_providers)
 
-        notification_server.kubespider_notification_server = notification_server.NotificationServer(
-            self.enabled_notifications_providers
-        )
+        notification_manager.kubespider_notification_server = notification_manager.NotificationManager()
         # plugin manager
         plugin_manager.kubespider_plugin_manager = plugin_manager.PluginManager()
         # plugin binding
@@ -107,7 +95,7 @@ class Kubespider:
 
     def run_notification_consumer(self) -> None:
         logging.info('Notification Server Queue handler start running...')
-        notification_server.kubespider_notification_server.run_consumer()
+        notification_manager.kubespider_notification_server.run_consumer()
 
     def run_plugin_manager(self) -> None:
         logging.info('Plugin Manager start running...')

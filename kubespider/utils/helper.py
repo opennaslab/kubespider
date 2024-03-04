@@ -1,6 +1,8 @@
+import base64
 import cgi
 import functools
 import hashlib
+import inspect
 import logging
 import os
 import re
@@ -149,3 +151,25 @@ def retry(attempt_times=3, delay=1, exception=Exception):
 def extract_urls(text):
     urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
     return urls
+
+
+def extract_doc(obj):
+    return inspect.getdoc(obj)
+
+
+def parse_func_doc(func):
+    doc = extract_doc(func)
+    if not doc:
+        return {}
+    data = re.findall(r':param[ ]*([^\W]*)[ ]*:[ ]*([^\n]*)', doc)
+    return {item[0]: item[1] for item in data if all(item)}
+
+
+def get_img_b64(path):
+    if path and os.path.exists(path):
+        with open(path, "rb") as image_file:
+            image = image_file.read()
+            base64_encoded = base64.b64encode(image)
+            base64_string = base64_encoded.decode("utf-8")
+            return base64_string
+    return ""
