@@ -29,3 +29,18 @@ def operator_plugin_handler(plugin_name):
         else:
             plugin_manager.kubespider_plugin_manager.disable(plugin_name)
     return success()
+
+@plugin_blu.route("/<plugin_name>", methods=['DELETE'])
+def unregister_plugin_handler(plugin_name):
+    plugin_manager.kubespider_plugin_manager.unregister(plugin_name)
+    return success()
+
+
+@plugin_blu.route("/<plugin_name>", methods=['UPDATE'])
+def update_plugin_handler(plugin_name):
+    data: dict = json.loads(request.data.decode("utf-8"))
+    if 'definition' not in data:
+        raise Exception("definition is required")
+    plugin_manager.kubespider_plugin_manager.unregister(plugin_name)
+    plugin_manager.kubespider_plugin_manager.register(data['definition'])
+    return success()
