@@ -1,8 +1,9 @@
 import logging
+import traceback
 
 from flask import Flask, g, request
 from flask_cors import CORS
-from api.response import authenticate_require, server_error
+from api.response import authenticate_require, server_error, method_not_allowed
 
 from utils.global_config import APPConfig
 
@@ -31,8 +32,13 @@ def create_app():
     def unauthorized_error(error):
         return authenticate_require(msg=str(error))
 
-    @app.errorhandler(500)
+    @app.errorhandler(405)
+    def unsupported_method_error(error):
+        return method_not_allowed(msg=str(error))
+
+    @app.errorhandler(Exception)
     def api_server_error(error):
+        logging.error(traceback.format_exc())
         return server_error(msg=str(error))
 
     from api.v1 import v1_blu, health_blu
