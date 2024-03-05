@@ -1,12 +1,12 @@
 # ANi资源提供器配置
 ## 简介
-ANi Project是一个全自动下载流媒体网站（[动画疯](https://ani.gamer.com.tw/)、[Bilibili](https://www.bilibili.com/anime/)等）番剧资源的项目。官方频道：[Telegram Channel](https://t.me/channel_ani)  
+ANi Project是一个全自动下载流媒体网站（[动画疯](https://ani.gamer.com.tw/)、[Bilibili](https://www.bilibili.com/anime/)等）番剧资源的项目。官方频道：[Telegram Channel](https://t.me/channel_ani)
 
 由于ANi项目与上游的流媒体平台放送时间完全同步，所以该源能够**最及时**地跟踪正在放送的番剧更新。
 
 本项目将会同步ANi更新的所有番剧到你的私有库中。由于是内嵌字幕，该项目的视频源不适合用作收藏，我们推荐定期清除旧的下载。
 
-因为ANi的API提供的是直链下载，所以本源要求必须正确配置好aria2。
+因为ANi的API提供的是直链下载，所以本源要求必须正确配置好aria2或其他类似下载软件。
 
 ## 前提
 你已经安装好了Kubespider。
@@ -19,13 +19,13 @@ ani_source_provider:
   enable: true
   rss_link: https://api.ani.rip/ani-download.xml
   classification_on_directory: true
-  blacklist: 
+  blacklist:
     - 孤獨搖滾！
     - 機動戰士鋼彈 水星的魔女
 ```
 
 * `type`：订阅源类型，需为`ani_source_provider`。
-* `enable`：是否开启此provider。  
+* `enable`：是否开启此provider。
 * `rss_link`：ANi的API地址，默认已经填好。
 * `classification_on_directory`：是否按照番剧名分文件夹保存。启用该项有助于Emby/Jellyfin等插件显示“Shows”页面。
 * `blacklist`：黑名单，可以是`list`或者`str`，在黑名单中的番剧将不会被下载。黑名单使用纯字符串匹配，**不支持正则表达式**，为空时默认下载所有番剧。
