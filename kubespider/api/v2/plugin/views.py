@@ -8,7 +8,9 @@ from core import plugin_manager
 @plugin_blu.route('', methods=['GET'])
 def list_plugin_handler():
     plugins = plugin_manager.kubespider_plugin_manager.list_plugin()
-    return success([plugin.to_dict() for plugin in plugins])
+    instances = plugin_manager.kubespider_plugin_manager.list_instance()
+    instance_plugin = [instance.definition.name for instance in instances]
+    return success([dict(plugin.to_dict(), **{"up": plugin.name in instance_plugin}) for plugin in plugins])
 
 
 @plugin_blu.route('', methods=['PUT'])

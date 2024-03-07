@@ -151,7 +151,7 @@ class PluginInstance:
             **kwargs
         }
         response = self.request.post(
-            url=f"http://localhost:{port}", json=body, timeout=1)
+            url=f"http://localhost:{port}", json=body, timeout=30)
         if response.status_code != 200:
             raise Exception(
                 f"Failed to call plugin API: {api}")
@@ -199,6 +199,9 @@ class PluginManager:
 
     def list_plugin(self) -> list[PluginDefinition]:
         return self.definitions.values()
+
+    def list_instance(self) -> list[PluginInstance]:
+        return self.instances.values()
 
     def get_plugin(self, plugin_name: str) -> PluginDefinition:
         return self.definitions.get(plugin_name)
@@ -255,7 +258,10 @@ class PluginManager:
         definition = self.definitions.get(plugin_name)
         if not definition:
             raise Exception(f"Plugin not found: {plugin_name}")
-        self.disable(plugin_name)
+        # Disable the plugin if it is enabled
+        if self.instances.get(plugin_name):
+            self.disable(plugin_name)
+        # Remove the plugin definition and binary
         del self.definitions[plugin_name]
         os.remove(PLUGIN_DEFINITION_PATH + plugin_name + ".yaml")
         os.remove(PLUGIN_BINARY_PATH + plugin_name)
