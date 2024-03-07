@@ -151,7 +151,7 @@ class PluginInstance:
             **kwargs
         }
         response = self.request.post(
-            url=f"http://localhost:{port}", json=body, timeout=1)
+            url=f"http://localhost:{port}", json=body, timeout=30)
         if response.status_code != 200:
             raise Exception(
                 f"Failed to call plugin API: {api}")
