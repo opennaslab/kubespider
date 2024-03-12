@@ -6,7 +6,7 @@ from source_provider import provider
 from api import types
 from api.values import Event, Resource
 from utils.config_reader import AbsConfigReader
-from utils.helper import get_request_controller, retry
+from utils.helper import get_request_controller, retry, get_unique_hash
 
 
 class AlistSourceProvider(provider.SourceProvider):
@@ -90,7 +90,7 @@ class AlistSourceProvider(provider.SourceProvider):
         content = resp.get("data").get("content")
         alist_provider = resp.get("data").get("provider")
         total = resp.get("data").get("total")
-        if code:
+        if code == 200:
             return content, alist_provider, total
         raise ValueError(f"response error: {resp}")
 
@@ -116,13 +116,17 @@ class AlistSourceProvider(provider.SourceProvider):
                 files += self.get_all_files(new_path)
             else:
                 item["file_type"] = types.FILE_TYPE_COMMON
-                uri = f'{os.path.join("/d", os.path.join(item.get("path"), item.get("name")))}'
-                item["link"] = urljoin(self.host, quote(uri) + f'?modified={item.get("modified")}')
+                uri = os.path.join("/d", os.path.join(item.get("path", "").strip('/'), item.get("name", "")))
+                md5 = (item.get("hash_info") or {}).get("md5", get_unique_hash(uri))
+                sign = item.get("sign", "")
+                modified = item.get("modified", "")
+                item["link"] = urljoin(self.host, quote(uri) + f'?modified={modified}&sign={sign}')
                 files.append(Resource(
                     url=item.pop("link"),
                     path=item.pop("path"),
                     link_type=self.get_link_type(),
                     file_type=item.pop("file_type"),
+                    uid=md5,
                     **item
                 ))
         return files
