@@ -53,7 +53,7 @@ class BilibiliSourceProvider(provider.SourceProvider):
 
     def should_handle(self, event: Event) -> bool:
         parse_url = urlparse(event.source)
-        if parse_url.hostname == 'www.bilibili.com':
+        if parse_url.hostname in ('www.bilibili.com', 'b23.tv'):
             logging.info('%s belongs to BilibiliSourceProvider', event.source)
             return True
         return False
