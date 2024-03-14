@@ -16,12 +16,12 @@ language: python
 logo: https://via.placeholder.com/200
 binary: https://raw.githubusercontent.com/qingchoulove/ks_provider_example/main/example_provider
 arguments:
-  - name: handle_host
+  handle_host:
     type: text
     description: Configuration options
     required: true
     default: ""
-  - name: link_selector
+  link_selector: 
     type: text
     description: Configuration options
     required: true
@@ -37,7 +37,7 @@ kubespider会使用 `arguments` 定义渲染前端插件配置表格，这里对
 #### text类型
 
 ```yaml
-- name: handle_host
+handle_host: 
   type: text
   description: Configuration options
   required: true
@@ -47,7 +47,7 @@ kubespider会使用 `arguments` 定义渲染前端插件配置表格，这里对
 #### integer类型
 
 ```yaml
-- name: host_port
+host_port: 
   type: integer
   description: Configuration options
   required: true
@@ -57,7 +57,7 @@ kubespider会使用 `arguments` 定义渲染前端插件配置表格，这里对
 #### boolean类型
 
 ```yaml
-- name: enable_autodownload
+enable_autodownload: 
   type: boolean
   description: Configuration options
   required: true
@@ -65,41 +65,54 @@ kubespider会使用 `arguments` 定义渲染前端插件配置表格，这里对
 ```
 
 #### array类型
-
+##### 元素为object类型
 ```yaml
-- name: checking_websites
+checking_websites: 
   type: array
   description: Configuration options
   required: false
   default: nil
-  itemProperties:
-    - name: website
-      type: text
-      description: Configuration options
-      required: true
-      default: ""
-    - name: use_proxy
-      type: boolean
-      description: Configuration options
-      required: true
-      default: false
+  items:
+    type: object
+    properties:
+      website: 
+        type: text
+        description: Configuration options
+        required: true
+        default: ""
+      use_proxy:
+        type: boolean
+        description: Configuration options
+        required: true
+        default: false
+```
+
+##### 元素为简单类型
+```yaml
+checking_websites:
+  type: array
+  description: Configuration options
+  required: false
+  default: nil
+  items:
+    type: text
 ```
 
 #### object类型
 
 ```yaml
-- name: checking_websites
-  type: array
+checking_websites:
+  type: object
   description: Configuration options
   required: true
   default: nil
   properties:
-    - name: website
+    website: 
       type: text
       description: Configuration options
       required: true
       default: ""
-    - name: use_proxy
+    use_proxy:
       type: boolean
       description: Configuration options
       required: true
