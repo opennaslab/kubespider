@@ -1,6 +1,5 @@
 import logging
 import json
-import re
 from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
 from download_provider.provider import DownloadProvider
