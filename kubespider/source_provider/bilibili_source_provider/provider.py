@@ -2,6 +2,7 @@
 # Function: download single video link
 # encoding:utf-8
 import logging
+import re
 from urllib.parse import urlparse
 
 from source_provider import provider
@@ -52,7 +53,7 @@ class BilibiliSourceProvider(provider.SourceProvider):
         return self.webhook_enable
 
     def should_handle(self, event: Event) -> bool:
-        parse_url = urlparse(event.source)
+        parse_url = urlparse(re.findall(r"https?://\S+", event.source)[0])
         if parse_url.hostname in ('www.bilibili.com', 'b23.tv'):
             logging.info('%s belongs to BilibiliSourceProvider', event.source)
             return True

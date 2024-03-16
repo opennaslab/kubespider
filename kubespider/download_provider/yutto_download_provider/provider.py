@@ -37,7 +37,6 @@ class YuttoDownloadProvider(DownloadProvider):
 
     def send_general_task(self, task: Task) -> TypeError:
         headers = {'Content-Type': 'application/json'}
-        task.url = re.findall(r"https?://\S+", task.url)[0]
         data = {'dataSource': task.url, 'path': task.path}
         logging.info('Send general task:%s', json.dumps(data))
 
