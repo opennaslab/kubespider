@@ -81,7 +81,7 @@ class YouGetTasks:
         self.equeue(DownloadTask(args, fail_count+1))
 
     def get_authing_args(self, url) -> list:
-        if url.startswith('https://www.bilibili.com'):
+        if url.startswith('https://www.bilibili.com') or url.startswith('https://b23.tv'):
             if values.config_map['bilibili'] != "":
                 return ['-c', values.config_map['bilibili']]
             return ['-c', 'BILIBILI_SESSDATA']
