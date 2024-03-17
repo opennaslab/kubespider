@@ -64,7 +64,7 @@ class BilibiliSourceProvider(provider.SourceProvider):
         event.put_extra_params(self.get_download_param())
 
         return [Resource(
-            url=event.source,
+            url=re.findall(r"https?://\S+", event.source)[0],
             path='',
             link_type=self.get_link_type(),
             file_type=types.FILE_TYPE_VIDEO_MIXED,
