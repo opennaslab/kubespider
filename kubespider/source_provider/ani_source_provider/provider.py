@@ -16,7 +16,7 @@ from utils.config_reader import AbsConfigReader
 
 class AniSourceProvider(provider.SourceProvider):
     '''This provider is to sync resources from ANi API: https://api.ani.rip/ani-download.xml
-    For the most timely follow-up of Anime updates. 
+    For the most timely follow-up of Anime updates.
     Downloading media in general HTTP, aria2 provider must be needed.
 
     Accepts 2 configs:
@@ -122,8 +122,8 @@ class AniSourceProvider(provider.SourceProvider):
             title, episode = matches[0][:2]
             extra_info = matches[0][2:]
             return title, episode, extra_info
-        except Exception as e:
-            logging.warning('Error while running regex on title %s: %s', title, e)
+        except Exception as err:
+            logging.warning('Error while running regex on title %s: %s', title, err)
             return None, None, None
 
     def load_filter_config(self) -> str:
