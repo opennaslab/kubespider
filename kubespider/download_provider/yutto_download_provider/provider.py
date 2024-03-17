@@ -39,7 +39,7 @@ class YuttoDownloadProvider(DownloadProvider):
         data = {'dataSource': task.url, 'path': task.path}
         logging.info('Send general task:%s', json.dumps(data))
 
-        if not task.url.startswith('https://www.bilibili.com'):
+        if not (task.url.startswith('https://www.bilibili.com') or task.url.startswith('https://b23.tv')):
             return TypeError('yutto only support specific resource')
 
         # This downloading tasks is special, other download software could not handle
