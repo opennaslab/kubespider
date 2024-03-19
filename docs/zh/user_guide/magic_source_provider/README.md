@@ -31,8 +31,8 @@ dygod_magic_source_provider:
 * `enable`：是否开启此provider
 * `type`：订阅源类型，需为`magic_source_provider`
 * `handle_host`: 资源网站域名
-* `link_selector`: 资源链接xpath
-* `title_selector`: 资源标题xpath
+* `link_selector`: 资源链接xpath，使用 `$URL` 保留原始发送的URL。
+* `title_selector`: 资源标题xpath，可留空（留空即资源保存路径不存在此title的父文件夹）。
   可选配置
 * `downloader`: 数组格式，指定下载器，必须是在`${HOME}/kubespider/.config/downloader_provider.yaml`配置中的下载器。
 * `download_param`: 下载器参数配置，具体参数请参考下载器配置。
@@ -81,7 +81,7 @@ mteam_magic_source_provider:
   title_selector: //*[@id="top"]/text()
   type: magic_source_provider
 ```
-* `downloader`: 建议使用 transmission 下载软件.  
+* `downloader`: 建议使用 transmission 下载软件.
 ![mteamshow](./images/mteam-show.png)
 
 ### hdvideo(https://hdvideo.one)
@@ -103,7 +103,7 @@ hdvideo_magic_source_provider:
   title_selector: //*[@id="top"]/text()
   type: magic_source_provider
 ```
-* `downloader`: 建议使用 transmission 下载软件.  
+* `downloader`: 建议使用 transmission 下载软件.
 ![hdvideo](./images/hdvideo-show.png)
 
 ### 支持yt-dlp下载
