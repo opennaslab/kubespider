@@ -53,7 +53,10 @@ class BilibiliSourceProvider(provider.SourceProvider):
         return self.webhook_enable
 
     def should_handle(self, event: Event) -> bool:
-        parse_url = urlparse(re.findall(r"https?://\S+", event.source)[0])
+        url_list = re.findall(r"https?://\S+", event.source)
+        if len(url_list) == 0:
+            return False
+        parse_url = urlparse(url_list[0])
         if parse_url.hostname in ('www.bilibili.com', 'b23.tv'):
             logging.info('%s belongs to BilibiliSourceProvider', event.source)
             return True
