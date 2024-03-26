@@ -29,7 +29,11 @@ Browser.runtime.onInstalled.addListener(() => {
 Browser.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId === "KubespiderMenu") {
     const tabId = tab?.id || (await Tab.getCurrentTabId());
-    let dataSource = info.linkUrl;
+    // first try to get selected text, then link url, then tab url
+    let dataSource = info.selectionText;
+    if (dataSource === "" || dataSource == null) {
+      dataSource = info.linkUrl;
+    }
     if (dataSource === "" || dataSource == null) {
       dataSource = tab?.url;
     }
