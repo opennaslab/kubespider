@@ -37,7 +37,7 @@ kubespider会使用 `arguments` 定义渲染前端插件配置表格，这里对
 #### text类型
 
 ```yaml
-handle_host: 
+handle_host:
   type: text
   description: Configuration options
   required: true

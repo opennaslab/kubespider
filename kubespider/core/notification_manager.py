@@ -2,12 +2,12 @@
 import queue
 import time
 import logging
+
 from flask import Flask
 
 import notification_provider
 from utils.config_reader import YamlFileConfigReader
-from utils.types import ParamsType
-from utils.values import Config
+from utils.values import Config, Extra
 
 
 class NotificationManager:
@@ -29,15 +29,39 @@ class NotificationManager:
 
     @staticmethod
     def get_definitions():
-        return [provider.definitions() for provider in notification_provider.providers]
+        return [provider.definitions().serializer() for provider in notification_provider.providers]
 
     def get_confs(self) -> dict:
         notification_config = self.notification_config.read()
         return dict(notification_config.items())
 
-    def create_or_update(self, name, reload=True, **kwargs):
+    def update(self, name, reload=True, **kwargs):
         config = self.notification_config.read()
-        config[name] = kwargs
+
+        exists = config[name]
+        extra_params = {}
+        extra_params.update(exists)
+        extra_params.update(kwargs)
+        config_type = extra_params.pop('type')
+        enable = extra_params.pop('enable')
+        notification_config = NotificationConfig(name, config_type, enable, **extra_params)
+        notification_config.validate()
+
+        config[name] = notification_config.to_dict()
+        self.notification_config.save(config)
+        if reload:
+            self.reload_instance()
+
+    def create(self, name, reload=True, **kwargs):
+        config = self.notification_config.read()
+        extra_params = {}
+        extra_params.update(kwargs)
+        config_type = extra_params.pop('type')
+        enable = extra_params.pop('enable')
+        notification_config = NotificationConfig(name, config_type, enable, **extra_params)
+        notification_config.validate()
+
+        config[name] = notification_config.to_dict()
         self.notification_config.save(config)
         if reload:
             self.reload_instance()
@@ -53,12 +77,11 @@ class NotificationManager:
         for name, conf in self.get_confs().items():
             try:
                 if conf.get("enable"):
-                    cls = NotificationConfigValidation.get_provider_by_type(conf.get("type"))
+                    cls = NotificationConfig.get_provider_by_type(conf.get("type"))
                     definitions = cls.definitions()
                     params = {}
-                    for item in definitions.get("arguments", []):
-                        param_name = item.get("name")
-                        params[param_name] = conf.get(item.get("name"))
+                    for arg_name in definitions.arguments.keys():
+                        params[arg_name] = conf.get(arg_name)
                     # pylint: disable=E1102
                     instance = cls(**params)
                     instance.NAME = name
@@ -84,11 +107,12 @@ class NotificationManager:
             self.queue.put((title, kwargs))
 
 
-class NotificationConfigValidation:
-
-    def __init__(self, **kwargs):
-        self.arguments = kwargs
-        self._validated_data = None
+class NotificationConfig(Extra):
+    def __init__(self, name: str, config_type: str, enable: bool, **kwargs) -> None:
+        super().__init__(**kwargs)
+        self.name = name
+        self.type = config_type
+        self.enable = enable
 
     @classmethod
     def get_provider_by_type(cls, _type: str):
@@ -98,23 +122,10 @@ class NotificationConfigValidation:
             raise ValueError("type missing or invalid")
         return provider_cls
 
-    def validate(self) -> bool:
-        validated_data = {}
-        provider = self.get_provider_by_type(self.arguments.get("type", ""))
-        validated_data['type'] = provider.__name__
-        validated_data["enable"] = bool(self.arguments.get("enable"))
-        for arg_item in provider.definitions().get("arguments", []):
-            name = arg_item.get("name")
-            required = arg_item.get("required", False)
-            if required:
-                if name not in self.arguments.keys():
-                    raise ValueError(f"Argument {name} missing")
-                field_type = arg_item.get("type")
-                if not isinstance(self.arguments.get(name), ParamsType.sting_to_type(field_type)):
-                    raise ValueError(f"Argument {name} filed_type error, accept {field_type}")
-            validated_data[name] = self.arguments.get(name, "")
-        self._validated_data = validated_data
-        return True
+    def validate(self):
+        provider = self.get_provider_by_type(self.type)
+        definition = provider.definitions()
+        definition.validate(**self.extra_params())
 
     @staticmethod
     def translate_type(_type: str) -> str:
@@ -123,11 +134,13 @@ class NotificationConfigValidation:
             return "".join([i.capitalize() for i in type_split])
         return _type
 
-    @property
-    def data(self):
-        if self._validated_data is not None:
-            return self._validated_data
-        raise ValueError("NotificationConfig not yet verified")
+    def to_dict(self) -> dict:
+        provider = self.get_provider_by_type(self.type)
+        return {
+            "type": provider.__name__,
+            "enable": bool(self.enable),
+            **self.extra_params()
+        }
 
 
 kubespider_notification_server: NotificationManager = None
