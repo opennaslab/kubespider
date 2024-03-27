@@ -37,7 +37,7 @@ kubespider会使用 `arguments` 定义渲染前端插件配置表格，这里对
 #### text类型
 
 ```yaml
-handle_host: 
+handle_host:
   type: text
   description: Configuration options
   required: true
@@ -45,13 +45,18 @@ handle_host:
 ```
 
 #### integer类型
-
+##### 字段中可选加入枚举,包含枚举的字段在前端显示为下拉框,由用户点选
 ```yaml
 host_port: 
   type: integer
   description: Configuration options
   required: true
   default: ""
+  enum:
+    - name: first
+      value: 1
+    - name: second
+      value: 2
 ```
 
 #### boolean类型

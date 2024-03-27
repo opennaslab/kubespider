@@ -10,7 +10,7 @@ def list_plugin_handler():
     plugins = plugin_manager.kubespider_plugin_manager.list_plugin()
     instances = plugin_manager.kubespider_plugin_manager.list_instance()
     instance_plugin = [instance.definition.name for instance in instances]
-    return success([dict(plugin.to_dict(), **{"up": plugin.name in instance_plugin}) for plugin in plugins])
+    return success([dict(plugin.serializer(), **{"up": plugin.name in instance_plugin}) for plugin in plugins])
 
 
 @plugin_blu.route('', methods=['PUT'])
@@ -32,17 +32,19 @@ def operator_plugin_handler(plugin_name):
             plugin_manager.kubespider_plugin_manager.disable(plugin_name)
     return success()
 
+
 @plugin_blu.route("/<plugin_name>", methods=['DELETE'])
 def unregister_plugin_handler(plugin_name):
     plugin_manager.kubespider_plugin_manager.unregister(plugin_name)
     return success()
 
 
-@plugin_blu.route("/<plugin_name>", methods=['UPDATE'])
+@plugin_blu.route("/<plugin_name>", methods=['PUT'])
 def update_plugin_handler(plugin_name):
     data: dict = json.loads(request.data.decode("utf-8"))
     if 'definition' not in data:
         raise Exception("definition is required")
-    plugin_manager.kubespider_plugin_manager.unregister(plugin_name)
+    if plugin_manager.kubespider_plugin_manager.get_plugin(plugin_name):
+        plugin_manager.kubespider_plugin_manager.unregister(plugin_name)
     plugin_manager.kubespider_plugin_manager.register(data['definition'])
     return success()
