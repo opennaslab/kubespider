@@ -1,9 +1,8 @@
 import json
 from flask import request
-from api.response import success, param_error
+from api.response import success
 from api.v2.notification import notification_blu
 from core import notification_manager
-from core.notification_manager import NotificationConfigValidation
 
 
 @notification_blu.route('', methods=['GET'])
@@ -18,21 +17,22 @@ def list_notification_configs():
     return success(data=definitions)
 
 
-@notification_blu.route('/configs/<config_name>', methods=['POST', 'PUT'])
-def modify_notification_config(config_name):
-    if not config_name:
-        return param_error(msg='config_name is required')
+@notification_blu.route('/configs/<config_name>', methods=['POST'])
+def add_notification_config(config_name):
     data: dict = json.loads(request.data.decode("utf-8"))
-    validation = NotificationConfigValidation(**data)
-    validation.validate()
-    notification_manager.kubespider_notification_server.create_or_update(config_name, **validation.data)
+    notification_manager.kubespider_notification_server.create(config_name, **data)
+    return success()
+
+
+@notification_blu.route('/configs/<config_name>', methods=['PUT'])
+def modify_notification_config(config_name):
+    data: dict = json.loads(request.data.decode("utf-8"))
+    notification_manager.kubespider_notification_server.update(config_name, **data)
     return success()
 
 
 @notification_blu.route('/configs/<config_name>', methods=['DELETE'])
 def delete_notification_config(config_name):
-    if not config_name:
-        return param_error(msg='config_name is required')
     notification_manager.kubespider_notification_server.remove(config_name)
     return success()
 

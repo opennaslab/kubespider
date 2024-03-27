@@ -1,6 +1,5 @@
 from utils.values import CFG_BASE_PATH, Extra
 from utils.config_reader import YamlFileConfigReader, YamlFileSectionConfigReader
-from core import plugin_manager
 
 BINDING_STATE = CFG_BASE_PATH + 'binding_state.yaml'
 
@@ -100,14 +99,14 @@ class PluginBinding:
         instance.config.put_extra_params(extra_params)
         instance.save()
 
-    def __validate(self, config: Config):
+    @staticmethod
+    def __validate(config: Config):
+        from core import plugin_manager
         plugin_definition = plugin_manager.kubespider_plugin_manager.get_plugin(
             config.plugin_name)
         if not plugin_definition:
             raise Exception('plugin not found')
-
-        if not plugin_definition.validate(config.extra_params()):
-            raise Exception('config not valid')
+        plugin_definition.validate(**config.extra_params())
 
 
 kubespider_plugin_binding: PluginBinding = None
