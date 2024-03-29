@@ -18,16 +18,9 @@ def list_notification_configs():
 
 
 @notification_blu.route('/configs/<config_name>', methods=['POST'])
-def add_notification_config(config_name):
-    data: dict = json.loads(request.data.decode("utf-8"))
-    notification_manager.kubespider_notification_server.create(config_name, **data)
-    return success()
-
-
-@notification_blu.route('/configs/<config_name>', methods=['PUT'])
 def modify_notification_config(config_name):
-    data: dict = json.loads(request.data.decode("utf-8"))
-    notification_manager.kubespider_notification_server.update(config_name, **data)
+    data: dict = request.json
+    notification_manager.kubespider_notification_server.create_or_update(config_name, **data)
     return success()
 
 

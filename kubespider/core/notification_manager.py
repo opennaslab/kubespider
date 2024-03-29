@@ -35,26 +35,12 @@ class NotificationManager:
         notification_config = self.notification_config.read()
         return dict(notification_config.items())
 
-    def update(self, name, reload=True, **kwargs):
+    def create_or_update(self, name, reload=True, **kwargs):
         config = self.notification_config.read()
-
-        exists = config[name]
+        exists = config.get(name)
         extra_params = {}
-        extra_params.update(exists)
-        extra_params.update(kwargs)
-        config_type = extra_params.pop('type')
-        enable = extra_params.pop('enable')
-        notification_config = NotificationConfig(name, config_type, enable, **extra_params)
-        notification_config.validate()
-
-        config[name] = notification_config.to_dict()
-        self.notification_config.save(config)
-        if reload:
-            self.reload_instance()
-
-    def create(self, name, reload=True, **kwargs):
-        config = self.notification_config.read()
-        extra_params = {}
+        if exists:
+            extra_params.update(exists)
         extra_params.update(kwargs)
         config_type = extra_params.pop('type')
         enable = extra_params.pop('enable')
