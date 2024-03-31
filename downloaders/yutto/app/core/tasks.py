@@ -15,7 +15,7 @@ class DownloadTask:
         self.fail_count = count
 
 
-class YouGetTasks:
+class YuttoTasks:
     def __init__(self) -> None:
         self.paralel_num = 4
         self.fail_threshold = 3
@@ -90,4 +90,4 @@ class YouGetTasks:
     def equeue(self, tasks: list) -> None:
         self.queue.put(tasks)
 
-yutto_tasks = YouGetTasks()
+yutto_tasks = YuttoTasks()
