@@ -4,13 +4,11 @@ import subprocess
 import _thread
 import logging
 import signal
-import shutil
 
+from utils.definition import Definition
 from utils.values import CFG_BASE_PATH, Resource
 from utils.config_reader import YamlFileConfigReader, YamlFileSectionConfigReader
 from utils import helper
-from core import plugin_binding
-
 
 PLUGIN_BASE_PATH = CFG_BASE_PATH + "plugins/"
 PLUGIN_DEFINITION_PATH = PLUGIN_BASE_PATH + "definitions/"
@@ -18,84 +16,8 @@ PLUGIN_BINARY_PATH = PLUGIN_BASE_PATH + "binaries/"
 PLUGIN_STATE_PATH = PLUGIN_BASE_PATH + "state.yaml"
 
 
-class PluginConfigDefinition:
-
-    # pylint: disable=redefined-builtin
-    def __init__(self, name: str, type: str, description: str, placeholder: str, required: bool, default: any):
-        self.name = name
-        self.type = type
-        self.description = description
-        self.placeholder = placeholder
-        self.required = required
-        self.default = default
-
-    def __str__(self) -> str:
-        return f"PluginConfigDefinition(name: {self.name}, type: {self.type}, \
-            description: {self.description}, placeholder: {self.placeholder}, \
-                required: {self.required}, default: {self.default})"
-
-
-class PluginDefinition:
-
-    def __init__(self, yaml_file: str):
-        reader = YamlFileConfigReader(yaml_file)
-        yaml_data = reader.read()
-        self.name = yaml_data.get("name")
-        self.version = yaml_data.get("version")
-        self.author = yaml_data.get("author")
-        self.type = yaml_data.get("type")
-        self.description = yaml_data.get("description")
-        self.language = yaml_data.get("language")
-        self.logo = yaml_data.get("logo")
-        self.binary = yaml_data.get("binary")
-        self.arguments = []
-        if yaml_data.get("arguments"):
-            self.arguments = [PluginConfigDefinition(
-                **item) for item in yaml_data["arguments"]]
-
-    def validate(self, config: dict) -> bool:
-        if not self.arguments:
-            return True
-        for arg in self.arguments:
-            # Check if the argument is required
-            if arg.required and not config.get(arg.name):
-                return False
-            # Check if the argument type is correct
-            if config.get(arg.name) and self.__check_type(config.get(arg.name), arg.type) is False:
-                return False
-
-        return True
-
-    def __check_type(self, value: any, field_type: str) -> bool:
-        if field_type == "text":
-            return isinstance(value, str)
-        if field_type == "number":
-            return isinstance(value, (int, float))
-        if field_type == "boolean":
-            return isinstance(value, bool)
-        if field_type == "list":
-            return isinstance(value, list)
-        if field_type == "dict":
-            return isinstance(value, dict)
-        return False
-
-    def __str__(self) -> str:
-        return f"PluginDefinition(name: {self.name}, \
-        version: {self.version}, author: {self.author}, \
-        type: {self.type}, description: {self.description}, \
-        language: {self.language}, logo: {self.logo}, \
-        binary: {self.binary}, arguments: {self.arguments})"
-
-    def to_dict(self) -> dict:
-        data = {}
-        data.update(self.__dict__)
-        if self.arguments:
-            data["arguments"] = [item.__dict__ for item in self.arguments]
-        return data
-
-
 class PluginInstance:
-    def __init__(self, definition: PluginDefinition, state_reader: YamlFileConfigReader):
+    def __init__(self, definition: Definition, state_reader: YamlFileConfigReader):
         self.definition = definition
         self.reader = state_reader
         self.state = state_reader.read()
@@ -185,25 +107,25 @@ class PluginInstance:
         # Make the binary executable
         os.chmod(binary_file, 0o755)
 
-    def __update_state(self, key: str, value: str):
+    def __update_state(self, key: str, value: [str, int, None]):
         self.state[key] = value
         self.reader.save(self.state)
 
 
 class PluginManager:
     def __init__(self):
-        self.definitions: dict[str, PluginDefinition] = {}
+        self.definitions: dict[str, Definition] = {}
         self.instances: dict[str, PluginInstance] = {}
         self.request = helper.get_request_controller()
         self.state = YamlFileConfigReader(PLUGIN_STATE_PATH).read()
 
-    def list_plugin(self) -> list[PluginDefinition]:
-        return self.definitions.values()
+    def list_plugin(self) -> list[Definition]:
+        return list(self.definitions.values())
 
     def list_instance(self) -> list[PluginInstance]:
-        return self.instances.values()
+        return list(self.instances.values())
 
-    def get_plugin(self, plugin_name: str) -> PluginDefinition:
+    def get_plugin(self, plugin_name: str) -> Definition:
         return self.definitions.get(plugin_name)
 
     def load_local(self) -> None:
@@ -214,8 +136,7 @@ class PluginManager:
         for file in os.listdir(PLUGIN_DEFINITION_PATH):
             if file.endswith(".yaml"):
                 logging.info('Loading plugin definition: %s', file)
-                definition = PluginDefinition(
-                    PLUGIN_DEFINITION_PATH + file)
+                definition = Definition.init_from_yaml(PLUGIN_DEFINITION_PATH + file)
                 self.definitions[definition.name] = definition
         # Auto enable when the state exists
         for definition in self.definitions.values():
@@ -235,22 +156,19 @@ class PluginManager:
             raise Exception(
                 f"Failed to download plugin definition: {yaml_file}")
 
-        tmp_file = helper.get_tmp_file_name(yaml_file)
-        with open(tmp_file, "wb") as file:
-            file.write(response.content)
         # Read the plugin definition
-        definition = PluginDefinition(tmp_file)
+        definition = Definition.init_from_yaml_bytes(response.content)
         # Check if the plugin definition already exists
         exists = self.definitions.get(definition.name)
         if exists:
             raise Exception(
                 f"Plugin definition already exists: {definition.name}")
         # Save the plugin definition
-        shutil.move(tmp_file, PLUGIN_DEFINITION_PATH + definition.name +
-                    ".yaml")
+        YamlFileConfigReader(PLUGIN_DEFINITION_PATH + definition.name + ".yaml").save(definition.serializer())
         self.definitions[definition.name] = definition
 
     def unregister(self, plugin_name: str):
+        from core import plugin_binding
         configs = plugin_binding.kubespider_plugin_binding.list_config()
         for config in configs:
             if config.plugin_name == plugin_name:
@@ -263,8 +181,11 @@ class PluginManager:
             self.disable(plugin_name)
         # Remove the plugin definition and binary
         del self.definitions[plugin_name]
-        os.remove(PLUGIN_DEFINITION_PATH + plugin_name + ".yaml")
-        os.remove(PLUGIN_BINARY_PATH + plugin_name)
+        try:
+            os.remove(PLUGIN_DEFINITION_PATH + plugin_name + ".yaml")
+            os.remove(PLUGIN_BINARY_PATH + plugin_name)
+        except FileNotFoundError:
+            pass
 
     def enable(self, plugin_name: str):
         definition = self.definitions.get(plugin_name)
