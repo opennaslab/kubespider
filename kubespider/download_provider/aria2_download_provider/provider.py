@@ -3,30 +3,47 @@ import os
 import aria2p
 
 from download_provider.provider import DownloadProvider
-from utils.config_reader import AbsConfigReader
 from utils import types
 from utils.values import Task
 
 
 class Aria2DownloadProvider(DownloadProvider):
-    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
-        super().__init__(name, config_reader)
-        self.provider_name = name
-        self.provider_type = 'aria2_download_provider'
-        self.rpc_endpoint_host = ''
-        self.rpc_endpoint_port = 0
-        self.download_base_path = ''
-        self.aria2: aria2p.API = None
-        self.secret = ''
+    """
+    aria2 is a lightweight, multi-protocol, and multi-source command-line download utility. It supports protocols
+    such as HTTP, HTTPS, FTP, BitTorrent, and more. With features like resumable downloads and multiple connections,
+    aria2 maximizes the utilization of network resources to enhance download speeds.
+    """
 
-    def get_provider_type(self) -> str:
-        return self.provider_type
+    def __init__(self, name: str, rpc_endpoint_host: str, rpc_endpoint_port: int, secret: str,
+                 download_base_path: str = "", priority: int = 10) -> None:
+        """
+        :param name: unique instance name
+        :param rpc_endpoint_host: RPC endpoint host
+        :param rpc_endpoint_port: RPC endpoint port
+        :param secret: RPC secret
+        :param download_base_path: download base path
+        :param priority: download priority
+        """
+        super().__init__(
+            name=name,
+            supported_link_types=[types.LINK_TYPE_GENERAL, types.LINK_TYPE_MAGNET, types.LINK_TYPE_TORRENT],
+            priority=priority
+        )
+        self.rpc_endpoint_host = rpc_endpoint_host
+        self.rpc_endpoint_port = rpc_endpoint_port
+        self.download_base_path = download_base_path
+        self.secret = secret
+        self.aria2 = aria2p.API(
+            aria2p.Client(
+                host=self.rpc_endpoint_host,
+                port=self.rpc_endpoint_port,
+                secret=self.secret
+            )
+        )
 
-    def provider_enabled(self) -> bool:
-        return self.config_reader.read()['enable']
-
-    def provide_priority(self) -> int:
-        return self.config_reader.read()['priority']
+    @property
+    def is_alive(self) -> bool:
+        return True
 
     def get_defective_task(self) -> list[Task]:
         defective_tasks = []
@@ -95,17 +112,3 @@ class Aria2DownloadProvider(DownloadProvider):
             self.aria2.remove(downloads, force=True)
         except Exception as err:
             logging.warning('Aria2 remove tasks error:%s', err)
-
-    def load_config(self) -> TypeError:
-        cfg = self.config_reader.read()
-        self.rpc_endpoint_host = cfg['rpc_endpoint_host']
-        self.rpc_endpoint_port = cfg['rpc_endpoint_port']
-        self.download_base_path = cfg['download_base_path']
-        self.secret = cfg['secret']
-        self.aria2 = aria2p.API(
-            aria2p.Client(
-                host=self.rpc_endpoint_host,
-                port=self.rpc_endpoint_port,
-                secret=self.secret
-            )
-        )

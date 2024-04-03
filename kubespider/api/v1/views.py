@@ -4,19 +4,20 @@ import json
 from flask import jsonify, request
 from core import notification_manager
 from core import period_server
-from core.kubespider_controller import kubespider_controller
+from core import download_manager
 from core import source_manager
+from core.kubespider_controller import kubespider_controller
 from utils.values import Event
 from api.v1 import v1_blu
 
 
 @v1_blu.route('/downloadproviders', methods=['GET'])
 def list_download_provider_handler():
-    download_providers = kubespider_controller.download_providers
+    download_providers = download_manager.kubespider_download_server.instances
 
     resp_array = {}
     for i in download_providers:
-        resp_array[i.get_provider_name()] = i.provider_enabled()
+        resp_array[i.name] = i.is_active
     resp = jsonify(resp_array)
     resp.content_type = "application/json"
     return resp

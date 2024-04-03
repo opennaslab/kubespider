@@ -35,7 +35,8 @@ class NotificationManager:
         notification_config = self.notification_config.read()
         return dict(notification_config.items())
 
-    def create_or_update(self, name, reload=True, **kwargs):
+    def create_or_update(self, reload=True, **kwargs):
+        name = kwargs.get("name")
         config = self.notification_config.read()
         exists = config.get(name)
         extra_params = {}
@@ -44,7 +45,7 @@ class NotificationManager:
         extra_params.update(kwargs)
         config_type = extra_params.pop('type')
         enable = extra_params.pop('enable')
-        notification_config = NotificationConfig(name, config_type, enable, **extra_params)
+        notification_config = NotificationConfig(config_type, enable, **extra_params)
         notification_config.validate()
 
         config[name] = notification_config.to_dict()
@@ -68,9 +69,10 @@ class NotificationManager:
                     params = {}
                     for arg_name in definitions.arguments.keys():
                         params[arg_name] = conf.get(arg_name)
+                    if not params.get("name"):
+                        params["name"] = name
                     # pylint: disable=E1102
                     instance = cls(**params)
-                    instance.NAME = name
                     self.instance[name] = instance
                     logging.info('[NotificationManager] %s enabled...', name)
             except Exception as err:
@@ -94,9 +96,9 @@ class NotificationManager:
 
 
 class NotificationConfig(Extra):
-    def __init__(self, name: str, config_type: str, enable: bool, **kwargs) -> None:
+    def __init__(self, config_type: str, enable: bool, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.name = name
+        self.name = kwargs.get("name")
         self.type = config_type
         self.enable = enable
 

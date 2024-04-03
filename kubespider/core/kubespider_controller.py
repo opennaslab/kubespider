@@ -3,7 +3,7 @@
 import logging
 import _thread
 
-from core import download_trigger
+from core import download_manager
 from core import period_server
 from core import pt_server
 from core import config_handler
@@ -21,7 +21,6 @@ class Kubespider:
 
     def __init__(self) -> None:
         self.source_providers: list[SourceProvider] = []
-        self.download_providers: list[DownloadProvider] = []
         self.pt_providers: list[PTProvider] = []
         self.notifications_providers: list[NotificationProvider] = []
         self.enabled_source_providers: list[SourceProvider] = []
@@ -31,7 +30,6 @@ class Kubespider:
 
     def config(self) -> None:
         self.source_providers = config_handler.init_source_config()
-        self.download_providers = config_handler.init_download_config()
         self.pt_providers = config_handler.init_pt_config()
 
         for provider in self.source_providers:
@@ -43,16 +41,6 @@ class Kubespider:
             except KeyError:
                 logging.warning('Source Provider:%s not exists, treat as disabled', provider_name)
 
-        for provider in self.download_providers:
-            provider_name = provider.get_provider_name()
-            try:
-                if provider.provider_enabled():
-                    logging.info('Download Provider:%s enabled...', provider_name)
-                    self.enabled_download_providers.append(provider)
-            except KeyError:
-                logging.warning('Download Provider:%s not exists, treat as disabled', provider_name)
-        self.enabled_download_providers.sort(key=sort_download_provider)
-
         for provider in self.pt_providers:
             provider_name = provider.get_provider_name()
             try:
@@ -62,15 +50,13 @@ class Kubespider:
             except KeyError:
                 logging.warning('PT Provider:%s not exists, treat as disabled', provider_name)
 
-        # download provider aggregate
-        download_trigger.kubespider_downloader = download_trigger.KubespiderDownloader(self.enabled_download_providers)
         # source provider aggregate
         source_manager.source_provider_manager = source_manager.SourceProviderManager(self.enabled_source_providers)
 
         period_server.kubespider_period_server = period_server.PeriodServer(self.enabled_source_providers)
 
         pt_server.kubespider_pt_server = pt_server.PTServer(self.enabled_pt_providers)
-
+        download_manager.kubespider_download_server = download_manager.DownloadManager()
         notification_manager.kubespider_notification_server = notification_manager.NotificationManager()
         # plugin manager
         plugin_manager.kubespider_plugin_manager = plugin_manager.PluginManager()
@@ -91,7 +77,7 @@ class Kubespider:
 
     def run_download_trigger_job(self) -> None:
         logging.info('Download trigger job start running...')
-        download_trigger.kubespider_downloader.period_run()
+        download_manager.kubespider_download_server.period_run()
 
     def run_notification_consumer(self) -> None:
         logging.info('Notification Server Queue handler start running...')
@@ -112,7 +98,3 @@ class Kubespider:
 
 
 kubespider_controller = Kubespider()
-
-
-def sort_download_provider(provider: DownloadProvider):
-    return provider.provide_priority()

@@ -4,27 +4,48 @@ import os
 from urllib.parse import urlparse
 from transmission_rpc import Client
 from download_provider.provider import DownloadProvider
+from utils import types
 
-from utils.config_reader import AbsConfigReader
 from utils.values import Task
 
 
 class TransmissionProvider(DownloadProvider):
-    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
-        super().__init__(name, config_reader)
-        self.provider_name = name
-        self.provider_type = 'transmission_download_provider'
-        self.client: Client = None
-        self.download_base_path = ''
+    """Transmission is a fast, easy, and free BitTorrent client."""
 
-    def get_provider_type(self) -> str:
-        return self.provider_type
+    def __init__(self, name: str, http_endpoint: str, username: str = "admin", password: str = "admin",
+                 download_base_path: str = "", priority: int = 10) -> None:
+        """
+        :param name: unique instance name
+        :param http_endpoint: http endpoint host
+        :param username: username
+        :param password: password
+        :param download_base_path: download base path
+        :param priority: priority
+        """
+        super().__init__(
+            name=name,
+            supported_link_types=[types.LINK_TYPE_TORRENT, types.LINK_TYPE_MAGNET],
+            priority=priority
+        )
+        self.download_base_path = download_base_path
+        self.http_endpoint = http_endpoint
+        self.username = username
+        self.password = password
 
-    def provider_enabled(self) -> bool:
-        return self.config_reader.read()['enable']
+        parse_result = urlparse(http_endpoint)
+        self.client = Client(
+            protocol=parse_result.scheme,
+            host=parse_result.hostname,
+            port=parse_result.port,
+            path=parse_result.path,
+            username=username,
+            password=password,
+        )
 
-    def provide_priority(self) -> int:
-        return self.config_reader.read()['priority']
+    @property
+    def is_alive(self) -> bool:
+        # TODO implement
+        return True
 
     def get_defective_task(self) -> list[Task]:
         # Note: The definition of transmission state does not match this method, returning an empty list temporarily.
@@ -72,26 +93,3 @@ class TransmissionProvider(DownloadProvider):
                 self.client.remove_torrent(ids=task_ids, delete_data=True)
         except Exception as err:
             logging.error('Transmission remove all tasks err:%s', err)
-
-    def load_config(self) -> TypeError:
-        cfg = self.config_reader.read()
-        self.download_base_path = cfg['download_base_path']
-        http_endpoint = cfg.get('http_endpoint')
-        username = cfg.get('username', 'admin')
-        password = cfg.get('password', 'admin')
-
-        parse_result = urlparse(http_endpoint)
-
-        try:
-            self.client = Client(
-                protocol=parse_result.scheme,
-                host=parse_result.hostname,
-                port=parse_result.port,
-                path=parse_result.path,
-                username=username,
-                password=password,
-            )
-        except Exception as err:
-            logging.error("Init client error:%s", err)
-            return err
-        return None

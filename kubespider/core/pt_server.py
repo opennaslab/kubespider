@@ -6,7 +6,7 @@ import _thread
 
 import logging
 
-from core import download_trigger
+from core import download_manager
 from pt_provider import provider
 from utils.config_reader import YamlFileConfigReader
 from utils.values import Config, FILE_TYPE_TO_PATH
@@ -80,7 +80,7 @@ class PTServer:
         logging.info("Start downloading: %s", pt_source)
         download_provider_name = pt_provider.get_download_provider()
         download_path = os.path.join(FILE_TYPE_TO_PATH[FILE_TYPE_PT], download_provider_name)
-        err = download_trigger.kubespider_downloader.download_file(Resource(
+        err = download_manager.kubespider_download_server.download_file(Resource(
             url=pt_source,
             path=download_path,
             link_type=LINK_TYPE_TORRENT,
@@ -94,7 +94,7 @@ class PTServer:
     @staticmethod
     def trigger_remove_tasks(pt_provider: provider.PTProvider):
         download_provider_name = pt_provider.get_download_provider()
-        download_trigger.kubespider_downloader.handle_download_remove(Downloader(
+        download_manager.kubespider_download_server.handle_download_remove(Downloader(
             download_provider_names=[download_provider_name]
         ))
 

@@ -2,29 +2,38 @@ import logging
 import json
 
 from download_provider import provider
-from utils.config_reader import AbsConfigReader
+from utils import types
 from utils.helper import get_request_controller
 from utils.values import Task
 
 
 class TiktokDownloadProvider(provider.DownloadProvider):
-    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
-        super().__init__(name, config_reader)
-        self.provider_name = name
-        self.provider_type = 'tiktok_download_provider'
-        self.http_endpoint_host = ''
-        self.http_endpoint_port = 0
-        self.cookie = ''
-        self.reqeust_handler = get_request_controller(use_proxy=False)
+    """Tiktok downloader"""
 
-    def get_provider_type(self) -> str:
-        return self.provider_type
+    def __init__(self, name: str, http_endpoint_host: str = "http://127.0.0.1", http_endpoint_port: int = 3083,
+                 cookie: str = "", use_proxy: bool = False, priority: int = 10) -> None:
+        """
+        :param name: unique instance name
+        :param http_endpoint_host: http endpoint host
+        :param http_endpoint_port: http endpoint port
+        :param cookie: cookie
+        :param use_proxy: whether you use proxy
+        :param priority: priority
+        """
+        super().__init__(
+            name=name,
+            supported_link_types=[types.LINK_TYPE_GENERAL],
+            priority=priority
+        )
+        self.http_endpoint_host = http_endpoint_host
+        self.http_endpoint_port = http_endpoint_port
+        self.cookie = cookie
+        self.reqeust_handler = get_request_controller(use_proxy=use_proxy)
 
-    def provider_enabled(self) -> bool:
-        return self.config_reader.read()['enable']
-
-    def provide_priority(self) -> int:
-        return self.config_reader.read()['priority']
+    @property
+    def is_alive(self) -> bool:
+        # TODO implement
+        return True
 
     def get_defective_task(self) -> list[Task]:
         # These tasks are special, other download software could not handle
@@ -53,9 +62,3 @@ class TiktokDownloadProvider(provider.DownloadProvider):
 
     def remove_tasks(self, tasks: list[Task]):
         pass
-
-    def load_config(self) -> TypeError:
-        cfg = self.config_reader.read()
-        self.http_endpoint_host = cfg.get('http_endpoint_host', 'http://127.0.0.1')
-        self.http_endpoint_port = cfg.get('http_endpoint_port', 3083)
-        self.cookie = cfg.get('cookie', '')

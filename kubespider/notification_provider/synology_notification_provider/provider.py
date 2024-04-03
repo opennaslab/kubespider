@@ -11,11 +11,13 @@ class SynologyNotificationProvider(provider.NotificationProvider):
     """Synology Chat"""
     LOGO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logo.png")
 
-    def __init__(self, host: str, token: str) -> None:
+    def __init__(self, name: str, host: str, token: str) -> None:
         """
+        :param name: unique instance name
         :param host: SynologyChat`s host
         :param token: bot`s token
         """
+        super().__init__(name=name)
         self.host = host
         self.token = token
         self.request_handler = get_request_controller()

@@ -11,11 +11,13 @@ class PushdeerNotificationProvider(provider.NotificationProvider):
     """An open-source notification tool pushDeer"""
     LOGO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logo.png")
 
-    def __init__(self, host: str, push_keys: list[str]) -> None:
+    def __init__(self, name: str, host: str, push_keys: list[str]) -> None:
         """
+        :param name: unique instance name
         :param host: pushdeer`s host
         :param push_keys: pushdeer`s push key
         """
+        super().__init__(name=name)
         self.host = host
         self.push_keys = push_keys
         self.request_handler = get_request_controller()

@@ -13,14 +13,14 @@ def list_notification_definitions():
 
 @notification_blu.route('/configs', methods=['GET'])
 def list_notification_configs():
-    definitions = notification_manager.kubespider_notification_server.get_confs()
-    return success(data=definitions)
+    configs = notification_manager.kubespider_notification_server.get_confs()
+    return success(data=configs)
 
 
-@notification_blu.route('/configs/<config_name>', methods=['POST'])
-def modify_notification_config(config_name):
+@notification_blu.route('/configs', methods=['POST'])
+def modify_notification_config():
     data: dict = request.json
-    notification_manager.kubespider_notification_server.create_or_update(config_name, **data)
+    notification_manager.kubespider_notification_server.create_or_update(**data)
     return success()
 
 

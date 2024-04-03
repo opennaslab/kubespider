@@ -13,12 +13,14 @@ class TelegramNotificationProvider(provider.NotificationProvider):
     """Telegram channel notification tool"""
     LOGO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logo.png")
 
-    def __init__(self, channel_name: str, bot_token: str, channel_chat_id: str = None) -> None:
+    def __init__(self, name: str, channel_name: str, bot_token: str, channel_chat_id: str = None) -> None:
         """
+        :param name: unique instance name
         :param channel_name: channel name
         :param bot_token: bot token
         :param channel_chat_id: channel id
         """
+        super().__init__(name=name)
         self.request_handler = get_request_controller()
         self.host = "https://api.telegram.org"
         self.token = bot_token
@@ -79,4 +81,4 @@ class TelegramNotificationProvider(provider.NotificationProvider):
     def save_conf(self, **kwargs) -> None:
         logging.info("[Telegram] update telegram conf: %s", kwargs)
         config_reader = YamlFileConfigReader(Config.NOTIFICATION_PROVIDER.config_path())
-        config_reader.parcial_update(lambda notification_conf: notification_conf[self.NAME].update(kwargs))
+        config_reader.parcial_update(lambda notification_conf: notification_conf[self.name].update(kwargs))

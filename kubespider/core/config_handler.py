@@ -29,14 +29,6 @@ import source_provider.tiktok_source_provider.provider as tiktok_source_provider
 import source_provider.bilibili_vlogger_subscribe_source_provider.provider as bilibili_vlogger_subscribe_source_provider
 import source_provider.alist_source_provider.provider as alist_source_provider
 import source_provider.ani_source_provider.provider as ani_source_provider
-import download_provider.aria2_download_provider.provider as aria2_download_provider
-import download_provider.xunlei_download_provider.provider as xunlei_download_provider
-import download_provider.qbittorrent_download_provider.provider as qbittorrent_download_provider
-import download_provider.youget_download_provider.provider as youget_download_provider
-import download_provider.ytdlp_download_provider.provider as ytdlp_download_provider
-import download_provider.transmission_download_provider.provider as transmission_download_provider
-import download_provider.tiktok_dlp_download_provider.provider as tiktok_dlp_download_provider
-import download_provider.yutto_download_provider.provider as yutto_download_provider
 
 import pt_provider.nexusphp_pt_provider.provider as nexusphp_pt_provider
 
@@ -53,18 +45,6 @@ source_provider_init_func = {
     'bilibili_vlogger_subscribe_source_provider': bilibili_vlogger_subscribe_source_provider.BilibiliVloggerSubscribeSourceProvider,
     'alist_source_provider': alist_source_provider.AlistSourceProvider,
     'ani_source_provider': ani_source_provider.AniSourceProvider,
-}
-
-# Download provider init related
-downloader_provider_init_func = {
-    'aria2_download_provider': aria2_download_provider.Aria2DownloadProvider,
-    'qbittorrent_download_provider': qbittorrent_download_provider.QbittorrentDownloadProvider,
-    'xunlei_download_provider': xunlei_download_provider.XunleiDownloadProvider,
-    'youget_download_provider': youget_download_provider.YougetDownloadProvider,
-    'ytdlp_download_provider': ytdlp_download_provider.YTDlpDownloadProvider,
-    'transmission_download_provider': transmission_download_provider.TransmissionProvider,
-    'tiktok_download_provider': tiktok_dlp_download_provider.TiktokDownloadProvider,
-    'yutto_download_provider': yutto_download_provider.YuttoDownloadProvider,
 }
 
 # PT provider init related
@@ -115,15 +95,6 @@ def get_source_provider(provider_name: str, config: dict):
         raise Exception(str('unknown source provider type %s', provider_type)) from exc
 
 
-def get_download_provider(provider_name: str, config: dict):
-    provider_type = config['type']
-    try:
-        return downloader_provider_init_func[provider_type](provider_name, YamlFileSectionConfigReader(
-            Config.DOWNLOAD_PROVIDER.config_path(), provider_name))
-    except Exception as exc:
-        raise Exception(str('unknown download provider type %s', provider_type)) from exc
-
-
 def get_pt_provider(provider_name: str, config: dict):
     provider_type = config['type']
     try:
@@ -140,14 +111,6 @@ def init_source_config():
     for name in source_config:
         init_source_providers.append(get_source_provider(name, source_config[name]))
     return init_source_providers
-
-
-def init_download_config():
-    init_download_providers = []
-    download_config = YamlFileConfigReader(values.Config.DOWNLOAD_PROVIDER.config_path()).read()
-    for name in download_config:
-        init_download_providers.append(get_download_provider(name, download_config[name]))
-    return init_download_providers
 
 
 def init_pt_config():
