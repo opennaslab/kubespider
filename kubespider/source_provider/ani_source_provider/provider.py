@@ -18,10 +18,6 @@ class AniSourceProvider(provider.SourceProvider):
     '''This provider is to sync resources from ANi API: https://api.ani.rip/ani-download.xml
     For the most timely follow-up of Anime updates.
     Downloading media in general HTTP, aria2 provider must be needed.
-
-    Accepts 2 configs:
-    Bool classification_on_directory: Choose whether the files is saved to directory according to title
-    Array blacklist: Anime title that match the array will not be downloaded. NO REGEX SUPPORT.
     '''
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(config_reader)
@@ -29,12 +25,16 @@ class AniSourceProvider(provider.SourceProvider):
         self.link_type = types.LINK_TYPE_GENERAL
         self.webhook_enable = False
         self.provider_type = 'ani_source_provider'
+        self.api_type = 'http'
         self.rss_link = ''
+        self.rss_link_torrent = ''
         self.tmp_file_path = '/tmp/'
         self.save_path = 'ANi'
         self.provider_name = name
         self.classification_on_directory = True
+        self.detect_season = False
         self.blacklist = []
+        self.custom_season_mapping = {}
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -47,6 +47,39 @@ class AniSourceProvider(provider.SourceProvider):
 
     def get_download_provider_type(self) -> str:
         return None
+    
+    def get_season(self, title: str) -> tuple[int, str]:
+        season = 1
+        keyword = None
+        mapper = {
+            "第二季": 2,
+            "第三季": 3,
+            "第四季": 4,
+            "第五季": 5,
+            "第六季": 6,
+            "第七季": 7,
+            "第八季": 8,
+            "第九季": 9,
+            "第十季": 10
+        }
+        # The user-defined season_mapping has higher priority
+        for kw in mapper:
+            if kw in title:
+                season = mapper[kw]
+                keyword = kw
+        for kw in self.custom_season_mapping:
+            if kw in title:
+                season = self.custom_season_mapping[kw]
+                keyword = kw
+
+        return season, keyword
+
+    def rename_season(self, title, season, keyword) -> str:
+        new_title = title.replace(f" {keyword}", "")
+        regex_pattern = r"- (\d+) \[(720P|1080P|4K)\]\[(Baha|Bilibili)\]"
+        s_ = str(season).zfill(2)
+        output = re.sub(regex_pattern, rf"- S{s_}E\1 [\2][\3]", new_title)
+        return output
 
     def get_prefer_download_provider(self) -> list:
         downloader_names = self.config_reader.read().get('downloader', None)
@@ -94,17 +127,23 @@ class AniSourceProvider(provider.SourceProvider):
             for i in items:
                 xml_title = i.find('./title').text
                 item_title, item_episode, extra = self.get_anime_info(xml_title)
+                season, season_keyword = self.get_season(xml_title)
                 url = i.find('./guid').text
                 if item_title is not None:
-                    logging.info('Found Anime "%s" Episode %s with info %s', item_title, item_episode, extra)
+                    logging.info('Found Anime "%s" Season %s Episode %s with info %s', item_title, season, item_episode, extra)
                     if not self.check_blacklist(xml_title, blacklist):
                         path_ = path + (f'/{item_title}' if self.classification_on_directory else '')
-                        ret.append(Resource(
+                        res = Resource(
                             url=url,
                             path=path_,
                             file_type=types.FILE_TYPE_VIDEO_TV,
                             link_type=self.get_link_type(),
-                        ))
+                        )
+                        if season > 1:
+                            res.put_extra_params(
+                                {'file_name': self.rename_season(xml_title, season, season_keyword)}
+                            )
+                        ret.append(res)
                 else:
                     continue
             return ret
@@ -116,7 +155,7 @@ class AniSourceProvider(provider.SourceProvider):
     def get_anime_info(self, title: str) -> Tuple[str, str, tuple]:
         '''Extract info by only REGEX, might be wrong in extreme cases.
         '''
-        pattern = re.compile(r'\[ANi\] (.+?) - (\d+) \[(.+?)\]\[(.+?)\]\[(.+?)\]\[(.+?)\]\[(.+?)\]\.mp4')
+        pattern = re.compile(r'\[ANi\] (.+?) - (\d+) \[(.+?)\]\[(.+?)\]\[(.+?)\]\[(.+?)\]\[(.+?)\]\.')
         matches = pattern.findall(title)
         try:
             title, episode = matches[0][:2]

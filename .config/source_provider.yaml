@@ -8,8 +8,21 @@ mikanani_source_provider:
 ani_source_provider:
   type: ani_source_provider
   enable: false
+  # API type: torrent / http
+  api_type: http
   rss_link: https://api.ani.rip/ani-download.xml
+  rss_link_torrent: https://api.ani.rip/ani-torrent.xml
+  blacklist: [ ]
+  # HTTP Options
   classification_on_directory: true
+  custom_season_mapping:
+    神覺者候補選拔試驗篇: 2
+    Season2: 2
+    "Season 2": 2
+  # Torrent Options
+  # share_rate: 0.5
+  # custom_category_mapping:
+  #   "Boku no Kokoro no Yabai Yatsu S02 - 我內心的糟糕念頭 第二季": "我內心的糟糕念頭/Season 02"
 btbtt12_disposable_source_provider:
   type: btbtt12_disposable_source_provider
   enable: true
