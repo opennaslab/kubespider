@@ -20,9 +20,14 @@ ani_source_provider:
     Season2: 2
     "Season 2": 2
   # Torrent Options
-  # share_rate: 0.5
-  # custom_category_mapping:
-  #   "Boku no Kokoro no Yabai Yatsu S02 - 我內心的糟糕念頭 第二季": "我內心的糟糕念頭/Season 02"
+  download_param:
+    tags:
+      - ANi
+    category: ANi
+  use_sub_category: true
+  custom_category_mapping:
+    "神覺者候補選拔試驗篇": "肌肉魔法使-MASHLE-/Season 02"
+    "魔術士歐菲 流浪之旅 聖域篇": "魔术士欧菲流浪之旅/Season 04"
 btbtt12_disposable_source_provider:
   type: btbtt12_disposable_source_provider
   enable: true

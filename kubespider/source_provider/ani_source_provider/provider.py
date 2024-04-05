@@ -22,7 +22,6 @@ class AniSourceProvider(provider.SourceProvider):
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(config_reader)
         self.provider_listen_type = types.SOURCE_PROVIDER_PERIOD_TYPE
-        self.link_type = types.LINK_TYPE_GENERAL
         self.webhook_enable = False
         self.provider_type = 'ani_source_provider'
         self.api_type = 'http'
@@ -31,10 +30,11 @@ class AniSourceProvider(provider.SourceProvider):
         self.tmp_file_path = '/tmp/'
         self.save_path = 'ANi'
         self.provider_name = name
+        self.use_sub_category = False
         self.classification_on_directory = True
-        self.detect_season = False
         self.blacklist = []
         self.custom_season_mapping = {}
+        self.custom_category_mapping = {}
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -74,12 +74,30 @@ class AniSourceProvider(provider.SourceProvider):
 
         return season, keyword
 
-    def rename_season(self, title, season, keyword) -> str:
+    def rename_season(self, title: str, season: int, keyword: str) -> str:
         new_title = title.replace(f" {keyword}", "")
         regex_pattern = r"- (\d+) \[(720P|1080P|4K)\]\[(Baha|Bilibili)\]"
         s_ = str(season).zfill(2)
         output = re.sub(regex_pattern, rf"- S{s_}E\1 [\2][\3]", new_title)
         return output
+    
+    def get_subcategory(self, title: str, season: int, keyword: str) -> str:
+        # Avoid '/' appear in original Anime title
+        # This will be misleading for qbittorrent
+        sub_category = title.replace('/', '_')
+        if ' - ' in title:
+            # Drop English Title
+            sub_category = sub_category.split(' - ')[-1]
+        if season > 1:
+            # Add Season subcategory
+            sub_category = sub_category.replace(f" {keyword}", '') + "/Season {}".format(str(season).zfill(2))
+        # According to qbittorrent issue 19941
+        # The Windows/linux illegal symbol of path will be automatically replaced with ' '
+        # But if the last char of category string is illegal symbol
+        # The replaced ' ' end of a path will occur unexpected bug in explorer
+        if sub_category[-1] in "<>:\"/\\|?* ":
+            sub_category = sub_category[:-1] + "_"
+        return sub_category
 
     def get_prefer_download_provider(self) -> list:
         downloader_names = self.config_reader.read().get('downloader', None)
@@ -93,7 +111,7 @@ class AniSourceProvider(provider.SourceProvider):
         return self.config_reader.read().get('download_param', {})
 
     def get_link_type(self) -> str:
-        return self.link_type
+        return types.LINK_TYPE_TORRENT if self.api_type == 'torrent' else types.LINK_TYPE_GENERAL
 
     def provider_enabled(self) -> bool:
         return self.config_reader.read().get('enable', True)
@@ -107,7 +125,8 @@ class AniSourceProvider(provider.SourceProvider):
     def get_links(self, event: Event) -> list[Resource]:
         try:
             req = helper.get_request_controller()
-            links_data = req.get(self.rss_link, timeout=30).content
+            api = self.rss_link_torrent if self.api_type == 'torrent' else self.rss_link
+            links_data = req.get(api, timeout=30).content
         except Exception as err:
             logging.info('Error while fetching ANi API: %s', err)
             return []
@@ -139,10 +158,25 @@ class AniSourceProvider(provider.SourceProvider):
                             file_type=types.FILE_TYPE_VIDEO_TV,
                             link_type=self.get_link_type(),
                         )
-                        if season > 1:
-                            res.put_extra_params(
-                                {'file_name': self.rename_season(xml_title, season, season_keyword)}
-                            )
+                        if self.api_type == 'torrent':
+                            if self.use_sub_category:
+                                category = res.extra_param('category')
+                                sub_category = self.get_subcategory(item_title, season, season_keyword)
+                                res.put_extra_params(
+                                    {'category': f"{category}/{sub_category}"}
+                                )
+                            # Custom subcategory mapping will forcibly cover any generated data
+                            # Even the value defined in download_param
+                            for x in self.custom_category_mapping:
+                                if x in item_title:
+                                    res.put_extra_params(
+                                        {'category': self.custom_category_mapping[x]}
+                                    )
+                        else:
+                            if season > 1:
+                                res.put_extra_params(
+                                    {'file_name': self.rename_season(xml_title, season, season_keyword)}
+                                )
                         ret.append(res)
                 else:
                     continue
