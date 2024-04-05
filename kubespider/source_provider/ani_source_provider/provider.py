@@ -24,7 +24,7 @@ class AniSourceProvider(provider.SourceProvider):
         self.provider_listen_type = types.SOURCE_PROVIDER_PERIOD_TYPE
         self.webhook_enable = False
         self.provider_type = 'ani_source_provider'
-        self.api_type = 'http'
+        self.api_type = ''
         self.rss_link = ''
         self.rss_link_torrent = ''
         self.tmp_file_path = '/tmp/'
@@ -97,6 +97,10 @@ class AniSourceProvider(provider.SourceProvider):
         # The replaced ' ' end of a path will occur unexpected bug in explorer
         if sub_category[-1] in "<>:\"/\\|?* ":
             sub_category = sub_category[:-1] + "_"
+        # Idk why there's one more space ' ' between English Name and Chinese Name
+        # The regex just looks fine
+        if sub_category[0] == ' ':
+            sub_category = sub_category[1:]
         return sub_category
 
     def get_prefer_download_provider(self) -> list:
@@ -162,8 +166,10 @@ class AniSourceProvider(provider.SourceProvider):
                             if self.use_sub_category:
                                 category = res.extra_param('category')
                                 sub_category = self.get_subcategory(item_title, season, season_keyword)
+                                logging.info("Using subcategory: %s", sub_category)
                                 res.put_extra_params(
-                                    {'category': f"{category}/{sub_category}"}
+                                    # {'category': f"{category}/{sub_category}"}
+                                    {'sub_category': sub_category}
                                 )
                             # Custom subcategory mapping will forcibly cover any generated data
                             # Even the value defined in download_param
@@ -223,6 +229,11 @@ class AniSourceProvider(provider.SourceProvider):
 
     def load_config(self) -> None:
         cfg = self.config_reader.read()
-        logging.info('ANi rss link is: %s', cfg['rss_link'])
-        self.rss_link = cfg['rss_link']
+        logging.info('Ani will use %s API', cfg.get('api_type'))
+        self.api_type = cfg.get('api_type')
+        self.rss_link = cfg.get('rss_link')
+        self.rss_link_torrent = cfg.get('rss_link_torrent')
+        self.use_sub_category = cfg.get('use_sub_category', False)
         self.classification_on_directory = cfg.get('classification_on_directory', True)
+        self.custom_season_mapping = cfg.get('custom_season_mapping', {})
+        self.custom_category_mapping = cfg.get('custom_category_mapping', {})
