@@ -171,12 +171,11 @@ class AniSourceProvider(provider.SourceProvider):
                                     # {'category': f"{category}/{sub_category}"}
                                     {'sub_category': sub_category}
                                 )
-                            # Custom subcategory mapping will forcibly cover any generated data
-                            # Even the value defined in download_param
+                            # Custom subcategory mapping will cover any generated data
                             for x in self.custom_category_mapping:
                                 if x in item_title:
                                     res.put_extra_params(
-                                        {'category': self.custom_category_mapping[x]}
+                                        {'sub_category': self.custom_category_mapping[x]}
                                     )
                         else:
                             if season > 1:
