@@ -13,12 +13,23 @@ ani_source_provider:
   rss_link: https://api.ani.rip/ani-download.xml
   rss_link_torrent: https://api.ani.rip/ani-torrent.xml
   blacklist: [ ]
+
   # HTTP Options
   classification_on_directory: true
   custom_season_mapping:
-    神覺者候補選拔試驗篇: 2
-    Season2: 2
-    "Season 2": 2
+  # [str] keyword: [int] Season
+  # Example ->
+  # 神覺者候補選拔試驗篇: 2
+  # Season2: 2
+  # 'Season 2': 2
+  season_episode_adjustment:
+  # Title:
+  #   [int] Season: [int] Offset
+  # Example ->
+  # 關於我轉生變成史萊姆這檔事:
+  #   2: -24
+  #   3: -48
+  
   # Torrent Options
   download_param:
     tags:
@@ -26,8 +37,10 @@ ani_source_provider:
     category: ANi
   use_sub_category: true
   custom_category_mapping:
-    "神覺者候補選拔試驗篇": "肌肉魔法使-MASHLE-/Season 02"
-    "魔術士歐菲 流浪之旅 聖域篇": "魔术士欧菲流浪之旅/Season 04"
+  # [str] keyword: [str] category
+  # Example ->
+  # '神覺者候補選拔試驗篇': '肌肉魔法使-MASHLE-/Season 02'
+  # '魔術士歐菲 流浪之旅 聖域篇': '魔术士欧菲流浪之旅/Season 04'
 btbtt12_disposable_source_provider:
   type: btbtt12_disposable_source_provider
   enable: true

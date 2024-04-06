@@ -35,6 +35,7 @@ class AniSourceProvider(provider.SourceProvider):
         self.blacklist = []
         self.custom_season_mapping = {}
         self.custom_category_mapping = {}
+        self.season_episode_adjustment = {}
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -74,11 +75,20 @@ class AniSourceProvider(provider.SourceProvider):
 
         return season, keyword
 
-    def rename_season(self, title: str, season: int, keyword: str) -> str:
+    def rename_season(self, title: str, season: int, keyword: str, episode: str) -> str:
+        # Add Season Perfix
         new_title = title.replace(f" {keyword}", "")
         regex_pattern = r"- (\d+) \[(720P|1080P|4K)\]\[(Baha|Bilibili)\]"
-        s_ = str(season).zfill(2)
-        output = re.sub(regex_pattern, rf"- S{s_}E\1 [\2][\3]", new_title)
+        season_ = str(season).zfill(2)
+        # Apply Episode Adjustment
+        e_ = int(episode)
+        for t in self.season_episode_adjustment:
+            if t in title:
+                for s in self.season_episode_adjustment[t]:
+                    if s == season:
+                        episode = str(e_ + self.season_episode_adjustment[t][s]).zfill(2)
+
+        output = re.sub(regex_pattern, rf"- S{season_}E{episode} [\2][\3]", new_title)
         return output
     
     def get_subcategory(self, title: str, season: int, keyword: str) -> str:
@@ -180,7 +190,7 @@ class AniSourceProvider(provider.SourceProvider):
                         else:
                             if season > 1:
                                 res.put_extra_params(
-                                    {'file_name': self.rename_season(xml_title, season, season_keyword)}
+                                    {'file_name': self.rename_season(xml_title, season, season_keyword, item_episode)}
                                 )
                         ret.append(res)
                 else:
@@ -236,3 +246,4 @@ class AniSourceProvider(provider.SourceProvider):
         self.classification_on_directory = cfg.get('classification_on_directory', True)
         self.custom_season_mapping = cfg.get('custom_season_mapping', {})
         self.custom_category_mapping = cfg.get('custom_category_mapping', {})
+        self.season_episode_adjustment = cfg.get('season_episode_adjustment', {})
