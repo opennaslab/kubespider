@@ -8,11 +8,13 @@ from utils.helper import get_request_controller
 class BarkNotificationProvider(provider.NotificationProvider):
     """bark notification"""
 
-    def __init__(self, host: str, device_token: str) -> None:
+    def __init__(self, name: str, host: str, device_token: str) -> None:
         """
+        :param name: unique instance name
         :param host: bark`s host
         :param device_token: bark`s device token
         """
+        super().__init__(name=name)
         self.host = host
         self.device_token = device_token
         self.request_handler = get_request_controller()

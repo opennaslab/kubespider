@@ -2,28 +2,36 @@ import logging
 import json
 
 from download_provider.provider import DownloadProvider
-from utils.config_reader import AbsConfigReader
+from utils import types
 from utils.helper import get_request_controller
 from utils.values import Task
 
 
 class YougetDownloadProvider(DownloadProvider):
-    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
-        super().__init__(name, config_reader)
-        self.provider_name = name
-        self.provider_type = 'youget_download_provider'
-        self.http_endpoint_host = ''
-        self.http_endpoint_port = 0
-        self.request_handler = get_request_controller(use_proxy=False)
+    """YouGet downloader"""
 
-    def get_provider_type(self) -> str:
-        return self.provider_type
+    def __init__(self, name: str, http_endpoint_host: str, http_endpoint_port: int, use_proxy: bool = False,
+                 priority: int = 10) -> None:
+        """
+        :param name: unique instance name
+        :param http_endpoint_host: http endpoint host
+        :param http_endpoint_port: http endpoint port
+        :param use_proxy: whether you use proxy
+        :param priority: priority
+        """
+        super().__init__(
+            name=name,
+            supported_link_types=[types.LINK_TYPE_GENERAL],
+            priority=priority
+        )
+        self.http_endpoint_host = http_endpoint_host
+        self.http_endpoint_port = http_endpoint_port
+        self.request_handler = get_request_controller(use_proxy=use_proxy)
 
-    def provider_enabled(self) -> bool:
-        return self.config_reader.read()['enable']
-
-    def provide_priority(self) -> int:
-        return self.config_reader.read()['priority']
+    @property
+    def is_alive(self) -> bool:
+        # TODO implement
+        return True
 
     def get_defective_task(self) -> list[Task]:
         # These tasks are special, other download software could not handle
@@ -58,8 +66,3 @@ class YougetDownloadProvider(DownloadProvider):
     def remove_tasks(self, tasks: list[Task]):
         # TODO: Implement it
         pass
-
-    def load_config(self) -> TypeError:
-        cfg = self.config_reader.read()
-        self.http_endpoint_host = cfg['http_endpoint_host']
-        self.http_endpoint_port = cfg['http_endpoint_port']

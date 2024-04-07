@@ -1,6 +1,7 @@
 from flask import Blueprint, g, abort
 
 download_blu = Blueprint('download', __name__)
+# pylint: disable=cyclic-import
 from .views import *
 
 

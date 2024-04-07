@@ -10,29 +10,42 @@ import execjs
 import bencodepy
 
 from download_provider import provider
-from utils.config_reader import AbsConfigReader
+from utils import types
 from utils.helper import get_request_controller
 from utils.values import Task
 
 
 class XunleiDownloadProvider(provider.DownloadProvider):
-    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
-        super().__init__(name, config_reader)
-        self.provider_name = name
-        self.provider_type = 'xunlei_download_provider'
-        self.http_endpoint = ''
-        self.device_id = ''
-        self.js_ctx = execjs.compile('')
-        self.request_handler = get_request_controller(use_proxy=False)
+    """Xunlei downloader"""
 
-    def get_provider_type(self) -> str:
-        return self.provider_type
+    def __init__(self, name: str, http_endpoint: str = "http://127.0.0.1:2345",
+                 token_js_path: str = "/app/.config/dependencies/xunlei_download_provider/get_token.js",
+                 device_id: str = "", use_proxy: bool = False, priority: int = 10) -> None:
+        """
+        :param name: unique instance name
+        :param http_endpoint: http endpoint host
+        :param token_js_path: token js path
+        :param device_id: device_id
+        :param use_proxy: whether you use proxy
+        :param priority: priority
+        """
+        super().__init__(
+            name=name,
+            supported_link_types=[types.LINK_TYPE_TORRENT, types.LINK_TYPE_MAGNET, types.LINK_TYPE_GENERAL],
+            priority=priority
+        )
+        self.request_handler = get_request_controller(use_proxy=use_proxy)
+        self.http_endpoint = http_endpoint
+        self.token_js_path = token_js_path
+        with open(token_js_path, 'r', encoding='utf-8') as js_file:
+            js_text = js_file.read()
+        self.js_ctx = execjs.compile(js_text)
+        self.device_id = device_id
 
-    def provider_enabled(self) -> bool:
-        return self.config_reader.read()['enable']
-
-    def provide_priority(self) -> int:
-        return self.config_reader.read()['priority']
+    @property
+    def is_alive(self) -> bool:
+        # TODO implement
+        return True
 
     def get_defective_task(self) -> list[Task]:
         # if xunlei doesn't work, it means other tools couldn't, so just ignore it.
@@ -66,15 +79,6 @@ class XunleiDownloadProvider(provider.DownloadProvider):
     def remove_tasks(self, tasks: list[Task]):
         # TODO: Implement it
         pass
-
-    def load_config(self) -> TypeError:
-        cfg = self.config_reader.read()
-        self.http_endpoint = cfg.get('http_endpoint', 'http://127.0.0.1:2345')
-        token_js_path = cfg.get('token_js_path', '/app/.config/dependencies/xunlei_download_provider/get_token.js')
-        with open(token_js_path, 'r', encoding='utf-8') as js_file:
-            js_text = js_file.read()
-        self.js_ctx = execjs.compile(js_text)
-        self.device_id = cfg.get('device_id', '')
 
     def list_files(self, token: str, url: str) -> dict:
         try:
@@ -128,9 +132,9 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         hashcontents = bencodepy.encode(subj)
         digest = hashlib.sha1(hashcontents).digest()
         b32hash = base64.b32encode(digest).decode()
-        return 'magnet:?'\
-                 + 'xt=urn:btih:' + b32hash\
-                 + '&dn=' + metadata[b'info'][b'name'].decode()
+        return 'magnet:?' \
+            + 'xt=urn:btih:' + b32hash \
+            + '&dn=' + metadata[b'info'][b'name'].decode()
 
     def create_sub_path(self, token: str, dir_name: str, parent_id: str) -> TypeError:
         try:

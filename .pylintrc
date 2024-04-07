@@ -16,6 +16,7 @@ disable=
     R0903, # Too few public methods
     R0913, # Too many arguments
     R0911, # Too many return statements
+    R1710, # inconsistent-return-statements
 
 [SIMILARITIES]
 # Minimum lines number of a similarity.

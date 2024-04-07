@@ -7,7 +7,8 @@ from utils.definition import Definition, ArgumentsFiled
 
 
 class NotificationProvider(metaclass=abc.ABCMeta):
-    NAME = ""
+    def __init__(self, name: str):
+        self.name = name
 
     @classmethod
     def definitions(cls) -> dict:

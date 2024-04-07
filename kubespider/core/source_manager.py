@@ -4,7 +4,7 @@ from utils.values import Resource, Event, Downloader
 from utils import helper, types
 from source_provider.provider import SourceProvider
 from core import period_server
-from core import download_trigger
+from core import download_manager
 from core import plugin_manager
 from core import plugin_binding
 
@@ -74,14 +74,14 @@ class SourceProviderManager:
             controller = helper.get_request_controller(event.extra_param('cookies'))
             link_type = helper.get_link_type(event.source, controller)
             path = os.path.join(helper.convert_file_type_to_path(types.FILE_TYPE_COMMON), event.path)
-            err = download_trigger.kubespider_downloader.download_file(Resource(
+            err = download_manager.kubespider_download_server.download_file(Resource(
                 url=event.source,
                 path=path,
                 file_type=types.FILE_TYPE_COMMON,
                 link_type=link_type,
                 **event.extra_params()
             ))
-            return TypeError(f'No provider found and download failed with error {err}')
+            return err
 
         result = {}
         period_providers = list(filter(lambda x: x.get_provider_listen_type() == types.SOURCE_PROVIDER_PERIOD_TYPE, providers))
@@ -97,11 +97,10 @@ class SourceProviderManager:
             if links is None or len(links) < 1:
                 continue
             for link in links:
-                print(link)
                 link.path = os.path.join(
                     helper.convert_file_type_to_path(link.file_type), link.path)
                 link.put_extra_params(provider.get_download_param())
-                err = download_trigger.kubespider_downloader.download_file(link, Downloader(
+                err = download_manager.kubespider_download_server.download_file(link, Downloader(
                     provider.get_download_provider_type(),
                     provider.get_prefer_download_provider(),
                 ))

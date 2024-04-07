@@ -4,35 +4,55 @@ import qbittorrentapi
 
 from qbittorrentapi.definitions import TorrentStates
 from download_provider.provider import DownloadProvider
-from utils.config_reader import AbsConfigReader
 from utils import types
 from utils.values import Task
 
 
 class QbittorrentDownloadProvider(DownloadProvider):
-    def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
-        super().__init__(name, config_reader)
-        self.provider_name = name
-        self.provider_type = 'qbittorrent_download_provider'
-        self.http_endpoint_host = ''
-        self.http_endpoint_port = 0
-        self.client: qbittorrentapi.Client = None
-        self.username = ''
-        self.password = ''
-        self.download_base_path = ''
-        self.verify_webui_certificate = False
-        self.download_tags = ['']
-        self.download_category = ''
-        self.use_auto_torrent_management = False
+    """Qbittorrent downloader"""
+    def __init__(self, name: str, http_endpoint_host: str, http_endpoint_port: int, username: str,
+                 password: str, verify_webui_certificate: bool, download_tags: list[str], download_category: str,
+                 download_base_path: str = "", use_auto_torrent_management: bool = False, priority: int = 10) -> None:
+        """
+        :param name: unique instance name
+        :param http_endpoint_host: http endpoint host
+        :param http_endpoint_port: http endpoint port
+        :param username: username
+        :param password: password
+        :param verify_webui_certificate: verify webui certificate
+        :param download_tags: download tags
+        :param download_category: download category
+        :param download_base_path: download base path
+        :param use_auto_torrent_management: use auto torrent management
+        :param priority: priority
+        """
+        super().__init__(
+            name=name,
+            supported_link_types=[types.LINK_TYPE_MAGNET, types.LINK_TYPE_TORRENT],
+            priority=priority
+        )
+        self.http_endpoint_host = http_endpoint_host
+        self.http_endpoint_port = http_endpoint_port
+        self.download_base_path = download_base_path
+        self.username = username
+        self.password = password
+        self.verify_webui_certificate = verify_webui_certificate
+        self.download_tags = download_tags
+        self.download_category = download_category
+        self.use_auto_torrent_management = use_auto_torrent_management
+        self.client = qbittorrentapi.Client(
+            self.http_endpoint_host,
+            self.http_endpoint_port,
+            self.username,
+            self.password,
+            VERIFY_WEBUI_CERTIFICATE=self.verify_webui_certificate,
+        )
+        self.client.auth_log_in()
 
-    def get_provider_type(self) -> str:
-        return self.provider_type
-
-    def provider_enabled(self) -> bool:
-        return self.config_reader.read()['enable']
-
-    def provide_priority(self) -> int:
-        return self.config_reader.read()['priority']
+    @property
+    def is_alive(self) -> bool:
+        # TODO implement
+        return True
 
     def get_defective_task(self) -> list[Task]:
         torrents_info = self.client.torrents_info()
@@ -107,29 +127,3 @@ class QbittorrentDownloadProvider(DownloadProvider):
             self.client.torrents_delete(torrent_hashes='all', delete_files=True)
         except Exception as err:
             logging.warning('qbittorrent remove all tasks error:%s', err)
-
-    def load_config(self) -> TypeError:
-        cfg = self.config_reader.read()
-        self.http_endpoint_host = cfg['http_endpoint_host']
-        self.http_endpoint_port = cfg['http_endpoint_port']
-        self.download_base_path = cfg['download_base_path']
-        self.username = cfg['username']
-        self.password = cfg['password']
-        self.verify_webui_certificate = cfg['verify_webui_certificate']
-        self.download_tags = cfg.get('tags', [])
-        self.download_category = cfg.get('category')
-        self.use_auto_torrent_management = cfg['use_auto_torrent_management']
-        self.client = qbittorrentapi.Client(
-            self.http_endpoint_host,
-            self.http_endpoint_port,
-            self.username,
-            self.password,
-            VERIFY_WEBUI_CERTIFICATE=self.verify_webui_certificate,
-        )
-        try:
-            self.client.auth_log_in()
-            return None
-        except qbittorrentapi.LoginFailed as err:
-            logging.warning('Auth into qbittorrent error:%s', err)
-            return err
-        return None

@@ -7,7 +7,7 @@ from utils.values import Config, Downloader
 from utils import helper, types
 from utils.config_reader import YamlFileConfigReader
 from source_provider.provider import SourceProvider
-from core import download_trigger, notification_manager
+from core import download_manager, notification_manager
 
 
 class PeriodServer:
@@ -62,7 +62,7 @@ class PeriodServer:
             source.put_extra_params(provider.get_download_param())
             logging.info('Find new resource:%s/%s', provider_name, helper.format_long_string(source.url))
             source.path = os.path.join(helper.convert_file_type_to_path(source.file_type), source.path)
-            err = download_trigger.kubespider_downloader.download_file(source, Downloader(
+            err = download_manager.kubespider_download_server.download_file(source, Downloader(
                 provider.get_download_provider_type(),
                 provider.get_prefer_download_provider(),
             ))

@@ -8,12 +8,14 @@ from notification_provider import provider
 class QQNotificationProvider(provider.NotificationProvider):
     """QQ notification"""
 
-    def __init__(self, host: str, access_token: str, target_qq: str) -> None:
+    def __init__(self, name: str, host: str, access_token: str, target_qq: str) -> None:
         """
+        :param name: unique instance name
         :param host: host
         :param access_token: access_token
         :param target_qq: target_qq
         """
+        super().__init__(name=name)
         self.host = host
         self.access_token = access_token
         self.target_qq = int(target_qq)
