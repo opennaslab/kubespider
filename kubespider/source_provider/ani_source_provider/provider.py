@@ -48,7 +48,7 @@ class AniSourceProvider(provider.SourceProvider):
 
     def get_download_provider_type(self) -> str:
         return None
-    
+
     def get_season(self, title: str) -> tuple[int, str]:
         season = 1
         keyword = None
@@ -64,13 +64,13 @@ class AniSourceProvider(provider.SourceProvider):
             "第十季": 10
         }
         # The user-defined season_mapping has higher priority
-        for kw in mapper:
+        for kw, s in mapper.items():
             if kw in title:
-                season = mapper[kw]
+                season = s
                 keyword = kw
-        for kw in self.custom_season_mapping:
+        for kw, s in self.custom_season_mapping.items():
             if kw in title:
-                season = self.custom_season_mapping[kw]
+                season = s
                 keyword = kw
 
         return season, keyword
@@ -90,8 +90,12 @@ class AniSourceProvider(provider.SourceProvider):
 
         output = re.sub(regex_pattern, rf"- S{season_}E{episode} [\2][\3]", new_title)
         return output
-    
+
     def get_subcategory(self, title: str, season: int, keyword: str) -> str:
+        # Custom subcategory mapping will cover any generated data
+        for x in self.custom_category_mapping:
+            if x in title:
+                return self.custom_category_mapping[x]
         # Avoid '/' appear in original Anime title
         # This will be misleading for qbittorrent
         sub_category = title.replace('/', '_')
@@ -100,7 +104,8 @@ class AniSourceProvider(provider.SourceProvider):
             sub_category = sub_category.split(' - ')[-1]
         if season > 1:
             # Add Season subcategory
-            sub_category = sub_category.replace(f" {keyword}", '') + "/Season {}".format(str(season).zfill(2))
+            s_ = str(season).zfill(2)
+            sub_category = sub_category.replace(f" {keyword}", '') + f"/Season {s_}"
         # According to qbittorrent issue 19941
         # The Windows/linux illegal symbol of path will be automatically replaced with ' '
         # But if the last char of category string is illegal symbol
@@ -155,43 +160,28 @@ class AniSourceProvider(provider.SourceProvider):
         try:
             xml_parse = ET.parse(tmp_xml)
             items = xml_parse.findall('.//item')
-            path = self.save_path
             ret = []
             for i in items:
                 xml_title = i.find('./title').text
-                item_title, item_episode, extra = self.get_anime_info(xml_title)
+                item_title, item_episode = self.get_anime_info(xml_title)
                 season, season_keyword = self.get_season(xml_title)
-                url = i.find('./guid').text
                 if item_title is not None:
-                    logging.info('Found Anime "%s" Season %s Episode %s with info %s', item_title, season, item_episode, extra)
+                    logging.info('Found Anime "%s" Season %s Episode %s', item_title, season, item_episode)
                     if not self.check_blacklist(xml_title, blacklist):
-                        path_ = path + (f'/{item_title}' if self.classification_on_directory else '')
                         res = Resource(
-                            url=url,
-                            path=path_,
+                            url=i.find('./guid').text,
+                            path=self.save_path + (f'/{item_title}' if self.classification_on_directory else ''),
                             file_type=types.FILE_TYPE_VIDEO_TV,
                             link_type=self.get_link_type(),
                         )
                         if self.api_type == 'torrent':
                             if self.use_sub_category:
-                                category = res.extra_param('category')
                                 sub_category = self.get_subcategory(item_title, season, season_keyword)
                                 logging.info("Using subcategory: %s", sub_category)
-                                res.put_extra_params(
-                                    # {'category': f"{category}/{sub_category}"}
-                                    {'sub_category': sub_category}
-                                )
-                            # Custom subcategory mapping will cover any generated data
-                            for x in self.custom_category_mapping:
-                                if x in item_title:
-                                    res.put_extra_params(
-                                        {'sub_category': self.custom_category_mapping[x]}
-                                    )
+                                res.put_extra_params({'sub_category': sub_category})                
                         else:
                             if season > 1:
-                                res.put_extra_params(
-                                    {'file_name': self.rename_season(xml_title, season, season_keyword, item_episode)}
-                                )
+                                res.put_extra_params({'file_name': self.rename_season(xml_title, season, season_keyword, item_episode)})
                         ret.append(res)
                 else:
                     continue
@@ -201,18 +191,18 @@ class AniSourceProvider(provider.SourceProvider):
             logging.info('Error while parsing RSS XML: %s', err)
             return []
 
-    def get_anime_info(self, title: str) -> Tuple[str, str, tuple]:
+    def get_anime_info(self, title: str) -> Tuple[str, str]:
         '''Extract info by only REGEX, might be wrong in extreme cases.
         '''
         pattern = re.compile(r'\[ANi\] (.+?) - (\d+) \[(.+?)\]\[(.+?)\]\[(.+?)\]\[(.+?)\]\[(.+?)\]\.')
         matches = pattern.findall(title)
         try:
             title, episode = matches[0][:2]
-            extra_info = matches[0][2:]
-            return title, episode, extra_info
+            # extra_info = matches[0][2:]
+            return title, episode
         except Exception as err:
             logging.warning('Error while running regex on title %s: %s', title, err)
-            return None, None, None
+            return None, None
 
     def load_filter_config(self) -> str:
         filter_ = self.config_reader.read().get('blacklist', None)
