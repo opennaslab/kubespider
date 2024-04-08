@@ -182,7 +182,7 @@ class AniSourceProvider(provider.SourceProvider):
                             logging.info("Using subcategory: %s", sub_category)
                             res.put_extra_params({'sub_category': sub_category})
                     elif season > 1:
-                            res.put_extra_params({'file_name': self.rename_season(xml_title, season, season_keyword, item_episode)})
+                        res.put_extra_params({'file_name': self.rename_season(xml_title, season, season_keyword, item_episode)})
                     ret.append(res)
                 else:
                     continue
