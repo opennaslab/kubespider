@@ -167,22 +167,23 @@ class AniSourceProvider(provider.SourceProvider):
                 season, season_keyword = self.get_season(xml_title)
                 if item_title is not None:
                     logging.info('Found Anime "%s" Season %s Episode %s', item_title, season, item_episode)
-                    if not self.check_blacklist(xml_title, blacklist):
-                        res = Resource(
-                            url=i.find('./guid').text,
-                            path=self.save_path + (f'/{item_title}' if self.classification_on_directory else ''),
-                            file_type=types.FILE_TYPE_VIDEO_TV,
-                            link_type=self.get_link_type(),
-                        )
-                        if self.api_type == 'torrent':
-                            if self.use_sub_category:
-                                sub_category = self.get_subcategory(item_title, season, season_keyword)
-                                logging.info("Using subcategory: %s", sub_category)
-                                res.put_extra_params({'sub_category': sub_category})                
-                        else:
-                            if season > 1:
-                                res.put_extra_params({'file_name': self.rename_season(xml_title, season, season_keyword, item_episode)})
-                        ret.append(res)
+                    # Pass blacklist Animes
+                    if self.check_blacklist(xml_title, blacklist):
+                        continue
+                    res = Resource(
+                        url=i.find('./guid').text,
+                        path=self.save_path + (f'/{item_title}' if self.classification_on_directory else ''),
+                        file_type=types.FILE_TYPE_VIDEO_TV,
+                        link_type=self.get_link_type(),
+                    )
+                    if self.api_type == 'torrent':
+                        if self.use_sub_category:
+                            sub_category = self.get_subcategory(item_title, season, season_keyword)
+                            logging.info("Using subcategory: %s", sub_category)
+                            res.put_extra_params({'sub_category': sub_category})
+                    elif season > 1:
+                            res.put_extra_params({'file_name': self.rename_season(xml_title, season, season_keyword, item_episode)})
+                    ret.append(res)
                 else:
                     continue
             return ret
