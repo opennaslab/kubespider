@@ -38,15 +38,15 @@ aria2:
   priority: 2
 qbittorrent:
   type: qbittorrent_download_provider
-  enable: true
+  enable: false
   download_base_path: "/downloads/"
-  http_endpoint_host: http://192.168.126.1
-  http_endpoint_port: 7600
+  http_endpoint_host: http://127.0.0.1
+  http_endpoint_port: 8080
   username: admin
-  password: password
+  password: adminadmin
   verify_webui_certificate: false
-  use_auto_torrent_management: true
-  priority: 1
+  use_auto_torrent_management: false
+  priority: 3
   tags:
     - kubespider
 xunlei:
