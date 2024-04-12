@@ -104,9 +104,8 @@ class MikananiSourceProvider(provider.SourceProvider):
                         link_type=self.get_link_type(),
                     )
                     if self.use_sub_category:
-                        sub_category = self.get_subcategory(path)
-                        logging.info("Using subcategory: %s", sub_category)
-                        res.put_extra_params({'sub_category': sub_category})
+                        res.put_extra_params({'sub_category': self.get_subcategory(path)})
+                        logging.info("Using subcategory: %s", res.extra_param('sub_category'))
                     ret.append(res)
                 else:
                     logging.warning("Skip %s, %s", anime_name, item_title)
@@ -134,7 +133,12 @@ class MikananiSourceProvider(provider.SourceProvider):
         logging.warning("Episode %s will not be downloaded, filtered by %s", title, pattern)
         return None
 
-    def get_season(self, title: str) -> tuple[int, str]:
+    def get_subcategory(self, title: str) -> str:
+        # Custom subcategory mapping will cover any generated data
+        for x in self.custom_category_mapping:
+            if x in title:
+                return self.custom_category_mapping[x]
+        # Get Season
         season = 1
         keyword = None
         mapper = {
@@ -153,14 +157,6 @@ class MikananiSourceProvider(provider.SourceProvider):
             if kw in title:
                 season = s
                 keyword = kw
-        return season, keyword
-
-    def get_subcategory(self, title: str) -> str:
-        # Custom subcategory mapping will cover any generated data
-        for x in self.custom_category_mapping:
-            if x in title:
-                return self.custom_category_mapping[x]
-        season, keyword = self.get_season(title)
         # Avoid '/' appear in original Anime title
         # This will be misleading for qbittorrent
         sub_category = title.replace('/', '_')
