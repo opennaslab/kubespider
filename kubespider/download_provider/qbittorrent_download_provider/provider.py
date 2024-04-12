@@ -66,6 +66,9 @@ class QbittorrentDownloadProvider(DownloadProvider):
         logging.info('Start torrent download:%s, path:%s', task.url, download_path)
         tags = task.extra_param('tags', self.download_tags)
         category = task.extra_param('category', self.download_category)
+        sub_category = task.extra_param('sub_category')
+        if sub_category:
+            category = category + f"/{sub_category}"
         use_auto_torrent_management = task.extra_param('use_auto_torrent_management', self.use_auto_torrent_management)
         if not category:
             use_auto_torrent_management = False
@@ -85,11 +88,14 @@ class QbittorrentDownloadProvider(DownloadProvider):
         download_path = os.path.join(self.download_base_path, task.path)
         tags = task.extra_param('tags', self.download_tags)
         category = task.extra_param('category', self.download_category)
+        sub_category = task.extra_param('sub_category')
         use_auto_torrent_management = task.extra_param('use_auto_torrent_management', self.use_auto_torrent_management)
         if not category:
             use_auto_torrent_management = False
         try:
             logging.info('Create download task category:%s, tags:%s', category, tags)
+            if sub_category:
+                category = category + f"/{sub_category}"
             ret = self.client.torrents_add(urls=task.url, save_path=download_path, category=category, tags=tags, use_auto_torrent_management=use_auto_torrent_management)
             logging.info('Create download task results:%s', ret)
             return None

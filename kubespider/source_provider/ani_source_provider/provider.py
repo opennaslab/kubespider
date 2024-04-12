@@ -18,23 +18,24 @@ class AniSourceProvider(provider.SourceProvider):
     '''This provider is to sync resources from ANi API: https://api.ani.rip/ani-download.xml
     For the most timely follow-up of Anime updates.
     Downloading media in general HTTP, aria2 provider must be needed.
-
-    Accepts 2 configs:
-    Bool classification_on_directory: Choose whether the files is saved to directory according to title
-    Array blacklist: Anime title that match the array will not be downloaded. NO REGEX SUPPORT.
     '''
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(config_reader)
         self.provider_listen_type = types.SOURCE_PROVIDER_PERIOD_TYPE
-        self.link_type = types.LINK_TYPE_GENERAL
         self.webhook_enable = False
         self.provider_type = 'ani_source_provider'
+        self.api_type = ''
         self.rss_link = ''
+        self.rss_link_torrent = ''
         self.tmp_file_path = '/tmp/'
         self.save_path = 'ANi'
         self.provider_name = name
+        self.use_sub_category = False
         self.classification_on_directory = True
         self.blacklist = []
+        self.custom_season_mapping = {}
+        self.custom_category_mapping = {}
+        self.season_episode_adjustment = {}
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -48,6 +49,75 @@ class AniSourceProvider(provider.SourceProvider):
     def get_download_provider_type(self) -> str:
         return None
 
+    def get_season(self, title: str) -> tuple[int, str]:
+        season = 1
+        keyword = None
+        mapper = {
+            "第二季": 2,
+            "第三季": 3,
+            "第四季": 4,
+            "第五季": 5,
+            "第六季": 6,
+            "第七季": 7,
+            "第八季": 8,
+            "第九季": 9,
+            "第十季": 10
+        }
+        # The user-defined season_mapping has higher priority
+        for kw, s in mapper.items():
+            if kw in title:
+                season = s
+                keyword = kw
+        for kw, s in self.custom_season_mapping.items():
+            if kw in title:
+                season = s
+                keyword = kw
+
+        return season, keyword
+
+    def rename_season(self, title: str, season: int, keyword: str, episode: str) -> str:
+        # Add Season Perfix
+        new_title = title.replace(f" {keyword}", "")
+        regex_pattern = r"- (\d+) \[(720P|1080P|4K)\]\[(Baha|Bilibili)\]"
+        season_ = str(season).zfill(2)
+        # Apply Episode Adjustment
+        e_ = int(episode)
+        for t in self.season_episode_adjustment:
+            if t in title:
+                for s in self.season_episode_adjustment[t]:
+                    if s == season:
+                        episode = str(e_ + self.season_episode_adjustment[t][s]).zfill(2)
+
+        output = re.sub(regex_pattern, rf"- S{season_}E{episode} [\2][\3]", new_title)
+        return output
+
+    def get_subcategory(self, title: str, season: int, keyword: str) -> str:
+        # Custom subcategory mapping will cover any generated data
+        for x in self.custom_category_mapping:
+            if x in title:
+                return self.custom_category_mapping[x]
+        # Avoid '/' appear in original Anime title
+        # This will be misleading for qbittorrent
+        sub_category = title.replace('/', '_')
+        if ' - ' in title:
+            # Drop English Title
+            sub_category = sub_category.split(' - ')[-1]
+        if season > 1:
+            # Add Season subcategory
+            s_ = str(season).zfill(2)
+            sub_category = sub_category.replace(f" {keyword}", '') + f"/Season {s_}"
+        # According to qbittorrent issue 19941
+        # The Windows/linux illegal symbol of path will be automatically replaced with ' '
+        # But if the last char of category string is illegal symbol
+        # The replaced ' ' end of a path will occur unexpected bug in explorer
+        if sub_category[-1] in "<>:\"/\\|?* ":
+            sub_category = sub_category[:-1] + "_"
+        # Idk why there's one more space ' ' between English Name and Chinese Name
+        # The regex just looks fine
+        if sub_category[0] == ' ':
+            sub_category = sub_category[1:]
+        return sub_category
+
     def get_prefer_download_provider(self) -> list:
         downloader_names = self.config_reader.read().get('downloader', None)
         if downloader_names is None:
@@ -60,7 +130,7 @@ class AniSourceProvider(provider.SourceProvider):
         return self.config_reader.read().get('download_param', {})
 
     def get_link_type(self) -> str:
-        return self.link_type
+        return types.LINK_TYPE_TORRENT if self.api_type == 'torrent' else types.LINK_TYPE_GENERAL
 
     def provider_enabled(self) -> bool:
         return self.config_reader.read().get('enable', True)
@@ -74,7 +144,8 @@ class AniSourceProvider(provider.SourceProvider):
     def get_links(self, event: Event) -> list[Resource]:
         try:
             req = helper.get_request_controller()
-            links_data = req.get(self.rss_link, timeout=30).content
+            api = self.rss_link_torrent if self.api_type == 'torrent' else self.rss_link
+            links_data = req.get(api, timeout=30).content
         except Exception as err:
             logging.info('Error while fetching ANi API: %s', err)
             return []
@@ -89,22 +160,30 @@ class AniSourceProvider(provider.SourceProvider):
         try:
             xml_parse = ET.parse(tmp_xml)
             items = xml_parse.findall('.//item')
-            path = self.save_path
             ret = []
             for i in items:
                 xml_title = i.find('./title').text
-                item_title, item_episode, extra = self.get_anime_info(xml_title)
-                url = i.find('./guid').text
+                item_title, item_episode = self.get_anime_info(xml_title)
+                season, season_keyword = self.get_season(xml_title)
                 if item_title is not None:
-                    logging.info('Found Anime "%s" Episode %s with info %s', item_title, item_episode, extra)
-                    if not self.check_blacklist(xml_title, blacklist):
-                        path_ = path + (f'/{item_title}' if self.classification_on_directory else '')
-                        ret.append(Resource(
-                            url=url,
-                            path=path_,
-                            file_type=types.FILE_TYPE_VIDEO_TV,
-                            link_type=self.get_link_type(),
-                        ))
+                    logging.info('Found Anime "%s" Season %s Episode %s', item_title, season, item_episode)
+                    # Pass blacklist Animes
+                    if self.check_blacklist(xml_title, blacklist):
+                        continue
+                    res = Resource(
+                        url=i.find('./guid').text,
+                        path=self.save_path + (f'/{item_title}' if self.classification_on_directory else ''),
+                        file_type=types.FILE_TYPE_VIDEO_TV,
+                        link_type=self.get_link_type(),
+                    )
+                    if self.api_type == 'torrent':
+                        if self.use_sub_category:
+                            sub_category = self.get_subcategory(item_title, season, season_keyword)
+                            logging.info("Using subcategory: %s", sub_category)
+                            res.put_extra_params({'sub_category': sub_category})
+                    elif season > 1:
+                        res.put_extra_params({'file_name': self.rename_season(xml_title, season, season_keyword, item_episode)})
+                    ret.append(res)
                 else:
                     continue
             return ret
@@ -113,18 +192,18 @@ class AniSourceProvider(provider.SourceProvider):
             logging.info('Error while parsing RSS XML: %s', err)
             return []
 
-    def get_anime_info(self, title: str) -> Tuple[str, str, tuple]:
+    def get_anime_info(self, title: str) -> Tuple[str, str]:
         '''Extract info by only REGEX, might be wrong in extreme cases.
         '''
-        pattern = re.compile(r'\[ANi\] (.+?) - (\d+) \[(.+?)\]\[(.+?)\]\[(.+?)\]\[(.+?)\]\[(.+?)\]\.mp4')
+        pattern = re.compile(r'\[ANi\] (.+?) - (\d+) \[(.+?)\]\[(.+?)\]\[(.+?)\]\[(.+?)\]\[(.+?)\]\.')
         matches = pattern.findall(title)
         try:
             title, episode = matches[0][:2]
-            extra_info = matches[0][2:]
-            return title, episode, extra_info
+            # extra_info = matches[0][2:]
+            return title, episode
         except Exception as err:
             logging.warning('Error while running regex on title %s: %s', title, err)
-            return None, None, None
+            return None, None
 
     def load_filter_config(self) -> str:
         filter_ = self.config_reader.read().get('blacklist', None)
@@ -150,6 +229,12 @@ class AniSourceProvider(provider.SourceProvider):
 
     def load_config(self) -> None:
         cfg = self.config_reader.read()
-        logging.info('ANi rss link is: %s', cfg['rss_link'])
-        self.rss_link = cfg['rss_link']
+        logging.info('Ani will use %s API', cfg.get('api_type'))
+        self.api_type = cfg.get('api_type')
+        self.rss_link = cfg.get('rss_link')
+        self.rss_link_torrent = cfg.get('rss_link_torrent')
+        self.use_sub_category = cfg.get('use_sub_category', False)
         self.classification_on_directory = cfg.get('classification_on_directory', True)
+        self.custom_season_mapping = cfg.get('custom_season_mapping', {})
+        self.custom_category_mapping = cfg.get('custom_category_mapping', {})
+        self.season_episode_adjustment = cfg.get('season_episode_adjustment', {})

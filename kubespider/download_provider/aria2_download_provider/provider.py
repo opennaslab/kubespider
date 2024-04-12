@@ -82,7 +82,11 @@ class Aria2DownloadProvider(DownloadProvider):
 
         download_path = os.path.join(self.download_base_path, task.path)
         try:
-            ret = self.aria2.add(task.url, options={'dir': download_path})
+            opt = {'dir': download_path}
+            file_name = task.extra_param('file_name')
+            if file_name:
+                opt['out'] = file_name
+            ret = self.aria2.add(task.url, options=opt)
             task.task_id = ret[0].gid
             logging.info('Create download task result:%s', ret)
             return None
