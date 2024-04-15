@@ -42,6 +42,10 @@ class NotificationProvider(metaclass=abc.ABCMeta):
         })
         return definition
 
+    @property
+    def is_alive(self):
+        return True
+
     @abc.abstractmethod
     def push(self, title: str, **kwargs) -> bool:
         # push message

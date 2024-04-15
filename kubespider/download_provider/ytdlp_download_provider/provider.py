@@ -27,7 +27,7 @@ class YTDlpDownloadProvider(DownloadProvider):
         """
         super().__init__(
             name=name,
-            supported_link_types=[types.LINK_TYPE_GENERAL],
+            supported_link_types=[types.LinkType.general],
             priority=priority
         )
 

@@ -61,13 +61,13 @@ def get_request_controller(cookie: str = None, use_proxy=True) -> requests.Sessi
 
 def get_link_type(url: str, controller: requests.Session) -> str:
     if url.startswith('magnet:'):
-        return types.LINK_TYPE_MAGNET
+        return types.LinkType.magnet
     if urlparse(url).path.endswith('torrent'):
-        return types.LINK_TYPE_TORRENT
+        return types.LinkType.torrent
     if not url.startswith('http'):
         # such as ed2k://xxx, we treat it as general
         # whether it could be downloaded depeneds on the download softwear
-        return types.LINK_TYPE_GENERAL
+        return types.LinkType.general
     # rfc6266: guess link type
     try:
         resp = controller.head(url, timeout=30, allow_redirects=True)
@@ -75,12 +75,12 @@ def get_link_type(url: str, controller: requests.Session) -> str:
             content_disposition = resp.headers.get('content-disposition')
             _, params = cgi.parse_header(content_disposition)
             if params['filename'] and params['filename'].endswith('torrent'):
-                return types.LINK_TYPE_TORRENT
+                return types.LinkType.torrent
     except Exception as err:
         logging.warning('Rfc6266 get link type error:%s', err)
 
     # TODO: implement other type, like music mv or short video
-    return types.LINK_TYPE_GENERAL
+    return types.LinkType.general
 
 
 def parse_cookie_string(cookie: str) -> dict:
@@ -173,3 +173,10 @@ def get_img_b64(path):
             base64_string = base64_encoded.decode("utf-8")
             return base64_string
     return ""
+
+
+def translate_provider_type(_type: str) -> str:
+    type_split = _type.split("_")
+    if len(type_split) > 1:
+        return "".join([i.capitalize() for i in type_split])
+    return _type

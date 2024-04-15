@@ -26,7 +26,7 @@ class Aria2DownloadProvider(DownloadProvider):
         """
         super().__init__(
             name=name,
-            supported_link_types=[types.LINK_TYPE_GENERAL, types.LINK_TYPE_MAGNET, types.LINK_TYPE_TORRENT],
+            supported_link_types=types.LinkType.types(),
             priority=priority
         )
         self.rpc_endpoint_host = rpc_endpoint_host

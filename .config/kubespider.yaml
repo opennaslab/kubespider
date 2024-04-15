@@ -12,3 +12,5 @@ auth_token:
 telegram_bot_token:
 # limit only this username send message to bot will be handled
 telegram_username:
+# session expired time, default 3600 seconds
+permanent_session_lifetime: 3600

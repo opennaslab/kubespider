@@ -2,20 +2,17 @@ import time
 import logging
 import queue
 import os
+from apscheduler.schedulers.background import BackgroundScheduler
 
 from utils.values import Config, Downloader
 from utils import helper, types
-from utils.config_reader import YamlFileConfigReader
 from source_provider.provider import SourceProvider
 from core import download_manager, notification_manager
 
 
 class PeriodServer:
     def __init__(self, source_providers) -> None:
-        self.state_config = YamlFileConfigReader(Config.STATE.config_path())
-        self.period_seconds = 3600
-        self.source_providers = source_providers
-        self.queue = queue.Queue()
+        self.scheduler = BackgroundScheduler()
 
     def run_producer(self) -> None:
         while True:
@@ -41,7 +38,7 @@ class PeriodServer:
         self.queue.put(True)
 
     def run_single_provider(self, provider: SourceProvider) -> TypeError:
-        if provider.get_provider_listen_type() != types.SOURCE_PROVIDER_PERIOD_TYPE:
+        if provider.get_provider_listen_type() != types.PERIOD_PROVIDER:
             return None
 
         provider.load_config()

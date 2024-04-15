@@ -2,92 +2,87 @@
 import queue
 import time
 import logging
-
-from flask import Flask
-
+import traceback
 import download_provider
 from download_provider import DownloadProvider
+from models import Download, get_session
 from utils import helper, types, global_config
-from utils.config_reader import YamlFileConfigReader
 from utils.helper import retry
-from utils.values import Config, Extra, Resource, Task, Downloader
+from utils.values import Resource, Task, Downloader
 
 
 class DownloadManager:
-    def __init__(self, app=None) -> None:
-        self.download_config = YamlFileConfigReader(Config.DOWNLOAD_PROVIDER.config_path())
+    def __init__(self) -> None:
         self.queue = queue.Queue(maxsize=100)
         self.instances = {}
-        if app:
-            self.init_app(app)
-        self.reload_instance()
-
-    def init_app(self, app: Flask):
-        if "download_manager" in app.extensions:
-            raise RuntimeError(
-                "A 'DownloadManager' instance has already been registered on this Flask app."
-                " Import and use that instance instead."
-            )
-        app.extensions["download_manager"] = self
+        self.session = get_session()
 
     @staticmethod
     def get_definitions():
         return [provider.definitions().serializer() for provider in download_provider.providers]
 
+    def get_download_models(self, enable=None):
+        if enable is not None:
+            return self.session.query(Download).filter_by(enable=enable).all()
+        return self.session.query(Download).all()
+
     def get_confs(self) -> dict:
-        download_config = self.download_config.read()
         data = {}
-        for key, conf in download_config.items():
-            if key in self.instances.keys():
-                conf["is_alive"] = self.instances[key].is_alive
-            else:
-                conf["is_alive"] = False
-            data[key] = conf
+        for instance in self.get_download_models():
+            _id = instance.id
+            config = instance.config
+            name = instance.name
+            _type = instance.type
+            enable = instance.enable
+            is_alive = self.instances[name].is_alive if name in self.instances.keys() else False
+            config.update(name=name, type=_type, enable=enable, is_alive=is_alive, id=_id)
+            data[name] = config
         return data
 
     def create_or_update(self, reload=True, **kwargs):
+        _id = kwargs.get("id")
         name = kwargs.get("name")
-        config = self.download_config.read()
-        exists = config.get(name)
-        extra_params = {}
-        if exists:
-            extra_params.update(exists)
-        extra_params.update(kwargs)
-        config_type = extra_params.pop('type')
-        enable = extra_params.pop('enable')
-        notification_config = DownloadConfig(config_type, enable, **extra_params)
-        notification_config.validate()
-
-        config[name] = notification_config.to_dict()
-        self.download_config.save(config)
+        config_type = kwargs.pop('type')
+        enable = kwargs.pop('enable')
+        download_conf = self.session.query(Download).filter_by(id=_id).first() or Download()
+        self.validate_config(config_type, **kwargs)
+        download_conf.name = name
+        download_conf.type = config_type
+        download_conf.config = kwargs
+        download_conf.enable = enable
+        self.session.add(download_conf)
+        self.session.commit()
         if reload:
             self.reload_instance()
 
-    def remove(self, name, reload=True):
-        config = self.download_config.read()
-        config.pop(name, None)
-        self.download_config.save(config)
-        if reload:
+    def remove(self, _id, reload=True):
+        config_model = self.session.query(Download).filter_by(id=_id).first()
+        if config_model:
+            self.session.delete(config_model)
+            self.session.commit()
             self.reload_instance()
+            if reload:
+                self.reload_instance()
 
     def reload_instance(self):
-        for name, conf in self.get_confs().items():
+        for download_model in self.get_download_models(enable=True):
             try:
-                if conf.get("enable"):
-                    cls = DownloadConfig.get_provider_by_type(conf.get("type"))
-                    definitions = cls.definitions()
-                    params = {}
-                    for arg_name in definitions.arguments.keys():
-                        params[arg_name] = conf.get(arg_name)
-                    if not params.get("name"):
-                        params["name"] = name
-                    # pylint: disable=E1102
-                    instance = cls(**params)
-                    self.instances[name] = instance
-                    logging.info('[DownloadManager] %s enabled...', name)
+                config = download_model.config
+                cls = self.get_download_provider_by_type(download_model.type)
+                definitions = cls.definitions()
+                params = {}
+                for arg_name in definitions.arguments.keys():
+                    params[arg_name] = config.get(arg_name)
+                if not params.get("name"):
+                    params["name"] = download_model.name
+                # pylint: disable=E1102
+                instance = cls(**params)
+                self.instances[download_model.name] = instance
+                logging.info('[DownloadManager] %s enabled...', download_model.name)
             except Exception as err:
-                logging.warning('[DownloadManager] %s enabled failed, %s', name, err)
-        logging.info("[DownloadManager] instance reload success ...")
+                traceback.print_exc()
+                logging.warning('[DownloadManager] %s enabled failed, %s', download_model.name, err)
+        logging.info("[DownloadManager] instance reload finish ...")
 
     def filter_downloader_by_name(self, names: list[str], download_providers: list = None) -> list[DownloadProvider]:
         download_providers = download_providers or self.instances.values()
@@ -106,7 +101,6 @@ class DownloadManager:
 
     def filter_bind_downloader(self, bind_downloader: Downloader) -> list[DownloadProvider]:
         download_providers = self.instances.values()
-        print(download_providers)
         if bind_downloader is None:
             return list(download_providers)
         download_provider_type = bind_downloader.download_provider_type
@@ -119,7 +113,6 @@ class DownloadManager:
         if download_provider_names is not None:
             # Filter by provider name
             download_providers = self.filter_downloader_by_name(download_provider_names, download_providers)
-        print(download_providers)
         return download_providers
 
     def download_file(self, resource: Resource, downloader: Downloader = None) -> TypeError:
@@ -135,18 +128,19 @@ class DownloadManager:
         link_type = resource.link_type
         logging.info('download link type %s, with provider size %s', link_type, len(downloader_list))
 
-        if link_type == types.LINK_TYPE_TORRENT:
+        if link_type == types.LinkType.torrent:
             return self.handle_torrent_download(resource, downloader_list)
 
-        if link_type == types.LINK_TYPE_MAGNET:
+        if link_type == types.LinkType.magnet:
             return self.handle_magnet_download(resource, downloader_list)
 
-        if link_type == types.LINK_TYPE_GENERAL:
+        if link_type == types.LinkType.general:
             return self.handle_general_download(resource, downloader_list)
 
         logging.warning("[DownloadManager] Unknown link type:%s", link_type)
 
     def period_run(self):
+        logging.info('Download trigger job start running...')
         while True:
             time.sleep(180)
             for downloader in self.instances.values():
@@ -197,7 +191,7 @@ class DownloadManager:
             err = provider.send_torrent_task(Task(
                 url=tmp_file,
                 path=resource.path,
-                link_type=types.LINK_TYPE_TORRENT,
+                link_type=types.LinkType.torrent,
                 **resource.extra_params()
             ))
             if err is not None:
@@ -215,7 +209,7 @@ class DownloadManager:
             err = provider.send_magnet_task(Task(
                 url=resource.url,
                 path=resource.path,
-                link_type=types.LINK_TYPE_MAGNET,
+                link_type=types.LinkType.magnet,
                 **resource.extra_params()
             ))
             if err is not None:
@@ -233,7 +227,7 @@ class DownloadManager:
             err = provider.send_general_task(Task(
                 url=resource.url,
                 path=resource.path,
-                link_type=types.LINK_TYPE_GENERAL,
+                link_type=types.LinkType.general,
                 **resource.extra_params()
             ))
             if err is not None:
@@ -256,41 +250,17 @@ class DownloadManager:
         for provider in downloader_list:
             provider.remove_tasks([])
 
-
-class DownloadConfig(Extra):
-    def __init__(self, config_type: str, enable: bool, **kwargs) -> None:
-        super().__init__(**kwargs)
-        self.name = kwargs.get("name")
-        self.type = config_type
-        self.enable = enable
-
-    @classmethod
-    def get_provider_by_type(cls, _type: str):
-        _type: str = cls.translate_type(_type)
+    @staticmethod
+    def get_download_provider_by_type(_type: str):
         provider_cls = getattr(download_provider, _type, None)
         if not provider_cls:
             raise ValueError("type missing or invalid")
         return provider_cls
 
-    def validate(self):
-        provider = self.get_provider_by_type(self.type)
+    def validate_config(self, _type, **arguments):
+        provider = self.get_download_provider_by_type(_type)
         definition = provider.definitions()
-        definition.validate(**self.extra_params())
-
-    @staticmethod
-    def translate_type(_type: str) -> str:
-        type_split = _type.split("_")
-        if len(type_split) > 1:
-            return "".join([i.capitalize() for i in type_split])
-        return _type
-
-    def to_dict(self) -> dict:
-        provider = self.get_provider_by_type(self.type)
-        return {
-            "type": provider.__name__,
-            "enable": bool(self.enable),
-            **self.extra_params()
-        }
+        definition.validate(**arguments)
 
 
-kubespider_download_server: DownloadManager = None
+download_manager: DownloadManager = DownloadManager()

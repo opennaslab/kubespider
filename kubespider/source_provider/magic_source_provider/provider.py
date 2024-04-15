@@ -14,7 +14,7 @@ class MagicSourceProvider(provider.SourceProvider):
 
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(config_reader)
-        self.provider_listen_type = types.SOURCE_PROVIDER_DISPOSABLE_TYPE
+        self.provider_listen_type = types.ProviderTypes.parser
         self.webhook_enable = True
         self.provider_type = 'magic_source_provider'
         self.provider_name = name
@@ -23,8 +23,8 @@ class MagicSourceProvider(provider.SourceProvider):
         self.link_selector = cfg.get('link_selector')
         self.title_selector = cfg.get('title_selector')
         # optional config
-        self.link_type = cfg.get('link_type', types.LINK_TYPE_MAGNET)
-        self.file_type = cfg.get('file_type', types.FILE_TYPE_VIDEO_MIXED)
+        self.link_type = cfg.get('link_type', types.LinkType.magnet)
+        self.file_type = cfg.get('file_type', types.FileType.video_mixed)
         self.charset = cfg.get('charset', 'utf-8')
         self.cookie = cfg.get('cookie', None)
         self.pre_download = bool(cfg.get('pre_download', False))
@@ -95,7 +95,7 @@ class MagicSourceProvider(provider.SourceProvider):
 
         links = self.filter_links(event, links)
 
-        if self.link_type == types.LINK_TYPE_TORRENT:
+        if self.link_type == types.LinkType.torrent:
             links = self.pre_download_file(event, links)
 
         if len(links) < 1:

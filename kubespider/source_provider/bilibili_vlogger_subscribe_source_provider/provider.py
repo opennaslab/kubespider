@@ -19,29 +19,32 @@ mixinKeyEncTab = [
     36, 20, 34, 44, 52
 ]
 
+
 def get_mixin_key(orig: str):
     return reduce(lambda s, i: s + orig[i], mixinKeyEncTab, '')[:32]
+
 
 def enc_wbi(params: dict, img_key: str, sub_key: str):
     mixin_key = get_mixin_key(img_key + sub_key)
     curr_time = round(time.time())
-    params['wts'] = curr_time                                   # 添加 wts 字段
-    params = dict(sorted(params.items()))                       # 按照 key 重排参数
+    params['wts'] = curr_time  # 添加 wts 字段
+    params = dict(sorted(params.items()))  # 按照 key 重排参数
     params = {
-        k : ''.join(filter(lambda chr: chr not in "!'()*", str(v)))
+        k: ''.join(filter(lambda chr: chr not in "!'()*", str(v)))
         for k, v
         in params.items()
     }
-    query = urllib.parse.urlencode(params)                      # 序列化参数
-    wbi_sign = md5((query + mixin_key).encode()).hexdigest()    # 计算 w_rid
+    query = urllib.parse.urlencode(params)  # 序列化参数
+    wbi_sign = md5((query + mixin_key).encode()).hexdigest()  # 计算 w_rid
     params['w_rid'] = wbi_sign
     return params
+
 
 class BilibiliVloggerSubscribeSourceProvider(provider.SourceProvider):
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(config_reader)
-        self.provider_listen_type = types.SOURCE_PROVIDER_PERIOD_TYPE
-        self.link_type = types.LINK_TYPE_GENERAL
+        self.provider_listen_type = types.ProviderTypes.scheduler
+        self.link_type = types.LinkType.general
         self.webhook_enable = True
         self.provider_type = 'bilibili_vlogger_subscribe_source_provider'
         self.provider_name = name
@@ -119,7 +122,7 @@ class BilibiliVloggerSubscribeSourceProvider(provider.SourceProvider):
                     ret.append(Resource(
                         url=link,
                         path=path,
-                        file_type=types.FILE_TYPE_VIDEO_MIXED,
+                        file_type=types.FileType.video_mixed,
                         link_type=self.get_link_type(),
                     ))
                     logging.info("BilibiliVloggerSubscribeSourceProvider get links %s", link)

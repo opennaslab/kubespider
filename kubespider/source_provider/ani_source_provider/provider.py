@@ -24,8 +24,8 @@ class AniSourceProvider(provider.SourceProvider):
     '''
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(config_reader)
-        self.provider_listen_type = types.SOURCE_PROVIDER_PERIOD_TYPE
-        self.link_type = types.LINK_TYPE_GENERAL
+        self.provider_listen_type = types.ProviderTypes.scheduler
+        self.link_type = types.LinkType.general
         self.webhook_enable = False
         self.provider_type = 'ani_source_provider'
         self.rss_link = ''

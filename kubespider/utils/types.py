@@ -1,16 +1,50 @@
 # Used to define the api types in the project
 
-SOURCE_PROVIDER_PERIOD_TYPE = "period"
-SOURCE_PROVIDER_DISPOSABLE_TYPE = "disposable"
 
-LINK_TYPE_GENERAL = "general"
-LINK_TYPE_MAGNET = "magnet"
-LINK_TYPE_TORRENT = "torrent"
+class FileType:
+    common = "common"
+    general = "general"
+    tv = "tv"
+    movie = "movie"
+    video_mixed = "video_mixed"
+    video_9kg = "video_9kg"
+    music = "music"
+    picture = "picture"
+    document = "document"
 
-FILE_TYPE_COMMON = "general"
-FILE_TYPE_VIDEO_TV = "tv"
-FILE_TYPE_VIDEO_MOVIE = "movie"
-FILE_TYPE_VIDEO_MIXED = "video_mixed"
-FILE_TYPE_MUSIC = "music"
-FILE_TYPE_PICTIRE = "picture"
-FILE_TYPE_PT = "pt"
+    @classmethod
+    def types(cls) -> list:
+        return [
+            cls.common, cls.general, cls.tv, cls.movie, cls.video_mixed,
+            cls.video_9kg, cls.music, cls.picture, cls.document
+        ]
+
+
+class LinkType:
+    general = "general"
+    magnet = "magnet"
+    torrent = "torrent"
+
+    @classmethod
+    def types(cls) -> list:
+        return [cls.general, cls.magnet, cls.torrent]
+
+
+class ProviderTypes:
+    parser = "parser"
+    search = "search"
+    scheduler = "scheduler"
+
+    @classmethod
+    def types(cls) -> list:
+        return [cls.parser, cls.search, cls.scheduler]
+
+
+class PluginTypes:
+    parser = "parser"
+    search = "search"
+    scheduler = "scheduler"
+
+    @classmethod
+    def types(cls) -> list:
+        return [cls.parser, cls.search, cls.scheduler]

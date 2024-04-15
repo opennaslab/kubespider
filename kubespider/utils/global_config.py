@@ -1,7 +1,9 @@
 import logging
-
+import os
 from utils.config_reader import YamlFileConfigReader
 from utils import values
+from utils.values import CFG_BASE_PATH
+from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 
 
 def get_global_config() -> YamlFileConfigReader:
@@ -48,9 +50,15 @@ def get_telegram_username() -> [str, None]:
 
 
 class APPConfig:
-    SESSION_USE_SIGNER = True
-    SESSION_PERMANENT = False
-    PERMANENT_SESSION_LIFETIME = 86400 * 2
+    # database
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(CFG_BASE_PATH, 'kubespider.db')}"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # scheduler
+    SCHEDULER_JOBSTORES = {
+        'default': SQLAlchemyJobStore(url=f"sqlite:///{os.path.join(CFG_BASE_PATH, 'kubespider.db')}")
+    }
+    SCHEDULER_API_ENABLED = False
 
     LOG_LEVEL = cfg.get('log_level', logging.INFO)
     PROXY = cfg.get('proxy', "")

@@ -10,7 +10,7 @@ import execjs
 import bencodepy
 
 from download_provider import provider
-from utils import types
+from utils.types import LinkType
 from utils.helper import get_request_controller
 from utils.values import Task
 
@@ -31,7 +31,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         """
         super().__init__(
             name=name,
-            supported_link_types=[types.LINK_TYPE_TORRENT, types.LINK_TYPE_MAGNET, types.LINK_TYPE_GENERAL],
+            supported_link_types=LinkType.types(),
             priority=priority
         )
         self.request_handler = get_request_controller(use_proxy=use_proxy)

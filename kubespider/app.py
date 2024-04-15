@@ -31,7 +31,7 @@ def print_logo():
 
 
 def main():
-    runner.run_with_config_handler()
+    runner.run()
 
 
 if __name__ == "__main__":

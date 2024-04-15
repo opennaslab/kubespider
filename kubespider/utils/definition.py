@@ -24,7 +24,8 @@ class ArgumentsFiled:
         if self._type == list:
             self.items = self.__class__(**kwargs.get("items", {}))
         if self._type == dict:
-            self.properties = {key: self.__class__(**item) for key, item in kwargs.get("properties", {}).items()}
+            properties = kwargs.get("properties") or {}
+            self.properties = {key: self.__class__(**item) for key, item in properties.items()}
 
     @classmethod
     def type_to_string(cls, _type):

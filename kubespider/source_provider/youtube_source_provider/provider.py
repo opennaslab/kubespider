@@ -13,8 +13,8 @@ from utils.config_reader import AbsConfigReader
 class YouTubeSourceProvider(provider.SourceProvider):
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(config_reader)
-        self.provider_listen_type = types.SOURCE_PROVIDER_DISPOSABLE_TYPE
-        self.link_type = types.LINK_TYPE_GENERAL
+        self.provider_listen_type = types.ProviderTypes.parser
+        self.link_type = types.LinkType.general
         self.webhook_enable = True
         self.provider_type = 'youtube_source_provider'
         self.provider_name = name
@@ -62,7 +62,7 @@ class YouTubeSourceProvider(provider.SourceProvider):
         return [Resource(
             url=event.source,
             path='',
-            file_type=types.FILE_TYPE_VIDEO_MIXED,
+            file_type=types.FileType.video_mixed,
             link_type=self.get_link_type(),
         )]
 
