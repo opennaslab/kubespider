@@ -21,6 +21,8 @@ mikanani_source_provider:
     tags:
       - mikanani
   filter: ^((?!先行).)*$
+  use_sub_category: true
+  custom_category_mapping:
 ```
 
 * `type`：订阅源类型，需为`meijutt_source_provider`。
@@ -35,6 +37,16 @@ mikanani_source_provider:
 * `downloader`：指定使用的下载器，格式为数组，内容需要精确地跟 `downloader_provider.yaml` 中声明的名称一样；下载优先级将由数组顺序决定。
 * `download_param`：下载时传给下载器的额外参数，具体参数需要参考下载器定义。
 * `filter`：用于过滤标题名的正则表达式。
+* `use_sub_category`：qBittorrent的子分类支持，有助于高效管理番剧内容，这里使用的分类名是Mikan Project动画详情中左上角的标题。
+   ![img](images/4.png)
+* `custom_category_mapping`：qBittorrent的子分类映射，用于适配用户自己的内容管理模式，例如：
+
+```yaml
+custom_category_mapping:
+  '无职转生Ⅱ ～到了异世界就拿出真本事～ 第2部分': '无职转生/Season 02'
+  '鲁邦三世 PART6': '鲁邦三世/Season 06'
+  '黑执事 -寄宿学校篇-': '黑执事/Season 04'
+```
 
 ## 启用配置
 设置好后，直接重启Kubespider即可。

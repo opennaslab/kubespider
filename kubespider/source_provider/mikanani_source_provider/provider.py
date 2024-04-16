@@ -25,6 +25,8 @@ class MikananiSourceProvider(provider.SourceProvider):
         self.rss_link = ''
         self.tmp_file_path = '/tmp/'
         self.provider_name = name
+        self.custom_category_mapping = {}
+        self.use_sub_category = False
 
     def get_provider_name(self) -> str:
         return self.provider_name
@@ -95,12 +97,16 @@ class MikananiSourceProvider(provider.SourceProvider):
                 logging.info('mikanani find %s', helper.format_long_string(anime_name))
                 url = i.find('./enclosure').attrib['url']
                 if path is not None and item_title is not None:
-                    ret.append(Resource(
+                    res = Resource(
                         url=url,
                         path=path,
                         file_type=types.FILE_TYPE_VIDEO_TV,
                         link_type=self.get_link_type(),
-                    ))
+                    )
+                    if self.use_sub_category:
+                        res.put_extra_params({'sub_category': self.get_subcategory(path)})
+                        logging.info("Using subcategory: %s", res.extra_param('sub_category'))
+                    ret.append(res)
                 else:
                     logging.warning("Skip %s, %s", anime_name, item_title)
             return ret
@@ -127,6 +133,40 @@ class MikananiSourceProvider(provider.SourceProvider):
         logging.warning("Episode %s will not be downloaded, filtered by %s", title, pattern)
         return None
 
+    def get_subcategory(self, title: str) -> str:
+        # Custom subcategory mapping will cover any generated data
+        for x in self.custom_category_mapping:
+            if x in title:
+                return self.custom_category_mapping[x]
+        # Get Season
+        season = 1
+        keyword = None
+        mapper = {
+            "第二季": 2,
+            "第三季": 3,
+            "第四季": 4,
+            "第五季": 5,
+            "第六季": 6,
+            "第七季": 7,
+            "第八季": 8,
+            "第九季": 9,
+            "第十季": 10
+        }
+        # The user-defined season_mapping has higher priority
+        for kw, s in mapper.items():
+            if kw in title:
+                season = s
+                keyword = kw
+        # Avoid '/' appear in original Anime title
+        # This will be misleading for qbittorrent
+        sub_category = title.replace('/', '_')
+        if season > 1:
+            s_ = str(season).zfill(2)
+            sub_category = sub_category.replace(f" {keyword}", '') + f"/Season {s_}"
+        if sub_category[-1] in "<>:\"/\\|?* ":
+            sub_category = sub_category[:-1] + "_"
+        return sub_category
+
     def update_config(self, event: Event) -> None:
         pass
 
@@ -134,6 +174,8 @@ class MikananiSourceProvider(provider.SourceProvider):
         cfg = self.config_reader.read()
         logging.info('mikanani rss link is:%s', cfg['rss_link'])
         self.rss_link = cfg['rss_link']
+        self.custom_category_mapping = cfg.get('custom_category_mapping', {})
+        self.use_sub_category = cfg.get('use_sub_category', False)
 
     def get_file_title(self, link: str) -> str:
         # example: https://mikanani.me/Home/Episode/5350b283db7d8e4665a08dda24d0d0c66259fc71
