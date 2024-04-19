@@ -28,7 +28,7 @@ class QbittorrentDownloadProvider(DownloadProvider):
         """
         super().__init__(
             name=name,
-            supported_link_types=[types.LINK_TYPE_MAGNET, types.LINK_TYPE_TORRENT],
+            supported_link_types=[types.LinkType.magnet, types.LinkType.torrent],
             priority=priority
         )
         self.http_endpoint_host = http_endpoint_host

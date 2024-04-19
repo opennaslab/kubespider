@@ -12,7 +12,7 @@ class PluginBinding:
         if config_type:
             query = query.filter_by(type=config_type)
         if ids:
-            query = query.filter_by(Binding.id.in_(ids))
+            query = query.filter(Binding.id.in_(ids))
         return query.all()
 
     def create_or_update(self, **config_data: dict) -> None:
@@ -27,8 +27,8 @@ class PluginBinding:
         bind_model.name = name
         bind_model.type = config_type
         bind_model.plugin_id = plugin.id
+        bind_model.plugin = plugin
         bind_model.arguments = config_data
-        bind_model.plugin_instance = plugin
         self.__validate(bind_model)
         self.session.add(bind_model)
         self.session.commit()

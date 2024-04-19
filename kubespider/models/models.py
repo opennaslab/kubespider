@@ -14,10 +14,6 @@ class BaseModel(object):
     update_time = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
 
-class EmptyModelAttr:
-    ...
-
-
 class Download(BaseModel, Base):
     __tablename__ = 'download'
 
@@ -135,7 +131,6 @@ class PeriodTask(BaseModel, Base):
             "tigger_type": self.tigger_type,
             "tigger_config": self.tigger_config,
             "arguments": self.arguments,
-            "bindings": self.binding_ids.split(','),
             "enable": self.enable
         }
         return serializer
@@ -160,8 +155,8 @@ class Resource(BaseModel, Base):
     is_read = Column(Boolean, default=False)
     is_download = Column(Boolean, default=False)
 
-    def to_dict(self):
-        data = {
+    def serializer(self):
+        serializer = {
             "uid": self.uid,
             "url": self.url,
             "path": self.path,
@@ -178,4 +173,4 @@ class Resource(BaseModel, Base):
             "is_read": self.is_read,
             "is_download": self.is_download,
         }
-        return data
+        return serializer

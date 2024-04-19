@@ -252,6 +252,7 @@ class DownloadManager:
 
     @staticmethod
     def get_download_provider_by_type(_type: str):
+
         provider_cls = getattr(download_provider, _type, None)
         if not provider_cls:
             raise ValueError("type missing or invalid")

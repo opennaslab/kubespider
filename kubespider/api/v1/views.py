@@ -2,7 +2,7 @@ import logging
 import json
 
 from flask import jsonify, request
-from core import notification_manager, period_server
+from core import notification_manager
 from core import download_manager
 from core.plugin.parser import parser_plugin
 from core.download_manager import download_manager
@@ -66,12 +66,6 @@ def download_handler():
         title="[webhook] download failed", source=source, path=path
     )
     return send_bad_response(err)
-
-
-@v1_blu.route('/refresh', methods=['GET'])
-def refresh_handler():
-    period_server.kubespider_period_server.trigger_run()
-    return send_ok_response()
 
 
 def send_ok_response():
