@@ -24,3 +24,4 @@ mkdocs-static-i18n==0.56
 telepot==12.7
 SQLAlchemy~=2.0.27
 Flask-Cors==4.0.0
+APScheduler==3.10.4

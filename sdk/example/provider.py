@@ -6,7 +6,7 @@ from lxml import etree
 
 from kubespider_plugin import utils as helper
 from kubespider_plugin.sdk import SDK, ParserProvider
-from kubespider_plugin.values import FileType, LinkType
+from kubespider_plugin.values import FileType, LinkType, KubespiderContext
 
 
 def pre_download_file(event: dict, links: list) -> list:
@@ -48,7 +48,7 @@ class Provider(ParserProvider):
 
     @staticmethod
     # pylint: disable=too-many-locals
-    def get_links(source: str, **kwargs):
+    def get_links(source: str, context: KubespiderContext, **kwargs):
         event: dict = kwargs
         # extract the params from the event
         link_selector = event.get('link_selector', None)
@@ -113,7 +113,7 @@ class Provider(ParserProvider):
         return ret
 
     @staticmethod
-    def should_handle(source: str, **kwargs):
+    def should_handle(source: str, context: KubespiderContext, **kwargs):
         handle_host = kwargs.get('handle_host', None)
         if not handle_host:
             return False

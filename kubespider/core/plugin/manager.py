@@ -11,6 +11,7 @@ from plugin_provider.parser import ParserProvider
 from plugin_provider.search import SearchProvider
 from plugin_provider.scheduler import SchedulerProvider
 from utils.definition import Definition
+from utils.global_config import APPConfig
 from utils.types import ProviderTypes, PluginTypes
 from utils.values import CFG_BASE_PATH
 from utils import helper
@@ -38,7 +39,7 @@ class PluginInstance:
 
         self.port = helper.get_free_port()
         # start the plugin
-        command = f"{binary} --name {self.definition.name} --port {self.port}"
+        command = f"{binary} --name={self.definition.name} --port={self.port} --proxy={APPConfig.PROXY or ''}"
         self.process = subprocess.Popen(command, shell=True)
         _thread.start_new_thread(self.__run_plugin, ())
         # wait for the plugin to start
@@ -60,7 +61,7 @@ class PluginInstance:
         try:
             self.call_api("_health", timeout=2)
             return True
-        except Exception as e:
+        except Exception:
             return False
 
     def call_api(self, api: str, timeout=30, **kwargs) -> dict:
@@ -144,7 +145,7 @@ class PluginManager:
             os.chmod(binary_file, 0o755)
         # Save the plugin definition
         definition_dict = definition.serializer()
-        plugin = Plugin()
+        plugin = self.session.query(Plugin).filter_by(name=definition.name).first() or Plugin()
         plugin.name = definition_dict.get("name")
         plugin.version = definition_dict.get("version")
         plugin.author = definition_dict.get("author")
@@ -156,15 +157,17 @@ class PluginManager:
         plugin.arguments = definition_dict.get("arguments")
         self.session.add(plugin)
         self.session.commit()
+        if self.instances.get(plugin.name):
+            self.disable(plugin)
         self.definitions[definition.name] = definition
-        logging.info(f'Plugin {plugin.name} registered')
+        logging.info('Plugin %s registered', plugin.name)
 
     def unregister(self, plugin: [str, Plugin]):
         if isinstance(plugin, str):
             plugin = self.session.query(Plugin).filter_by(name=plugin).first()
         configs = plugin_binding.list_config()
         for config in configs:
-            if config.plugin == plugin.id:
+            if config.plugin.id == plugin.id:
                 raise Exception(f'Plugin {plugin.name} is used by {config.name} currently, please delete it first...')
         definition = self.definitions.get(plugin.name)
         if not definition:
@@ -180,13 +183,13 @@ class PluginManager:
             pass
         self.session.delete(plugin)
         self.session.commit()
-        logging.info(f'Plugin {plugin.name} unregister')
+        logging.info('Plugin %s unregister', plugin.name)
 
     def enable(self, plugin: [str, Plugin]):
         if isinstance(plugin, str):
             plugin = self.session.query(Plugin).filter_by(name=plugin).first()
         if not plugin:
-            raise Exception(f"Plugin not found")
+            raise Exception("Plugin not found")
         definition = Definition.init_from_dict(**plugin.serializer())
         if self.instances.get(plugin.name):
             # Just ignore re-enable plugin operation
@@ -202,7 +205,7 @@ class PluginManager:
         if isinstance(plugin, str):
             plugin = self.session.query(Plugin).filter_by(name=plugin).first()
         if not plugin:
-            raise Exception(f"Plugin not found")
+            raise Exception("Plugin not found")
         instance = self.instances.get(plugin.name)
         if not instance:
             # Just ignore re-disable plugin operation
@@ -222,15 +225,17 @@ class PluginManager:
     def provider_maker(self, bind, provider_type=None):
         bind_type = bind.type
         plugin_instance = self.get_instance(bind.plugin.name)
+        provider = None
         if not plugin_instance:
-            logging.warning(f"[PluginManager] Plugin: {bind.plugin_name} has gone")
-            return
+            logging.warning("[PluginManager] Plugin: %s has gone", bind.plugin.name)
+            return provider
         if provider_type == ProviderTypes.scheduler and bind_type == PluginTypes.scheduler:
-            return self.__make_scheduler_provider(bind_type, plugin_instance)
+            provider = self.__make_scheduler_provider(bind_type, plugin_instance)
         elif provider_type == ProviderTypes.search and bind_type in [PluginTypes.search, PluginTypes.scheduler]:
-            return self.__make_search_provider(bind, plugin_instance)
+            provider = self.__make_search_provider(bind, plugin_instance)
         elif provider_type == ProviderTypes.parser and bind_type in PluginTypes.types():
-            return self.__make_parser_provider(bind, plugin_instance)
+            provider = self.__make_parser_provider(bind, plugin_instance)
+        return provider
 
     @staticmethod
     def __make_parser_provider(bind, plugin_instance):

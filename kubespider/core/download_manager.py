@@ -2,7 +2,6 @@
 import queue
 import time
 import logging
-import traceback
 import download_provider
 from download_provider import DownloadProvider
 from models import Download, get_session
@@ -80,7 +79,6 @@ class DownloadManager:
                 self.instances[download_model.name] = instance
                 logging.info('[DownloadManager] %s enabled...', download_model.name)
             except Exception as err:
-                traceback.print_exc()
                 logging.warning('[DownloadManager] %s enabled failed, %s', download_model.name, err)
         logging.info("[DownloadManager] instance reload finish ...")
 
@@ -252,6 +250,7 @@ class DownloadManager:
 
     @staticmethod
     def get_download_provider_by_type(_type: str):
+
         provider_cls = getattr(download_provider, _type, None)
         if not provider_cls:
             raise ValueError("type missing or invalid")

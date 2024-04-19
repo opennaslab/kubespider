@@ -44,7 +44,6 @@ class TelegramNotificationProvider(provider.NotificationProvider):
                     if chat.get("type") == "channel" and chat.get("title") == channel_name:
                         channel_chat_id = chat.get("id")
         logging.error("[Telegram] chat_id not found, response: %s", resp)
-        print(channel_chat_id)
         if channel_chat_id:
             self.save_conf(channel_chat_id=channel_chat_id)
         return channel_chat_id

@@ -2,7 +2,6 @@
 # Function: download anime updated on ANi project
 # encoding:utf-8
 import logging
-import traceback
 
 import xml.etree.ElementTree as ET
 import re
@@ -13,6 +12,7 @@ from utils.values import Event, Resource
 from utils import helper, types
 from utils.config_reader import AbsConfigReader
 
+
 class AniSourceProvider(provider.SourceProvider):
     '''This provider is to sync resources from ANi API: https://api.ani.rip/ani-download.xml
     For the most timely follow-up of Anime updates. 
@@ -22,6 +22,7 @@ class AniSourceProvider(provider.SourceProvider):
     Bool classification_on_directory: Choose whether the files is saved to directory according to title
     Array blacklist: Anime title that match the array will not be downloaded. NO REGEX SUPPORT.
     '''
+
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(config_reader)
         self.provider_listen_type = types.ProviderTypes.scheduler
@@ -108,7 +109,6 @@ class AniSourceProvider(provider.SourceProvider):
                     continue
             return ret
         except Exception as err:
-            print(traceback.format_exc())
             logging.info('Error while parsing RSS XML: %s', err)
             return []
 

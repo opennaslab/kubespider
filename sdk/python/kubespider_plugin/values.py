@@ -8,7 +8,6 @@ class Resource:
         """
         Resource, used to describe the resource to be downloaded, result of the source provider
         """
-        super().__init__(**kwargs)
         self.url = url
         self.path = path
         self.link_type = link_type
@@ -75,3 +74,14 @@ class FileType:
             cls.common, cls.general, cls.tv, cls.movie, cls.video_mixed,
             cls.video_9kg, cls.music, cls.picture, cls.document
         ]
+
+
+class KubespiderContext:
+    proxy: str
+    plugin_name: str
+    plugin_port: str
+
+    def __init__(self, **kwargs):
+        self.proxy = kwargs.get("proxy", "")
+        self.plugin_name = kwargs.get("name", "")
+        self.plugin_port = kwargs.get("port", "")

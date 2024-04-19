@@ -48,8 +48,6 @@ def register_from_remote():
     if 'definition' not in data:
         raise Exception("definition is required")
     definition = get_definition(data['definition'])
-    if plugin_manager.get_plugin(definition.name):
-        plugin_manager.unregister(definition.name)
     plugin_manager.register(definition)
     return success()
 
@@ -61,8 +59,6 @@ def register_from_local():
     if not all([definition_file, binary]):
         return param_error(msg="definition and binary cannot be empty")
     definition = get_definition(definition_file.read())
-    if plugin_manager.get_plugin(definition.name):
-        plugin_manager.unregister(definition.name)
     plugin_manager.register(definition, binary.read())
     return success()
 

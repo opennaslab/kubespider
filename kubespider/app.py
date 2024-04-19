@@ -2,6 +2,7 @@ import sys
 import os
 
 from core import runner
+from models.migrate import migrate
 
 
 def check_python_version():
@@ -10,10 +11,6 @@ def check_python_version():
     if version_info < min_version:
         msg = f'Python version should be higher or equal to {min_version}.'
         raise Exception(msg)
-
-
-def migrate():
-    pass
 
 
 def print_logo():
@@ -31,6 +28,7 @@ def print_logo():
 
 
 def main():
+    migrate()
     runner.run()
 
 

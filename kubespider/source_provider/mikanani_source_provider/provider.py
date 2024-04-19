@@ -97,7 +97,7 @@ class MikananiSourceProvider(provider.SourceProvider):
                     ret.append(Resource(
                         url=url,
                         path=path,
-                        file_type=types.FILE_TYPE_VIDEO_TV,
+                        file_type=types.FileType.tv,
                         link_type=self.get_link_type(),
                     ))
                 else:

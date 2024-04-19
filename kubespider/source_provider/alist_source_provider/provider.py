@@ -115,7 +115,7 @@ class AlistSourceProvider(provider.SourceProvider):
                 new_path = os.path.join(path, item.get("name"))
                 files += self.get_all_files(new_path)
             else:
-                item["file_type"] = types.FILE_TYPE_COMMON
+                item["file_type"] = types.FileType.common
                 uri = os.path.join("/d", os.path.join(item.get("path", "").strip('/'), item.get("name", "")))
                 md5 = (item.get("hash_info") or {}).get("md5", get_unique_hash(uri))
                 sign = item.get("sign", "")

@@ -1,5 +1,5 @@
 import json
-from flask import request, current_app
+from flask import request
 from api.response import success
 from api.v2.binding import binding_blu
 from core.plugin.binding import plugin_binding

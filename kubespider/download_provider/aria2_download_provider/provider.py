@@ -58,7 +58,7 @@ class Aria2DownloadProvider(DownloadProvider):
                 self.aria2.remove([single_download], force=True)
                 pending_task = Task(
                     url='magnet:?xt=urn:btih:' + single_download.info_hash,
-                    file_type=types.LINK_TYPE_MAGNET,
+                    file_type=types.LinkType.magnet,
                     path=str(single_download.dir).removeprefix(self.download_base_path)
                 )
                 defective_tasks.append(pending_task)

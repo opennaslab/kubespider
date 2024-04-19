@@ -66,7 +66,7 @@ class BilibiliSourceProvider(provider.SourceProvider):
             url=event.source,
             path='',
             link_type=self.get_link_type(),
-            file_type=types.FILE_TYPE_VIDEO_MIXED,
+            file_type=types.FileType.video_mixed,
         )]
 
     def update_config(self, event: Event) -> None:

@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 
 import telepot
 from telepot.loop import MessageLoop
-from core import notification_manager
+from core.notification_manager import notification_manager
 
 import utils.helper
 from utils.values import Event
@@ -38,11 +38,11 @@ def download_handler(msg):
             err = parser_plugin.download_with_parser_provider(event)
 
             if err is None:
-                notification_manager.kubespider_notification_server.send_message(
+                notification_manager.send_message(
                     title="[telegram hook] start download", source=source, path=path
                 )
             else:
-                notification_manager.kubespider_notification_server.send_message(
+                notification_manager.send_message(
                     title="[telegram hook] download failed", source=source, path=path
                 )
 

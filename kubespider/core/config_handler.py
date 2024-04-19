@@ -9,10 +9,7 @@
 
 import logging
 import os
-import time
-from multiprocessing import Process
 import shutil
-from watchdog.events import FileSystemEventHandler, FileModifiedEvent
 
 from utils.values import Config
 from utils.config_reader import YamlFileSectionConfigReader, YamlFileConfigReader
@@ -44,39 +41,6 @@ source_provider_init_func = {
     'alist_source_provider': alist_source_provider.AlistSourceProvider,
     'ani_source_provider': ani_source_provider.AniSourceProvider,
 }
-
-
-class ConfigHandler(FileSystemEventHandler):
-
-    def __init__(self, run):
-        self.run = run
-        self.p_run = Process(target=run)
-        self.p_run.start()
-
-    def on_modified(self, event: FileModifiedEvent):
-        filepath = os.path.basename(event.src_path)
-
-        monitor_files = [
-            str(Config.DOWNLOAD_PROVIDER),
-            str(Config.KUBESPIDER_CONFIG),
-            str(Config.PT_PROVIDER),
-            str(Config.SOURCE_PROVIDER),
-            str(Config.NOTIFICATION_PROVIDER),
-        ]
-        if filepath not in monitor_files:
-            return
-        logging.info("%s file has be changed, the kubespider will reboot", event.src_path)
-
-        # wait some file handling process finish, to avoid config getting empty
-        time.sleep(3)
-        self.p_run.terminate()
-
-        if self.p_run.is_alive():
-            self.p_run.kill()
-
-        new_p_run = Process(target=self.run)
-        new_p_run.start()
-        self.p_run = new_p_run
 
 
 def get_source_provider(provider_name: str, config: dict):

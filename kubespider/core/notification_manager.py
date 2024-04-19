@@ -2,7 +2,6 @@
 import queue
 import time
 import logging
-import traceback
 import notification_provider
 from models import Notification, get_session
 
@@ -64,7 +63,7 @@ class NotificationManager:
         for notification_model in self.get_notification_models(enable=True):
             try:
                 config = notification_model.config
-                cls = self.get_notification_provider_by_type(notification_model.type)
+                cls = self.get_provider_by_type(notification_model.type)
                 definitions = cls.definitions()
                 params = {}
                 for arg_name in definitions.arguments.keys():
@@ -76,7 +75,6 @@ class NotificationManager:
                 self.instances[notification_model.name] = instance
                 logging.info('[NotificationManager] %s enabled...', notification_model.name)
             except Exception as err:
-                traceback.print_exc()
                 logging.warning('[NotificationManager] %s enabled failed, %s', notification_model.name, err)
         logging.info("[NotificationManager] instance reload finish ...")
 
@@ -97,14 +95,14 @@ class NotificationManager:
             self.queue.put((title, kwargs))
 
     @staticmethod
-    def get_notification_provider_by_type(_type: str):
-        provider_cls = getattr(notification_provider, _type, None)
+    def get_provider_by_type(notification_type: str):
+        provider_cls = getattr(notification_provider, notification_type, None)
         if not provider_cls:
             raise ValueError("type missing or invalid")
         return provider_cls
 
     def validate_config(self, _type, **arguments):
-        provider = self.get_notification_provider_by_type(_type)
+        provider = self.get_provider_by_type(_type)
         definition = provider.definitions()
         definition.validate(**arguments)
 

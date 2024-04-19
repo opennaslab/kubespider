@@ -106,9 +106,9 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
         if ahrefs[0].text.strip() == '剧集' or \
                 ahrefs[0].text.strip() == '高清剧集' or \
                 ahrefs[0].text.strip() == '动漫':
-            return types.FILE_TYPE_VIDEO_TV, title
+            return types.FileType.tv, title
 
         if ahrefs[0].text.strip() == '电影' or ahrefs[0].text.strip() == '高清电影':
-            return types.FILE_TYPE_VIDEO_MOVIE, title
+            return types.FileType.movie, title
 
         return "", ""
