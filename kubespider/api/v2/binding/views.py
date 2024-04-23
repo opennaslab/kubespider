@@ -2,7 +2,7 @@ import json
 from flask import request
 from api.response import success
 from api.v2.binding import binding_blu
-from core.plugin.binding import plugin_binding
+from core.plugin.manager import plugin_binding
 
 
 @binding_blu.route('', methods=['GET'])

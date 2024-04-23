@@ -1,4 +1,4 @@
-from models import Base, engine, get_session
+from models import Base, engine, session_context
 from models.migrate.init import init_download_table, init_notification_table
 
 
@@ -9,5 +9,5 @@ def init(session):
 
 
 def migrate():
-    session = get_session()
-    init(session)
+    with session_context() as session:
+        init(session)

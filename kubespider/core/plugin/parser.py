@@ -7,8 +7,7 @@ from utils.types import ProviderTypes, FileType
 from utils import helper
 from core import config_handler
 from core.download_manager import download_manager
-from core.plugin.manager import plugin_manager
-from core.plugin.binding import plugin_binding
+from core.plugin.manager import plugin_manager, plugin_binding
 
 
 class ParserPlugin:

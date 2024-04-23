@@ -4,7 +4,7 @@ import time
 import logging
 import download_provider
 from download_provider import DownloadProvider
-from models import Download, get_session
+from models import Download, session_context
 from utils import helper, types, global_config
 from utils.helper import retry
 from utils.values import Resource, Task, Downloader
@@ -14,16 +14,17 @@ class DownloadManager:
     def __init__(self) -> None:
         self.queue = queue.Queue(maxsize=100)
         self.instances = {}
-        self.session = get_session()
 
     @staticmethod
     def get_definitions():
         return [provider.definitions().serializer() for provider in download_provider.providers]
 
-    def get_download_models(self, enable=None):
-        if enable is not None:
-            return self.session.query(Download).filter_by(enable=enable).all()
-        return self.session.query(Download).all()
+    @staticmethod
+    def get_download_models(enable=None):
+        with session_context() as session:
+            if enable is not None:
+                return session.query(Download).filter_by(enable=enable).all()
+            return session.query(Download).all()
 
     def get_confs(self) -> dict:
         data = {}
@@ -39,29 +40,31 @@ class DownloadManager:
         return data
 
     def create_or_update(self, reload=True, **kwargs):
-        _id = kwargs.get("id")
-        name = kwargs.get("name")
-        config_type = kwargs.pop('type')
-        enable = kwargs.pop('enable')
-        download_conf = self.session.query(Download).filter_by(id=_id).first() or Download()
-        self.validate_config(config_type, **kwargs)
-        download_conf.name = name
-        download_conf.type = config_type
-        download_conf.config = kwargs
-        download_conf.enable = enable
-        self.session.add(download_conf)
-        self.session.commit()
-        if reload:
-            self.reload_instance()
-
-    def remove(self, _id, reload=True):
-        config_model = self.session.query(Download).filter_by(id=_id).first()
-        if config_model:
-            self.session.delete(config_model)
-            self.session.commit()
-            self.reload_instance()
+        with session_context() as session:
+            _id = kwargs.get("id")
+            name = kwargs.get("name")
+            config_type = kwargs.pop('type')
+            enable = kwargs.pop('enable')
+            download_conf = session.query(Download).filter_by(id=_id).first() or Download()
+            self.validate_config(config_type, **kwargs)
+            download_conf.name = name
+            download_conf.type = config_type
+            download_conf.config = kwargs
+            download_conf.enable = enable
+            session.add(download_conf)
+            session.commit()
             if reload:
                 self.reload_instance()
+
+    def remove(self, _id, reload=True):
+        with session_context() as session:
+            config_model = session.query(Download).filter_by(id=_id).first()
+            if config_model:
+                session.delete(config_model)
+                session.commit()
+                self.reload_instance()
+                if reload:
+                    self.reload_instance()
 
     def reload_instance(self):
         for download_model in self.get_download_models(enable=True):
@@ -138,7 +141,6 @@ class DownloadManager:
         logging.warning("[DownloadManager] Unknown link type:%s", link_type)
 
     def period_run(self):
-        logging.info('Download trigger job start running...')
         while True:
             time.sleep(180)
             for downloader in self.instances.values():

@@ -5,8 +5,7 @@ from models.models import Binding
 from plugin_provider.search import SearchProvider
 from utils.types import ProviderTypes
 from utils.values import SearchEvent
-from core.plugin.manager import plugin_manager
-from core.plugin.binding import plugin_binding
+from core.plugin.manager import plugin_manager, plugin_binding
 
 
 class SearchPlugin:
@@ -44,8 +43,9 @@ class SearchPlugin:
                          event.keyword, ",".join([str(p) for p in providers]))
             for provider in providers:
                 result = provider.search(event)
-                result["plugin"] = provider.plugin_instance.definition.name
-                resource.append(result)
+                for item in result:
+                    item["plugin"] = provider.plugin_instance.definition.name
+                resource += result
         return resource
 
 

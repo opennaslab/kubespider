@@ -68,8 +68,8 @@ class Plugin(BaseModel, Base):
     arguments = Column(JSON)
     enable = Column(Boolean, default=False)
 
-    bindings = relationship('Binding', backref='plugin', lazy=False)
-    resources = relationship('Resource', backref='plugin', lazy=False)
+    bindings = relationship('Binding', back_populates='plugin', lazy="joined")
+    resources = relationship('Resource', back_populates='plugin', lazy="joined")
 
     def serializer(self) -> dict:
         resp_dict = {
@@ -97,6 +97,7 @@ class Binding(BaseModel, Base):
     type = Column(Enum(*TYPE))
     arguments = Column(JSON)
     plugin_id = Column(Integer, ForeignKey('plugin.id'), nullable=False)
+    plugin = relationship('Plugin', back_populates="bindings", lazy="joined")
 
     def serializer(self) -> dict:
         resp_dict = {
@@ -154,6 +155,7 @@ class Resource(BaseModel, Base):
     plugin_id = Column(Integer, ForeignKey('plugin.id'), nullable=True)
     is_read = Column(Boolean, default=False)
     is_download = Column(Boolean, default=False)
+    plugin = relationship('Plugin', back_populates="resources", lazy="joined")
 
     def serializer(self):
         serializer = {

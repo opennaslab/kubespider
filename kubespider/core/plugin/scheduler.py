@@ -1,7 +1,6 @@
 import logging
 from core import config_handler
-from core.plugin.manager import plugin_manager
-from core.plugin.binding import plugin_binding
+from core.plugin.manager import plugin_manager, plugin_binding
 from models.models import Binding
 from plugin_provider.scheduler import SchedulerProvider
 from source_provider.provider import SourceProvider

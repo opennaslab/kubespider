@@ -3,23 +3,24 @@ import queue
 import time
 import logging
 import notification_provider
-from models import Notification, get_session
+from models import Notification, session_context
 
 
 class NotificationManager:
     def __init__(self) -> None:
         self.queue = queue.Queue(maxsize=100)
         self.instances = {}
-        self.session = get_session()
 
     @staticmethod
     def get_definitions():
         return [provider.definitions().serializer() for provider in notification_provider.providers]
 
-    def get_notification_models(self, enable=None):
-        if enable is not None:
-            return self.session.query(Notification).filter_by(enable=enable).all()
-        return self.session.query(Notification).all()
+    @staticmethod
+    def get_notification_models(enable=None):
+        with session_context() as session:
+            if enable is not None:
+                return session.query(Notification).filter_by(enable=enable).all()
+            return session.query(Notification).all()
 
     def get_confs(self) -> dict:
         data = {}
@@ -35,29 +36,31 @@ class NotificationManager:
         return data
 
     def create_or_update(self, reload=True, **kwargs):
-        _id = kwargs.get("id")
-        name = kwargs.get("name")
-        config_type = kwargs.pop('type')
-        enable = kwargs.pop('enable')
-        download_conf = self.session.query(Notification).filter_by(id=_id).first() or Notification()
-        self.validate_config(config_type, **kwargs)
-        download_conf.name = name
-        download_conf.type = config_type
-        download_conf.config = kwargs
-        download_conf.enable = enable
-        self.session.add(download_conf)
-        self.session.commit()
-        if reload:
-            self.reload_instance()
-
-    def remove(self, _id, reload=True):
-        config_model = self.session.query(Notification).filter_by(id=_id).first()
-        if config_model:
-            self.session.delete(config_model)
-            self.session.commit()
-            self.reload_instance()
+        with session_context() as session:
+            _id = kwargs.get("id")
+            name = kwargs.get("name")
+            config_type = kwargs.pop('type')
+            enable = kwargs.pop('enable')
+            download_conf = session.query(Notification).filter_by(id=_id).first() or Notification()
+            self.validate_config(config_type, **kwargs)
+            download_conf.name = name
+            download_conf.type = config_type
+            download_conf.config = kwargs
+            download_conf.enable = enable
+            session.add(download_conf)
+            session.commit()
             if reload:
                 self.reload_instance()
+
+    def remove(self, _id, reload=True):
+        with session_context() as session:
+            config_model = session.query(Notification).filter_by(id=_id).first()
+            if config_model:
+                session.delete(config_model)
+                session.commit()
+                self.reload_instance()
+                if reload:
+                    self.reload_instance()
 
     def reload_instance(self):
         for notification_model in self.get_notification_models(enable=True):
