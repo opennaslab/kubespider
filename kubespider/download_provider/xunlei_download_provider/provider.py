@@ -12,10 +12,9 @@ import bencodepy
 
 from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
+from utils.version_parser import check_version_at_lest
 from download_provider import provider
 from api.values import Task
-
-from kubespider.utils.version_parser import check_version_at_lest
 
 
 class XunleiDownloadProvider(provider.DownloadProvider):
