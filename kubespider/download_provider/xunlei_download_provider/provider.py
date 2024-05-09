@@ -224,7 +224,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
 
     def get_pan_token(self) -> str:
         server_version = self.get_server_version()
-        if check_version_at_lest(server_version, "1.21.1"):
+        if check_version_at_lest(server_version, "3.21.0"):
             if self._token_str is not None:
                 return self._token_str
             resp = self.request_handler.get(self.http_endpoint + '/webman/3rdparty/pan-xunlei-com/index.cgi/',
