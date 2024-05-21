@@ -22,7 +22,7 @@ class TiktokDownloadProvider(provider.DownloadProvider):
         """
         super().__init__(
             name=name,
-            supported_link_types=[types.LINK_TYPE_GENERAL],
+            supported_link_types=[types.LinkType.general],
             priority=priority
         )
         self.http_endpoint_host = http_endpoint_host

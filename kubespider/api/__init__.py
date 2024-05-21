@@ -41,9 +41,6 @@ def create_app():
         logging.error(traceback.format_exc())
         return server_error(msg=str(error))
 
-    from api.v1 import v1_blu, health_blu
     from api.v2 import v2_blu
-    app.register_blueprint(v1_blu)
-    app.register_blueprint(health_blu)
     app.register_blueprint(v2_blu)
     return app

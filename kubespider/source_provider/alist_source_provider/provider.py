@@ -12,8 +12,8 @@ from utils.helper import get_request_controller, retry, get_unique_hash
 class AlistSourceProvider(provider.SourceProvider):
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(config_reader)
-        self.provider_listen_type = types.SOURCE_PROVIDER_PERIOD_TYPE
-        self.link_type = types.LINK_TYPE_GENERAL
+        self.provider_listen_type = types.ProviderTypes.scheduler
+        self.link_type = types.FileType.general
         self.webhook_enable = False
         self.provider_type = 'alist_source_provider'
         self.provider_name = name
@@ -115,7 +115,7 @@ class AlistSourceProvider(provider.SourceProvider):
                 new_path = os.path.join(path, item.get("name"))
                 files += self.get_all_files(new_path)
             else:
-                item["file_type"] = types.FILE_TYPE_COMMON
+                item["file_type"] = types.FileType.common
                 uri = os.path.join("/d", os.path.join(item.get("path", "").strip('/'), item.get("name", "")))
                 md5 = (item.get("hash_info") or {}).get("md5", get_unique_hash(uri))
                 sign = item.get("sign", "")

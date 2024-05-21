@@ -15,8 +15,8 @@ from utils.helper import get_request_controller
 class Btbtt12DisposableSourceProvider(provider.SourceProvider):
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(config_reader)
-        self.provider_listen_type = types.SOURCE_PROVIDER_DISPOSABLE_TYPE
-        self.link_type = types.LINK_TYPE_TORRENT
+        self.provider_listen_type = types.ProviderTypes.parser
+        self.link_type = types.LinkType.torrent
         self.webhook_enable = True
         self.provider_type = 'btbtt12_disposable_source_provider'
         self.provider_name = name
@@ -106,9 +106,9 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
         if ahrefs[0].text.strip() == '剧集' or \
                 ahrefs[0].text.strip() == '高清剧集' or \
                 ahrefs[0].text.strip() == '动漫':
-            return types.FILE_TYPE_VIDEO_TV, title
+            return types.FileType.tv, title
 
         if ahrefs[0].text.strip() == '电影' or ahrefs[0].text.strip() == '高清电影':
-            return types.FILE_TYPE_VIDEO_MOVIE, title
+            return types.FileType.movie, title
 
         return "", ""

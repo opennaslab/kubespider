@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 
 import telepot
 from telepot.loop import MessageLoop
-from core import source_manager, notification_manager
+from core.notification_manager import notification_manager
 
 import utils.helper
 from utils.values import Event
@@ -13,6 +13,7 @@ from utils import global_config
 
 
 def download_handler(msg):
+    from core.plugin.parser import parser_plugin
     # Read the configured username. If there is no configuration, start processing directly. If it is configured,
     # compare whether the current message's username is the same. If it's different, skip it directly.
     valid_username = global_config.get_telegram_username()
@@ -34,14 +35,14 @@ def download_handler(msg):
             path = ""
             logging.info('Get telegram trigger:%s', source)
             event = Event(source, path)
-            err = source_manager.source_provider_manager.download_with_source_provider(event)
+            err = parser_plugin.download_with_parser_provider(event)
 
             if err is None:
-                notification_manager.kubespider_notification_server.send_message(
+                notification_manager.send_message(
                     title="[telegram hook] start download", source=source, path=path
                 )
             else:
-                notification_manager.kubespider_notification_server.send_message(
+                notification_manager.send_message(
                     title="[telegram hook] download failed", source=source, path=path
                 )
 

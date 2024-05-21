@@ -16,8 +16,8 @@ class MeijuttSourceProvider(provider.SourceProvider):
 
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(config_reader)
-        self.provider_listen_type = types.SOURCE_PROVIDER_PERIOD_TYPE
-        self.link_type = types.LINK_TYPE_MAGNET
+        self.provider_listen_type = types.ProviderTypes.scheduler
+        self.link_type = types.LinkType.magnet
         self.webhook_enable = True
         self.provider_type = 'meijutt_source_provider'
         self.tv_links = []
@@ -99,7 +99,7 @@ class MeijuttSourceProvider(provider.SourceProvider):
                 ret.append(Resource(
                     url=url,
                     path=tv_link['tv_name'],
-                    file_type=types.FILE_TYPE_VIDEO_TV,
+                    file_type=types.FileType.tv,
                     link_type=link_type,
                 ))
         return ret

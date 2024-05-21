@@ -28,7 +28,7 @@ class QbittorrentDownloadProvider(DownloadProvider):
         """
         super().__init__(
             name=name,
-            supported_link_types=[types.LINK_TYPE_MAGNET, types.LINK_TYPE_TORRENT],
+            supported_link_types=[types.LinkType.magnet, types.LinkType.torrent],
             priority=priority
         )
         self.http_endpoint_host = http_endpoint_host
@@ -62,7 +62,7 @@ class QbittorrentDownloadProvider(DownloadProvider):
                 fail_task = Task(
                     url=single_torrent.magnet_uri,
                     path=single_torrent.save_path.removeprefix(self.download_base_path),
-                    link_type=types.LINK_TYPE_MAGNET,
+                    link_type=types.LinkType.magnet,
                 )
                 defective_tasks.append(fail_task)
                 single_torrent.delete(delete_files=True)
@@ -73,7 +73,7 @@ class QbittorrentDownloadProvider(DownloadProvider):
                     pending_task = Task(
                         url=single_torrent.magnet_uri,
                         path=single_torrent.save_path.removeprefix(self.download_base_path),
-                        link_type=types.LINK_TYPE_MAGNET,
+                        link_type=types.LinkType.magnet,
                     )
                     defective_tasks.append(pending_task)
                     single_torrent.delete(delete_files=True)

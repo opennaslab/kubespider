@@ -17,8 +17,8 @@ from utils.config_reader import AbsConfigReader
 class MikananiSourceProvider(provider.SourceProvider):
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(config_reader)
-        self.provider_listen_type = types.SOURCE_PROVIDER_PERIOD_TYPE
-        self.link_type = types.LINK_TYPE_TORRENT
+        self.provider_listen_type = types.ProviderTypes.scheduler
+        self.link_type = types.LinkType.torrent
         self.webhook_enable = False
         self.provider_type = 'mikanani_source_provider'
         self.rss_link = ''
@@ -97,7 +97,7 @@ class MikananiSourceProvider(provider.SourceProvider):
                     ret.append(Resource(
                         url=url,
                         path=path,
-                        file_type=types.FILE_TYPE_VIDEO_TV,
+                        file_type=types.FileType.tv,
                         link_type=self.get_link_type(),
                     ))
                 else:

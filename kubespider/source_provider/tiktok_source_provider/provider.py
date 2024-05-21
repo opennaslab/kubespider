@@ -13,7 +13,7 @@ class TiktokSourceProvider(provider.SourceProvider):
 
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(config_reader)
-        self.provider_listen_type = types.SOURCE_PROVIDER_DISPOSABLE_TYPE
+        self.provider_listen_type = types.ProviderTypes.parser
         self.webhook_enable = True
         self.provider_type = 'tiktok_source_provider'
         self.provider_name = name
@@ -42,7 +42,7 @@ class TiktokSourceProvider(provider.SourceProvider):
         return self.config_reader.read().get('download_param')
 
     def get_link_type(self) -> str:
-        return types.LINK_TYPE_GENERAL
+        return types.LinkType.general
 
     def provider_enabled(self) -> bool:
         return self.config_reader.read().get('enable', True)
@@ -64,7 +64,7 @@ class TiktokSourceProvider(provider.SourceProvider):
         return [Resource(
             url=event.source,
             path='',
-            file_type=types.FILE_TYPE_VIDEO_MIXED,
+            file_type=types.FileType.video_mixed,
             link_type=self.get_link_type(),
         )]
 

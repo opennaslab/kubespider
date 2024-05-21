@@ -26,7 +26,7 @@ class Aria2DownloadProvider(DownloadProvider):
         """
         super().__init__(
             name=name,
-            supported_link_types=[types.LINK_TYPE_GENERAL, types.LINK_TYPE_MAGNET, types.LINK_TYPE_TORRENT],
+            supported_link_types=types.LinkType.types(),
             priority=priority
         )
         self.rpc_endpoint_host = rpc_endpoint_host
@@ -58,7 +58,7 @@ class Aria2DownloadProvider(DownloadProvider):
                 self.aria2.remove([single_download], force=True)
                 pending_task = Task(
                     url='magnet:?xt=urn:btih:' + single_download.info_hash,
-                    file_type=types.LINK_TYPE_MAGNET,
+                    file_type=types.LinkType.magnet,
                     path=str(single_download.dir).removeprefix(self.download_base_path)
                 )
                 defective_tasks.append(pending_task)

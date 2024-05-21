@@ -4,13 +4,12 @@ import logging
 from urllib.parse import urlparse
 from lxml import etree
 
-from kubespider_source_provider_sdk import utils as helper
-from kubespider_source_provider_sdk.sdk import SDK
-from kubespider_source_provider_sdk.values import ProviderType, FileType, LinkType
+from kubespider_plugin import utils as helper
+from kubespider_plugin.sdk import SDK, ParserProvider
+from kubespider_plugin.values import FileType, LinkType, KubespiderContext
 
 
 def pre_download_file(event: dict, links: list) -> list:
-
     ret = []
     controller = helper.get_request_controller(
         cookie=event.get('cookies', None))
@@ -44,12 +43,12 @@ def filter_links(event: dict, links: list) -> list:
     return ret
 
 
-@SDK(ProviderType.parser)
-class Provider:
+@SDK()
+class Provider(ParserProvider):
 
     @staticmethod
     # pylint: disable=too-many-locals
-    def get_links(source: str, **kwargs):
+    def get_links(source: str, context: KubespiderContext, **kwargs):
         event: dict = kwargs
         # extract the params from the event
         link_selector = event.get('link_selector', None)
@@ -114,7 +113,7 @@ class Provider:
         return ret
 
     @staticmethod
-    def should_handle(source: str, **kwargs):
+    def should_handle(source: str, context: KubespiderContext, **kwargs):
         handle_host = kwargs.get('handle_host', None)
         if not handle_host:
             return False

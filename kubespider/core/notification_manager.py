@@ -2,88 +2,91 @@
 import queue
 import time
 import logging
-
-from flask import Flask
-
 import notification_provider
-from utils.config_reader import YamlFileConfigReader
-from utils.values import Config, Extra
+from models import Notification, session_context
 
 
 class NotificationManager:
-    def __init__(self, app=None) -> None:
-        self.notification_config = YamlFileConfigReader(Config.NOTIFICATION_PROVIDER.config_path())
+    def __init__(self) -> None:
         self.queue = queue.Queue(maxsize=100)
-        self.instance = {}
-        if app:
-            self.init_app(app)
-        self.reload_instance()
-
-    def init_app(self, app: Flask):
-        if "notification_manager" in app.extensions:
-            raise RuntimeError(
-                "A 'Notification' instance has already been registered on this Flask app."
-                " Import and use that instance instead."
-            )
-        app.extensions["notification_manager"] = self
+        self.instances = {}
 
     @staticmethod
     def get_definitions():
         return [provider.definitions().serializer() for provider in notification_provider.providers]
 
+    @staticmethod
+    def get_notification_models(enable=None):
+        with session_context() as session:
+            if enable is not None:
+                return session.query(Notification).filter_by(enable=enable).all()
+            return session.query(Notification).all()
+
     def get_confs(self) -> dict:
-        notification_config = self.notification_config.read()
-        return dict(notification_config.items())
+        data = {}
+        for instance in self.get_notification_models():
+            _id = instance.id
+            config = instance.config
+            name = instance.name
+            _type = instance.type
+            enable = instance.enable
+            is_alive = self.instances[name].is_alive if name in self.instances.keys() else False
+            config.update(name=name, type=_type, enable=enable, is_alive=is_alive, id=_id)
+            data[name] = config
+        return data
 
     def create_or_update(self, reload=True, **kwargs):
-        name = kwargs.get("name")
-        config = self.notification_config.read()
-        exists = config.get(name)
-        extra_params = {}
-        if exists:
-            extra_params.update(exists)
-        extra_params.update(kwargs)
-        config_type = extra_params.pop('type')
-        enable = extra_params.pop('enable')
-        notification_config = NotificationConfig(config_type, enable, **extra_params)
-        notification_config.validate()
+        with session_context() as session:
+            _id = kwargs.get("id")
+            name = kwargs.get("name")
+            config_type = kwargs.pop('type')
+            enable = kwargs.pop('enable')
+            download_conf = session.query(Notification).filter_by(id=_id).first() or Notification()
+            self.validate_config(config_type, **kwargs)
+            download_conf.name = name
+            download_conf.type = config_type
+            download_conf.config = kwargs
+            download_conf.enable = enable
+            session.add(download_conf)
+            session.commit()
+            if reload:
+                self.reload_instance()
 
-        config[name] = notification_config.to_dict()
-        self.notification_config.save(config)
-        if reload:
-            self.reload_instance()
-
-    def remove(self, name, reload=True):
-        config = self.notification_config.read()
-        config.pop(name, None)
-        self.notification_config.save(config)
-        if reload:
-            self.reload_instance()
+    def remove(self, _id, reload=True):
+        with session_context() as session:
+            config_model = session.query(Notification).filter_by(id=_id).first()
+            if config_model:
+                session.delete(config_model)
+                session.commit()
+                self.reload_instance()
+                if reload:
+                    self.reload_instance()
 
     def reload_instance(self):
-        for name, conf in self.get_confs().items():
+        for notification_model in self.get_notification_models(enable=True):
             try:
-                if conf.get("enable"):
-                    cls = NotificationConfig.get_provider_by_type(conf.get("type"))
-                    definitions = cls.definitions()
-                    params = {}
-                    for arg_name in definitions.arguments.keys():
-                        params[arg_name] = conf.get(arg_name)
-                    if not params.get("name"):
-                        params["name"] = name
-                    # pylint: disable=E1102
-                    instance = cls(**params)
-                    self.instance[name] = instance
-                    logging.info('[NotificationManager] %s enabled...', name)
+                config = notification_model.config
+                cls = self.get_provider_by_type(notification_model.type)
+                definitions = cls.definitions()
+                params = {}
+                for arg_name in definitions.arguments.keys():
+                    params[arg_name] = config.get(arg_name)
+                if not params.get("name"):
+                    params["name"] = notification_model.name
+                # pylint: disable=E1102
+                instance = cls(**params)
+                self.instances[notification_model.name] = instance
+                logging.info('[NotificationManager] %s enabled...', notification_model.name)
             except Exception as err:
-                logging.warning('[NotificationManager] %s enabled failed, %s', name, err)
-        logging.info("[NotificationManager] instance reload success ...")
+                logging.warning('[NotificationManager] %s enabled failed, %s', notification_model.name, err)
+        logging.info("[NotificationManager] instance reload finish ...")
 
     def run_consumer(self) -> None:
+        logging.info('Notification Server Queue handler start running...')
         while True:
             try:
                 title, kwargs = self.queue.get(block=False)
-                for instance in self.instance.values():
+                for instance in self.instances.values():
                     instance.push(title, **kwargs)
             except queue.Empty:
                 time.sleep(1)
@@ -91,44 +94,20 @@ class NotificationManager:
                 logging.error("[NotificationManager] Message queue consume failed: %s", err)
 
     def send_message(self, title: str, **kwargs) -> None:
-        if self.instance:
+        if self.instances:
             self.queue.put((title, kwargs))
 
-
-class NotificationConfig(Extra):
-    def __init__(self, config_type: str, enable: bool, **kwargs) -> None:
-        super().__init__(**kwargs)
-        self.name = kwargs.get("name")
-        self.type = config_type
-        self.enable = enable
-
-    @classmethod
-    def get_provider_by_type(cls, _type: str):
-        _type: str = cls.translate_type(_type)
-        provider_cls = getattr(notification_provider, _type, None)
+    @staticmethod
+    def get_provider_by_type(notification_type: str):
+        provider_cls = getattr(notification_provider, notification_type, None)
         if not provider_cls:
             raise ValueError("type missing or invalid")
         return provider_cls
 
-    def validate(self):
-        provider = self.get_provider_by_type(self.type)
+    def validate_config(self, _type, **arguments):
+        provider = self.get_provider_by_type(_type)
         definition = provider.definitions()
-        definition.validate(**self.extra_params())
-
-    @staticmethod
-    def translate_type(_type: str) -> str:
-        type_split = _type.split("_")
-        if len(type_split) > 1:
-            return "".join([i.capitalize() for i in type_split])
-        return _type
-
-    def to_dict(self) -> dict:
-        provider = self.get_provider_by_type(self.type)
-        return {
-            "type": provider.__name__,
-            "enable": bool(self.enable),
-            **self.extra_params()
-        }
+        definition.validate(**arguments)
 
 
-kubespider_notification_server: NotificationManager = None
+notification_manager: NotificationManager = NotificationManager()

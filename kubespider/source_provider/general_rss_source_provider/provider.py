@@ -38,9 +38,9 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         self.webhook_enable = False
         self.rss_name = None
         self.rss_link = None
-        self.file_type = types.FILE_TYPE_COMMON
-        self.link_type = types.LINK_TYPE_GENERAL
-        self.provider_listen_type = types.SOURCE_PROVIDER_PERIOD_TYPE
+        self.file_type = types.FileType.common
+        self.link_type = types.LinkType.general
+        self.provider_listen_type = types.ProviderTypes.scheduler
         self.provider_type = "general_rss_source_provider"
         self.provider_name = name
         self.load_config()
@@ -109,11 +109,11 @@ class GeneralRssSourceProvider(provider.SourceProvider):
             path = self.get_link_download_path(entry['title'])
             for link in items:
                 url = link["href"]
-                link_type = types.LINK_TYPE_GENERAL
+                link_type = types.LinkType.general
                 if url.startswith("magnet:?xt"):
-                    link_type = types.LINK_TYPE_MAGNET
+                    link_type = types.LinkType.magnet
                 elif url.endswith("torrent"):
-                    link_type = types.LINK_TYPE_TORRENT
+                    link_type = types.LinkType.torrent
 
                 links.append(Resource(
                     url=url,
@@ -147,8 +147,8 @@ class GeneralRssSourceProvider(provider.SourceProvider):
         cfg = self.config_reader.read()
         self.rss_name = cfg.get("rss_name", "")
         self.rss_link = cfg.get("rss_link")
-        self.file_type = cfg.get("file_type", types.FILE_TYPE_COMMON)
-        self.link_type = cfg.get("link_type", types.LINK_TYPE_GENERAL)
+        self.file_type = cfg.get("file_type", types.FileType.common)
+        self.link_type = cfg.get("link_type", types.LinkType.general)
         title_pattern = cfg.get("title_pattern", None)
         if title_pattern is not None:
             try:

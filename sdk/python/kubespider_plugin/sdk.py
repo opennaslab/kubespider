@@ -1,17 +1,15 @@
-import copy
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 import argparse
 import logging
 import traceback
-
-from .values import ProviderType
+from .values import KubespiderContext
 
 
 class SDKHTTPRequestHandler(BaseHTTPRequestHandler):
     PROVIDER = None
     API = {}
-    ARGUMENTS_CONTEXT = {}
+    CONTEXT: KubespiderContext
 
     # pylint: disable=redefined-builtin
     def log_message(self, format: str, *args) -> None:
@@ -61,9 +59,7 @@ class SDKHTTPRequestHandler(BaseHTTPRequestHandler):
             raise Exception(f"API <{api}> not found")
 
         logging.info('Calling API <%s>', api)
-        arg_context = copy.deepcopy(self.ARGUMENTS_CONTEXT)
-        arg_context.update(data)
-        return self.API[api](**arg_context)
+        return self.API[api](**data, context=self.CONTEXT)
 
     def __send_response(self, response: dict) -> None:
         self.send_response(200)
@@ -74,65 +70,114 @@ class SDKHTTPRequestHandler(BaseHTTPRequestHandler):
 
 class SDK:
 
-    def __init__(self, provider_type: ProviderType) -> None:
+    def __init__(self) -> None:
         self.__http_server = None
-        self.__type = provider_type
 
     def __run(self) -> None:
         params = self.__extract_params()
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s-%(levelname)s: [' + params['name'] + '] %(message)s')
-        logging.info('Running the provider on port <%s>', params['port'])
-        SDKHTTPRequestHandler.ARGUMENTS_CONTEXT = params
+        logging.info('Running the plugin on port <%s>', params['port'])
+        SDKHTTPRequestHandler.CONTEXT = KubespiderContext(**params)
         self.__http_server = HTTPServer(
             ("", params['port']), SDKHTTPRequestHandler)
         self.__http_server.serve_forever()
 
-    def __extract_params(self) -> dict:
+    @staticmethod
+    def __extract_params() -> dict:
         parser = argparse.ArgumentParser(
             formatter_class=argparse.RawTextHelpFormatter,
-            description="KubeSpider Source Provider SDK",
+            description="KubeSpider Plugin SDK",
             prog='kubespider',
         )
         parser.add_argument(
             "--name",
             type=str,
             required=True,
-            help="The name of the provider"
+            help="The name of the plugin"
         )
         parser.add_argument(
             "--proxy",
             type=str,
             required=False,
+            default="",
             help="Proxy address"
         )
         parser.add_argument(
             "--port",
             type=int,
             default=9090,
-            help="The port to run the provider"
+            help="The port to run the plugin"
         )
         params = parser.parse_args()
         return vars(params)
 
     def __call__(self, provider_class):
-        provider_api = [func for func in dir(provider_class)
-                        if callable(getattr(provider_class, func)) and not func.startswith("__")]
-        for api in self.__type.api_list:
-            if api not in provider_api:
-                raise Exception(
-                    f"API <{api}> not found in the <{self.__type.name}> provider")
+        if not any([
+            issubclass(provider_class, ParserProvider),
+            issubclass(provider_class, SearchProvider),
+            issubclass(provider_class, SchedulerProvider),
+        ]):
+            raise Exception(
+                f"{provider_class.__name__} is not subclass of ParserProvider or SearchProvider or SchedulerProvider."
+            )
 
         if SDKHTTPRequestHandler.PROVIDER:
             raise Exception(
-                f'This provider has been bound on <{SDKHTTPRequestHandler.PROVIDER}>')
+                f'This plugin has been bound on <{SDKHTTPRequestHandler.PROVIDER}>'
+            )
 
         SDKHTTPRequestHandler.PROVIDER = provider_class
         # Define the Common API
-        setattr(provider_class, "_health", lambda **kwarg: None)
-        SDKHTTPRequestHandler.register(provider_class._health, "_health")
+        SDKHTTPRequestHandler.register(lambda **kwarg: None, "_health")
         # Register the APIs
-        for api in self.__type.api_list:
+        for api in provider_class.API_LIST:
             SDKHTTPRequestHandler.register(getattr(provider_class, api), api)
         # Start the server
         self.__run()
+
+
+class ParserProvider:
+    TYPE = "parser"
+    API_LIST = ["get_links", "should_handle"]
+
+    # pylint: disable=unused-argument
+    @staticmethod
+    def get_links(source: str, context: KubespiderContext, **kwargs) -> list:
+        """Parse links to extract resources inside the links."""
+        return []
+
+    # pylint: disable=unused-argument
+    @staticmethod
+    def should_handle(source: str, context: KubespiderContext, **kwargs) -> bool:
+        """Determine whether the current link can be parsed."""
+        return False
+
+
+class SearchProvider(ParserProvider):
+    TYPE = "search"
+    API_LIST = ["get_links", "should_handle", "search"]
+
+    # pylint: disable=unused-argument
+    @staticmethod
+    def search(keyword: str, page: int, context: KubespiderContext, **kwargs) -> dict:
+        """
+        Search resource by keyword and page
+        per page defined by developer
+        """
+        return {}
+
+
+class SchedulerProvider(SearchProvider):
+    TYPE = "scheduler"
+    API_LIST = ["get_links", "should_handle", "search", "scheduler"]
+
+    # pylint: disable=unused-argument
+    @staticmethod
+    def scheduler(context: KubespiderContext, **kwargs) -> dict:
+        """
+        Task scheduling, you can discover resources here, return resources,
+        and also do other things you want to do at the moment.
+        return: resource list
+        """
+        return {}

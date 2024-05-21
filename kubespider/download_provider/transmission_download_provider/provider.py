@@ -4,12 +4,12 @@ import os
 from urllib.parse import urlparse
 from transmission_rpc import Client
 from download_provider.provider import DownloadProvider
-from utils import types
+from utils.types import LinkType
 
 from utils.values import Task
 
 
-class TransmissionProvider(DownloadProvider):
+class TransmissionDownloadProvider(DownloadProvider):
     """Transmission is a fast, easy, and free BitTorrent client."""
 
     def __init__(self, name: str, http_endpoint: str, username: str = "admin", password: str = "admin",
@@ -24,7 +24,7 @@ class TransmissionProvider(DownloadProvider):
         """
         super().__init__(
             name=name,
-            supported_link_types=[types.LINK_TYPE_TORRENT, types.LINK_TYPE_MAGNET],
+            supported_link_types=[LinkType.torrent, LinkType.magnet],
             priority=priority
         )
         self.download_base_path = download_base_path
