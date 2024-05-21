@@ -32,24 +32,14 @@ class SearchProvider:
     def get_prefer_download_provider(self):
         pass
 
-    def search(self, event: SearchEvent) -> list:
+    def search(self, event: SearchEvent) -> dict:
         # Return the download resources for the parser provider
         result = self.plugin_instance.call_api("search", **self.get_search_param(event))
-        # result:
-        # {"code": 200, "msg": "Success", "data": {"page": 1, "page_size": 100, "next_page": True, "data": []}}
-        # [{"code": 200, "msg": "Success", "data": {"page": 1, "page_size": 100, "next_page": True, "data": []}}]
-        if isinstance(result.get("data"), dict):
-            resource = result.get("data", {"page": 1, "page_size": 100, "next_page": False, "data": []})
-            resource["data"] = [Resource(**item).data for item in resource.get("data", [])]
-            # resource: {"page": 1, "page_size": 100, "next_page": True, "data": []}
-            return [resource, ]
-        else:
-            resources = []
-            for item in result.get("data", []):
-                item["data"] = [Resource(**item).data for item in item.get("data", [])]
-                # resource: {"page": 1, "page_size": 100, "next_page": True, "data": []}
-                resources.append(item)
-            return resources
+        # result: {"code": 200, "msg": "Success", "data": {"page": 1, "page_size": 100, "next_page": True, "data": []}}
+        resource = result.get("data", {"page": 1, "page_size": 100, "next_page": False, "data": []})
+        resource["data"] = [Resource(**item).data for item in resource.get("data", [])]
+        # resource: {"page": 1, "page_size": 100, "next_page": True, "data": []}
+        return resource
 
     def __repr__(self):
         return f"<SearchProvider[bind:{self.bind.name} plugin:{self.plugin_instance.definition.name}]>"

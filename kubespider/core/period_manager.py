@@ -112,7 +112,7 @@ class PeriodManager:
         elif task.task_type == "scheduler":
             kwargs = copy.deepcopy(task.arguments)
             kwargs['binding_ids'] = task.binding_ids
-            self.scheduler.add_job(id=task.name, func=self.period_scheduler_task, trigger='tigger', kwargs=kwargs)
+            self.scheduler.add_job(id=task.name, func=self.period_scheduler_task, trigger=tigger, kwargs=kwargs)
 
     def __remove_task(self, task_name: str):
         try:

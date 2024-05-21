@@ -43,9 +43,8 @@ class SearchPlugin:
                          event.keyword, ",".join([str(p) for p in providers]))
             for provider in providers:
                 result = provider.search(event)
-                for item in result:
-                    item["plugin"] = provider.plugin_instance.definition.name
-                resource += result
+                result["plugin"] = provider.plugin_instance.definition.name
+                resource.append(result)
         return resource
 
 
