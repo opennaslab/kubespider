@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  Release-Extension:
+  Release-Chrome-Extension:
     name: Release Kubespider Chrome Extension
     runs-on: ubuntu-20.04
     steps:
@@ -25,4 +25,37 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload ${{github.event.release.tag_name}} chrome-extension.zip
+        shell: bash
+  Release-Firefox-Extension:
+    name: Release Kubespider Firefox Extension
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "21"
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: kubespider-extension/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('kubespider-extension/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: |
+          npm install
+        working-directory: ./kubespider-extension
+      - name: Build
+        run: |
+          npm run build:firefox
+        working-directory: ./kubespider-extension
+      - name: Zip
+        run: zip -r firefox-extension.zip chrome-extension
+        shell: bash
+
+      - name: Upload Release Asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{github.event.release.tag_name}} firefox-extension.zip
         shell: bash
