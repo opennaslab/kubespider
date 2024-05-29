@@ -1,3 +1,3 @@
-requests==2.31.0
+requests==2.32.2
 flask==2.2.5
 you-get==0.4.1650
