@@ -19,7 +19,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/index.tsx-loader-5056ce38.js"
+        "assets/index.tsx-loader-2MxPyVFe.js"
       ],
       "matches": [
         "http://*/*",
@@ -47,9 +47,9 @@
         "https://*/*"
       ],
       "resources": [
-        "assets/chunk-7f353fbb.js",
-        "assets/chunk-fe7244a2.js",
-        "assets/chunk-13957a98.js"
+        "assets/chunk-T26GuxHg.js",
+        "assets/chunk-B9e8ng1t.js",
+        "assets/chunk-CBVaWBKk.js"
       ],
       "use_dynamic_url": true
     }
