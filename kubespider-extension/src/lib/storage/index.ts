@@ -18,12 +18,12 @@ const defaultConfig: Config = {
 
 namespace Storage {
   export const read = async (): Promise<Config> => {
-    return Browser.storage.sync.get(defaultConfig).then((config) => {
+    return Browser.storage.local.get(defaultConfig).then((config) => {
       return config as Config;
     });
   };
   export const save = async (config: Config): Promise<void> => {
-    return Browser.storage.sync.set(config);
+    return Browser.storage.local.set(config);
   };
 }
 

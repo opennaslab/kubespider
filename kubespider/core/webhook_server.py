@@ -3,6 +3,7 @@ import json
 
 from functools import wraps
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 from api.values import Event
 from utils import global_config
@@ -12,7 +13,7 @@ from core.kubespider_controller import kubespider_controller
 from core import source_manager
 
 kubespider_server = Flask(__name__)
-
+CORS(kubespider_server)
 
 def auth_required(func):
     @wraps(func)

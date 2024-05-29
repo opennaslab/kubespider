@@ -2,7 +2,7 @@ import Browser from "webextension-polyfill";
 
 namespace Tab {
   export async function getCurrentTabId(): Promise<number> {
-    const [tab] = await chrome.tabs.query({
+    const [tab] = await Browser.tabs.query({
       active: true,
       currentWindow: true,
     });

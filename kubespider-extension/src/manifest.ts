@@ -16,6 +16,7 @@ export default defineManifest({
     default_icon: "img/icon48.png",
   },
   background: {
+    scripts: ["src/background/index.ts"],
     service_worker: "src/background/index.ts",
     type: "module",
   },
