@@ -67,8 +67,7 @@ class SlackNotificationProvider(provider.NotificationProvider):
         if response.status_code != 200:
             logging.error("Slack push failed : %s", response.text)
             return False
-        else:
-            logging.info("Slack push success : %s", response.text)
+        logging.info("Slack push success : %s", response.text)
         return True
 
     def format_message(self, title, **kwargs) -> str:
