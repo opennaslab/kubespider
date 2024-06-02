@@ -19,4 +19,3 @@ def check_version_at_lest(current_version: str, target_version: str) -> bool:
 def parse_version(version_name: str) -> Tuple[List[int], int]:
     vers = [int(x) for x in version_name.split('.')]
     return vers, len(vers)
-
