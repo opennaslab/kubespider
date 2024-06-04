@@ -29,4 +29,4 @@ slack:
   host: https://hooks.slack.com/services/XXXXXXXXXX
   channel: channel_name
   username: bot_name
-  title_lan: en/zh
+  title_emoji: none/emoji_name

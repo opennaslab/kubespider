@@ -9,14 +9,13 @@ class SlackNotificationProvider(provider.NotificationProvider):
     def __init__(self, name: str, config_reader: AbsConfigReader) -> None:
         super().__init__(name, config_reader)
         self.name = name
-        self.enable, self.host, self.channel, self.username, self.title_lan = self._init_conf(
-            config_reader)
+        self.enable, self.host, self.channel, self.username, self.title_emoji = self._init_conf(config_reader)
         self.request_handler = get_request_controller()
 
     @staticmethod
     def _init_conf(config_reader: AbsConfigReader):
         conf = config_reader.read()
-        return conf.get("enable", True), conf.get("host"), conf.get("channel"), conf.get("username"), conf.get("title_lan")
+        return conf.get("enable", True), conf.get("host"), conf.get("channel"), conf.get("username"), conf.get("title_emoji")
 
     def get_provider_name(self) -> str:
         return self.name
@@ -26,17 +25,17 @@ class SlackNotificationProvider(provider.NotificationProvider):
 
     def push(self, title, **kwargs) -> bool:
         message = self.format_message(title, **kwargs)
+        emoji = self.title_emoji
         # Slack APP弹窗通知的标题
-        push_title = "Kubespider收到新下载请求."
+        push_title = title
+        # 弹窗通知是否Emoji表情
+        if emoji.lower() != "none":
+            push_title = ":" + emoji + ":" + push_title
         # Slack APP里正文的标题
-        body_title = "收到下载请求"
         url = self.host
         headers = {
             'Content-Type': 'application/json; charset=utf-8'
         }
-        if self.title_lan == "en":
-            push_title = "Kubespider has received a new download request."
-            body_title = "Received Download request"
         slack_data = {
             "username": self.username,
             "channel": "#" + self.channel,
@@ -46,7 +45,7 @@ class SlackNotificationProvider(provider.NotificationProvider):
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": body_title,
+                        "text": push_title,
                     }
                 },
                 # 正文内容主体text
