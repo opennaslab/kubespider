@@ -23,3 +23,10 @@ bark:
   enable: false
   host: https://api.day.app
   device_token: 12345678
+slack:
+  type: slack_notification_provider
+  enable: false
+  host: https://hooks.slack.com/services/XXXXXXXXXX
+  channel: channel_name
+  username: bot_name
+  title_emoji: none/emoji_name
