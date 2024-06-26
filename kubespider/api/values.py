@@ -99,7 +99,10 @@ class Task(Extra):
 
     def __init__(self, url: str, path: str, link_type: str = None, **kwargs) -> None:
         super().__init__(**kwargs)
+        # url is the download url or torrent file path
+        # For example: http://xxx.com/x.jpg or /tmp/a.torrent
         self.url = url
+        # Path is the path to save the file, like /Movie
         self.path = path
         self.link_type = link_type
         self.uid = None
