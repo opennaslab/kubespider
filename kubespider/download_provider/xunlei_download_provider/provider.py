@@ -49,7 +49,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         token = self.get_pan_token()
         if token == "":
             return None
-        magnet_url = self.convert_torrent_to_magnet(task.path)
+        magnet_url = self.convert_torrent_to_magnet(task.url)
         file_info = self.list_files(token, magnet_url)
         return self.send_task(token, file_info, magnet_url, task.path)
 
