@@ -1,4 +1,4 @@
-requests==2.31.0
+requests==2.32.2
 flask==2.2.5
 tqdm==4.66.3
 PyYAML==6.0.1
