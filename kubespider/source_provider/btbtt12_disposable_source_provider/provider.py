@@ -56,6 +56,8 @@ class Btbtt12DisposableSourceProvider(provider.SourceProvider):
 
     def should_handle(self, event: Event) -> bool:
         parse_url = urlparse(event.source)
+        if not parse_url:
+            return False
         if parse_url.hostname.endswith('btbtt12.com') and 'attach-dialog-fid' in parse_url.path:
             logging.info('%s belongs to Btbtt12DisposableSourceProvider', event.source)
             return True

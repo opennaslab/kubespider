@@ -108,3 +108,6 @@ xunlei:
 docker restart kubespider
 ```
 按最终效果图测试一下即可。
+
+#### 8.自动获取
+[#505](https://github.com/opennaslab/kubespider/pull/505) `3.21.0` 之后迅雷版本会自动获取 `device_id` `token`
