@@ -224,7 +224,14 @@ class XunleiDownloadProvider(provider.DownloadProvider):
         file_count = int(file_info['list']['resources'][0]['file_count'])
         if file_count == 1:
             return '--1,'
-        return '0-' + str(file_count - 1)
+        max_sub_file_idx=0
+        for sub_file_obj in file_info['list']['resources'][0]["dir"]["resources"]:
+            if (
+                "file_index" in sub_file_obj
+                and sub_file_obj["file_index"] > max_sub_file_idx
+            ):
+                max_sub_file_idx = sub_file_obj["file_index"]
+        return f"0-{max_sub_file_idx}"
 
     def get_pan_token(self) -> str:
         server_version = self.get_server_version()
