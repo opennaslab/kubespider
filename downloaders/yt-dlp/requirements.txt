@@ -1,4 +1,4 @@
 requests==2.32.0
 flask==2.2.5
-yt_dlp==2024.4.9
+yt_dlp==2024.7.7
 watchdog==3.0.0
