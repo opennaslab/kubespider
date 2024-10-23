@@ -64,7 +64,11 @@ class MagicSourceProvider(provider.SourceProvider):
 
     def should_handle(self, event: Event) -> bool:
         data_source_url = event.source
-        if urlparse(data_source_url).hostname in self.handle_host:
+        # Issue #539, the url may not be a valid url
+        parse_url = urlparse(data_source_url)
+        if not parse_url:
+            return False
+        if parse_url.hostname in self.handle_host:
             logging.info('%s belongs to %s', data_source_url, self.provider_name)
             return True
         return False
