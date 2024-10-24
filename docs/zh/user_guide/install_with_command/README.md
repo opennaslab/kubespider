@@ -31,7 +31,7 @@ services:
     image: cesign/kubespider:latest
     depends_on:
       - qbittorrent
-      - aria2-qb
+      - aria2
     environment:
       - PUID=1000
       - PGID=1000
