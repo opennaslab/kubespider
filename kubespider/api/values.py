@@ -81,7 +81,7 @@ class Resource(Extra):
     Resource, used to describe the resource to be downloaded, result of the source provider
     """
 
-    def __init__(self, url: str, path: str,
+    def __init__(self, *, url: str, path: str,
                  link_type: str = None, file_type: str = None, uid: str = None,
                  **kwargs):
         super().__init__(**kwargs)

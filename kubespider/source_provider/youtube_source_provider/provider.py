@@ -53,6 +53,9 @@ class YouTubeSourceProvider(provider.SourceProvider):
 
     def should_handle(self, event: Event) -> bool:
         parse_url = urlparse(event.source)
+        # Issue #539, the url may not be a valid url
+        if not parse_url:
+            return False
         if parse_url.hostname in ('www.youtube.com', 'youtube.com', 'm.youtube.com', 'youtu.be'):
             logging.info('%s belongs to youtube_source_provider', event.source)
             return True
