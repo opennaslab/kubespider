@@ -51,7 +51,7 @@
         "assets/chunk-B9e8ng1t.js",
         "assets/chunk-CBVaWBKk.js"
       ],
-      "use_dynamic_url": true
+      "use_dynamic_url": false
     }
   ],
   "host_permissions": [
