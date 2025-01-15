@@ -14,6 +14,7 @@ import bencodepy
 
 from utils.config_reader import AbsConfigReader
 from utils.helper import get_request_controller
+from utils.magnet_url import MagnetUrl
 from utils.version_parser import check_version_at_lest
 from download_provider import provider
 from api.values import Task
@@ -134,6 +135,14 @@ class XunleiDownloadProvider(provider.DownloadProvider):
             if req.status_code != 200:
                 logging.error("Create tasks error:%s", req.text)
                 return ValueError("Create task error")
+            if url.startswith("magnet:?"):
+                magnet_name = MagnetUrl(url).Resolve()
+                logging.info("Check MagnetLink Name:%s", magnet_name)
+                return {"Status":"Success", "Name":magnet_name}
+            if url.startswith("ed2k://"):
+                magnet_name = MagnetUrl(url).ed2k_filename()
+                logging.info("Check Ed2k Name:%s", magnet_name)
+                return {"Status": "Success", "Name": magnet_name}
             return None
         except Exception as err:
             logging.error('Send download task error:%s', err)

@@ -82,10 +82,15 @@ def download_handler():
 
     err = source_manager.source_provider_manager.download_with_source_provider(event)
 
-    if err is None:
-        notification_server.kubespider_notification_server.send_message(
-            title="[webhook] start download", source=source, path=path
-        )
+    if err is None or type(err) is dict:
+        if type(err) is dict and err['Status'] == "Success":
+            notification_server.kubespider_notification_server.send_message(
+                title="[webhook] start download", name=err['Name'], source=source, path=path
+            )
+        else:
+            notification_server.kubespider_notification_server.send_message(
+                title="[webhook] start download", source=source, path=path
+            )
         return send_ok_response()
     notification_server.kubespider_notification_server.send_message(
         title="[webhook] download failed", source=source, path=path
