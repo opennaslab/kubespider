@@ -66,10 +66,10 @@ class FeishuNotificationProvider(provider.NotificationProvider):
         }
         response = self.request_handler.post(
             webhook_url, json=post_data, timeout=5, headers=headers).json()
-        if response.status_code != 200:
-            logging.error("Slack push failed : %s", response.text)
+        if response['StatusCode'] != 0 or response['code'] != 0:
+            logging.error("Feishu push failed : %s", response['msg'])
             return False
-        logging.info("Slack push success : %s", response.text)
+        logging.info("Feishu push success : %s", response['msg'])
         return True
 
     def format_message(self, title, **kwargs) -> str:

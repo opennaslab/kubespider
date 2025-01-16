@@ -51,10 +51,10 @@ class DingtalkNotificationProvider(provider.NotificationProvider):
         }
         response = self.request_handler.post(
             webhook_url, json=post_data, timeout=5, headers=headers).json()
-        if response.status_code != 200:
-            logging.error("Dingtalk push failed : %s", response.text)
+        if response['errcode'] != 0:
+            logging.error("Dingtalk push failed : %s", response['errmsg'])
             return False
-        logging.info("Dingtalk success : %s", response.text)
+        logging.info("Dingtalk push success : %s", response['errmsg'])
         return True
 
     def format_message(self, title, **kwargs) -> str:
