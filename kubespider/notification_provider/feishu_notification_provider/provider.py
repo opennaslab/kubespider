@@ -84,7 +84,7 @@ class FeishuNotificationProvider(provider.NotificationProvider):
     def build_sign(self, secret: str):
         # 计算加签后的密钥
         timestamp = str(round(time.time()))
-        string_to_sign = '{}\n{}'.format(timestamp, secret)
+        string_to_sign = f"{timestamp}\n{secret}"
         hmac_code = hmac.new(string_to_sign.encode("utf-8"), digestmod=hashlib.sha256).digest()
         sign = base64.b64encode(hmac_code).decode('utf-8')
         return timestamp, sign

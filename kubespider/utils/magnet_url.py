@@ -1,6 +1,7 @@
+import re
 from urllib.parse import urlparse, parse_qs
 
-class MagnetUrl(object):
+class MagnetUrl:
     url = None
     xturn_delimiter = ':'
 
@@ -57,26 +58,22 @@ class MagnetUrl(object):
     def __hash_type(self, index=None):
         xturn = self.data_index('xt', index)
         if not xturn:
-            return
+            return None
         return ' '.join(xturn.split(self.xturn_delimiter)[1:-1])
 
     def __hash(self, index=None):
         xturn = self.data_index('xt', index)
         if not xturn:
-            return
+            return None
         return xturn.split(self.xturn_delimiter)[-1]
 
     def __data_size(self, index=None):
         return self.data_index('xl', index)
 
     def __file_entry(self, index):
-        return dict(
-            display_name=self.__display_name(index),
-            data_size=self.__data_size(index),
-            hash_type=self.__hash_type(index),
-            hash=self.__hash(index))
+        return {"display_name": self.__display_name(index), "data_size": self.__data_size(index), "hash_type": self.__hash_type(index), "hash": self.__hash(index)}
 
-    def Resolve(self):
+    def resolve(self):
         char = ".torrent"
         if self.files[0]['display_name'] is not None:
             result = self.files[0]['display_name']
@@ -85,9 +82,15 @@ class MagnetUrl(object):
                 if "dn" in key:
                     result = self.data[key]
                     break
-                else:
-                    result = "No Name Found"
         if result.endswith(char):
             result = result[:-len(char)]
-
         return result
+        
+    def ed2k_filename(self):
+        pattern = r'ed2k://\|file\|(.+)\|(\d+)\|([a-fA-F0-9]+)\|/'
+        match = re.match(pattern, self.url)
+        if match:
+            filename = match.group(1)
+            return filename
+        else:
+            raise ValueError("Invalid ed2k link")

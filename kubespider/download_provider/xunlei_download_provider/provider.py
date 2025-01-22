@@ -136,7 +136,7 @@ class XunleiDownloadProvider(provider.DownloadProvider):
                 logging.error("Create tasks error:%s", req.text)
                 return ValueError("Create task error")
             if url.startswith("magnet:?"):
-                magnet_name = MagnetUrl(url).Resolve()
+                magnet_name = MagnetUrl(url).resolve()
                 logging.info("Check MagnetLink Name:%s", magnet_name)
                 return {"Status":"Success", "Name":magnet_name}
             if url.startswith("ed2k://"):

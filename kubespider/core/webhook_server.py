@@ -82,8 +82,8 @@ def download_handler():
 
     err = source_manager.source_provider_manager.download_with_source_provider(event)
 
-    if err is None or type(err) is dict:
-        if type(err) is dict and err['Status'] == "Success":
+    if err is None or isinstance(err, dict):
+        if isinstance(err, dict) and err['Status'] == "Success":
             notification_server.kubespider_notification_server.send_message(
                 title="[webhook] start download", name=err['Name'], source=source, path=path
             )
