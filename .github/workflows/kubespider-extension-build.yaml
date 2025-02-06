@@ -8,9 +8,6 @@ on:
       - main
     paths:
       - "kubespider-extension/**"
-  pull_request:
-    paths:
-      - "kubespider-extension/**"
 
 permissions:
   contents: write
