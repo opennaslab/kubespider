@@ -62,8 +62,8 @@ class SlackNotificationProvider(provider.NotificationProvider):
             ]
         }
         response = self.request_handler.post(
-            url, json=slack_data, timeout=5, headers=headers).json()
-        if response.status_code != 200:
+            url, json=slack_data, timeout=5, headers=headers)
+        if response.status_code != 200 or response.text != "ok":
             logging.error("Slack push failed : %s", response.text)
             return False
         logging.info("Slack push success : %s", response.text)
