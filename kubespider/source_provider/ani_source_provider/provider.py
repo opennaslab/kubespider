@@ -170,8 +170,11 @@ class AniSourceProvider(provider.SourceProvider):
                     # Pass blacklist Animes
                     if self.check_blacklist(xml_title, blacklist):
                         continue
+                    final_url = i.find('./guid').text
+                    if 'resources.ani.rip' in final_url:
+                        final_url = final_url.replace('resources.ani.rip', 'cloud.ani-download.workers.dev')
                     res = Resource(
-                        url=i.find('./guid').text,
+                        url=final_url,
                         path=self.save_path + (f'/{item_title}' if self.classification_on_directory else ''),
                         file_type=types.FILE_TYPE_VIDEO_TV,
                         link_type=self.get_link_type(),
