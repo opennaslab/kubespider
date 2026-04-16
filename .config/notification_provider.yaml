@@ -30,3 +30,13 @@ slack:
   channel: channel_name
   username: bot_name
   title_emoji: none/emoji_name
+dingtalk:
+  type: dingtalk_notification_provider
+  enable: false
+  token: 只需填写授权码部分，如：https://oapi.dingtalk.com/robot/send?access_token=XXXXXXX，授权码则是XXXXXX部分
+  secret: 选填。创建时没有设置，则填none
+feishu:
+  type: feishu_notification_provider
+  enable: false
+  token: 只需填授权码部分，如https://open.feishu.cn/open-apis/bot/v2/hook/XXXXXXX，授权码则是XXXXXX部分
+  secret: 选填。创建时没有设置，则填none
