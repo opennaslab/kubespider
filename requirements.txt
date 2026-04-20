@@ -12,7 +12,7 @@ feedparser==6.0.10
 transmission-rpc==4.3.0
 coverage==7.3.0
 lxml==4.9.3
-waitress==2.1.2
+waitress==3.0.1
 watchdog==3.0.0
 mkdocs==1.5.2
 mkdocs-awesome-pages-plugin==2.9.2
